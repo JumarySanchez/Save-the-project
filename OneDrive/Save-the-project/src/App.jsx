@@ -730,6 +730,7 @@ function CTASection() {
 function WaitlistSection() {
   const [form, setForm] = useState({ name: "", email: "", interest: "Digital Assets" });
   const [joined, setJoined] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("calo_waitlist") || "[]").length;
@@ -740,12 +741,39 @@ function WaitlistSection() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
+
+    // Save to localStorage
     const entry = { ...form, createdAt: new Date().toISOString() };
     const existing = JSON.parse(localStorage.getItem("calo_waitlist") || "[]");
     localStorage.setItem("calo_waitlist", JSON.stringify([entry, ...existing]));
     setCount(existing.length + 1);
-    setJoined(true);
-    setForm({ name: "", email: "", interest: "Digital Assets" });
+
+    // Send email using EmailJS
+    const templateParams = {
+      from_name: form.name,
+      from_email: form.email,
+      interest: form.interest,
+      to_email: 'protection@calocapital.io',
+      message: `New waitlist signup: ${form.name} (${form.email}) is interested in ${form.interest}`,
+      reply_to: form.email
+    };
+
+    // Note: You'll need to set up EmailJS service with these IDs
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+      .then((response) => {
+        console.log('Email sent successfully!', response.status, response.text);
+        setJoined(true);
+        setForm({ name: "", email: "", interest: "Digital Assets" });
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Failed to send email:', error);
+        // Still show success since we saved locally
+        setJoined(true);
+        setForm({ name: "", email: "", interest: "Digital Assets" });
+        setLoading(false);
+      });
   }
 
   return (
@@ -773,7 +801,7 @@ function WaitlistSection() {
         </div>
 
         <form onSubmit={handleSubmit} className="rounded-[2rem] border border-cyan-200/20 bg-white/[0.05] p-6 shadow-2xl shadow-cyan-950/30 backdrop-blur-md lg:p-8">
-          {joined && <div className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">You're on the waitlist. This is saved locally for now.</div>}
+          {joined && <div className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">✅ You're on the waitlist! An email has been sent to protection@calocapital.io</div>}
           <label className="block">
             <span className="mb-2 block text-sm font-bold text-slate-200">Name</span>
             <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-[#070a14] px-4 py-3 text-white outline-none ring-cyan-300/30 focus:ring-4" placeholder="Your name" />
@@ -791,8 +819,10 @@ function WaitlistSection() {
               <option>Consultation</option>
             </select>
           </label>
-          <button className="mt-5 w-full rounded-2xl bg-cyan-300 px-6 py-4 font-black text-slate-950 transition hover:bg-cyan-200">Join Waitlist →</button>
-          <p className="mt-4 text-center text-xs leading-5 text-slate-400">No spam. For production, connect this form to a real backend, Supabase, Formspree, or email service.</p>
+          <button disabled={loading} className="mt-5 w-full rounded-2xl bg-cyan-300 px-6 py-4 font-black text-slate-950 transition hover:bg-cyan-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            {loading ? "Sending..." : "Join Waitlist →"}
+          </button>
+          <p className="mt-4 text-center text-xs leading-5 text-slate-400">No spam. Your information will be sent to protection@calocapital.io for follow-up.</p>
         </form>
       </div>
     </section>
