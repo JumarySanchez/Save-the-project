@@ -1,0 +1,10 @@
+<svg width="400" height="250" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer triangle -->
+  <polygon points="0,580 450,20 900,580" fill="none" stroke="#5d2d82" stroke-width="60" stroke-linejoin="round"/>
+  
+  <!-- Middle triangle -->
+  <polygon points="120,520 450,130 780,520" fill="none" stroke="#5d2d82" stroke-width="60" stroke-linejoin="round"/>
+  
+  <!-- Inner triangle -->
+  <polygon points="240,460 450,240 660,460" fill="#5d2d82"/>
+</svg>
