@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import logoPng from "../public/Calo_purple_logo.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -176,7 +177,7 @@ function Logo() {
   return (
     <div className="flex items-center gap-3">
       <img
-        src="/Calo_purple_logo.png" 
+        src={logoPng}
         alt="Calo Capital Logo"
         className="h-16 w-auto object-contain"
         style={{ background: 'transparent' }}
