@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
+<<<<<<< HEAD:src/App.jsx
 import logoPng from "../public/Calo_purple_logo.png";
+=======
+import emailjs from "@emailjs/browser";
+>>>>>>> beb396d (Restore Calo Capital contact recipient):OneDrive/Save-the-project/src/App.jsx
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -108,6 +112,58 @@ const blogPosts = [
     description: "How to include digital assets, crypto wallets, and online accounts in your estate plan for a complete wealth transfer strategy.",
   },
 ];
+
+const CALO_INQUIRY_RECIPIENT = "protection@calocapital.io";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim();
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim();
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim();
+const EMAILJS_CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID?.trim() || EMAILJS_TEMPLATE_ID;
+const EMAILJS_WAITLIST_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_WAITLIST_TEMPLATE_ID?.trim() || EMAILJS_TEMPLATE_ID;
+
+let emailjsInitialized = false;
+
+function ensureEmailjsInitialized() {
+  if (!EMAILJS_PUBLIC_KEY) {
+    return false;
+  }
+
+  if (!emailjsInitialized) {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    emailjsInitialized = true;
+  }
+
+  return true;
+}
+
+function getEmailDeliveryError() {
+  return "This form is not configured for email delivery yet. Add the EmailJS environment variables and redeploy.";
+}
+
+function getErrorMessage(error) {
+  return error?.text || error?.message || "We could not send your request right now. Please try again.";
+}
+
+async function sendInquiryEmail(templateId, templateParams) {
+  if (!EMAILJS_SERVICE_ID || !templateId || !ensureEmailjsInitialized()) {
+    throw new Error(getEmailDeliveryError());
+  }
+
+  return emailjs.send(EMAILJS_SERVICE_ID, templateId, templateParams);
+}
+
+function readStoredList(storageKey) {
+  try {
+    return JSON.parse(localStorage.getItem(storageKey) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function storeInquiry(storageKey, entry) {
+  const existing = readStoredList(storageKey);
+  localStorage.setItem(storageKey, JSON.stringify([entry, ...existing]));
+  return existing.length + 1;
+}
 
 function formatPrice(price) {
   if (price >= 1000) return `$${price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
@@ -730,7 +786,7 @@ function CTASection() {
 
 function WaitlistSection() {
   const [form, setForm] = useState({ name: "", email: "", interest: "Digital Assets" });
-  const [joined, setJoined] = useState(false);
+  const [status, setStatus] = useState({ type: "idle", message: "" });
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(() => {
     try {
@@ -743,36 +799,36 @@ function WaitlistSection() {
   function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
+    setStatus({ type: "idle", message: "" });
 
-    // Save to localStorage
-    const entry = { ...form, createdAt: new Date().toISOString() };
-    const existing = JSON.parse(localStorage.getItem("calo_waitlist") || "[]");
-    localStorage.setItem("calo_waitlist", JSON.stringify([entry, ...existing]));
-    setCount(existing.length + 1);
+    const createdAt = new Date().toISOString();
 
-    // Send email using EmailJS
     const templateParams = {
+      recipient_email: CALO_INQUIRY_RECIPIENT,
+      to_email: CALO_INQUIRY_RECIPIENT,
+      inquiry_type: "Waitlist Signup",
       from_name: form.name,
       from_email: form.email,
       interest: form.interest,
-      to_email: 'protection@calocapital.io',
-      message: `New waitlist signup: ${form.name} (${form.email}) is interested in ${form.interest}`,
-      reply_to: form.email
+      phone: "Not provided",
+      message: `New Crypto RIAs waitlist signup: ${form.name} (${form.email}) is interested in ${form.interest}.`,
+      reply_to: form.email,
+      created_at: createdAt,
     };
 
-    // Note: You'll need to set up EmailJS service with these IDs
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-      .then((response) => {
-        console.log('Email sent successfully!', response.status, response.text);
-        setJoined(true);
+    sendInquiryEmail(EMAILJS_WAITLIST_TEMPLATE_ID, templateParams)
+      .then(() => {
+        const entry = { ...form, createdAt };
+        const nextCount = storeInquiry("calo_waitlist", entry);
+        setCount(nextCount);
+        setStatus({ type: "success", message: "You're on the waitlist. The Calo team has been emailed." });
         setForm({ name: "", email: "", interest: "Digital Assets" });
-        setLoading(false);
       })
       .catch((error) => {
-        console.error('Failed to send email:', error);
-        // Still show success since we saved locally
-        setJoined(true);
-        setForm({ name: "", email: "", interest: "Digital Assets" });
+        console.error("Failed to send waitlist email:", error);
+        setStatus({ type: "error", message: getErrorMessage(error) });
+      })
+      .finally(() => {
         setLoading(false);
       });
   }
@@ -802,7 +858,12 @@ function WaitlistSection() {
         </div>
 
         <form onSubmit={handleSubmit} className="rounded-[2rem] border border-cyan-200/20 bg-white/[0.05] p-6 shadow-2xl shadow-cyan-950/30 backdrop-blur-md lg:p-8">
+<<<<<<< HEAD:src/App.jsx
           {joined && <div className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">✅ You're on the waitlist! An email has been sent to protection@calocapital.io</div>}
+=======
+          {status.type === "success" && <div className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">{status.message}</div>}
+          {status.type === "error" && <div className="mb-5 rounded-2xl border border-rose-300/20 bg-rose-300/10 p-4 text-sm font-bold text-rose-200">{status.message}</div>}
+>>>>>>> beb396d (Restore Calo Capital contact recipient):OneDrive/Save-the-project/src/App.jsx
           <label className="block">
             <span className="mb-2 block text-sm font-bold text-slate-200">Name</span>
             <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-[#070a14] px-4 py-3 text-white outline-none ring-cyan-300/30 focus:ring-4" placeholder="Your name" />
@@ -831,16 +892,48 @@ function WaitlistSection() {
 }
 
 function ContactSection() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    requestType: "Consultation",
+    message: "",
+  });
+  const [status, setStatus] = useState({ type: "idle", message: "" });
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const saved = { ...form, createdAt: new Date().toISOString() };
-    const existing = JSON.parse(localStorage.getItem("calo_leads") || "[]");
-    localStorage.setItem("calo_leads", JSON.stringify([saved, ...existing]));
-    setSubmitted(true);
-    setForm({ name: "", email: "", message: "" });
+    setLoading(true);
+    setStatus({ type: "idle", message: "" });
+
+    const createdAt = new Date().toISOString();
+    const templateParams = {
+      recipient_email: CALO_INQUIRY_RECIPIENT,
+      to_email: CALO_INQUIRY_RECIPIENT,
+      inquiry_type: "Client Request",
+      from_name: form.name,
+      from_email: form.email,
+      phone: form.phone || "Not provided",
+      service_type: form.requestType,
+      message: form.message,
+      reply_to: form.email,
+      subject: `Calo Capital request from ${form.name}`,
+      created_at: createdAt,
+    };
+
+    try {
+      await sendInquiryEmail(EMAILJS_CONTACT_TEMPLATE_ID, templateParams);
+      const saved = { ...form, createdAt };
+      storeInquiry("calo_leads", saved);
+      setStatus({ type: "success", message: "Message sent successfully. The Calo team will follow up soon." });
+      setForm({ name: "", email: "", phone: "", requestType: "Consultation", message: "" });
+    } catch (error) {
+      console.error("Failed to send contact email:", error);
+      setStatus({ type: "error", message: getErrorMessage(error) });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -903,9 +996,15 @@ function ContactSection() {
 
           {/* FORM */}
           <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-[#0d1322]/90 p-8 shadow-xl backdrop-blur-md">
-            {submitted && (
+            {status.type === "success" && (
               <div className="mb-5 rounded-xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">
-                Message sent successfully.
+                {status.message}
+              </div>
+            )}
+
+            {status.type === "error" && (
+              <div className="mb-5 rounded-xl border border-rose-300/20 bg-rose-300/10 p-4 text-sm font-bold text-rose-200">
+                {status.message}
               </div>
             )}
 
@@ -933,6 +1032,35 @@ function ContactSection() {
             </label>
 
             <label className="mt-5 block">
+              <span className="mb-2 block text-sm font-bold">Phone Number</span>
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="w-full rounded-xl border border-white/10 bg-[#070a14] px-4 py-3 text-white outline-none"
+                placeholder="(555) 123-4567"
+              />
+            </label>
+
+            <label className="mt-5 block">
+              <span className="mb-2 block text-sm font-bold">Service / Request Type</span>
+              <select
+                required
+                value={form.requestType}
+                onChange={(e) => setForm({ ...form, requestType: e.target.value })}
+                className="w-full rounded-xl border border-white/10 bg-[#070a14] px-4 py-3 text-white outline-none"
+              >
+                <option>Consultation</option>
+                <option>Insurance Planning</option>
+                <option>Lending Solutions</option>
+                <option>Digital Assets</option>
+                <option>Wealth Strategy</option>
+                <option>General Question</option>
+                <option>Other</option>
+              </select>
+            </label>
+
+            <label className="mt-5 block">
               <span className="mb-2 block text-sm font-bold">Message</span>
               <textarea
                 required
@@ -944,8 +1072,8 @@ function ContactSection() {
               />
             </label>
 
-            <button className="mt-6 w-full rounded-xl bg-violet-300 px-6 py-4 font-black text-slate-950 transition hover:bg-violet-200">
-              Send Message →
+            <button disabled={loading} className="mt-6 w-full rounded-xl bg-violet-300 px-6 py-4 font-black text-slate-950 transition hover:bg-violet-200 disabled:cursor-not-allowed disabled:opacity-50">
+              {loading ? "Sending..." : "Send Message →"}
             </button>
           </form>
         </div>
