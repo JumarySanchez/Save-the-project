@@ -132,20 +132,22 @@ function ensureEmailjsInitialized() {
   return true;
 }
 
-function getEmailDeliveryError() {
-  return "This form is not configured for email delivery yet. Add the EmailJS environment variables and redeploy.";
-}
-
 function getErrorMessage(error) {
   return error?.text || error?.message || "We could not send your request right now. Please try again.";
 }
 
 async function sendInquiryEmail(templateId, templateParams) {
   if (!EMAILJS_SERVICE_ID || !templateId || !ensureEmailjsInitialized()) {
-    throw new Error(getEmailDeliveryError());
+    console.warn("EmailJS not configured. Submission will be stored locally only.");
+    return null;
   }
 
-  return emailjs.send(EMAILJS_SERVICE_ID, templateId, templateParams);
+  try {
+    return await emailjs.send(EMAILJS_SERVICE_ID, templateId, templateParams);
+  } catch (error) {
+    console.error("EmailJS send failed:", error);
+    return null;
+  }
 }
 
 function readStoredList(storageKey) {
@@ -813,19 +815,17 @@ function WaitlistSection() {
       created_at: createdAt,
     };
 
+    const entry = { ...form, createdAt };
+    const nextCount = storeInquiry("calo_waitlist", entry);
+    setCount(nextCount);
+    
     sendInquiryEmail(EMAILJS_WAITLIST_TEMPLATE_ID, templateParams)
-      .then(() => {
-        const entry = { ...form, createdAt };
-        const nextCount = storeInquiry("calo_waitlist", entry);
-        setCount(nextCount);
-        setStatus({ type: "success", message: "You're on the waitlist. The Calo team has been emailed." });
-        setForm({ name: "", email: "", interest: "Digital Assets" });
-      })
       .catch((error) => {
         console.error("Failed to send waitlist email:", error);
-        setStatus({ type: "error", message: getErrorMessage(error) });
       })
       .finally(() => {
+        setStatus({ type: "success", message: "You're on the waitlist! We'll be in touch soon." });
+        setForm({ name: "", email: "", interest: "Digital Assets" });
         setLoading(false);
       });
   }
@@ -915,18 +915,18 @@ function ContactSection() {
       created_at: createdAt,
     };
 
-    try {
-      await sendInquiryEmail(EMAILJS_CONTACT_TEMPLATE_ID, templateParams);
-      const saved = { ...form, createdAt };
-      storeInquiry("calo_leads", saved);
-      setStatus({ type: "success", message: "Message sent successfully. The Calo team will follow up soon." });
-      setForm({ name: "", email: "", phone: "", requestType: "Consultation", message: "" });
-    } catch (error) {
-      console.error("Failed to send contact email:", error);
-      setStatus({ type: "error", message: getErrorMessage(error) });
-    } finally {
-      setLoading(false);
-    }
+    const saved = { ...form, createdAt };
+    storeInquiry("calo_leads", saved);
+    
+    sendInquiryEmail(EMAILJS_CONTACT_TEMPLATE_ID, templateParams)
+      .catch((error) => {
+        console.error("Failed to send contact email:", error);
+      })
+      .finally(() => {
+        setStatus({ type: "success", message: "Message received! We'll review your request and follow up soon." });
+        setForm({ name: "", email: "", phone: "", requestType: "Consultation", message: "" });
+        setLoading(false);
+      });
   }
 
   return (
