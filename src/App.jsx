@@ -1,9 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-<<<<<<< HEAD:src/App.jsx
 import logoPng from "../public/Calo_purple_logo.png";
-=======
 import emailjs from "@emailjs/browser";
->>>>>>> beb396d (Restore Calo Capital contact recipient):OneDrive/Save-the-project/src/App.jsx
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -858,12 +855,8 @@ function WaitlistSection() {
         </div>
 
         <form onSubmit={handleSubmit} className="rounded-[2rem] border border-cyan-200/20 bg-white/[0.05] p-6 shadow-2xl shadow-cyan-950/30 backdrop-blur-md lg:p-8">
-<<<<<<< HEAD:src/App.jsx
-          {joined && <div className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">✅ You're on the waitlist! An email has been sent to protection@calocapital.io</div>}
-=======
           {status.type === "success" && <div className="mb-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm font-bold text-emerald-200">{status.message}</div>}
           {status.type === "error" && <div className="mb-5 rounded-2xl border border-rose-300/20 bg-rose-300/10 p-4 text-sm font-bold text-rose-200">{status.message}</div>}
->>>>>>> beb396d (Restore Calo Capital contact recipient):OneDrive/Save-the-project/src/App.jsx
           <label className="block">
             <span className="mb-2 block text-sm font-bold text-slate-200">Name</span>
             <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-[#070a14] px-4 py-3 text-white outline-none ring-cyan-300/30 focus:ring-4" placeholder="Your name" />
