@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import logoPng from "../public/Calo_purple_logo.png";
-import emailjs from "@emailjs/browser";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -136,18 +135,20 @@ function getErrorMessage(error) {
   return error?.text || error?.message || "We could not send your request right now. Please try again.";
 }
 
+function getMissingConfigError() {
+  const missing = [];
+  if (!EMAILJS_SERVICE_ID) missing.push("VITE_EMAILJS_SERVICE_ID");
+  if (!EMAILJS_PUBLIC_KEY) missing.push("VITE_EMAILJS_PUBLIC_KEY");
+  if (!EMAILJS_TEMPLATE_ID) missing.push("VITE_EMAILJS_TEMPLATE_ID");
+  return `EmailJS not configured. Missing: ${missing.join(", ")}. Please add these environment variables to your deployment.`;
+}
+
 async function sendInquiryEmail(templateId, templateParams) {
   if (!EMAILJS_SERVICE_ID || !templateId || !ensureEmailjsInitialized()) {
-    console.warn("EmailJS not configured. Submission will be stored locally only.");
-    return null;
+    throw new Error(getMissingConfigError());
   }
 
-  try {
-    return await emailjs.send(EMAILJS_SERVICE_ID, templateId, templateParams);
-  } catch (error) {
-    console.error("EmailJS send failed:", error);
-    return null;
-  }
+  return emailjs.send(EMAILJS_SERVICE_ID, templateId, templateParams);
 }
 
 function readStoredList(storageKey) {
@@ -802,30 +803,26 @@ function WaitlistSection() {
 
     const createdAt = new Date().toISOString();
 
-    const templateParams = {
-      recipient_email: CALO_INQUIRY_RECIPIENT,
+    const formData = {
       to_email: CALO_INQUIRY_RECIPIENT,
-      inquiry_type: "Waitlist Signup",
-      from_name: form.name,
       from_email: form.email,
-      interest: form.interest,
-      phone: "Not provided",
-      message: `New Crypto RIAs waitlist signup: ${form.name} (${form.email}) is interested in ${form.interest}.`,
-      reply_to: form.email,
-      created_at: createdAt,
+      subject: `New Waitlist Signup: ${form.name}`,
+      message: `Name: ${form.name}\nEmail: ${form.email}\nInterest: ${form.interest}\n\nNew Crypto RIAs waitlist signup.`,
     };
 
-    const entry = { ...form, createdAt };
-    const nextCount = storeInquiry("calo_waitlist", entry);
-    setCount(nextCount);
-    
-    sendInquiryEmail(EMAILJS_WAITLIST_TEMPLATE_ID, templateParams)
+    submitInquiryToWeb3Forms(formData)
+      .then((response) => {
+        const entry = { ...form, createdAt };
+        const nextCount = storeInquiry("calo_waitlist", entry);
+        setCount(nextCount);
+        setStatus({ type: "success", message: "Success! You're on the waitlist. Check your email for a confirmation." });
+        setForm({ name: "", email: "", interest: "Digital Assets" });
+      })
       .catch((error) => {
-        console.error("Failed to send waitlist email:", error);
+        console.error("Failed to submit waitlist:", error);
+        setStatus({ type: "error", message: getErrorMessage(error) });
       })
       .finally(() => {
-        setStatus({ type: "success", message: "You're on the waitlist! We'll be in touch soon." });
-        setForm({ name: "", email: "", interest: "Digital Assets" });
         setLoading(false);
       });
   }
@@ -901,30 +898,25 @@ function ContactSection() {
     setStatus({ type: "idle", message: "" });
 
     const createdAt = new Date().toISOString();
-    const templateParams = {
-      recipient_email: CALO_INQUIRY_RECIPIENT,
+    const formData = {
       to_email: CALO_INQUIRY_RECIPIENT,
-      inquiry_type: "Client Request",
-      from_name: form.name,
       from_email: form.email,
-      phone: form.phone || "Not provided",
-      service_type: form.requestType,
-      message: form.message,
-      reply_to: form.email,
-      subject: `Calo Capital request from ${form.name}`,
-      created_at: createdAt,
+      subject: `Calo Capital Contact Request from ${form.name}`,
+      message: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone || "Not provided"}\nRequest Type: ${form.requestType}\n\nMessage:\n${form.message}`,
     };
 
-    const saved = { ...form, createdAt };
-    storeInquiry("calo_leads", saved);
-    
-    sendInquiryEmail(EMAILJS_CONTACT_TEMPLATE_ID, templateParams)
+    submitInquiryToWeb3Forms(formData)
+      .then((response) => {
+        const saved = { ...form, createdAt };
+        storeInquiry("calo_leads", saved);
+        setStatus({ type: "success", message: "Success! Your message has been sent to protection@calocapital.io. We'll review your request and follow up soon." });
+        setForm({ name: "", email: "", phone: "", requestType: "Consultation", message: "" });
+      })
       .catch((error) => {
-        console.error("Failed to send contact email:", error);
+        console.error("Failed to submit contact form:", error);
+        setStatus({ type: "error", message: getErrorMessage(error) });
       })
       .finally(() => {
-        setStatus({ type: "success", message: "Message received! We'll review your request and follow up soon." });
-        setForm({ name: "", email: "", phone: "", requestType: "Consultation", message: "" });
         setLoading(false);
       });
   }
