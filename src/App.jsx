@@ -55,25 +55,25 @@ const services = [
   {
     title: "Cash Alternatives",
     description:
-      "Alternative strategies focused on liquidity, cash flow, and capital preservation.",
+      "Designed to help clients understand liquidity, cash flow, and preservation-focused strategies.",
     features: ["Liquidity Management", "Capital Preservation", "Structured Yield", "Short-term Alternatives"],
   },
   {
     title: "Crypto",
     description:
-      "Digital asset education, custody solutions, and strategic market insights.",
+      "Education and insight around digital assets, custody, treasury strategy, and emerging blockchain markets.",
     features: ["Education", "Custody Guidance", "Token Research", "Strategic Insights"],
   },
   {
     title: "Commodities",
     description:
-      "Diversification opportunities through precious metals, energy, and commodity markets.",
+      "Perspective on precious metals, energy, and real assets as tools for diversification and resilience.",
     features: ["Commodity Outlook", "Diversification", "Hedging", "Macro Insight"],
   },
   {
     title: "Companies",
     description:
-      "Long-term opportunities involving private businesses and growth-focused investments.",
+      "Research-driven views on businesses, private opportunities, and long-term growth potential.",
     features: ["Private Opportunities", "Company Analysis", "Growth Investing", "Operational Due Diligence"],
   },
 ];
@@ -155,6 +155,8 @@ const socialLinks = [
   },
 ];
 
+const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
+
 function SocialLink({ item }) {
   return (
     <a
@@ -162,9 +164,9 @@ function SocialLink({ item }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={item.ariaLabel}
-      className="group inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-slate-200 transition hover:-translate-y-0.5 hover:border-cyan-200/30 hover:bg-white/[0.07] hover:text-white"
+      className="group inline-flex items-center gap-3 rounded-2xl border border-violet-200/20 bg-white/[0.045] px-4 py-3 text-sm font-semibold text-slate-200 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-violet-200/45 hover:text-white hover:shadow-[0_10px_30px_-12px_rgba(167,139,250,0.6)]"
     >
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-[#0c1322] text-cyan-100 transition group-hover:border-cyan-200/30 group-hover:text-white">
+      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-violet-200/25 bg-white/[0.06] text-violet-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition group-hover:border-violet-200/50 group-hover:bg-violet-300/10 group-hover:text-white group-hover:shadow-[0_0_0_1px_rgba(167,139,250,0.28),0_0_22px_rgba(167,139,250,0.38)]">
         {item.icon}
       </span>
       <span>{item.label}</span>
@@ -385,9 +387,14 @@ function Navbar({ currentPage, setPage }) {
           ))}
         </nav>
 
-        <button onClick={() => goTo("Contact")} className="hidden rounded-xl bg-violet-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-violet-200 lg:inline-block">
+        <a
+          href={SCHEDULE_CALL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden rounded-xl bg-violet-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-violet-200 lg:inline-block"
+        >
           Schedule a Call
-        </button>
+        </a>
 
         <button
           onClick={() => setOpen((value) => !value)}
@@ -689,9 +696,14 @@ function HeroSection({ coins, setPage }) {
             <button onClick={() => setPage("About")} className="rounded-xl bg-violet-300 px-7 py-3.5 text-center text-sm font-black text-slate-950 transition hover:bg-violet-200">
               Learn More →
             </button>
-            <button onClick={() => setPage("Contact")} className="rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-center text-sm font-bold text-white transition hover:bg-white/10">
+            <a
+              href={SCHEDULE_CALL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-center text-sm font-bold text-white transition hover:bg-white/10"
+            >
               Schedule a Call
-            </button>
+            </a>
           </div>
 
           <div className="max-w-md pt-2">
@@ -733,7 +745,7 @@ function MarketTicker({ coins, live }) {
         <span className="font-mono text-[10px] font-black text-slate-300">{live ? "LIVE" : "DEMO"}</span>
       </div>
 
-      <div className="animate-[marquee_34s_linear_infinite] whitespace-nowrap pl-24">
+      <div className="animate-[marquee_22s_linear_infinite] whitespace-nowrap pl-24">
         {items.map((coin, index) => {
           const up = coin.change >= 0;
           return (
@@ -752,56 +764,50 @@ function MarketTicker({ coins, live }) {
   );
 }
 
-function StatsSection() {
-  const stats = [
-    ["3", "Core Planning Pillars"],
-    ["24/7", "Market Awareness"],
-    ["100%", "Education First"],
-    ["1:1", "Consultation Path"],
-  ];
-
-  return (
-    <section className="bg-[#070a14] px-5 py-12 text-white">
-      <div className="mx-auto grid max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map(([value, label]) => (
-          <div key={label} className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-center">
-            <p className="text-3xl font-black text-violet-200">{value}</p>
-            <p className="mt-2 text-sm text-slate-400">{label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function ServicesSection() {
+  const serviceMarks = ["I", "II", "III", "IV"];
+
   return (
-    <section id="services" className="bg-[#0b0f1d] px-5 py-20 text-white">
+    <section id="services" className="bg-[#0b0f1d] px-5 py-24 text-white">
       <div className="mx-auto max-w-7xl">
-        <p className="mb-3 text-sm font-black uppercase tracking-[0.3em] text-violet-200">Services</p>
-        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <h2 className="max-w-3xl text-3xl font-black sm:text-4xl">
-            Calo Capital bridges cash alternatives, crypto, commodities, and company research through education, insight, and strategic market guidance.
+        <div className="max-w-4xl">
+          <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-violet-200">The 4 C's</p>
+          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+            Strategic Wealth Pillars for a Changing Financial World
           </h2>
-          <p className="max-w-xl text-slate-300">
-            Services are organized around the 4 C's to support informed decisions and long-term capital stewardship.
+          <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+            Calo Capital organizes its education and market insight around four core pillars: cash alternatives, crypto, commodities, and companies. Together, they create a framework for understanding protection, opportunity, and long-term financial strategy.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {services.map((service, index) => (
-            <article key={service.title} className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 transition hover:-translate-y-1 hover:bg-white/[0.07]">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-300/10 text-xl text-violet-200 ring-1 ring-violet-300/20">
-                {index === 0 ? "◈" : index === 1 ? "◆" : index === 2 ? "△" : "✦"}
+            <article
+              key={service.title}
+              className="group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-violet-200/25 hover:bg-white/[0.055] hover:shadow-[0_20px_50px_-28px_rgba(109,94,245,0.7)]"
+            >
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent" />
+              <div className="absolute left-4 top-4 h-8 w-8 rounded-tl-2xl border-l border-t border-violet-200/25 opacity-70" />
+              <div className="absolute bottom-4 right-4 h-8 w-8 rounded-br-2xl border-b border-r border-violet-200/25 opacity-70" />
+
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-[#0b1020] text-sm font-black tracking-[0.28em] text-violet-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition group-hover:border-violet-200/30 group-hover:text-white">
+                  {serviceMarks[index]}
+                </div>
+                <div className="mt-2 h-px flex-1 bg-gradient-to-r from-slate-200/40 via-slate-200/15 to-transparent" />
               </div>
-              <h3 className="text-lg font-black text-white">{service.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-300">{service.description}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {service.features.map((feature) => (
-                  <span key={feature} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">
-                    {feature}
-                  </span>
-                ))}
+
+              <div className="mt-6">
+                <p className="text-[11px] font-black uppercase tracking-[0.34em] text-slate-400">Pillar {serviceMarks[index]}</p>
+                <h3 className="mt-3 text-2xl font-black tracking-tight text-white">{service.title}</h3>
+                <div className="mt-4 h-px w-full bg-white/10" />
+                <p className="mt-5 text-sm leading-7 text-slate-300">{service.description}</p>
+              </div>
+
+              <div className="mt-6 flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">
+                <span className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+                <span>4 C Framework</span>
+                <span className="h-px flex-1 bg-gradient-to-l from-white/10 to-transparent" />
               </div>
             </article>
           ))}
@@ -866,12 +872,14 @@ function CTASection({ setPage }) {
       <div className="mx-auto max-w-5xl rounded-[2rem] border border-violet-300/20 bg-gradient-to-br from-violet-300/15 to-cyan-300/10 p-8 text-center shadow-2xl shadow-violet-950/30 lg:p-12">
         <h2 className="text-3xl font-black sm:text-4xl">Ready to create clarity around your next financial move?</h2>
         <p className="mx-auto mt-4 max-w-2xl text-slate-300">Book a consultation, ask a question, or request more information about cash alternatives, crypto, commodities, and company research.</p>
-        <button
-          onClick={() => setPage("Contact")}
+        <a
+          href={SCHEDULE_CALL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-8 inline-block rounded-xl bg-violet-300 px-7 py-3.5 text-sm font-black text-slate-950 hover:bg-violet-200"
         >
           Schedule a Call
-        </button>
+        </a>
       </div>
     </section>
   );
@@ -926,13 +934,19 @@ function ContactSection() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
+              <a
+                href={SCHEDULE_CALL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open Google Calendar booking page in a new tab"
+                className="flex items-start gap-4 rounded-xl transition hover:bg-white/[0.03]"
+              >
                 <div className="rounded-xl bg-violet-300/10 p-3 text-violet-300">↗</div>
                 <div>
                   <p className="font-bold">Book a Meeting</p>
                   <p className="text-sm text-slate-400">Schedule via Google Calendar</p>
                 </div>
-              </div>
+              </a>
             </div>
 
             <div className="mt-10 border-t border-white/10 pt-6">
@@ -1140,7 +1154,6 @@ function HomePage({ coins, live, setPage }) {
     <>
       <HeroSection coins={coins} setPage={setPage} />
       <MarketTicker coins={coins} live={live} />
-      <StatsSection />
       <ServicesSection />
       <CTASection setPage={setPage} />
     </>
