@@ -1087,9 +1087,6 @@ function TeamPage() {
                 {/* overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/80 via-transparent to-transparent" />
 
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-[14rem] rounded-2xl border border-white/20 bg-[#0b0f1d]/80 px-4 py-2 text-center text-[10px] font-semibold leading-4 text-slate-200 backdrop-blur">
-                  Educational content only. No guaranteed financial returns.
-                </div>
               </div>
 
               <h3 className="mt-6 text-xl font-black">{member.name}</h3>
