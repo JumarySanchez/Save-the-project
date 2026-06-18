@@ -28,29 +28,6 @@ const CHART_ASSETS = [
   { group: "ETFs", label: "QQQ", display: "QQQ", tvSymbol: "NASDAQ:QQQ", price: 521.77, change: 0.55 },
 ];
 
-const aboutServices = [
-  {
-    title: "Cash Alternatives",
-    description: "Alternative strategies focused on liquidity, cash flow, and capital preservation.",
-    icon: "◈",
-  },
-  {
-    title: "Crypto",
-    description: "Digital asset education, custody solutions, and strategic market insights.",
-    icon: "◎",
-  },
-  {
-    title: "Commodities",
-    description: "Diversification opportunities through precious metals, energy, and commodity markets.",
-    icon: "▥",
-  },
-  {
-    title: "Companies",
-    description: "Long-term opportunities involving private businesses and growth-focused investments.",
-    icon: "▦",
-  },
-];
-
 const services = [
   {
     title: "Cash Alternatives",
@@ -164,9 +141,10 @@ function SocialLink({ item }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={item.ariaLabel}
-      className="group inline-flex items-center gap-3 rounded-2xl border border-violet-200/20 bg-white/[0.045] px-4 py-3 text-sm font-semibold text-slate-200 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-violet-200/45 hover:text-white hover:shadow-[0_10px_30px_-12px_rgba(167,139,250,0.6)]"
+      className="group relative inline-flex items-center gap-3 rounded-full border border-[#B7C0D8]/30 bg-white/[0.045] px-3.5 py-2.5 text-sm font-semibold text-[#F4F7FB] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-[#C6B8FF]/50 hover:text-white hover:shadow-[0_10px_24px_-14px_rgba(155,124,255,0.52)]"
     >
-      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-violet-200/25 bg-white/[0.06] text-violet-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition group-hover:border-violet-200/50 group-hover:bg-violet-300/10 group-hover:text-white group-hover:shadow-[0_0_0_1px_rgba(167,139,250,0.28),0_0_22px_rgba(167,139,250,0.38)]">
+      <span className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-[#B7C0D8]/45 to-transparent" />
+      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B7C0D8]/35 bg-[#1A2340]/55 text-[#C6B8FF] shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition group-hover:border-[#C6B8FF]/55 group-hover:bg-violet-300/12 group-hover:text-white group-hover:shadow-[0_0_0_1px_rgba(198,184,255,0.22),0_0_20px_rgba(155,124,255,0.32)]">
         {item.icon}
       </span>
       <span>{item.label}</span>
@@ -350,10 +328,10 @@ const pageRoutes = {
 
 function getPageFromHash() {
   const hash = window.location.hash || "#/";
-  if (hash === "#/about") return "About";
-  if (hash === "#/team") return "Team";
+  if (hash === "#/about" || hash === "#about" || hash === "#client-excellence") return "About";
+  if (hash === "#/team" || hash === "#team" || hash === "#leadership") return "Team";
   if (hash === "#/blog") return "Blog";
-  if (hash === "#/contact") return "Contact";
+  if (hash === "#/contact" || hash === "#contact") return "Contact";
   return "Home";
 }
 
@@ -565,7 +543,14 @@ function StockChart({ coins }) {
   }, [selectedAsset.tvSymbol]);
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-[#101323]/80 p-5 shadow-2xl shadow-violet-950/30 backdrop-blur-md">
+    <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-5 shadow-2xl shadow-violet-950/35 backdrop-blur-md">
+      <div className="pointer-events-none absolute inset-0 opacity-40">
+        <div className="h-full w-full bg-[linear-gradient(rgba(183,192,216,.07)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.06)_1px,transparent_1px)] bg-[size:34px_34px]" />
+      </div>
+      <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-slate-300/85">
+        <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-1">Depth</span>
+        <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-1">Vol 24H</span>
+      </div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-400">Asset Selector</p>
@@ -618,9 +603,15 @@ function StockChart({ coins }) {
           <p className="text-xs text-slate-400">24h Performance</p>
         </div>
       </div>
-      <div className="relative flex h-72 items-center justify-center overflow-visible rounded-2xl border border-white/10 bg-[#070a14]">
+      <div className="relative flex h-72 items-center justify-center overflow-visible rounded-2xl border border-violet-200/20 bg-[#070a14] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
         <div className="absolute inset-0 z-0 opacity-25">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:42px_42px]" />
+        </div>
+        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+          Momentum
+        </div>
+        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+          Trend
         </div>
         <div className="relative z-20 flex h-full w-full items-center justify-center px-0">
           <div ref={(el) => el && (el.style.width = "100%")} className="h-full w-full" id="tv_chart_container" />
@@ -683,9 +674,9 @@ function HeroSection({ coins, setPage }) {
           </div>
 
           <h1 className="text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-            <span>Where Strategy</span>
+            <span className="drop-shadow-[0_0_20px_rgba(198,184,255,0.3)]">Where Strategy</span>
             <br />
-            <span>Meets Legacy</span>
+            <span className="drop-shadow-[0_0_22px_rgba(109,94,245,0.35)]">Meets Legacy</span>
           </h1>
 
           <p className="max-w-md text-base leading-relaxed text-slate-300 sm:text-lg">
@@ -693,14 +684,14 @@ function HeroSection({ coins, setPage }) {
           </p>
 
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-            <button onClick={() => setPage("About")} className="rounded-xl bg-violet-300 px-7 py-3.5 text-center text-sm font-black text-slate-950 transition hover:bg-violet-200">
+            <button onClick={() => setPage("About")} className="rounded-xl bg-violet-300 px-7 py-3.5 text-center text-sm font-black text-slate-950 transition hover:bg-violet-200 hover:shadow-[0_10px_28px_-12px_rgba(198,184,255,0.65)]">
               Learn More →
             </button>
             <a
               href={SCHEDULE_CALL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-white/10 bg-white/5 px-7 py-3.5 text-center text-sm font-bold text-white transition hover:bg-white/10"
+              className="rounded-xl border border-violet-200/20 bg-white/5 px-7 py-3.5 text-center text-sm font-bold text-white transition hover:border-violet-200/45 hover:bg-violet-300/10 hover:shadow-[0_10px_26px_-14px_rgba(155,124,255,0.72)]"
             >
               Schedule a Call
             </a>
@@ -712,6 +703,11 @@ function HeroSection({ coins, setPage }) {
         </div>
 
         <div className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-slate-300/85">
+            <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Digital Assets</span>
+            <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Macro Signals</span>
+            <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Risk Lens</span>
+          </div>
           <StockChart coins={coins} />
           <div className="grid grid-cols-3 gap-3">
             {[
@@ -745,7 +741,7 @@ function MarketTicker({ coins, live }) {
         <span className="font-mono text-[10px] font-black text-slate-300">{live ? "LIVE" : "DEMO"}</span>
       </div>
 
-      <div className="animate-[marquee_22s_linear_infinite] whitespace-nowrap pl-24">
+      <div className="animate-[marquee_7s_linear_infinite] whitespace-nowrap pl-24">
         {items.map((coin, index) => {
           const up = coin.change >= 0;
           return (
@@ -766,48 +762,78 @@ function MarketTicker({ coins, live }) {
 
 function ServicesSection() {
   const serviceMarks = ["I", "II", "III", "IV"];
+  const serviceIds = ["cash-alternatives", "crypto", "commodities", "companies"];
+  const serviceTextures = [
+    {
+      panel: "bg-[radial-gradient(circle_at_12%_8%,rgba(198,184,255,0.18),transparent_35%),linear-gradient(180deg,rgba(26,35,64,0.62)_0%,rgba(13,19,36,0.84)_100%)]",
+      overlay: "bg-[linear-gradient(rgba(183,192,216,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.04)_1px,transparent_1px)] bg-[size:34px_34px]",
+      accent: "Liquidity Map",
+    },
+    {
+      panel: "bg-[radial-gradient(circle_at_84%_12%,rgba(155,124,255,0.24),transparent_42%),linear-gradient(180deg,rgba(21,31,58,0.68)_0%,rgba(11,16,30,0.86)_100%)]",
+      overlay: "bg-[radial-gradient(circle_at_14%_32%,rgba(198,184,255,.22)_1px,transparent_2px),radial-gradient(circle_at_62%_58%,rgba(198,184,255,.2)_1px,transparent_2px),radial-gradient(circle_at_84%_24%,rgba(198,184,255,.18)_1px,transparent_2px)] bg-[size:78px_68px]",
+      accent: "Node Mesh",
+    },
+    {
+      panel: "bg-[radial-gradient(circle_at_24%_82%,rgba(109,94,245,0.18),transparent_38%),linear-gradient(180deg,rgba(25,35,61,0.63)_0%,rgba(12,18,34,0.84)_100%)]",
+      overlay: "bg-[linear-gradient(118deg,transparent_0%,transparent_42%,rgba(183,192,216,.14)_43%,transparent_44%,transparent_100%),linear-gradient(143deg,transparent_0%,transparent_57%,rgba(183,192,216,.12)_58%,transparent_59%,transparent_100%)]",
+      accent: "Trend Flow",
+    },
+    {
+      panel: "bg-[radial-gradient(circle_at_78%_18%,rgba(198,184,255,0.2),transparent_38%),linear-gradient(180deg,rgba(23,34,59,0.64)_0%,rgba(10,16,31,0.86)_100%)]",
+      overlay: "bg-[linear-gradient(rgba(183,192,216,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.04)_1px,transparent_1px),radial-gradient(circle_at_24%_72%,rgba(183,192,216,.18)_1px,transparent_2px)] bg-[size:30px_30px,30px_30px,62px_62px]",
+      accent: "Data Pulse",
+    },
+  ];
 
   return (
     <section id="services" className="bg-[#0b0f1d] px-5 py-24 text-white">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-4xl">
-          <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-violet-200">The 4 C's</p>
-          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-            Strategic Wealth Pillars for a Changing Financial World
+          <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-[#C6B8FF]">Built for a New Era of Markets</p>
+          <h2 className="text-3xl font-black leading-tight tracking-tight text-[#F4F7FB] sm:text-4xl lg:text-5xl">
+            Digital Asset Strategy Meets Long-Term Wealth Thinking
           </h2>
-          <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
-            Calo Capital organizes its education and market insight around four core pillars: cash alternatives, crypto, commodities, and companies. Together, they create a framework for understanding protection, opportunity, and long-term financial strategy.
+          <p className="mt-5 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg">
+            Four Pillars for the Future of Capital. Calo Capital organizes its education and market insight around cash alternatives, crypto, commodities, and companies to build a practical framework for protection, opportunity, and long-term strategy.
           </p>
         </div>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {services.map((service, index) => (
             <article
+              id={serviceIds[index]}
               key={service.title}
-              className="group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-violet-200/25 hover:bg-white/[0.055] hover:shadow-[0_20px_50px_-28px_rgba(109,94,245,0.7)]"
+              className={`group relative overflow-hidden rounded-[1.55rem] border border-white/10 p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_34px_-26px_rgba(5,8,22,0.95)] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-[#C6B8FF]/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_20px_38px_-28px_rgba(155,124,255,0.5)] ${serviceTextures[index].panel}`}
             >
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent" />
-              <div className="absolute left-4 top-4 h-8 w-8 rounded-tl-2xl border-l border-t border-violet-200/25 opacity-70" />
-              <div className="absolute bottom-4 right-4 h-8 w-8 rounded-br-2xl border-b border-r border-violet-200/25 opacity-70" />
+              <div className="pointer-events-none absolute inset-0 opacity-28">
+                <div className={`h-full w-full ${serviceTextures[index].overlay}`} />
+              </div>
+              <div className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#C6B8FF]/45" />
+                <span className="h-px w-7 bg-[#B7C0D8]/30" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#C6B8FF]/25" />
+              </div>
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B7C0D8]/45 to-transparent" />
 
               <div className="flex items-start justify-between gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-[#0b1020] text-sm font-black tracking-[0.28em] text-violet-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition group-hover:border-violet-200/30 group-hover:text-white">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#B7C0D8]/35 bg-[#1A2340]/76 text-sm font-black tracking-[0.24em] text-[#F4F7FB] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] transition group-hover:border-[#C6B8FF]/45 group-hover:shadow-[0_0_0_1px_rgba(198,184,255,0.2)]">
                   {serviceMarks[index]}
                 </div>
-                <div className="mt-2 h-px flex-1 bg-gradient-to-r from-slate-200/40 via-slate-200/15 to-transparent" />
+                <div className="mt-3 h-px flex-1 bg-gradient-to-r from-[#B7C0D8]/35 via-[#B7C0D8]/10 to-transparent" />
               </div>
 
               <div className="mt-6">
-                <p className="text-[11px] font-black uppercase tracking-[0.34em] text-slate-400">Pillar {serviceMarks[index]}</p>
-                <h3 className="mt-3 text-2xl font-black tracking-tight text-white">{service.title}</h3>
-                <div className="mt-4 h-px w-full bg-white/10" />
-                <p className="mt-5 text-sm leading-7 text-slate-300">{service.description}</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-[#B7C0D8]">Pillar {serviceMarks[index]}</p>
+                <h3 className="mt-3 text-2xl font-black tracking-tight text-[#F4F7FB]">{service.title}</h3>
+                <div className="mt-4 h-px w-full bg-[#B7C0D8]/20" />
+                <p className="mt-5 text-sm leading-7 text-[#B7C0D8]">{service.description}</p>
               </div>
 
-              <div className="mt-6 flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">
-                <span className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
-                <span>4 C Framework</span>
-                <span className="h-px flex-1 bg-gradient-to-l from-white/10 to-transparent" />
+              <div className="mt-6 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.25em] text-[#B7C0D8]">
+                <span className="h-px flex-1 bg-gradient-to-r from-[#B7C0D8]/20 to-transparent" />
+                <span>{serviceTextures[index].accent}</span>
+                <span className="h-px flex-1 bg-gradient-to-l from-[#B7C0D8]/20 to-transparent" />
               </div>
             </article>
           ))}
@@ -889,7 +915,7 @@ function ContactSection() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-28 text-center text-white sm:py-36">
+      <section id="contact" className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-28 text-center text-white sm:py-36">
         <div className="absolute inset-0 opacity-[0.12]">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
         </div>
@@ -991,45 +1017,93 @@ function PageHeader({ eyebrow, title, description }) {
 }
 
 function AboutPage() {
+  const brandPillars = [
+    {
+      title: "The Guide",
+      description: "Helping people navigate finance clearly.",
+      mark: "I",
+    },
+    {
+      title: "The Visionary",
+      description: "Seeing where finance and wealth strategy are going.",
+      mark: "II",
+    },
+    {
+      title: "The Protector",
+      description: "Helping families build security.",
+      mark: "III",
+    },
+    {
+      title: "The Innovator",
+      description: "Modernizing financial education.",
+      mark: "IV",
+    },
+  ];
+
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-28 text-center text-white sm:py-36">
-        <div className="absolute inset-0 opacity-[0.12]">
-          <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
+      <section id="about" className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-24 text-white sm:py-32">
+        <div className="absolute inset-0 opacity-[0.14]">
+          <div className="h-full w-full bg-[linear-gradient(rgba(183,192,216,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.07)_1px,transparent_1px)] bg-[size:82px_82px]" />
         </div>
-        <div className="relative mx-auto max-w-5xl">
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">About Us</p>
-          <h1 className="mt-6 text-5xl font-black leading-tight tracking-tight text-white sm:text-6xl lg:text-7xl">About Us</h1>
-        </div>
-      </section>
-
-      <section className="bg-[#070a14] px-5 py-24 text-center text-white">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-            Where Strategy Meets Legacy.
-          </h2>
-          <div className="mx-auto mt-9 h-px w-24 bg-violet-300/40" />
-          <p className="mx-auto mt-9 max-w-3xl text-base leading-8 text-blue-300/80 sm:text-lg">
-            Calo Capital helps individuals and businesses navigate opportunities across cash alternatives, crypto, commodities, and companies through education, research, and strategic market insights. Our approach is disciplined, clear, and built to support long-term decision-making with confidence.
+        <FloatingStars />
+        <ShootingStars />
+        <div className="relative mx-auto max-w-6xl">
+          <p className="text-sm font-black uppercase tracking-[0.32em] text-[#C6B8FF]">About Calo Capital</p>
+          <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[1.02] tracking-tight text-[#F4F7FB] sm:text-6xl lg:text-7xl">
+            Strategic Wealth in the New Era
+          </h1>
+          <p className="mt-7 max-w-3xl text-lg leading-8 text-[#B7C0D8]">
+            Calo Capital blends traditional financial wisdom with future-forward market education across digital assets, commodities, companies, and cash alternatives.
           </p>
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#0b101b] px-5 py-24 text-white">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center">
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">What We Are Best At</p>
-            <h2 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl">Our Services</h2>
+      <section className="bg-[#070a14] px-5 py-20 text-white">
+        <div className="mx-auto max-w-6xl space-y-14">
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C6B8FF]">Brand Identity</p>
+              <h2 className="mt-4 text-3xl font-black tracking-tight text-[#F4F7FB] sm:text-4xl">Built for a New Era of Markets</h2>
+            </div>
+            <div className="border-l border-[#B7C0D8]/25 pl-6 text-base leading-8 text-[#B7C0D8] sm:text-lg">
+              Calo Capital represents the convergence of traditional financial wisdom and future-forward innovation.
+            </div>
           </div>
 
-          <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-            {aboutServices.map((service) => (
-              <article key={service.title} className="rounded-2xl border border-white/10 bg-[#0d1322] p-8 shadow-xl shadow-black/10">
-                <div className="mb-7 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-300/10 text-xl text-violet-300 ring-1 ring-violet-300/10">
-                  {service.icon}
+          <div id="client-excellence" className="rounded-3xl border border-[#B7C0D8]/20 bg-[linear-gradient(180deg,rgba(26,35,64,0.5)_0%,rgba(5,8,22,0.4)_100%)] p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] lg:p-10">
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C6B8FF]">Mission</p>
+            <p className="mt-5 max-w-4xl text-xl leading-9 text-[#F4F7FB]">
+              "Our mission is to help families and individuals build a more secure financial future through education, strategy, and long-term thinking."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#0b101b] px-5 py-24 text-white">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C6B8FF]">Core Brand Pillars</p>
+              <h2 className="mt-4 text-3xl font-black tracking-tight text-[#F4F7FB] sm:text-4xl">Human Guidance, Future Finance Perspective</h2>
+            </div>
+            <p className="max-w-xl text-base leading-7 text-[#B7C0D8]">
+              A strategic operating posture designed to support families and individuals with clarity, confidence, and long-range thinking.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {brandPillars.map((pillar) => (
+              <article
+                key={pillar.title}
+                className="relative overflow-hidden rounded-2xl border border-[#B7C0D8]/18 bg-[linear-gradient(180deg,rgba(26,35,64,0.52)_0%,rgba(13,19,36,0.74)_100%)] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_16px_32px_-26px_rgba(5,8,22,1)]"
+              >
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B7C0D8]/45 to-transparent" />
+                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#B7C0D8]/30 bg-[#1A2340]/72 text-xs font-black tracking-[0.22em] text-[#F4F7FB]">
+                  {pillar.mark}
                 </div>
-                <h3 className="text-2xl font-black text-white">{service.title}</h3>
-                <p className="mt-4 text-base leading-7 text-blue-300/75">{service.description}</p>
+                <h3 className="text-2xl font-black tracking-tight text-[#F4F7FB]">{pillar.title}</h3>
+                <p className="mt-3 text-base leading-7 text-[#B7C0D8]">{pillar.description}</p>
               </article>
             ))}
           </div>
@@ -1038,8 +1112,8 @@ function AboutPage() {
 
       <section className="bg-[#070a14] px-5 py-24 text-center text-white">
         <div className="mx-auto max-w-3xl">
-          <h2 className="text-3xl font-black sm:text-4xl">Let's start your next strategic conversation</h2>
-          <p className="mt-5 text-lg text-blue-300/75">Reach out to discuss cash alternatives, crypto, commodities, and companies with a clearer long-term framework.</p>
+          <h2 className="text-3xl font-black text-[#F4F7FB] sm:text-4xl">Let&apos;s start your next strategic conversation</h2>
+          <p className="mt-5 text-lg text-[#B7C0D8]">Reach out to discuss cash alternatives, crypto, commodities, and companies with a clearer long-term framework.</p>
           <button
             onClick={() => {
               window.location.hash = pageRoutes.Contact;
@@ -1077,7 +1151,7 @@ function TeamPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-28 text-center text-white sm:py-36">
+      <section id="leadership" className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-28 text-center text-white sm:py-36">
         <div className="absolute inset-0 opacity-[0.12]">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
         </div>
@@ -1161,8 +1235,18 @@ function HomePage({ coins, live, setPage }) {
 }
 
 function Footer() {
-  const serviceLinks = ["Cash Alternatives", "Crypto", "Commodities", "Companies"];
-  const companyLinks = ["Our Philosophy", "Leadership", "Client Excellence", "Contact"];
+  const serviceLinks = [
+    { label: "Cash Alternatives", href: "#cash-alternatives" },
+    { label: "Crypto", href: "#crypto" },
+    { label: "Commodities", href: "#commodities" },
+    { label: "Companies", href: "#companies" },
+  ];
+  const companyLinks = [
+    { label: "Our Philosophy", href: "#about" },
+    { label: "Leadership", href: "#leadership" },
+    { label: "Client Excellence", href: "#client-excellence" },
+    { label: "Contact", href: "#contact" },
+  ];
 
   return (
     <footer className="border-t border-white/10 bg-[#070a14] px-5 py-12 text-white">
@@ -1176,20 +1260,17 @@ function Footer() {
         <div>
           <p className="mb-4 font-black">Services</p>
           <div className="space-y-2">
-            {serviceLinks.map((link) => <a key={link} href="#services" className="block text-sm text-slate-400 hover:text-white">{link}</a>)}
+            {serviceLinks.map((link) => <a key={link.label} href={link.href} className="block text-sm text-slate-400 hover:text-white">{link.label}</a>)}
           </div>
         </div>
         <div>
           <p className="mb-4 font-black">Company</p>
           <div className="space-y-2">
-            {companyLinks.map((link) => <a key={link} href="#about" className="block text-sm text-slate-400 hover:text-white">{link}</a>)}
+            {companyLinks.map((link) => <a key={link.label} href={link.href} className="block text-sm text-slate-400 hover:text-white">{link.label}</a>)}
           </div>
         </div>
       </div>
-      <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-slate-500">
-        © {new Date().getFullYear()} Calo Capital. Educational content only. No guaranteed financial returns.
-      </div>
-      <div className="mx-auto mt-6 max-w-7xl text-xs leading-6 text-slate-500">
+      <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-[11px] leading-5 text-slate-500">
         Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. Asset allocation, diversification, and portfolio strategies do not guarantee profits or protect against losses in declining markets.
 
         The information provided by Calo Capital is for educational and informational purposes only and should not be construed as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making any financial decisions.
@@ -1261,8 +1342,20 @@ export default function App() {
 
   useEffect(() => {
     function handleHashChange() {
+      const hash = window.location.hash || "#/";
       setCurrentPage(getPageFromHash());
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      const anchorId = hash.startsWith("#/") ? "" : hash.slice(1);
+      requestAnimationFrame(() => {
+        if (anchorId) {
+          const target = document.getElementById(anchorId);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            return;
+          }
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     }
 
     window.addEventListener("hashchange", handleHashChange);
