@@ -48,12 +48,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module">
-      if (import.meta.env && import.meta.env.DEV) {
-        await import('/src/main.jsx')
-      } else {
-        await import('/dist/assets/index-C3DaWYaa.js')
-      }
-    </script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
