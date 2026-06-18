@@ -1179,7 +1179,19 @@ function Footer() {
         © {new Date().getFullYear()} Calo Capital. Educational content only. No guaranteed financial returns.
       </div>
       <div className="mx-auto mt-6 max-w-7xl text-xs leading-6 text-slate-500">
-        The information provided on this website is for educational and informational purposes only and should not be construed as investment, legal, tax, or financial advice. Calo Capital is not currently a registered investment advisor. Nothing on this site constitutes an offer, solicitation, recommendation, or endorsement of any investment product, security, or strategy. Past performance does not guarantee future results. All investments involve risk, including the possible loss of principal. Visitors should consult with qualified financial, legal, and tax professionals before making any investment decisions.
+        Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. Asset allocation, diversification, and portfolio strategies do not guarantee profits or protect against losses in declining markets.
+
+        The information provided by Calo Capital is for educational and informational purposes only and should not be construed as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making any financial decisions.
+
+        This material does not take into account an individual's specific investment objectives, financial situation, risk tolerance, or needs and is not intended as a recommendation, offer, or solicitation to buy or sell any security, investment product, or strategy.
+
+        Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Nothing contained on this website, in presentations, webinars, reports, or communications should be interpreted as personalized investment advice or a guarantee of future performance.
+
+        Any references to digital assets, commodities, cash alternatives, businesses, or market opportunities are provided for educational discussion only. All investments and financial decisions carry risk, and individuals are solely responsible for evaluating whether any strategy is appropriate for their circumstances.
+
+        Calo Capital may discuss third-party products, platforms, or service providers. Such references do not constitute an endorsement or guarantee of results. Users should perform their own due diligence before engaging with any third-party provider.
+
+        By using this website, you acknowledge that you are responsible for your own financial decisions and agree that Calo Capital shall not be held liable for any losses arising from reliance on information presented through this website or related materials.
       </div>
       <div className="mx-auto mt-6 max-w-7xl flex flex-wrap gap-3">
         {socialLinks.map((item) => (
