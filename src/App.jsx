@@ -132,8 +132,6 @@ const socialLinks = [
   },
 ];
 
-const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
-
 function SocialLink({ item }) {
   return (
     <a
@@ -141,41 +139,15 @@ function SocialLink({ item }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={item.ariaLabel}
-      className="group relative inline-flex items-center gap-3 rounded-full border border-[#B7C0D8]/30 bg-white/[0.045] px-3.5 py-2.5 text-sm font-semibold text-[#F4F7FB] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-[#C6B8FF]/50 hover:text-white hover:shadow-[0_10px_24px_-14px_rgba(155,124,255,0.52)]"
+      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-violet-300/35 hover:bg-violet-300/10 hover:text-white"
     >
-      <span className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-[#B7C0D8]/45 to-transparent" />
-      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B7C0D8]/35 bg-[#1A2340]/55 text-[#C6B8FF] shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition group-hover:border-[#C6B8FF]/55 group-hover:bg-violet-300/12 group-hover:text-white group-hover:shadow-[0_0_0_1px_rgba(198,184,255,0.22),0_0_20px_rgba(155,124,255,0.32)]">
-        {item.icon}
-      </span>
+      {item.icon}
       <span>{item.label}</span>
     </a>
   );
 }
 
-const CALO_INQUIRY_RECIPIENT = "protection@calocapital.io";
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim();
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim();
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim();
-const EMAILJS_CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID?.trim() || EMAILJS_TEMPLATE_ID;
-
-let emailjsInitialized = false;
-
-function ensureEmailjsInitialized() {
-  if (!EMAILJS_PUBLIC_KEY) {
-    return false;
-  }
-
-  if (!emailjsInitialized) {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-    emailjsInitialized = true;
-  }
-
-  return true;
-}
-
-function getErrorMessage(error) {
-  return error?.text || error?.message || "We could not send your request right now. Please try again.";
-}
+const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
 
 function getMissingConfigError() {
   const missing = [];
@@ -364,12 +336,11 @@ function Navbar({ currentPage, setPage }) {
             </button>
           ))}
         </nav>
-
         <a
           href={SCHEDULE_CALL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden rounded-xl bg-violet-300 px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-violet-200 lg:inline-block"
+          className="hidden rounded-xl bg-[#8B5CF6] px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-[#A855F7] lg:inline-block"
         >
           Schedule a Call
         </a>
@@ -670,13 +641,13 @@ function HeroSection({ coins, setPage }) {
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-300/10 px-4 py-2">
             <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-            <span className="text-xs font-bold text-violet-200">Cash Alternatives · Crypto · Commodities · Companies</span>
+            <span className="text-xs font-bold text-[#C084FC]">Cash Alternatives · Crypto · Commodities · Companies</span>
           </div>
 
           <h1 className="text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-            <span className="drop-shadow-[0_0_20px_rgba(198,184,255,0.3)]">Where Strategy</span>
+            <span className="drop-shadow-[0_0_20px_rgba(192,132,252,0.32)]">Where Strategy</span>
             <br />
-            <span className="drop-shadow-[0_0_22px_rgba(109,94,245,0.35)]">Meets Legacy</span>
+            <span className="drop-shadow-[0_0_22px_rgba(139,92,246,0.38)]">Meets Legacy</span>
           </h1>
 
           <p className="max-w-md text-base leading-relaxed text-slate-300 sm:text-lg">
@@ -705,8 +676,8 @@ function HeroSection({ coins, setPage }) {
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-slate-300/85">
             <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Digital Assets</span>
-            <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Macro Signals</span>
-            <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Risk Lens</span>
+            <span className="rounded-full border border-[#C084FC]/25 bg-[#1A2340]/60 px-2 py-1">Macro Signals</span>
+            <span className="rounded-full border border-[#C084FC]/25 bg-[#1A2340]/60 px-2 py-1">Risk Lens</span>
           </div>
           <StockChart coins={coins} />
           <div className="grid grid-cols-3 gap-3">
@@ -765,24 +736,44 @@ function ServicesSection() {
   const serviceIds = ["cash-alternatives", "crypto", "commodities", "companies"];
   const serviceTextures = [
     {
-      panel: "bg-[radial-gradient(circle_at_12%_8%,rgba(198,184,255,0.18),transparent_35%),linear-gradient(180deg,rgba(26,35,64,0.62)_0%,rgba(13,19,36,0.84)_100%)]",
-      overlay: "bg-[linear-gradient(rgba(183,192,216,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.04)_1px,transparent_1px)] bg-[size:34px_34px]",
+      panel: "bg-[linear-gradient(180deg,rgba(26,35,64,0.68)_0%,rgba(5,8,22,0.88)_100%)]",
       accent: "Liquidity Map",
+      icons: [
+        { glyph: "◔", left: "14%", top: "18%", size: "0.85rem", delay: "0s", duration: "20s" },
+        { glyph: "∿", left: "72%", top: "22%", size: "1rem", delay: "2.4s", duration: "18s" },
+        { glyph: "◌", left: "22%", top: "68%", size: "0.72rem", delay: "4.2s", duration: "22s" },
+        { glyph: "◜", left: "78%", top: "74%", size: "0.76rem", delay: "1.2s", duration: "16s" },
+      ],
     },
     {
-      panel: "bg-[radial-gradient(circle_at_84%_12%,rgba(155,124,255,0.24),transparent_42%),linear-gradient(180deg,rgba(21,31,58,0.68)_0%,rgba(11,16,30,0.86)_100%)]",
-      overlay: "bg-[radial-gradient(circle_at_14%_32%,rgba(198,184,255,.22)_1px,transparent_2px),radial-gradient(circle_at_62%_58%,rgba(198,184,255,.2)_1px,transparent_2px),radial-gradient(circle_at_84%_24%,rgba(198,184,255,.18)_1px,transparent_2px)] bg-[size:78px_68px]",
+      panel: "bg-[linear-gradient(180deg,rgba(23,34,59,0.72)_0%,rgba(5,8,22,0.9)_100%)]",
       accent: "Node Mesh",
+      icons: [
+        { glyph: "₿", left: "18%", top: "20%", size: "0.98rem", delay: "0.4s", duration: "21s" },
+        { glyph: "◇", left: "74%", top: "18%", size: "0.78rem", delay: "2.8s", duration: "17s" },
+        { glyph: "⟐", left: "30%", top: "72%", size: "0.76rem", delay: "5.2s", duration: "19s" },
+        { glyph: "⊚", left: "80%", top: "68%", size: "0.72rem", delay: "1.7s", duration: "23s" },
+      ],
     },
     {
-      panel: "bg-[radial-gradient(circle_at_24%_82%,rgba(109,94,245,0.18),transparent_38%),linear-gradient(180deg,rgba(25,35,61,0.63)_0%,rgba(12,18,34,0.84)_100%)]",
-      overlay: "bg-[linear-gradient(118deg,transparent_0%,transparent_42%,rgba(183,192,216,.14)_43%,transparent_44%,transparent_100%),linear-gradient(143deg,transparent_0%,transparent_57%,rgba(183,192,216,.12)_58%,transparent_59%,transparent_100%)]",
+      panel: "bg-[linear-gradient(180deg,rgba(21,31,58,0.7)_0%,rgba(5,8,22,0.9)_100%)]",
       accent: "Trend Flow",
+      icons: [
+        { glyph: "∿", left: "16%", top: "24%", size: "0.9rem", delay: "0.2s", duration: "19s" },
+        { glyph: "⌁", left: "68%", top: "26%", size: "0.76rem", delay: "3s", duration: "24s" },
+        { glyph: "⌒", left: "26%", top: "76%", size: "0.86rem", delay: "4.8s", duration: "20s" },
+        { glyph: "◠", left: "82%", top: "70%", size: "0.72rem", delay: "1.4s", duration: "18s" },
+      ],
     },
     {
-      panel: "bg-[radial-gradient(circle_at_78%_18%,rgba(198,184,255,0.2),transparent_38%),linear-gradient(180deg,rgba(23,34,59,0.64)_0%,rgba(10,16,31,0.86)_100%)]",
-      overlay: "bg-[linear-gradient(rgba(183,192,216,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.04)_1px,transparent_1px),radial-gradient(circle_at_24%_72%,rgba(183,192,216,.18)_1px,transparent_2px)] bg-[size:30px_30px,30px_30px,62px_62px]",
+      panel: "bg-[linear-gradient(180deg,rgba(23,34,59,0.72)_0%,rgba(5,8,22,0.9)_100%)]",
       accent: "Data Pulse",
+      icons: [
+        { glyph: "▦", left: "18%", top: "18%", size: "0.78rem", delay: "0.6s", duration: "22s" },
+        { glyph: "▤", left: "72%", top: "24%", size: "0.76rem", delay: "3.4s", duration: "18s" },
+        { glyph: "▢", left: "28%", top: "74%", size: "0.86rem", delay: "5.6s", duration: "20s" },
+        { glyph: "◫", left: "80%", top: "68%", size: "0.72rem", delay: "1.9s", duration: "24s" },
+      ],
     },
   ];
 
@@ -804,20 +795,35 @@ function ServicesSection() {
             <article
               id={serviceIds[index]}
               key={service.title}
-              className={`group relative overflow-hidden rounded-[1.55rem] border border-white/10 p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_34px_-26px_rgba(5,8,22,0.95)] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-[#C6B8FF]/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_20px_38px_-28px_rgba(155,124,255,0.5)] ${serviceTextures[index].panel}`}
+              className={`service-card group relative overflow-hidden rounded-[1.55rem] border border-white/10 p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_34px_-26px_rgba(5,8,22,0.95)] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-[#C084FC]/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_20px_38px_-28px_rgba(168,85,247,0.44)] ${serviceTextures[index].panel}`}
             >
-              <div className="pointer-events-none absolute inset-0 opacity-28">
-                <div className={`h-full w-full ${serviceTextures[index].overlay}`} />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_56%,rgba(8,12,24,0.04),rgba(5,8,22,0.18)_70%,rgba(5,8,22,0.28)_100%)]" />
+              <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                {serviceTextures[index].icons.map((icon) => (
+                  <span
+                    key={`${service.title}-${icon.glyph}-${icon.left}-${icon.top}`}
+                    className="service-card-icon absolute flex items-center justify-center text-[#C084FC]"
+                    style={{
+                      left: icon.left,
+                      top: icon.top,
+                      fontSize: icon.size,
+                      animationDelay: icon.delay,
+                      animationDuration: icon.duration,
+                      color: "rgba(192,132,252,0.05)",
+                    }}
+                  >
+                    {icon.glyph}
+                  </span>
+                ))}
               </div>
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C084FC]/40 to-transparent" />
               <div className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#C6B8FF]/45" />
-                <span className="h-px w-7 bg-[#B7C0D8]/30" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[#C6B8FF]/25" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7]/55" />
+                <span className="h-px w-7 bg-[#B7C0D8]/22" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#8B5CF6]/40" />
               </div>
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B7C0D8]/45 to-transparent" />
-
               <div className="flex items-start justify-between gap-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#B7C0D8]/35 bg-[#1A2340]/76 text-sm font-black tracking-[0.24em] text-[#F4F7FB] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] transition group-hover:border-[#C6B8FF]/45 group-hover:shadow-[0_0_0_1px_rgba(198,184,255,0.2)]">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#C084FC]/28 bg-[#1A2340]/76 text-sm font-black tracking-[0.24em] text-[#F4F7FB] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] transition group-hover:border-[#C084FC]/48 group-hover:shadow-[0_0_0_1px_rgba(192,132,252,0.18)]">
                   {serviceMarks[index]}
                 </div>
                 <div className="mt-3 h-px flex-1 bg-gradient-to-r from-[#B7C0D8]/35 via-[#B7C0D8]/10 to-transparent" />
@@ -825,7 +831,9 @@ function ServicesSection() {
 
               <div className="mt-6">
                 <p className="text-[11px] font-black uppercase tracking-[0.3em] text-[#B7C0D8]">Pillar {serviceMarks[index]}</p>
-                <h3 className="mt-3 text-2xl font-black tracking-tight text-[#F4F7FB]">{service.title}</h3>
+                <h3 className="mt-3 text-2xl font-black tracking-tight text-[#F4F7FB]" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+                  {service.title}
+                </h3>
                 <div className="mt-4 h-px w-full bg-[#B7C0D8]/20" />
                 <p className="mt-5 text-sm leading-7 text-[#B7C0D8]">{service.description}</p>
               </div>
@@ -877,9 +885,9 @@ function BlogPreview() {
         <h2 className="text-center text-3xl font-black sm:text-4xl">Financial education visitors can trust</h2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {blogPosts.slice(0, 3).map((post) => (
-            <article key={post.title} className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-violet-300/30 hover:bg-white/[0.07]">
+            <article key={post.title} className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#C084FC]/30 hover:bg-white/[0.07]">
               <div className="mb-5 flex items-center gap-3 text-xs text-blue-300/80">
-                <span className="rounded-full bg-violet-300/10 px-3 py-1 font-black text-violet-300">{post.category}</span>
+                <span className="rounded-full bg-[#A855F7]/10 px-3 py-1 font-black text-[#C084FC]">{post.category}</span>
                 <span>▣ {post.date}</span>
               </div>
               <h3 className="text-xl font-black text-white">{post.title}</h3>
@@ -895,14 +903,14 @@ function BlogPreview() {
 function CTASection({ setPage }) {
   return (
     <section className="bg-[#070a14] px-5 py-20 text-white">
-      <div className="mx-auto max-w-5xl rounded-[2rem] border border-violet-300/20 bg-gradient-to-br from-violet-300/15 to-cyan-300/10 p-8 text-center shadow-2xl shadow-violet-950/30 lg:p-12">
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#C084FC]/20 bg-gradient-to-br from-[#A855F7]/15 to-[#7C3AED]/10 p-8 text-center shadow-2xl shadow-[0_24px_60px_-28px_rgba(124,58,237,0.45)] lg:p-12">
         <h2 className="text-3xl font-black sm:text-4xl">Ready to create clarity around your next financial move?</h2>
         <p className="mx-auto mt-4 max-w-2xl text-slate-300">Book a consultation, ask a question, or request more information about cash alternatives, crypto, commodities, and company research.</p>
         <a
           href={SCHEDULE_CALL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-block rounded-xl bg-violet-300 px-7 py-3.5 text-sm font-black text-slate-950 hover:bg-violet-200"
+          className="mt-8 inline-block rounded-xl bg-[#8B5CF6] px-7 py-3.5 text-sm font-black text-slate-950 hover:bg-[#A855F7]"
         >
           Schedule a Call
         </a>
@@ -1017,113 +1025,152 @@ function PageHeader({ eyebrow, title, description }) {
 }
 
 function AboutPage() {
-  const brandPillars = [
+  const pillars = [
     {
-      title: "The Guide",
-      description: "Helping people navigate finance clearly.",
-      mark: "I",
+      title: "Fiduciary First",
+      description: "Your goals come first. Always.",
+      icon: "🛡",
     },
     {
-      title: "The Visionary",
-      description: "Seeing where finance and wealth strategy are going.",
-      mark: "II",
+      title: "Independent Thinking",
+      description: "Unbiased insights and recommendations.",
+      icon: "↗",
     },
     {
-      title: "The Protector",
-      description: "Helping families build security.",
-      mark: "III",
+      title: "Global Perspective",
+      description: "Access to a diverse range of assets and ideas.",
+      icon: "◌",
     },
     {
-      title: "The Innovator",
-      description: "Modernizing financial education.",
-      mark: "IV",
+      title: "Long-Term Focus",
+      description: "Building lasting wealth through discipline and patience.",
+      icon: "◎",
+    },
+  ];
+
+  const approachSteps = [
+    {
+      number: "01",
+      title: "Understand",
+      description: "We listen first. We take the time to understand your unique goals.",
+    },
+    {
+      number: "02",
+      title: "Strategize",
+      description: "We design customized strategies tailored to your vision.",
+    },
+    {
+      number: "03",
+      title: "Execute",
+      description: "We implement with precision and active risk management.",
+    },
+    {
+      number: "04",
+      title: "Steward",
+      description: "We monitor, adapt, and evolve with you over time.",
     },
   ];
 
   return (
     <>
-      <section id="about" className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-24 text-white sm:py-32">
-        <div className="absolute inset-0 opacity-[0.14]">
-          <div className="h-full w-full bg-[linear-gradient(rgba(183,192,216,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.07)_1px,transparent_1px)] bg-[size:82px_82px]" />
-        </div>
+      <section id="about" className="relative overflow-hidden border-b border-white/10 bg-[#070a14] px-5 pb-14 pt-16 text-white sm:pt-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(168,85,247,0.12),transparent_28%),radial-gradient(circle_at_85%_72%,rgba(99,102,241,0.08),transparent_26%)]" />
         <FloatingStars />
         <ShootingStars />
-        <div className="relative mx-auto max-w-6xl">
-          <p className="text-sm font-black uppercase tracking-[0.32em] text-[#C6B8FF]">About Calo Capital</p>
-          <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[1.02] tracking-tight text-[#F4F7FB] sm:text-6xl lg:text-7xl">
-            Strategic Wealth in the New Era
-          </h1>
-          <p className="mt-7 max-w-3xl text-lg leading-8 text-[#B7C0D8]">
-            Calo Capital blends traditional financial wisdom with future-forward market education across digital assets, commodities, companies, and cash alternatives.
-          </p>
-        </div>
-      </section>
+        <div className="relative mx-auto max-w-7xl">
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div className="max-w-2xl">
+              <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">About Calo Capital</p>
+              <h1 className="mt-6 max-w-xl text-[clamp(3.2rem,7vw,5.4rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
+                Strategic Wealth.
+                <br />
+                Built for <span className="text-[#A855F7]">Generations.</span>
+              </h1>
+              <p className="mt-6 max-w-lg text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]">
+                Calo Capital blends timeless financial principles with future-forward strategies across digital assets, commodities, and global markets.
+              </p>
+              <div className="mt-8 h-px w-12 bg-[#A855F7]" />
+            </div>
 
-      <section className="bg-[#070a14] px-5 py-20 text-white">
-        <div className="mx-auto max-w-6xl space-y-14">
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+            <div className="relative mx-auto w-full max-w-[460px] overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#101323] shadow-[0_24px_60px_-30px_rgba(5,8,22,0.95)]">
+              <img
+                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1400&q=80"
+                alt="Mountain peak above clouds"
+                className="h-[330px] w-full object-cover sm:h-[365px]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/32 via-transparent to-transparent" />
+            </div>
+          </div>
+
+          <div className="mt-16 grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C6B8FF]">Brand Identity</p>
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-[#F4F7FB] sm:text-4xl">Built for a New Era of Markets</h2>
+              <p className="text-[15px] font-serif text-[#A855F7]">Our Mission</p>
+              <p className="mt-4 max-w-md text-sm leading-7 text-[#B7C0D8] sm:text-[0.95rem]">
+                To deliver strategic, thoughtful guidance that helps individuals, families, and institutions preserve and grow wealth across market cycles. We combine rigorous research, disciplined risk management, and long-term perspective to uncover opportunities in evolving global markets.
+              </p>
             </div>
-            <div className="border-l border-[#B7C0D8]/25 pl-6 text-base leading-8 text-[#B7C0D8] sm:text-lg">
-              Calo Capital represents the convergence of traditional financial wisdom and future-forward innovation.
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              {pillars.map((pillar) => (
+                <article key={pillar.title} className="flex gap-4 rounded-[1.15rem] border border-white/10 bg-white/[0.02] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#A855F7]/40 bg-[#1A2340]/75 text-lg text-[#A855F7]">
+                    {pillar.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-[1.02rem] font-medium text-[#F4F7FB]">{pillar.title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-[#B7C0D8]">{pillar.description}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
 
-          <div id="client-excellence" className="rounded-3xl border border-[#B7C0D8]/20 bg-[linear-gradient(180deg,rgba(26,35,64,0.5)_0%,rgba(5,8,22,0.4)_100%)] p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] lg:p-10">
-            <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C6B8FF]">Mission</p>
-            <p className="mt-5 max-w-4xl text-xl leading-9 text-[#F4F7FB]">
-              "Our mission is to help families and individuals build a more secure financial future through education, strategy, and long-term thinking."
-            </p>
-          </div>
-        </div>
-      </section>
+          <div className="mt-16 grid gap-10 border-t border-white/10 pt-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
+            <div className="relative overflow-hidden rounded-[1.2rem] border border-white/10 bg-[#101323] shadow-[0_20px_45px_-30px_rgba(5,8,22,0.95)]">
+              <img
+                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&q=80"
+                alt="Modern office city view"
+                className="h-[310px] w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/45 via-transparent to-transparent" />
+            </div>
 
-      <section className="border-y border-white/10 bg-[#0b101b] px-5 py-24 text-white">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C6B8FF]">Core Brand Pillars</p>
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-[#F4F7FB] sm:text-4xl">Human Guidance, Future Finance Perspective</h2>
+              <p className="text-[15px] font-serif text-[#A855F7]">Our Approach</p>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#B7C0D8] sm:text-[0.95rem]">
+                We believe wealth is more than a number. It&apos;s freedom, opportunity, and legacy. Our approach is built on four pillars that guide every decision we make.
+              </p>
+
+              <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                {approachSteps.map((step) => (
+                  <article key={step.number} className="space-y-3">
+                    <p className="text-[1.6rem] font-serif text-[#A855F7]">{step.number}</p>
+                    <h3 className="text-lg font-medium text-[#F4F7FB]">{step.title}</h3>
+                    <p className="text-sm leading-6 text-[#B7C0D8]">{step.description}</p>
+                  </article>
+                ))}
+              </div>
             </div>
-            <p className="max-w-xl text-base leading-7 text-[#B7C0D8]">
-              A strategic operating posture designed to support families and individuals with clarity, confidence, and long-range thinking.
-            </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
-            {brandPillars.map((pillar) => (
-              <article
-                key={pillar.title}
-                className="relative overflow-hidden rounded-2xl border border-[#B7C0D8]/18 bg-[linear-gradient(180deg,rgba(26,35,64,0.52)_0%,rgba(13,19,36,0.74)_100%)] p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_16px_32px_-26px_rgba(5,8,22,1)]"
+          <div className="mt-16 rounded-[1.15rem] border border-[#A855F7]/30 bg-[linear-gradient(180deg,rgba(15,19,34,0.96)_0%,rgba(9,12,23,0.92)_100%)] px-6 py-6 shadow-[0_18px_50px_-35px_rgba(168,85,247,0.45)] sm:px-8 sm:py-8">
+            <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+              <div>
+                <h2 className="text-2xl font-serif font-medium text-[#F4F7FB] sm:text-3xl">Let&apos;s Build Your Legacy</h2>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-[#B7C0D8]">Partner with Calo Capital to create a strategy that stands the test of time.</p>
+              </div>
+              <button
+                onClick={() => {
+                  window.location.hash = pageRoutes.Contact;
+                  window.dispatchEvent(new HashChangeEvent("hashchange"));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="inline-flex items-center justify-center rounded-lg bg-[#8B5CF6] px-6 py-3 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(168,85,247,0.4)] transition hover:bg-[#A855F7]"
               >
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B7C0D8]/45 to-transparent" />
-                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#B7C0D8]/30 bg-[#1A2340]/72 text-xs font-black tracking-[0.22em] text-[#F4F7FB]">
-                  {pillar.mark}
-                </div>
-                <h3 className="text-2xl font-black tracking-tight text-[#F4F7FB]">{pillar.title}</h3>
-                <p className="mt-3 text-base leading-7 text-[#B7C0D8]">{pillar.description}</p>
-              </article>
-            ))}
+                Schedule a Call
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <section className="bg-[#070a14] px-5 py-24 text-center text-white">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="text-3xl font-black text-[#F4F7FB] sm:text-4xl">Let&apos;s start your next strategic conversation</h2>
-          <p className="mt-5 text-lg text-[#B7C0D8]">Reach out to discuss cash alternatives, crypto, commodities, and companies with a clearer long-term framework.</p>
-          <button
-            onClick={() => {
-              window.location.hash = pageRoutes.Contact;
-              window.dispatchEvent(new HashChangeEvent("hashchange"));
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="mt-10 rounded-xl bg-violet-300 px-9 py-4 text-sm font-black text-slate-950 transition hover:bg-violet-200"
-          >
-            Contact Us →
-          </button>
         </div>
       </section>
     </>
@@ -1134,53 +1181,109 @@ function TeamPage() {
   const team = [
     {
       name: "Marc Calo",
-      role: "CEO",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80",
+      title: "Founder & CEO",
+      bio: "Over 20 years of experience in investments, markets, and alternative assets.",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=80",
     },
     {
-      name: "Sara Smith",
-      role: "Account Manager",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80",
+      name: "Yumari Sanchez",
+      title: "CEO & Head of Strategy",
+      bio: "Leads strategic initiatives and client relationships with a focus on long-term value creation.",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80",
     },
     {
-      name: "Amanda Peterson",
-      role: "Director of Finance",
-      image: "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=600&q=80",
+      name: "Javier Ortiz",
+      title: "Chief Investment Strategist",
+      bio: "Specializes in global macro analysis, portfolio construction, and risk management.",
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&q=80",
+    },
+    {
+      name: "Daniel Alvarez",
+      title: "Head of Digital Assets",
+      bio: "Expert in blockchain technology, digital assets, and decentralized finance.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=80",
+    },
+    {
+      name: "Sofia Martinez",
+      title: "Head of Research",
+      bio: "Drives market research and uncovering high-conviction investment opportunities.",
+      image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=900&q=80",
+    },
+    {
+      name: "Anthony Rios",
+      title: "Head of Client Solutions",
+      bio: "Focuses on tailored solutions that align with client goals and objectives.",
+      image: "https://images.unsplash.com/photo-1504593811423-6dd665756598?w=900&q=80",
     },
   ];
 
   return (
     <>
-      <section id="leadership" className="relative overflow-hidden border-b border-white/10 bg-[#0b101b] px-5 py-28 text-center text-white sm:py-36">
-        <div className="absolute inset-0 opacity-[0.12]">
-          <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
-        </div>
-        <div className="relative mx-auto max-w-5xl">
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Our People</p>
-          <h1 className="mt-6 text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">The Calo Team</h1>
+      <section id="leadership" className="relative overflow-hidden border-b border-white/10 bg-[#070a14] px-5 pb-16 pt-16 text-white sm:pt-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.1),transparent_26%),radial-gradient(circle_at_82%_70%,rgba(99,102,241,0.08),transparent_24%)]" />
+        <FloatingStars />
+        <ShootingStars />
+        <div className="relative mx-auto max-w-7xl">
+          <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">Our Team</p>
+          <h1 className="mt-6 max-w-4xl text-[clamp(3rem,6.6vw,5.25rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
+            Experienced. Independent.
+            <br />
+            Aligned With <span className="text-[#A855F7]">Your Success.</span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]">
+            Our team brings decades of combined experience across traditional finance, digital assets, commodities, and global markets. We are united by a shared commitment to integrity, excellence, and long-term outcomes.
+          </p>
         </div>
       </section>
 
-      <section className="min-h-screen bg-[#070a14] px-5 py-20 text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
+      <section className="bg-[#070a14] px-5 py-16 text-white">
+        <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-3">
           {team.map((member) => (
-            <div key={member.name} className="text-center">
-              <div className="group relative overflow-hidden rounded-3xl">
+            <article key={member.name} className="group overflow-hidden rounded-[1.05rem] border border-white/10 bg-[linear-gradient(180deg,rgba(14,19,33,0.95)_0%,rgba(8,11,19,0.98)_100%)] shadow-[0_18px_40px_-30px_rgba(5,8,22,0.95)] transition duration-300 hover:-translate-y-1 hover:border-[#A855F7]/30">
+              <div className="relative">
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="h-[420px] w-full object-cover transition duration-500 group-hover:scale-105"
+                  className="h-[270px] w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
                 />
-
-                {/* overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/80 via-transparent to-transparent" />
-
+                <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/74 via-transparent to-transparent" />
               </div>
 
-              <h3 className="mt-6 text-xl font-black">{member.name}</h3>
-              <p className="mt-2 text-sm text-slate-400">{member.role}</p>
-            </div>
+              <div className="p-5">
+                <h3 className="text-[1.02rem] font-medium text-[#F4F7FB]">{member.name}</h3>
+                <p className="mt-1 text-sm text-[#A855F7]">{member.title}</p>
+                <p className="mt-4 text-sm leading-6 text-[#B7C0D8]">{member.bio}</p>
+                <a
+                  href="https://www.linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open LinkedIn profile for ${member.name}`}
+                  className="mt-6 inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#A855F7]/45 text-[0.72rem] font-semibold text-[#A855F7] transition hover:border-[#A855F7]/70 hover:bg-[#A855F7]/10 hover:text-white"
+                >
+                  in
+                </a>
+              </div>
+            </article>
           ))}
+        </div>
+
+        <div className="mx-auto mt-10 max-w-7xl rounded-[1.15rem] border border-[#A855F7]/25 bg-[linear-gradient(180deg,rgba(14,19,33,0.95)_0%,rgba(8,11,19,0.98)_100%)] px-6 py-6 shadow-[0_18px_50px_-35px_rgba(168,85,247,0.45)] sm:px-8 sm:py-7">
+          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div className="max-w-2xl">
+              <p className="text-sm font-black uppercase tracking-[0.34em] text-[#A855F7]">Client Commitment</p>
+              <p className="mt-3 text-lg leading-8 text-[#F4F7FB]">We&apos;re here to help you navigate today&apos;s markets and build lasting wealth.</p>
+            </div>
+            <button
+              onClick={() => {
+                window.location.hash = pageRoutes.Contact;
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="inline-flex items-center justify-center rounded-lg bg-[#8B5CF6] px-6 py-3 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(168,85,247,0.4)] transition hover:bg-[#A855F7]"
+            >
+              Schedule a Call
+            </button>
+          </div>
         </div>
       </section>
     </>
@@ -1208,9 +1311,9 @@ function BlogPage() {
         <ShootingStars />
         <div className="relative mx-auto grid max-w-7xl gap-7 md:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((post) => (
-            <article key={post.title} className="rounded-2xl border border-white/10 bg-[#0d1322]/90 p-8 shadow-xl shadow-black/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-violet-300/30 hover:bg-[#11182a]">
+            <article key={post.title} className="rounded-2xl border border-white/10 bg-[#0d1322]/90 p-8 shadow-xl shadow-black/10 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#C084FC]/30 hover:bg-[#11182a]">
               <div className="mb-7 flex flex-wrap items-center gap-3 text-xs text-blue-300/80">
-                <span className="rounded-full bg-violet-300/10 px-4 py-1.5 font-black text-violet-300">{post.category}</span>
+                <span className="rounded-full bg-[#A855F7]/10 px-4 py-1.5 font-black text-[#C084FC]">{post.category}</span>
                 <span className="font-medium">▣ {post.date}</span>
               </div>
               <h2 className="text-2xl font-black leading-tight text-white">{post.title}</h2>
@@ -1302,36 +1405,71 @@ function GlobalStyles() {
         0% { transform: translateX(0); }
         100% { transform: translateX(-50%); }
       }
-      @keyframes shootingStar {
-        0% { transform: translate3d(0, 0, 0) rotate(18deg) scale(var(--star-scale, 1)); opacity: 0; }
-        5% { opacity: 0; }
-        14% { opacity: 1; }
-        72% { opacity: 1; }
-        100% { transform: translate3d(150vw, 62vh, 0) rotate(18deg) scale(var(--star-scale, 1)); opacity: 0; }
-      }
-      .shooting-star { animation: shootingStar 5s cubic-bezier(.2,.65,.42,1) infinite; }
-      @keyframes cloudDriftOne {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      @keyframes cloudDriftTwo {
-        0% { transform: translateX(-12%); }
+      @keyframes cardAuroraDrift {
+        0% { transform: translate3d(-4px, -2px, 0) scale(1); opacity: 0.24; }
+        50% { transform: translate3d(7px, 4px, 0) scale(1.03); opacity: 0.34; }
+        100% { transform: translate3d(-4px, -2px, 0) scale(1); opacity: 0.24; }
         100% { transform: translateX(-55%); }
+      @keyframes serviceIconFloat {
+        0% { transform: translate3d(0, 12px, 0) scale(0.96) rotate(-1deg); opacity: 0; }
+        15% { opacity: 0.1; }
+        50% { transform: translate3d(6px, -4px, 0) scale(1.03) rotate(1deg); opacity: 0.16; }
+        85% { opacity: 0.08; }
+        100% { transform: translate3d(-2px, -14px, 0) scale(0.98) rotate(0deg); opacity: 0; }
       }
+      .service-card-aurora {
       .cloud-layer {
-        background:
-          radial-gradient(circle at 6% 75%, rgba(255,255,255,.34) 0 38px, transparent 39px),
+          radial-gradient(circle at 18% 18%, rgba(155,124,255,0.2) 0 18%, transparent 38%),
+          radial-gradient(circle at 82% 72%, rgba(124,58,237,0.16) 0 16%, transparent 34%),
+          linear-gradient(135deg, rgba(168,85,247,0.1) 0%, rgba(67,56,202,0.04) 34%, transparent 64%);
           radial-gradient(circle at 15% 60%, rgba(255,255,255,.42) 0 55px, transparent 56px),
-          radial-gradient(circle at 28% 74%, rgba(255,255,255,.32) 0 46px, transparent 47px),
-          radial-gradient(circle at 41% 62%, rgba(255,255,255,.38) 0 62px, transparent 63px),
-          radial-gradient(circle at 54% 78%, rgba(255,255,255,.30) 0 48px, transparent 49px),
-          radial-gradient(circle at 68% 64%, rgba(255,255,255,.40) 0 58px, transparent 59px),
-          radial-gradient(circle at 82% 74%, rgba(255,255,255,.30) 0 48px, transparent 49px),
-          radial-gradient(circle at 94% 66%, rgba(255,255,255,.36) 0 56px, transparent 57px);
-        filter: blur(1px);
+        animation: cardAuroraDrift 18s ease-in-out infinite;
+        0% { transform: translate3d(0, 0, 0); opacity: 0.18; }
+        50% { transform: translate3d(-10px, 6px, 0); opacity: 0.28; }
+        100% { transform: translate3d(0, 0, 0); opacity: 0.18; }
       }
-      .cloud-layer-one { animation: cloudDriftOne 58s linear infinite; }
-      .cloud-layer-two { animation: cloudDriftTwo 78s linear infinite; }
+        box-shadow: 0 0 0 1px rgba(192,132,252,0.12), 0 0 22px rgba(124,58,237,0.12);
+        0% { transform: translateX(-9px); opacity: 0.12; }
+        50% { transform: translateX(9px); opacity: 0.2; }
+        100% { transform: translateX(-9px); opacity: 0.12; }
+      }
+      .service-card-nebula {
+        background:
+          radial-gradient(circle at 18% 18%, rgba(155,124,255,0.24) 0 22%, transparent 46%),
+          radial-gradient(circle at 84% 76%, rgba(109,94,245,0.2) 0 18%, transparent 44%);
+        mix-blend-mode: screen;
+        animation: cardNebulaDrift 18s ease-in-out infinite;
+      }
+      .service-card-dust {
+        background:
+          radial-gradient(circle at 16% 64%, rgba(198,184,255,0.32) 0 1px, transparent 2px),
+          radial-gradient(circle at 38% 22%, rgba(183,192,216,0.26) 0 1px, transparent 2px),
+          radial-gradient(circle at 64% 58%, rgba(198,184,255,0.26) 0 1px, transparent 2px),
+          radial-gradient(circle at 82% 30%, rgba(183,192,216,0.24) 0 1px, transparent 2px),
+          radial-gradient(circle at 74% 82%, rgba(198,184,255,0.24) 0 1px, transparent 2px);
+        background-size: 100% 100%;
+        animation: cardDustDrift 16s ease-in-out infinite;
+      }
+      .service-card-shimmer {
+        background:
+          radial-gradient(circle at 50% 50%, rgba(198,184,255,0.05), transparent 40%),
+          linear-gradient(122deg, transparent 0%, transparent 46%, rgba(168,85,247,0.09) 50%, transparent 54%, transparent 100%);
+        animation: cardGridShimmer 20s ease-in-out infinite;
+      }
+      @keyframes serviceIconFloat {
+        0% { transform: translate3d(0, 12px, 0) scale(0.94) rotate(-1deg); opacity: 0.03; }
+        15% { opacity: 0.04; }
+        50% { transform: translate3d(6px, -4px, 0) scale(0.98) rotate(1deg); opacity: 0.08; }
+        85% { opacity: 0.05; }
+        100% { transform: translate3d(-2px, -14px, 0) scale(0.95) rotate(0deg); opacity: 0.03; }
+      }
+      .service-card-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        filter: blur(0.9px);
+        mix-blend-mode: screen;
+        animation: serviceIconFloat 22s ease-in-out infinite;
+      }
     `}</style>
   );
 }

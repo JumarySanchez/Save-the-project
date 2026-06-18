@@ -1,6 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap");
+
+:root {
+  --calo-purple-primary: #8b5cf6;
+  --calo-purple-bright: #a855f7;
+  --calo-purple-deep: #7c3aed;
+  --calo-purple-glow: #c084fc;
+  --calo-sans: "Montserrat", "Inter", system-ui, sans-serif;
+  --calo-serif: "Cormorant Garamond", Georgia, serif;
+  --calo-label: "Space Grotesk", "Montserrat", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
+  font-family: var(--calo-sans);
+  background: #070a14;
+  color: #f4f7fb;
+}
+
+main {
+  font-family: var(--calo-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--calo-serif);
+  letter-spacing: -0.02em;
+}
+
+button,
+input,
+select,
+textarea,
+a {
+  font-family: var(--calo-sans);
+}
+
+.uppercase:not(.font-mono):not([class*="tracking-[0.16em]"]):not([class*="tracking-[0.18em]"]) {
+  font-family: var(--calo-label);
 }
 
 #root {
