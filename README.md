@@ -2,31 +2,49 @@
 
 ## Forms & Email Setup
 
-### Contact Form & Waitlist
+The Contact and Waitlist forms submit through secure server-side handlers at `/api/contact` and `/api/waitlist`.
 
-The waitlist and contact forms send inquiries directly to `protection@calocapital.io` through Web3Forms (free, no backend required).
+### Recommended provider
 
-### Quick Setup
+- **Resend** is the simplest reliable choice for this project.
+- It supports straightforward REST delivery, easy verified-sender setup, and a safe `onboarding@resend.dev` fallback until the Calo domain is verified.
 
-1. **Sign up for Web3Forms**: https://web3forms.com/ (free account)
-2. **Create a form** in Web3Forms dashboard
-3. **Copy your Access Key** from the form details
-4. **Add to Webflow Cloud environment variables**:
-   ```
-   VITE_WEB3FORMS_ACCESS_KEY = [your access key]
-   ```
+### Required environment variables
 
-### Form Fields
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL` — defaults to `Calo Capital <onboarding@resend.dev>` until the domain is verified
+- `RESEND_TO_EMAILS` — defaults to `protection@calocapital.io,marc@calocapital.io`
 
-- Name (required)
-- Email (required)
-- Phone (optional)
-- Request Type (required dropdown)
-- Message (required)
+### Deployment steps
+
+1. Create a Resend account and generate an API key.
+2. Verify the Calo domain in Resend if you want to send from a branded address.
+3. Set the environment variables above in your hosting platform.
+4. Deploy the app and confirm `/api/contact` and `/api/waitlist` are routed to the serverless handlers.
+
+### Local testing
+
+- Set `RESEND_MOCK_DELIVERY=1` in your local environment to exercise the forms without sending real email.
+- Keep `RESEND_MOCK_DELIVERY` off in production.
+
+### Contact form test
+
+1. Open the Contact page.
+2. Fill in Name, Email, Service Type, and Message.
+3. Leave the honeypot field untouched.
+4. Submit and confirm the success message appears.
+5. Verify both `protection@calocapital.io` and `marc@calocapital.io` receive the email, or confirm mock delivery locally with `RESEND_MOCK_DELIVERY=1`.
+
+### Waitlist form test
+
+1. Open the Waitlist section.
+2. Fill in Name, Email, Service Type, and Message.
+3. Submit and confirm the success message appears.
+4. Verify both inboxes receive the waitlist submission, or confirm mock delivery locally with `RESEND_MOCK_DELIVERY=1`.
 
 ### Behavior
 
-- Submissions sent to `protection@calocapital.io` via Web3Forms
-- Success message shown only after email service confirms
-- Error messages displayed if submission fails
-- No local storage fallback; email delivery is required
+- No API key is exposed in the browser.
+- The submit buttons always reset because the UI uses `finally` blocks.
+- Honeypot, validation, and basic rate limiting reduce spam.
+

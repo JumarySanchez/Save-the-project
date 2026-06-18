@@ -4,11 +4,67 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calo Capital</title>
+    <title>Calo Capital | Cash Alternatives · Crypto · Commodities · Companies</title>
+    <meta
+      name="description"
+      content="Calo Capital helps individuals and businesses navigate cash alternatives, crypto, commodities, and companies through education, research, and strategic market insights."
+    />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://calocapital.io/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://calocapital.io/" />
+    <meta property="og:title" content="Calo Capital | Cash Alternatives · Crypto · Commodities · Companies" />
+    <meta
+      property="og:description"
+      content="Calo Capital helps individuals and businesses navigate cash alternatives, crypto, commodities, and companies through education, research, and strategic market insights."
+    />
+    <meta property="og:image" content="https://calocapital.io/Calo_purple_logo.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Calo Capital | Cash Alternatives · Crypto · Commodities · Companies" />
+    <meta
+      name="twitter:description"
+      content="Calo Capital helps individuals and businesses navigate cash alternatives, crypto, commodities, and companies through education, research, and strategic market insights."
+    />
+    <meta name="twitter:image" content="https://calocapital.io/Calo_purple_logo.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Calo Capital",
+        "url": "https://calocapital.io/",
+        "logo": "https://calocapital.io/Calo_purple_logo.png",
+        "description": "Education, research, and strategic market insights across cash alternatives, crypto, commodities, and companies.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "NJ",
+          "addressCountry": "US"
+        }
+      }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module">
+      const loadStaticFallback = async () => {
+        if (!document.querySelector('link[href="/assets/main.css"]')) {
+          const stylesheet = document.createElement('link')
+          stylesheet.rel = 'stylesheet'
+          stylesheet.href = '/assets/main.css'
+          document.head.appendChild(stylesheet)
+        }
+
+        await import('/assets/main.js')
+      }
+
+      try {
+        await import('/src/main.jsx')
+      } catch (error) {
+        await loadStaticFallback()
+      }
+    </script>
   </body>
 </html>
