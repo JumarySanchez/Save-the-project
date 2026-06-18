@@ -147,7 +147,9 @@ const socialLinks = [
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
         <rect x="3.5" y="3.5" width="17" height="17" rx="4" stroke="currentColor" strokeWidth="1.75" />
-        <path d="M8.1 10.2h2.7V17H8.1v-6.8ZM9.45 8.9c-.85 0-1.44-.58-1.44-1.32s.59-1.31 1.44-1.31 1.44.58 1.44 1.31c0 .74-.59 1.32-1.44 1.32ZM12.8 10.2h2.6v1c.36-.7 1.15-1.2 2.28-1.2 1.88 0 3.02 1.18 3.02 3.43V17h-2.7v-3c0-1.01-.38-1.66-1.28-1.66-.86 0-1.45.57-1.45 1.58V17h-2.47v-6.8Z" fill="currentColor" />
+        <g transform="translate(0.7 0.6) scale(0.92)">
+          <path d="M8.1 10.2h2.7V17H8.1v-6.8ZM9.45 8.9c-.85 0-1.44-.58-1.44-1.32s.59-1.31 1.44-1.31 1.44.58 1.44 1.31c0 .74-.59 1.32-1.44 1.32ZM12.8 10.2h2.6v1c.36-.7 1.15-1.2 2.28-1.2 1.88 0 3.02 1.18 3.02 3.43V17h-2.7v-3c0-1.01-.38-1.66-1.28-1.66-.86 0-1.45.57-1.45 1.58V17h-2.47v-6.8Z" fill="currentColor" />
+        </g>
       </svg>
     ),
   },
@@ -1085,10 +1087,9 @@ function TeamPage() {
                 {/* overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/80 via-transparent to-transparent" />
 
-                {/* linkedin icon */}
-                <button className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-[#0b0f1d]/80 p-3 text-sm text-white backdrop-blur hover:bg-violet-300 hover:text-black transition">
-                  in
-                </button>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-[14rem] rounded-2xl border border-white/20 bg-[#0b0f1d]/80 px-4 py-2 text-center text-[10px] font-semibold leading-4 text-slate-200 backdrop-blur">
+                  Educational content only. No guaranteed financial returns.
+                </div>
               </div>
 
               <h3 className="mt-6 text-xl font-black">{member.name}</h3>

@@ -49,21 +49,10 @@
   <body>
     <div id="root"></div>
     <script type="module">
-      const loadStaticFallback = async () => {
-        if (!document.querySelector('link[href="/assets/main.css"]')) {
-          const stylesheet = document.createElement('link')
-          stylesheet.rel = 'stylesheet'
-          stylesheet.href = '/assets/main.css'
-          document.head.appendChild(stylesheet)
-        }
-
-        await import('/assets/main.js')
-      }
-
-      try {
+      if (import.meta.env && import.meta.env.DEV) {
         await import('/src/main.jsx')
-      } catch (error) {
-        await loadStaticFallback()
+      } else {
+        await import('/dist/assets/index-C3DaWYaa.js')
       }
     </script>
   </body>
