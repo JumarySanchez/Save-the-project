@@ -117,7 +117,7 @@ function validatePayload(payload) {
 
 function buildSubject(kind, payload) {
   return kind === 'waitlist'
-    ? `New Waitlist Signup: ${payload.name}`
+    ? `New Crypto Services Waitlist Signup: ${payload.name}`
     : `Calo Capital Contact Request from ${payload.name}`
 }
 
@@ -133,14 +133,14 @@ function buildText(kind, payload) {
   ]
 
   if (kind === 'waitlist') {
-    base.splice(4, 0, '', 'Waitlist signup from calocapital.io.')
+    base.splice(4, 0, '', 'Crypto Services waitlist signup from calocapital.io.')
   }
 
   return base.join('\n')
 }
 
 function buildHtml(kind, payload) {
-  const intro = kind === 'waitlist' ? 'Waitlist signup from calocapital.io.' : 'Contact request from calocapital.io.'
+  const intro = kind === 'waitlist' ? 'Crypto Services waitlist signup from calocapital.io.' : 'Contact request from calocapital.io.'
 
   return `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">

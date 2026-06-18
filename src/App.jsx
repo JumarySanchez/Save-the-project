@@ -31,33 +31,23 @@ const CHART_ASSETS = [
 const aboutServices = [
   {
     title: "Cash Alternatives",
-    description: "Liquidity-focused strategies designed to preserve capital while seeking attractive yield opportunities.",
-    icon: "🎧",
+    description: "Alternative strategies focused on liquidity, cash flow, and capital preservation.",
+    icon: "◈",
   },
   {
     title: "Crypto",
-    description: "Education and research that help clients understand digital assets and emerging blockchain trends.",
+    description: "Digital asset education, custody solutions, and strategic market insights.",
     icon: "◎",
   },
   {
     title: "Commodities",
-    description: "Market perspective on commodity exposure as part of broader portfolio diversification.",
+    description: "Diversification opportunities through precious metals, energy, and commodity markets.",
     icon: "▥",
   },
   {
     title: "Companies",
-    description: "Evaluation of businesses and long-term growth opportunities through disciplined strategic review.",
+    description: "Long-term opportunities involving private businesses and growth-focused investments.",
     icon: "▦",
-  },
-  {
-    title: "Research",
-    description: "Timely market commentary and educational analysis built for informed decision-making.",
-    icon: "◇",
-  },
-  {
-    title: "Consulting",
-    description: "Strategic conversations for individuals and businesses seeking clarity around capital decisions.",
-    icon: "□",
   },
 ];
 
@@ -65,26 +55,26 @@ const services = [
   {
     title: "Cash Alternatives",
     description:
-      "Alternative cash-flow and liquidity strategies designed to preserve capital while seeking attractive yields.",
+      "Alternative strategies focused on liquidity, cash flow, and capital preservation.",
     features: ["Liquidity Management", "Capital Preservation", "Structured Yield", "Short-term Alternatives"],
   },
   {
     title: "Crypto",
     description:
-      "Education, research, and strategic insights into digital assets and emerging blockchain opportunities.",
-    features: ["Market Education", "Token Research", "Risk Awareness", "Strategic Insights"],
+      "Digital asset education, custody solutions, and strategic market insights.",
+    features: ["Education", "Custody Guidance", "Token Research", "Strategic Insights"],
   },
   {
     title: "Commodities",
     description:
-      "Market perspectives and portfolio diversification opportunities through commodity-related investments.",
-    features: ["Commodity Outlook", "Diversification", "Risk Management", "Macro Insight"],
+      "Diversification opportunities through precious metals, energy, and commodity markets.",
+    features: ["Commodity Outlook", "Diversification", "Hedging", "Macro Insight"],
   },
   {
     title: "Companies",
     description:
-      "Evaluation of businesses, private opportunities, and long-term growth-oriented investments.",
-    features: ["Private Opportunities", "Company Analysis", "Growth Investing", "Long-term Research"],
+      "Long-term opportunities involving private businesses and growth-focused investments.",
+    features: ["Private Opportunities", "Company Analysis", "Growth Investing", "Operational Due Diligence"],
   },
 ];
 
@@ -687,8 +677,6 @@ function HeroSection({ coins, setPage }) {
             <span>Where Strategy</span>
             <br />
             <span>Meets Legacy</span>
-            <br />
-            <span className="bg-gradient-to-r from-violet-200 via-cyan-200 to-blue-300 bg-clip-text text-transparent">With Calo Capital</span>
           </h1>
 
           <p className="max-w-md text-base leading-relaxed text-slate-300 sm:text-lg">
@@ -911,6 +899,17 @@ function ContactSection() {
         <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           {/* LEFT */}
           <div>
+            <div className="mb-8 rounded-2xl border border-white/6 bg-white/[0.02] p-6">
+              <h3 className="text-lg font-black">Trust & Credibility</h3>
+              <p className="mt-3 text-sm text-slate-300">Education-first, research-backed guidance across multiple asset classes:</p>
+              <ul className="mt-3 ml-4 list-disc text-sm text-slate-300">
+                <li>Education-First Approach</li>
+                <li>Long-Term Strategic Thinking</li>
+                <li>Capital Preservation Focus</li>
+                <li>Market Research & Insights</li>
+                <li>Multi-Asset Perspective</li>
+              </ul>
+            </div>
             <h2 className="text-3xl font-black">Let's start a conversation</h2>
             <p className="mt-5 max-w-md text-lg leading-8 text-blue-300/75">
               Whether you're ready to build a plan or just have questions, we're here to help. Reach out and a member of our team will get back to you.
@@ -1160,7 +1159,7 @@ function Footer() {
         <div className="md:col-span-2">
           <p className="text-lg font-black tracking-wide text-white">Calo Capital</p>
           <p className="mt-4 max-w-md text-sm leading-6 text-slate-400">
-            Calo Capital shares market insight across cash alternatives, crypto, commodities, and companies with clear, professional language.
+            Calo Capital — Where Strategy Meets Legacy. Educational content and market insights designed to help individuals and families make more informed financial decisions.
           </p>
         </div>
         <div>
@@ -1180,9 +1179,7 @@ function Footer() {
         © {new Date().getFullYear()} Calo Capital. Educational content only. No guaranteed financial returns.
       </div>
       <div className="mx-auto mt-6 max-w-7xl text-xs leading-6 text-slate-500">
-        The information provided on this website is for educational and informational purposes only and should not be construed as investment, legal, tax, or financial advice.
-        Calo Capital is not currently a registered investment advisor. Nothing contained on this website constitutes an offer, solicitation, recommendation, or endorsement of any investment product, security, or strategy.
-        Past performance does not guarantee future results. All investments involve risk, including the possible loss of principal. Visitors should consult with qualified financial, legal, and tax professionals before making any investment decisions.
+        The information provided on this website is for educational and informational purposes only and should not be construed as investment, legal, tax, or financial advice. Calo Capital is not currently a registered investment advisor. Nothing on this site constitutes an offer, solicitation, recommendation, or endorsement of any investment product, security, or strategy. Past performance does not guarantee future results. All investments involve risk, including the possible loss of principal. Visitors should consult with qualified financial, legal, and tax professionals before making any investment decisions.
       </div>
       <div className="mx-auto mt-6 max-w-7xl flex flex-wrap gap-3">
         {socialLinks.map((item) => (

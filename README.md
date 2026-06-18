@@ -2,7 +2,7 @@
 
 ## Forms & Email Setup
 
-The Contact and Waitlist forms submit through secure server-side handlers at `/api/contact` and `/api/waitlist`.
+The Contact form and Crypto Services Waitlist submit through secure server-side handlers at `/api/contact` and `/api/waitlist`.
 
 ### Recommended provider
 
@@ -35,9 +35,9 @@ The Contact and Waitlist forms submit through secure server-side handlers at `/a
 4. Submit and confirm the success message appears.
 5. Verify both `protection@calocapital.io` and `marc@calocapital.io` receive the email, or confirm mock delivery locally with `RESEND_MOCK_DELIVERY=1`.
 
-### Waitlist form test
+### Crypto Services Waitlist test
 
-1. Open the Waitlist section.
+1. Open the Waitlist/Crypto Services section.
 2. Fill in Name, Email, Service Type, and Message.
 3. Submit and confirm the success message appears.
 4. Verify both inboxes receive the waitlist submission, or confirm mock delivery locally with `RESEND_MOCK_DELIVERY=1`.

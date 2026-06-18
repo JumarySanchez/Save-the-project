@@ -6,9 +6,9 @@
 - Include fields for Name, Email, Phone Number, Service Type, and Message.
 - Mark Name, Email, Service Type, and Message as required.
 
-## Waitlist Form
+## Crypto Services Waitlist Form
 
-- Add a Webflow Form Block in the Waitlist section.
+- Add a Webflow Form Block in the Waitlist / Crypto Services section.
 - Include fields for Name, Email, Phone Number, Service Type, and Message.
 - Keep the same visual styling as the current site.
 
