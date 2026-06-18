@@ -83,37 +83,37 @@ const blogPosts = [
     category: "Retirement",
     date: "Feb 21, 2024",
     title: "10 Quick Tips For Retirement",
-    description: "Smart strategies to prepare for a comfortable and confident retirement, from early planning to portfolio diversification and risk management.",
+    description: "[CLIENT CONTENT PENDING]",
   },
   {
     category: "Insurance",
     date: "Feb 21, 2024",
     title: "15 Best Blogs To Follow About Insurance",
-    description: "Stay informed with the top insurance industry voices covering everything from life coverage to modern financial planning approaches.",
+    description: "[CLIENT CONTENT PENDING]",
   },
   {
     category: "Crypto",
     date: "Feb 21, 2024",
     title: "7 of the Best Crypto Strategies",
-    description: "Explore proven approaches to navigating the crypto market with confidence, from dollar-cost averaging to portfolio rebalancing strategies.",
+    description: "[CLIENT CONTENT PENDING]",
   },
   {
     category: "Insurance",
     date: "Jan 15, 2024",
     title: "Understanding Life Insurance Basics",
-    description: "A comprehensive guide for beginners on life insurance types, coverage options, and how to choose the right policy for your family.",
+    description: "[CLIENT CONTENT PENDING]",
   },
   {
     category: "Lending",
     date: "Jan 8, 2024",
     title: "Premium Financing Explained",
-    description: "How premium financing works, who it's for, and the key benefits of leveraging this strategy for high-value insurance policies.",
+    description: "[CLIENT CONTENT PENDING]",
   },
   {
     category: "Planning",
     date: "Dec 20, 2023",
     title: "Estate Planning in the Digital Age",
-    description: "How to include digital assets, crypto wallets, and online accounts in your estate plan for a complete wealth transfer strategy.",
+    description: "[CLIENT CONTENT PENDING]",
   },
 ];
 
