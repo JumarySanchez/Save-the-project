@@ -441,77 +441,82 @@ function MovingClouds() {
   );
 }
 
+function TradingViewChart() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    containerRef.current.innerHTML = "";
+
+    const script = document.createElement("script");
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.type = "text/javascript";
+    script.async = true;
+
+    script.innerHTML = JSON.stringify({
+      autosize: true,
+      symbol: "BITSTAMP:BTCUSD",
+      interval: "D",
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",
+      locale: "en",
+      backgroundColor: "rgba(5, 8, 22, 1)",
+      gridColor: "rgba(139, 92, 246, 0.12)",
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: true,
+      calendar: false,
+      support_host: "https://www.tradingview.com",
+      studies: [],
+      withdateranges: true,
+      allow_symbol_change: true,
+      details: true,
+      hotlist: false,
+      hide_side_toolbar: false,
+      watchlist: [
+        "BITSTAMP:BTCUSD",
+        "COINBASE:ETHUSD",
+        "NASDAQ:AAPL",
+        "NASDAQ:TSLA",
+        "NASDAQ:NVDA",
+        "TVC:GOLD",
+        "SP:SPX",
+      ],
+      overrides: {
+        "paneProperties.background": "#050816",
+        "paneProperties.backgroundType": "solid",
+        "paneProperties.vertGridProperties.color": "rgba(139, 92, 246, 0.12)",
+        "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
+        "symbolWatermarkProperties.transparency": 90,
+        "scalesProperties.textColor": "#B7C0D8",
+        "mainSeriesProperties.candleStyle.upColor": "#8B5CF6",
+        "mainSeriesProperties.candleStyle.downColor": "#C084FC",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#A855F7",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#7C3AED",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#A855F7",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#C084FC",
+      },
+    });
+
+    containerRef.current.appendChild(script);
+  }, []);
+
+  return (
+    <div className="tradingview-widget-container w-full h-full">
+      <div
+        ref={containerRef}
+        className="tradingview-widget-container__widget w-full h-full"
+      />
+    </div>
+  );
+}
+
 function StockChart({ coins }) {
   const [selectedSymbol, setSelectedSymbol] = useState("BTCUSD");
   const selectedAsset = CHART_ASSETS.find((asset) => asset.label === selectedSymbol) || CHART_ASSETS[0];
   const isUp = selectedAsset.change >= 0;
-
-  useEffect(() => {
-    const containerId = "tv_chart_container";
-    let tvScript = null;
-
-    function createWidget() {
-      try {
-        if (!window.TradingView) return;
-        if (!document.getElementById(containerId)) return;
-
-        // remove any previous widget content
-        const el = document.getElementById(containerId);
-        el.innerHTML = "";
-
-        new window.TradingView.widget({
-          autosize: true,
-          symbol: selectedAsset.tvSymbol,
-          interval: "D",
-          timezone: "America/New_York",
-          theme: "dark",
-          style: "1",
-          locale: "en",
-          container_id: containerId,
-          allow_symbol_change: false,
-          hide_top_toolbar: true,
-          hide_side_toolbar: false,
-          withdateranges: false,
-          // color overrides to better match Calo Capital branding
-          overrides: {
-            "paneProperties.background": "#050816",
-            "paneProperties.vertGridProperties.color": "#1A2340",
-            "paneProperties.horzGridProperties.color": "#1A2340",
-            "scalesProperties.textColor": "#B7C0D8",
-            "mainSeriesProperties.candleStyle.upColor": "#C6B8FF",
-            "mainSeriesProperties.candleStyle.downColor": "#6D5EF5",
-            "mainSeriesProperties.candleStyle.borderUpColor": "#C6B8FF",
-            "mainSeriesProperties.candleStyle.borderDownColor": "#6D5EF5",
-            "mainSeriesProperties.candleStyle.wickUpColor": "#C6B8FF",
-            "mainSeriesProperties.candleStyle.wickDownColor": "#6D5EF5",
-            "mainSeriesProperties.candleStyle.borderVisible": true,
-            "mainSeriesProperties.candleStyle.wickVisible": true,
-            "symbolWatermarkProperties.color": "#1A2340",
-          },
-        });
-      } catch (err) {
-        // fail silently — placeholder will remain visible
-        // eslint-disable-next-line no-console
-        console.warn("TradingView widget failed to load:", err);
-      }
-    }
-
-    if (window.TradingView) {
-      createWidget();
-    } else {
-      tvScript = document.createElement("script");
-      tvScript.src = "https://s3.tradingview.com/tv.js";
-      tvScript.async = true;
-      tvScript.onload = createWidget;
-      document.head.appendChild(tvScript);
-    }
-
-    return () => {
-      const el = document.getElementById(containerId);
-      if (el) el.innerHTML = "";
-      if (tvScript && tvScript.parentNode) tvScript.parentNode.removeChild(tvScript);
-    };
-  }, [selectedAsset.tvSymbol]);
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-5 shadow-2xl shadow-violet-950/35 backdrop-blur-md">
@@ -574,7 +579,7 @@ function StockChart({ coins }) {
           <p className="text-xs text-slate-400">24h Performance</p>
         </div>
       </div>
-      <div className="relative flex h-72 items-center justify-center overflow-visible rounded-2xl border border-violet-200/20 bg-[#070a14] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+      <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#070a14] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
         <div className="absolute inset-0 z-0 opacity-25">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:42px_42px]" />
         </div>
@@ -584,8 +589,8 @@ function StockChart({ coins }) {
         <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Trend
         </div>
-        <div className="relative z-20 flex h-full w-full items-center justify-center px-0">
-          <div ref={(el) => el && (el.style.width = "100%")} className="h-full w-full" id="tv_chart_container" />
+        <div className="relative z-20 h-[420px] w-full">
+          <TradingViewChart />
         </div>
       </div>
 
