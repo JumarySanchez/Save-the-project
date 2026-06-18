@@ -491,12 +491,12 @@ function TradingViewChart() {
         "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
         "symbolWatermarkProperties.transparency": 90,
         "scalesProperties.textColor": "#B7C0D8",
-        "mainSeriesProperties.candleStyle.upColor": "#8B5CF6",
-        "mainSeriesProperties.candleStyle.downColor": "#C084FC",
-        "mainSeriesProperties.candleStyle.borderUpColor": "#A855F7",
-        "mainSeriesProperties.candleStyle.borderDownColor": "#7C3AED",
-        "mainSeriesProperties.candleStyle.wickUpColor": "#A855F7",
-        "mainSeriesProperties.candleStyle.wickDownColor": "#C084FC",
+        "mainSeriesProperties.candleStyle.upColor": "#F4F7FB",
+        "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#F4F7FB",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#A855F7",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#F4F7FB",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#A855F7",
       },
     });
 
@@ -508,7 +508,7 @@ function TradingViewChart() {
       <div
         ref={containerRef}
         className="tradingview-widget-container__widget w-full h-full"
-        style={{ filter: "hue-rotate(300deg) saturate(1.4) brightness(0.96)" }}
+        style={{ filter: "hue-rotate(252deg) saturate(0.5) brightness(1.18) contrast(1.08)" }}
       />
     </div>
   );
