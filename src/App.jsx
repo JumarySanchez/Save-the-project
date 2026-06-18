@@ -508,6 +508,7 @@ function TradingViewChart() {
       <div
         ref={containerRef}
         className="tradingview-widget-container__widget w-full h-full"
+        style={{ filter: "hue-rotate(300deg) saturate(1.4) brightness(0.96)" }}
       />
     </div>
   );
