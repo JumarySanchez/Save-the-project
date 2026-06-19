@@ -441,73 +441,96 @@ function MovingClouds() {
   );
 }
 
-function TradingViewChart() {
+function TradingViewChart({ symbol }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
+    // ensure a unique container id per mount to avoid collisions
+    const uid = `tradingview_chart_${String(symbol).replace(/[:\\/]/g, "_")}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
+    containerRef.current.id = uid;
 
+    // clear any previous content
     containerRef.current.innerHTML = "";
 
     const script = document.createElement("script");
-    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.src = "https://s3.tradingview.com/tv.js";
     script.type = "text/javascript";
     script.async = true;
 
-    script.innerHTML = JSON.stringify({
-      autosize: true,
-      symbol: "BITSTAMP:BTCUSD",
-      interval: "D",
-      timezone: "Etc/UTC",
-      theme: "dark",
-      style: "1",
-      locale: "en",
-      backgroundColor: "rgba(5, 8, 22, 1)",
-      gridColor: "rgba(139, 92, 246, 0.12)",
-      hide_top_toolbar: false,
-      hide_legend: false,
-      save_image: true,
-      calendar: false,
-      support_host: "https://www.tradingview.com",
-      studies: [],
-      withdateranges: true,
-      allow_symbol_change: true,
-      details: true,
-      hotlist: false,
-      hide_side_toolbar: false,
-      watchlist: [
-        "BITSTAMP:BTCUSD",
-        "COINBASE:ETHUSD",
-        "NASDAQ:AAPL",
-        "NASDAQ:TSLA",
-        "NASDAQ:NVDA",
-        "TVC:GOLD",
-        "SP:SPX",
-      ],
-      overrides: {
-        "paneProperties.background": "#050816",
-        "paneProperties.backgroundType": "solid",
-        "paneProperties.vertGridProperties.color": "rgba(139, 92, 246, 0.12)",
-        "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
-        "symbolWatermarkProperties.transparency": 90,
-        "scalesProperties.textColor": "#B7C0D8",
-        "mainSeriesProperties.candleStyle.upColor": "#F4F7FB",
-        "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
-        "mainSeriesProperties.candleStyle.borderUpColor": "#F4F7FB",
-        "mainSeriesProperties.candleStyle.borderDownColor": "#A855F7",
-        "mainSeriesProperties.candleStyle.wickUpColor": "#F4F7FB",
-        "mainSeriesProperties.candleStyle.wickDownColor": "#A855F7",
-      },
-    });
+    const onLoad = () => {
+      if (!window.TradingView || !containerRef.current) return;
 
+      try {
+        new window.TradingView.widget({
+          autosize: true,
+          symbol,
+          interval: "D",
+          timezone: "Etc/UTC",
+          theme: "dark",
+          style: "1",
+          locale: "en",
+          container_id: uid,
+          allow_symbol_change: true,
+          hide_top_toolbar: false,
+          hide_side_toolbar: false,
+          withdateranges: true,
+          hide_legend: false,
+          hide_volume: false,
+          details: true,
+          calendar: false,
+          studies: [],
+          watchlist: [
+            "BITSTAMP:BTCUSD",
+            "COINBASE:ETHUSD",
+            "NASDAQ:AAPL",
+            "NASDAQ:TSLA",
+            "NASDAQ:NVDA",
+            "TVC:GOLD",
+            "SP:SPX",
+          ],
+          overrides: {
+            "paneProperties.background": "#050816",
+            "paneProperties.vertGridProperties.color": "rgba(139, 92, 246, 0.12)",
+            "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
+            "scalesProperties.textColor": "#B7C0D8",
+            "mainSeriesProperties.candleStyle.upColor": "#F4F7FB",
+            "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
+            "mainSeriesProperties.candleStyle.borderUpColor": "#F4F7FB",
+            "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
+            "mainSeriesProperties.candleStyle.wickUpColor": "#F4F7FB",
+            "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
+            // ensure candle borders and wicks are visible
+            "mainSeriesProperties.candleStyle.borderVisible": true,
+            "mainSeriesProperties.candleStyle.wickVisible": true,
+            // watermark / symbol backdrop subtle
+            "symbolWatermarkProperties.color": "#1A2340",
+          },
+        });
+      } catch (e) {
+        // fail silently in dev and leave the container empty
+      }
+    };
+
+    script.addEventListener("load", onLoad);
     containerRef.current.appendChild(script);
-  }, []);
+
+    return () => {
+      // cleanup: remove script and clear container
+      script.removeEventListener("load", onLoad);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      if (containerRef.current) containerRef.current.innerHTML = "";
+    };
+  }, [symbol]);
 
   return (
     <div className="tradingview-widget-container w-full h-full">
       <div
         ref={containerRef}
         className="tradingview-widget-container__widget w-full h-full"
+        id="tradingview_chart"
       />
     </div>
   );
@@ -522,10 +545,6 @@ function StockChart({ coins }) {
     <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-5 shadow-2xl shadow-violet-950/35 backdrop-blur-md">
       <div className="pointer-events-none absolute inset-0 opacity-40">
         <div className="h-full w-full bg-[linear-gradient(rgba(183,192,216,.07)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.06)_1px,transparent_1px)] bg-[size:34px_34px]" />
-      </div>
-      <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-2 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-slate-300/85">
-        <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-1">Depth</span>
-        <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-1">Vol 24H</span>
       </div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
@@ -590,7 +609,7 @@ function StockChart({ coins }) {
           Trend
         </div>
         <div className="relative z-20 h-[420px] w-full">
-          <TradingViewChart />
+          <TradingViewChart symbol={selectedAsset.tvSymbol} />
         </div>
       </div>
 
@@ -1394,9 +1413,7 @@ function Footer() {
         By using this website, you acknowledge that you are responsible for your own financial decisions and agree that Calo Capital shall not be held liable for any losses arising from reliance on information presented through this website or related materials.
       </div>
       <div className="mx-auto mt-6 max-w-7xl flex flex-wrap gap-3">
-        {socialLinks.map((item) => (
-          <SocialLink key={item.label} item={item} />
-        ))}
+        {/* Footer social links intentionally removed per request */}
       </div>
     </footer>
   );
