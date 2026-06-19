@@ -822,24 +822,7 @@ function ServicesSection() {
               className={`service-card group relative overflow-hidden rounded-[1.55rem] border border-white/10 p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_34px_-26px_rgba(5,8,22,0.95)] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-[#C084FC]/35 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_20px_38px_-28px_rgba(168,85,247,0.44)] ${serviceTextures[index].panel}`}
             >
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_56%,rgba(8,12,24,0.04),rgba(5,8,22,0.18)_70%,rgba(5,8,22,0.28)_100%)]" />
-              <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                {serviceTextures[index].icons.map((icon) => (
-                  <span
-                    key={`${service.title}-${icon.glyph}-${icon.left}-${icon.top}`}
-                    className="service-card-icon absolute flex items-center justify-center text-[#C084FC]"
-                    style={{
-                      left: icon.left,
-                      top: icon.top,
-                      fontSize: icon.size,
-                      animationDelay: icon.delay,
-                      animationDuration: icon.duration,
-                      color: "rgba(192,132,252,0.05)",
-                    }}
-                  >
-                    {icon.glyph}
-                  </span>
-                ))}
-              </div>
+              {/* decorative icons removed: leaving only text per request */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C084FC]/40 to-transparent" />
               <div className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7]/55" />
@@ -847,9 +830,6 @@ function ServicesSection() {
                 <span className="h-1.5 w-1.5 rounded-full bg-[#8B5CF6]/40" />
               </div>
               <div className="flex items-start justify-between gap-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#C084FC]/28 bg-[#1A2340]/76 text-sm font-black tracking-[0.24em] text-[#F4F7FB] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] transition group-hover:border-[#C084FC]/48 group-hover:shadow-[0_0_0_1px_rgba(192,132,252,0.18)]">
-                  {serviceMarks[index]}
-                </div>
                 <div className="mt-3 h-px flex-1 bg-gradient-to-r from-[#B7C0D8]/35 via-[#B7C0D8]/10 to-transparent" />
               </div>
 
