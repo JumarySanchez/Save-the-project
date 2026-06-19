@@ -824,11 +824,7 @@ function ServicesSection() {
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_56%,rgba(8,12,24,0.04),rgba(5,8,22,0.18)_70%,rgba(5,8,22,0.28)_100%)]" />
               {/* decorative icons removed: leaving only text per request */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C084FC]/40 to-transparent" />
-              <div className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#A855F7]/55" />
-                <span className="h-px w-7 bg-[#B7C0D8]/22" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[#8B5CF6]/40" />
-              </div>
+              {/* decorative top-right markers removed */}
               <div className="flex items-start justify-between gap-4">
                 <div className="mt-3 h-px flex-1 bg-gradient-to-r from-[#B7C0D8]/35 via-[#B7C0D8]/10 to-transparent" />
               </div>
@@ -1459,13 +1455,7 @@ function GlobalStyles() {
         85% { opacity: 0.05; }
         100% { transform: translate3d(-2px, -14px, 0) scale(0.95) rotate(0deg); opacity: 0.03; }
       }
-      .service-card-icon {
-        width: 1.5rem;
-        height: 1.5rem;
-        filter: blur(0.9px);
-        mix-blend-mode: screen;
-        animation: serviceIconFloat 22s ease-in-out infinite;
-      }
+      /* service-card-icon styles removed to hide decorative glyphs */
     `}</style>
   );
 }
