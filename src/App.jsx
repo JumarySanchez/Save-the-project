@@ -1185,15 +1185,9 @@ function TeamPage() {
   const team = [
     {
       name: "Marc Calo",
-      title: "Founder & CEO",
+      title: "CEO",
       bio: "Over 20 years of experience in investments, markets, and alternative assets.",
       image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=80",
-    },
-    {
-      name: "Yumari Sanchez",
-      title: "CEO & Head of Strategy",
-      bio: "Leads strategic initiatives and client relationships with a focus on long-term value creation.",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80",
     },
     {
       name: "Javier Ortiz",
