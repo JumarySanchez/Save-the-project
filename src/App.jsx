@@ -289,7 +289,7 @@ function Navbar({ currentPage, setPage }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070a14]/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <div className="mx-auto flex w-full max-w-[94vw] items-center justify-between px-5 py-4">
         <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="text-left">
           <Logo />
         </button>
@@ -341,35 +341,64 @@ function Navbar({ currentPage, setPage }) {
 function ShootingStars() {
   const shootingStars = useMemo(
     () =>
-      Array.from({ length: 20 }, (_, index) => ({
+      Array.from({ length: 14 }, (_, index) => ({
         id: index,
-        top: `${Math.random() * 80}%`,
-        left: `${Math.random() * 20 - 10}%`,
-        delay: `${index * 0.8}s`,
-        duration: `${3 + Math.random() * 2}s`,
-        scale: `${0.6 + Math.random() * 0.4}`,
-        angle: `${-45 + (index % 2) * 90 + Math.random() * 20}deg`,
+        top: `${8 + (index % 7) * 12 + Math.random() * 8}%`,
+        left: `${-14 + (index % 5) * 22 + Math.random() * 10}%`,
+        delay: `${index * 1.7}s`,
+        duration: `${15 + (index % 4) * 2 + Math.random() * 1.4}s`,
+        length: `${110 + (index % 5) * 22 + Math.floor(Math.random() * 36)}px`,
+        travelX: `${58 + (index % 3) * 12}vw`,
+        travelY: `${35 + (index % 4) * 8}vh`,
+      })),
+    []
+  );
+
+  const constellationLines = useMemo(
+    () =>
+      Array.from({ length: 8 }, (_, index) => ({
+        id: `line-${index}`,
+        top: `${10 + (index % 4) * 18 + (index > 3 ? 8 : 0)}%`,
+        left: `${6 + (index % 3) * 30}%`,
+        width: `${120 + (index % 4) * 70}px`,
+        angle: `${-18 + (index % 5) * 9}deg`,
+        delay: `${index * 1.1}s`,
       })),
     []
   );
 
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+      {constellationLines.map((line) => (
+        <span
+          key={line.id}
+          className="hero-network-line absolute"
+          style={{
+            top: line.top,
+            left: line.left,
+            width: line.width,
+            transform: `rotate(${line.angle})`,
+            animationDelay: line.delay,
+          }}
+        />
+      ))}
+
       {shootingStars.map((star) => (
         <span
           key={star.id}
-          className="diagonal-shooting-star absolute block h-1 w-0.5"
+          className="hero-star-lane absolute block"
           style={{
             top: star.top,
             left: star.left,
+            width: star.length,
             animationDelay: star.delay,
             animationDuration: star.duration,
-            "--scale": star.scale,
-            "--angle": star.angle,
+            "--travel-x": star.travelX,
+            "--travel-y": star.travelY,
           }}
         >
-          <span className="absolute inset-0 h-1 w-0.5 rounded-full bg-white shadow-[0_0_20px_8px_rgba(255,255,255,0.9),0_0_40px_16px_rgba(103,232,249,0.6)]" />
-          <span className="absolute inset-0 h-full w-full blur-sm rounded-full bg-gradient-to-r from-cyan-200 via-white to-transparent" />
+          <span className="hero-star-tail block h-[2px] w-full" />
+          <span className="hero-star-node" />
         </span>
       ))}
     </div>
@@ -621,10 +650,11 @@ function MovingPrompt() {
 function HeroSection() {
   return (
     <section id="home" className="relative w-full overflow-hidden border-b border-white/10 bg-[#070a14] text-white" style={{ minHeight: "max(100vh, 850px)" }}>
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${hikerPng})` }} />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(88,28,135,0.58)_0%,rgba(15,23,42,0.34)_42%,#070a14_90%)]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#070a14]/10 via-[#070a14]/30 to-[#070a14]/72" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-[#070a14]/50 to-[#070a14]" />
+      <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${hikerPng})` }} />
+      <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(88,28,135,0.58)_0%,rgba(15,23,42,0.34)_42%,#070a14_90%)]" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#070a14]/10 via-[#070a14]/30 to-[#070a14]/72" />
+      <ShootingStars />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-40 bg-gradient-to-b from-transparent via-[#070a14]/50 to-[#070a14]" />
     </section>
   );
 }
@@ -712,7 +742,7 @@ function ServicesSection({ coins, setPage }) {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#070a14] to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(168,85,247,0.14),transparent_34%),radial-gradient(circle_at_82%_64%,rgba(124,58,237,0.12),transparent_36%)]" />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto w-full max-w-[94vw]">
         <div className="mb-14 space-y-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-300/10 px-4 py-2">
             <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
@@ -742,7 +772,7 @@ function ServicesSection({ coins, setPage }) {
           </div>
         </div>
 
-        <div className="max-w-4xl">
+        <div className="max-w-[80vw]">
           <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-[#C6B8FF]">Built for a New Era of Markets</p>
           <h2 className="text-3xl font-black leading-tight tracking-tight text-[#F4F7FB] sm:text-4xl lg:text-5xl">
             Digital Asset Strategy Meets Long-Term Wealth Thinking
@@ -807,7 +837,7 @@ function PageHeader({ eyebrow, title, description }) {
   return (
     <section className="relative overflow-hidden bg-[#070a14] px-5 py-20 text-white">
       <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: `url(${hikerPng})` }} />
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto w-full max-w-[94vw]">
         <Logo />
         <p className="mt-10 text-sm font-black uppercase tracking-[0.3em] text-violet-200">{eyebrow}</p>
         <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">{title}</h1>
@@ -868,7 +898,7 @@ function AboutPage() {
     <>
       <section id="about" className="relative overflow-hidden bg-gradient-to-b from-[#0b0f1d] via-[#090d19] to-[#070a14] px-5 pb-14 pt-16 text-white sm:pt-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(168,85,247,0.12),transparent_28%),radial-gradient(circle_at_85%_72%,rgba(99,102,241,0.08),transparent_26%)]" />
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto w-full max-w-[94vw]">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div className="max-w-2xl">
               <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">About Calo Capital</p>
@@ -960,7 +990,7 @@ function TeamPage() {
     <>
       <section id="leadership" className="relative overflow-hidden bg-[#070a14] px-5 pb-16 pt-16 text-white sm:pt-20">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.1),transparent_26%),radial-gradient(circle_at_82%_70%,rgba(99,102,241,0.08),transparent_24%)]" />
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto w-full max-w-[94vw]">
           <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">Our Team</p>
           <h1 className="mt-6 max-w-4xl text-[clamp(3rem,6.6vw,5.25rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
             Experienced. Independent.
@@ -971,7 +1001,7 @@ function TeamPage() {
             Our team brings decades of combined experience across traditional finance, digital assets, commodities, and global markets. We are united by a shared commitment to integrity, excellence, and long-term outcomes.
           </p>
 
-          <div className="mt-12 grid max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-12 grid max-w-[94vw] gap-6 md:grid-cols-2 xl:grid-cols-3">
             {team.map((member) => (
               <article key={member.name} className="group overflow-hidden rounded-[1.05rem] border border-white/10 bg-[linear-gradient(180deg,rgba(14,19,33,0.95)_0%,rgba(8,11,19,0.98)_100%)] shadow-[0_18px_40px_-30px_rgba(5,8,22,0.95)] transition duration-300 hover:-translate-y-1 hover:border-[#A855F7]/30">
                 <div className="relative">
@@ -1020,7 +1050,7 @@ function HomePage({ coins, live, setPage }) {
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
         </div>
         
-        <div className="relative mx-auto max-w-6xl">
+        <div className="relative mx-auto w-full max-w-[94vw]">
           <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Let's Connect</p>
           <div className="mt-8">
             <h1 className="text-6xl font-black tracking-tight leading-[1.1] sm:text-7xl lg:text-8xl">
@@ -1034,7 +1064,7 @@ function HomePage({ coins, live, setPage }) {
           </p>
         </div>
 
-        <div className="relative mx-auto mt-24 max-w-6xl sm:mt-28">
+        <div className="relative mx-auto mt-24 w-full max-w-[94vw] sm:mt-28">
           {/* BOOKING CTA - PROMINENT */}
           <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-8 sm:p-12 backdrop-blur-sm">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-violet-300">Schedule Your Consultation</p>
@@ -1150,7 +1180,7 @@ function Footer() {
 
   return (
     <footer className="border-t border-white/10 bg-[#070a14] px-5 py-12 text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
+      <div className="mx-auto grid w-full max-w-[94vw] gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <p className="text-lg font-black tracking-wide text-white">Calo Capital</p>
           <p className="mt-4 max-w-md text-sm leading-6 text-slate-400">
@@ -1206,7 +1236,7 @@ function Footer() {
           </div>
         </div>
       </div>
-      <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-[11px] leading-5 text-slate-500">
+      <div className="mx-auto mt-10 w-full max-w-[94vw] border-t border-white/10 pt-6 text-[11px] leading-5 text-slate-500">
         Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. Asset allocation, diversification, and portfolio strategies do not guarantee profits or protect against losses in declining markets.
 
         The information provided by Calo Capital is for educational and informational purposes only and should not be construed as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making any financial decisions.
@@ -1221,7 +1251,7 @@ function Footer() {
 
         By using this website, you acknowledge that you are responsible for your own financial decisions and agree that Calo Capital shall not be held liable for any losses arising from reliance on information presented through this website or related materials.
       </div>
-      <div className="mx-auto mt-6 max-w-7xl flex flex-wrap gap-3">
+      <div className="mx-auto mt-6 flex w-full max-w-[94vw] flex-wrap gap-3">
         {/* Footer social links intentionally removed per request */}
       </div>
     </footer>
@@ -1332,6 +1362,58 @@ function GlobalStyles() {
       }
       .diagonal-shooting-star {
         animation: diagonalShootingStarAnimation 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+      }
+      @keyframes heroStarTraverse {
+        0% {
+          transform: translate3d(0, 0, 0) rotate(-24deg);
+          opacity: 0;
+        }
+        12% { opacity: 0.5; }
+        68% { opacity: 0.62; }
+        100% {
+          transform: translate3d(var(--travel-x), var(--travel-y), 0) rotate(-24deg);
+          opacity: 0;
+        }
+      }
+      @keyframes heroNodeTwinkle {
+        0%, 100% {
+          box-shadow: 0 0 12px rgba(255,255,255,0.62), 0 0 20px rgba(168,85,247,0.48), 0 0 28px rgba(103,232,249,0.35);
+          transform: translateY(-50%) scale(0.9);
+        }
+        50% {
+          box-shadow: 0 0 14px rgba(255,255,255,0.8), 0 0 24px rgba(168,85,247,0.64), 0 0 36px rgba(103,232,249,0.48);
+          transform: translateY(-50%) scale(1.06);
+        }
+      }
+      @keyframes heroConstellationPulse {
+        0%, 100% { opacity: 0.12; }
+        50% { opacity: 0.3; }
+      }
+      .hero-star-lane {
+        height: 2px;
+        transform-origin: left center;
+        animation: heroStarTraverse 18s cubic-bezier(0.21, 0.58, 0.36, 0.99) infinite;
+        filter: drop-shadow(0 0 10px rgba(168,85,247,0.2)) drop-shadow(0 0 16px rgba(103,232,249,0.16));
+      }
+      .hero-star-tail {
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(168,85,247,0.02) 0%, rgba(168,85,247,0.18) 30%, rgba(255,255,255,0.76) 72%, rgba(103,232,249,0.92) 100%);
+      }
+      .hero-star-node {
+        position: absolute;
+        right: -5px;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #ffffff;
+        animation: heroNodeTwinkle 5.2s ease-in-out infinite;
+      }
+      .hero-network-line {
+        height: 1px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(168,85,247,0.04) 0%, rgba(255,255,255,0.26) 48%, rgba(103,232,249,0.2) 100%);
+        animation: heroConstellationPulse 15s ease-in-out infinite;
       }
       /* security-css: prevent image saving and dragging */
       img {
