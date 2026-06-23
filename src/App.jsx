@@ -415,85 +415,72 @@ function MovingClouds() {
 function TradingViewChart({ symbol }) {
   const containerRef = useRef(null);
 
+  // Load TradingView script once
   useEffect(() => {
-    if (!containerRef.current) return;
-    // ensure a unique container id per mount to avoid collisions
-    const uid = `tradingview_chart_${String(symbol).replace(/[:\\/]/g, "_")}_${Math.random()
-      .toString(36)
-      .slice(2, 8)}`;
-    containerRef.current.id = uid;
-
-    // clear any previous content
-    containerRef.current.innerHTML = "";
-
+    if (window.TradingView) return;
+    
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/tv.js";
     script.type = "text/javascript";
     script.async = true;
-
-    const onLoad = () => {
-      if (!window.TradingView || !containerRef.current) return;
-
-      try {
-        new window.TradingView.widget({
-          autosize: true,
-          symbol,
-          interval: "D",
-          timezone: "Etc/UTC",
-          theme: "dark",
-          style: "1",
-          locale: "en",
-          container_id: uid,
-          allow_symbol_change: true,
-          hide_top_toolbar: false,
-          hide_side_toolbar: false,
-          withdateranges: true,
-          hide_legend: false,
-          hide_volume: false,
-          details: true,
-          calendar: false,
-          studies: [],
-          watchlist: [
-            "BITSTAMP:BTCUSD",
-            "COINBASE:ETHUSD",
-            "NASDAQ:AAPL",
-            "NASDAQ:TSLA",
-            "NASDAQ:NVDA",
-            "TVC:GOLD",
-            "SP:SPX",
-          ],
-          overrides: {
-            "paneProperties.background": "#050816",
-            "paneProperties.vertGridProperties.color": "rgba(139, 92, 246, 0.12)",
-            "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
-            "scalesProperties.textColor": "#B7C0D8",
-            "mainSeriesProperties.candleStyle.upColor": "#F4F7FB",
-            "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
-            "mainSeriesProperties.candleStyle.borderUpColor": "#F4F7FB",
-            "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
-            "mainSeriesProperties.candleStyle.wickUpColor": "#F4F7FB",
-            "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
-            // ensure candle borders and wicks are visible
-            "mainSeriesProperties.candleStyle.borderVisible": true,
-            "mainSeriesProperties.candleStyle.wickVisible": true,
-            // watermark / symbol backdrop subtle
-            "symbolWatermarkProperties.color": "#1A2340",
-          },
-        });
-      } catch (e) {
-        // fail silently in dev and leave the container empty
-      }
-    };
-
-    script.addEventListener("load", onLoad);
     document.head.appendChild(script);
+  }, []);
 
-    return () => {
-      // cleanup: remove script and clear container
-      script.removeEventListener("load", onLoad);
-      if (script.parentNode) script.parentNode.removeChild(script);
-      if (containerRef.current) containerRef.current.innerHTML = "";
-    };
+  // Create widget when symbol changes
+  useEffect(() => {
+    if (!containerRef.current || !window.TradingView) return;
+    
+    const uid = `tradingview_${String(symbol).replace(/[:\\/]/g, "_")}`;
+    containerRef.current.id = uid;
+    containerRef.current.innerHTML = "";
+
+    try {
+      new window.TradingView.widget({
+        autosize: true,
+        symbol,
+        interval: "D",
+        timezone: "Etc/UTC",
+        theme: "dark",
+        style: "1",
+        locale: "en",
+        container_id: uid,
+        allow_symbol_change: true,
+        hide_top_toolbar: false,
+        hide_side_toolbar: false,
+        withdateranges: true,
+        hide_legend: false,
+        hide_volume: false,
+        details: true,
+        calendar: false,
+        studies: [],
+        watchlist: [
+          "BITSTAMP:BTCUSD",
+          "COINBASE:ETHUSD",
+          "NASDAQ:AAPL",
+          "NASDAQ:TSLA",
+          "NASDAQ:NVDA",
+          "TVC:GOLD",
+          "SP:SPX",
+        ],
+        overrides: {
+          "paneProperties.background": "#050816",
+          "paneProperties.vertGridProperties.color": "rgba(139, 92, 246, 0.12)",
+          "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
+          "scalesProperties.textColor": "#B7C0D8",
+          "mainSeriesProperties.candleStyle.upColor": "#F4F7FB",
+          "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
+          "mainSeriesProperties.candleStyle.borderUpColor": "#F4F7FB",
+          "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
+          "mainSeriesProperties.candleStyle.wickUpColor": "#F4F7FB",
+          "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
+          "mainSeriesProperties.candleStyle.borderVisible": true,
+          "mainSeriesProperties.candleStyle.wickVisible": true,
+          "symbolWatermarkProperties.color": "#1A2340",
+        },
+      });
+    } catch (e) {
+      console.warn("TradingView widget error:", e);
+    }
   }, [symbol]);
 
   return (
