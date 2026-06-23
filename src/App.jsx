@@ -486,7 +486,7 @@ function TradingViewChart({ symbol }) {
     };
 
     script.addEventListener("load", onLoad);
-    containerRef.current.appendChild(script);
+    document.head.appendChild(script);
 
     return () => {
       // cleanup: remove script and clear container
