@@ -263,8 +263,8 @@ const pageRoutes = {
 function getPageFromHash() {
   const hash = window.location.hash || "#/";
   if (hash === "#/about" || hash === "#about" || hash === "#client-excellence") return "Home";
-  if (hash === "#/team" || hash === "#team" || hash === "#leadership") return "Team";
-  if (hash === "#/contact" || hash === "#contact") return "Contact";
+  if (hash === "#/team" || hash === "#team" || hash === "#leadership") return "Home";
+  if (hash === "#/contact" || hash === "#contact") return "Home";
   return "Home";
 }
 
@@ -1367,6 +1367,24 @@ function GlobalStyles() {
       .diagonal-shooting-star {
         animation: diagonalShootingStarAnimation 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
       }
+      /* security-css: prevent image saving and dragging */
+      img {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        pointer-events: none;
+        -webkit-user-drag: none;
+        -webkit-touch-callout: none;
+      }
+      img.interactive {
+        pointer-events: auto;
+      }
+      body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
       /* service-card-icon styles removed to hide decorative glyphs */
     `}</style>
   );
@@ -1399,9 +1417,9 @@ export default function App() {
   }, []);
 
   function setPage(page) {
-    if (page === "About") {
+    if (page === "About" || page === "Team" || page === "Contact") {
       setCurrentPage("Home");
-      window.location.hash = pageRoutes.About;
+      window.location.hash = pageRoutes[page];
       return;
     }
 
