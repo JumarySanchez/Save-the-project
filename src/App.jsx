@@ -1194,13 +1194,49 @@ function Footer() {
         <div>
           <p className="mb-4 font-black">Services</p>
           <div className="space-y-2">
-            {serviceLinks.map((link) => <a key={link.label} href={link.href} className="block text-sm text-slate-400 hover:text-white">{link.label}</a>)}
+            {serviceLinks.map((link) => (
+              <a 
+                key={link.label} 
+                href={link.href} 
+                onClick={(e) => {
+                  if (link.href.startsWith("#")) {
+                    e.preventDefault();
+                    const sectionId = link.href.replace("#", "");
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                      element.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  }
+                }}
+                className="block text-sm text-slate-400 hover:text-white cursor-pointer"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
         <div>
           <p className="mb-4 font-black">Company</p>
           <div className="space-y-2">
-            {companyLinks.map((link) => <a key={link.label} href={link.href} className="block text-sm text-slate-400 hover:text-white">{link.label}</a>)}
+            {companyLinks.map((link) => (
+              <a 
+                key={link.label} 
+                href={link.href} 
+                onClick={(e) => {
+                  if (link.href.startsWith("#")) {
+                    e.preventDefault();
+                    const sectionId = link.href.replace("#", "");
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                      element.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  }
+                }}
+                className="block text-sm text-slate-400 hover:text-white cursor-pointer"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>
