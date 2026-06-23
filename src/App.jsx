@@ -276,7 +276,15 @@ function Navbar({ currentPage, setPage }) {
     setPage(page);
     window.location.hash = pageRoutes[page];
     setOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => {
+      const sectionId = pageRoutes[page].replace("#/", "").replace("#", "");
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }, 0);
   }
 
   return (
