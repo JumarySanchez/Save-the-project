@@ -256,8 +256,8 @@ function Logo({ logoSizeClass = "h-16", textSizeClass = "text-lg", taglineClass 
 const pageRoutes = {
   Home: "#/",
   About: "#about",
-  Team: "#/team",
-  Contact: "#/contact",
+  Team: "#leadership",
+  Contact: "#contact",
 };
 
 function getPageFromHash() {
