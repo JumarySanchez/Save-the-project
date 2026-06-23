@@ -52,3 +52,28 @@ a {
   width: 100%;
   margin: 0;
 }
+
+/* Shooting star animations (subtle) */
+.shooting-star {
+  opacity: 0;
+  animation-name: shootingStar;
+  animation-timing-function: cubic-bezier(.2,.65,.42,1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes shootingStar {
+  0% {
+    opacity: 0;
+    transform: translateX(0) scale(1);
+  }
+  8% {
+    opacity: 0.8;
+  }
+  60% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(220px) scale(1);
+  }
+}
