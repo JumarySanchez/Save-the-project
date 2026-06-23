@@ -575,7 +575,7 @@ function StockChart({ coins }) {
         <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Trend
         </div>
-        <div className="relative z-20 h-[420px] w-full">
+        <div className="relative z-20 h-[500px] w-full sm:h-[560px] lg:h-[620px]">
           <TradingViewChart symbol={selectedAsset.tvSymbol} />
         </div>
       </div>
@@ -713,8 +713,13 @@ function ServicesSection({ coins, setPage }) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(168,85,247,0.14),transparent_34%),radial-gradient(circle_at_82%_64%,rgba(124,58,237,0.12),transparent_36%)]" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-14 grid items-start gap-8 lg:grid-cols-[1.22fr_0.78fr]">
-          <div className="order-1 space-y-4">
+        <div className="mb-14 space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-300/10 px-4 py-2">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+            <span className="text-xs font-bold text-[#C084FC]">Cash Alternatives · Crypto · Commodities · Companies</span>
+          </div>
+
+          <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-slate-300/85">
               <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Digital Assets</span>
               <span className="rounded-full border border-[#C084FC]/25 bg-[#1A2340]/60 px-2 py-1">Macro Signals</span>
@@ -733,41 +738,6 @@ function ServicesSection({ coins, setPage }) {
                   <p className={item.up ? "font-mono text-xs font-bold text-emerald-300" : "font-mono text-xs font-bold text-rose-300"}>{item.change}</p>
                 </div>
               ))}
-            </div>
-          </div>
-
-          <div className="order-2 space-y-5 lg:pt-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-300/10 px-4 py-2">
-              <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-              <span className="text-xs font-bold text-[#C084FC]">Cash Alternatives · Crypto · Commodities · Companies</span>
-            </div>
-
-            <h2 className="text-4xl font-black leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              <span className="drop-shadow-[0_0_20px_rgba(192,132,252,0.32)]">Where Strategy</span>
-              <br />
-              <span className="drop-shadow-[0_0_22px_rgba(139,92,246,0.38)]">Meets Legacy</span>
-            </h2>
-
-            <p className="max-w-lg text-base leading-relaxed text-slate-300 sm:text-lg">
-              Calo Capital helps individuals and businesses navigate opportunities across cash alternatives, crypto, commodities, and companies through education, research, and strategic market insights.
-            </p>
-
-            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-              <button onClick={() => setPage("About")} className="rounded-xl bg-violet-300 px-7 py-3.5 text-center text-sm font-black text-slate-950 transition hover:bg-violet-200 hover:shadow-[0_10px_28px_-12px_rgba(198,184,255,0.65)]">
-                Learn More →
-              </button>
-              <a
-                href={SCHEDULE_CALL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl border border-violet-200/20 bg-white/5 px-7 py-3.5 text-center text-sm font-bold text-white transition hover:border-violet-200/45 hover:bg-violet-300/10 hover:shadow-[0_10px_26px_-14px_rgba(155,124,255,0.72)]"
-              >
-                Schedule a Call
-              </a>
-            </div>
-
-            <div className="max-w-md pt-2">
-              <MovingPrompt />
             </div>
           </div>
         </div>
