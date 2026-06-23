@@ -339,68 +339,13 @@ function Navbar({ currentPage, setPage }) {
 }
 
 function ShootingStars() {
-  const shootingStars = useMemo(
-    () =>
-      Array.from({ length: 14 }, (_, index) => ({
-        id: index,
-        top: `${8 + (index % 7) * 12 + Math.random() * 8}%`,
-        left: `${-14 + (index % 5) * 22 + Math.random() * 10}%`,
-        delay: `${index * 1.7}s`,
-        duration: `${15 + (index % 4) * 2 + Math.random() * 1.4}s`,
-        length: `${110 + (index % 5) * 22 + Math.floor(Math.random() * 36)}px`,
-        travelX: `${58 + (index % 3) * 12}vw`,
-        travelY: `${35 + (index % 4) * 8}vh`,
-      })),
-    []
-  );
-
-  const constellationLines = useMemo(
-    () =>
-      Array.from({ length: 8 }, (_, index) => ({
-        id: `line-${index}`,
-        top: `${10 + (index % 4) * 18 + (index > 3 ? 8 : 0)}%`,
-        left: `${6 + (index % 3) * 30}%`,
-        width: `${120 + (index % 4) * 70}px`,
-        angle: `${-18 + (index % 5) * 9}deg`,
-        delay: `${index * 1.1}s`,
-      })),
-    []
-  );
-
   return (
-    <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
-      {constellationLines.map((line) => (
-        <span
-          key={line.id}
-          className="hero-network-line absolute"
-          style={{
-            top: line.top,
-            left: line.left,
-            width: line.width,
-            transform: `rotate(${line.angle})`,
-            animationDelay: line.delay,
-          }}
-        />
-      ))}
-
-      {shootingStars.map((star) => (
-        <span
-          key={star.id}
-          className="hero-star-lane absolute block"
-          style={{
-            top: star.top,
-            left: star.left,
-            width: star.length,
-            animationDelay: star.delay,
-            animationDuration: star.duration,
-            "--travel-x": star.travelX,
-            "--travel-y": star.travelY,
-          }}
-        >
-          <span className="hero-star-tail block h-[2px] w-full" />
-          <span className="hero-star-node" />
-        </span>
-      ))}
+    <div className="constellation-stars">
+      <span className="star-line" style={{ "--angle": "25deg" }} />
+      <span className="star-line" style={{ "--angle": "18deg" }} />
+      <span className="star-line" style={{ "--angle": "-12deg" }} />
+      <span className="star-line" style={{ "--angle": "205deg" }} />
+      <span className="star-line" style={{ "--angle": "190deg" }} />
     </div>
   );
 }
@@ -1363,57 +1308,114 @@ function GlobalStyles() {
       .diagonal-shooting-star {
         animation: diagonalShootingStarAnimation 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
       }
-      @keyframes heroStarTraverse {
-        0% {
-          transform: translate3d(0, 0, 0) rotate(-24deg);
-          opacity: 0;
-        }
-        12% { opacity: 0.5; }
-        68% { opacity: 0.62; }
-        100% {
-          transform: translate3d(var(--travel-x), var(--travel-y), 0) rotate(-24deg);
-          opacity: 0;
-        }
-      }
-      @keyframes heroNodeTwinkle {
-        0%, 100% {
-          box-shadow: 0 0 12px rgba(255,255,255,0.62), 0 0 20px rgba(168,85,247,0.48), 0 0 28px rgba(103,232,249,0.35);
-          transform: translateY(-50%) scale(0.9);
-        }
-        50% {
-          box-shadow: 0 0 14px rgba(255,255,255,0.8), 0 0 24px rgba(168,85,247,0.64), 0 0 36px rgba(103,232,249,0.48);
-          transform: translateY(-50%) scale(1.06);
-        }
-      }
-      @keyframes heroConstellationPulse {
-        0%, 100% { opacity: 0.12; }
-        50% { opacity: 0.3; }
-      }
-      .hero-star-lane {
-        height: 2px;
-        transform-origin: left center;
-        animation: heroStarTraverse 18s cubic-bezier(0.21, 0.58, 0.36, 0.99) infinite;
-        filter: drop-shadow(0 0 10px rgba(168,85,247,0.2)) drop-shadow(0 0 16px rgba(103,232,249,0.16));
-      }
-      .hero-star-tail {
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(168,85,247,0.02) 0%, rgba(168,85,247,0.18) 30%, rgba(255,255,255,0.76) 72%, rgba(103,232,249,0.92) 100%);
-      }
-      .hero-star-node {
+      .constellation-stars {
         position: absolute;
-        right: -5px;
-        top: 50%;
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: #ffffff;
-        animation: heroNodeTwinkle 5.2s ease-in-out infinite;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 20;
       }
-      .hero-network-line {
+
+      .star-line {
+        position: absolute;
+        width: 260px;
         height: 1px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(168,85,247,0.04) 0%, rgba(255,255,255,0.26) 48%, rgba(103,232,249,0.2) 100%);
-        animation: heroConstellationPulse 15s ease-in-out infinite;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(175, 235, 255, 0.9),
+          rgba(190, 140, 255, 0.8),
+          transparent
+        );
+        box-shadow:
+          0 0 8px rgba(175, 235, 255, 0.9),
+          0 0 18px rgba(160, 90, 255, 0.55);
+        opacity: 0;
+        transform: rotate(var(--angle, 25deg));
+        animation: constellationDrift 9s linear infinite;
+      }
+
+      .star-line::before,
+      .star-line::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: white;
+        transform: translateY(-50%);
+        box-shadow:
+          0 0 10px white,
+          0 0 22px rgba(160, 220, 255, 0.9),
+          0 0 34px rgba(160, 90, 255, 0.7);
+      }
+
+      .star-line::before {
+        left: 0;
+      }
+
+      .star-line::after {
+        right: 0;
+      }
+
+      .star-line:nth-child(1) {
+        top: 28%;
+        left: -18%;
+        animation-delay: 0s;
+        animation-duration: 11s;
+      }
+
+      .star-line:nth-child(2) {
+        top: 48%;
+        left: -25%;
+        animation-delay: 2s;
+        animation-duration: 13s;
+        --angle: 18deg;
+      }
+
+      .star-line:nth-child(3) {
+        top: 66%;
+        left: -20%;
+        animation-delay: 4s;
+        animation-duration: 12s;
+        --angle: -12deg;
+      }
+
+      .star-line:nth-child(4) {
+        top: 36%;
+        left: 110%;
+        animation-delay: 3s;
+        animation-duration: 14s;
+        --angle: 205deg;
+      }
+
+      .star-line:nth-child(5) {
+        top: 76%;
+        left: 105%;
+        animation-delay: 6s;
+        animation-duration: 12s;
+        --angle: 190deg;
+      }
+
+      @keyframes constellationDrift {
+        0% {
+          opacity: 0;
+          transform: translateX(0) translateY(0) rotate(var(--angle, 25deg));
+        }
+
+        12% {
+          opacity: 1;
+        }
+
+        65% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 0;
+          transform: translateX(135vw) translateY(120px) rotate(var(--angle, 25deg));
+        }
       }
       /* security-css: prevent image saving and dragging */
       img {
