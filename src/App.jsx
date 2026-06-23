@@ -414,37 +414,52 @@ function MovingClouds() {
 
 function TradingViewChart({ symbol }) {
   const containerRef = useRef(null);
+  const [tvReady, setTvReady] = useState(Boolean(window.TradingView));
 
-  // Load TradingView script once
+  // Load TradingView script once and mark readiness when it is available.
   useEffect(() => {
-    if (window.TradingView) return;
-    
-    const script = document.createElement("script");
-    script.src = "https://s3.tradingview.com/tv.js";
-    script.type = "text/javascript";
-    script.async = true;
-    document.head.appendChild(script);
+    if (window.TradingView) {
+      setTvReady(true);
+      return;
+    }
+
+    const existingScript = document.querySelector('script[src="https://s3.tradingview.com/tv.js"]');
+    const script = existingScript || document.createElement("script");
+
+    const handleLoad = () => setTvReady(Boolean(window.TradingView));
+    script.addEventListener("load", handleLoad);
+
+    if (!existingScript) {
+      script.src = "https://s3.tradingview.com/tv.js";
+      script.type = "text/javascript";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      script.removeEventListener("load", handleLoad);
+    };
   }, []);
 
-  // Create widget when symbol changes
+  // Create widget when symbol changes and TradingView is loaded.
   useEffect(() => {
-    if (!containerRef.current || !window.TradingView) return;
+    if (!containerRef.current || !tvReady || !window.TradingView) return;
     
-    const uid = `tradingview_${String(symbol).replace(/[:\\/]/g, "_")}`;
+    const uid = `tradingview_${String(symbol).replace(/[:\\/]/g, "_")}_${Math.random().toString(36).slice(2, 8)}`;
     containerRef.current.id = uid;
     containerRef.current.innerHTML = "";
 
     try {
       new window.TradingView.widget({
         autosize: true,
-        symbol,
-        interval: "D",
+        symbol: String(symbol || "").includes(":") ? String(symbol).toUpperCase() : `BITSTAMP:${String(symbol || "BTCUSD").toUpperCase()}`,
+        interval: "240",
         timezone: "Etc/UTC",
         theme: "dark",
         style: "1",
         locale: "en",
         container_id: uid,
-        allow_symbol_change: true,
+        allow_symbol_change: false,
         hide_top_toolbar: false,
         hide_side_toolbar: false,
         withdateranges: true,
@@ -464,14 +479,14 @@ function TradingViewChart({ symbol }) {
         ],
         overrides: {
           "paneProperties.background": "#050816",
-          "paneProperties.vertGridProperties.color": "rgba(139, 92, 246, 0.12)",
-          "paneProperties.horzGridProperties.color": "rgba(139, 92, 246, 0.12)",
+          "paneProperties.vertGridProperties.color": "rgba(255, 255, 255, 0.03)",
+          "paneProperties.horzGridProperties.color": "rgba(255, 255, 255, 0.03)",
           "scalesProperties.textColor": "#B7C0D8",
-          "mainSeriesProperties.candleStyle.upColor": "#F4F7FB",
+          "mainSeriesProperties.candleStyle.upColor": "#FFFFFF",
           "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
-          "mainSeriesProperties.candleStyle.borderUpColor": "#F4F7FB",
+          "mainSeriesProperties.candleStyle.borderUpColor": "#FFFFFF",
           "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
-          "mainSeriesProperties.candleStyle.wickUpColor": "#F4F7FB",
+          "mainSeriesProperties.candleStyle.wickUpColor": "#FFFFFF",
           "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
           "mainSeriesProperties.candleStyle.borderVisible": true,
           "mainSeriesProperties.candleStyle.wickVisible": true,
@@ -481,7 +496,7 @@ function TradingViewChart({ symbol }) {
     } catch (e) {
       console.warn("TradingView widget error:", e);
     }
-  }, [symbol]);
+  }, [symbol, tvReady]);
 
   return (
     <div className="tradingview-widget-container w-full h-full">
@@ -501,9 +516,6 @@ function StockChart({ coins }) {
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-5 shadow-2xl shadow-violet-950/35 backdrop-blur-md">
-      <div className="pointer-events-none absolute inset-0 opacity-40">
-        <div className="h-full w-full bg-[linear-gradient(rgba(183,192,216,.07)_1px,transparent_1px),linear-gradient(90deg,rgba(183,192,216,.06)_1px,transparent_1px)] bg-[size:34px_34px]" />
-      </div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-400">Asset Selector</p>
@@ -557,9 +569,6 @@ function StockChart({ coins }) {
         </div>
       </div>
       <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#070a14] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="absolute inset-0 z-0 opacity-25">
-          <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:42px_42px]" />
-        </div>
         <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Momentum
         </div>
