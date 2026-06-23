@@ -837,32 +837,6 @@ function ServicesSection({ coins, setPage }) {
   );
 }
 
-function AboutPreview() {
-  return (
-    <section id="about" className="bg-[#070a14] px-5 py-20 text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
-        <div>
-          <p className="mb-3 text-sm font-black uppercase tracking-[0.3em] text-violet-200">Our Philosophy</p>
-          <h2 className="text-3xl font-black sm:text-4xl">From unsure about money to confident about your financial direction.</h2>
-        </div>
-        <div className="space-y-5 text-slate-300">
-          <p>
-            At Calo Capital, the goal is to help visitors understand protection, capital access, and modern market opportunities in a clear and professional way.
-          </p>
-          <p>
-            Calo Capital's core services are presented in a clean, premium structure designed for client education and consultation requests.
-          </p>
-          <a href="#contact" className="inline-block rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-black text-white hover:bg-white/10">
-            Connect With Calo
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-
 function PageHeader({ eyebrow, title, description }) {
   return (
     <section className="relative overflow-hidden bg-[#070a14] px-5 py-20 text-white">
