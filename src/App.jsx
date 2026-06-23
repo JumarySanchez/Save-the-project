@@ -16,7 +16,7 @@ const CHART_ASSETS = [
   { group: "Crypto", label: "BTCUSD", display: "BTC/USD", tvSymbol: "COINBASE:BTCUSD", price: 97430, change: 2.14 },
   { group: "Crypto", label: "ETHUSD", display: "ETH/USD", tvSymbol: "COINBASE:ETHUSD", price: 3812, change: 1.87 },
   { group: "Crypto", label: "SOLUSD", display: "SOL/USD", tvSymbol: "COINBASE:SOLUSD", price: 172, change: 3.21 },
-  { group: "Crypto", label: "XRPUSD", display: "XRP/USD", tvSymbol: "COINBASE:XRPUSD", price: 0.5821, change: 1.12 },
+  { group: "Crypto", label: "XRPUSD", display: "XRP/USD", tvSymbol: "BITSTAMP:XRPUSD", price: 0.5821, change: 1.12 },
   { group: "Crypto", label: "ADAUSD", display: "ADA/USD", tvSymbol: "COINBASE:ADAUSD", price: 0.4432, change: -1.03 },
   { group: "Crypto", label: "DOGEUSD", display: "DOGE/USD", tvSymbol: "COINBASE:DOGEUSD", price: 0.1587, change: 2.42 },
   { group: "Crypto", label: "AVAXUSD", display: "AVAX/USD", tvSymbol: "COINBASE:AVAXUSD", price: 36.14, change: 1.65 },
@@ -26,6 +26,8 @@ const CHART_ASSETS = [
   { group: "Stocks", label: "NVDA", display: "NVDA", tvSymbol: "NASDAQ:NVDA", price: 142.11, change: 1.57 },
   { group: "Stocks", label: "MSFT", display: "MSFT", tvSymbol: "NASDAQ:MSFT", price: 467.23, change: 0.61 },
   { group: "Stocks", label: "GOOGL", display: "GOOGL", tvSymbol: "NASDAQ:GOOGL", price: 176.48, change: 0.52 },
+  { group: "Commodities", label: "GOLD", display: "Gold", tvSymbol: "OANDA:XAUUSD", price: 3395, change: 1.4 },
+  { group: "Indexes", label: "SPX", display: "S&P 500", tvSymbol: "SP:SPX", price: 6042, change: 0.42 },
   { group: "ETFs", label: "SPY", display: "SPY", tvSymbol: "AMEX:SPY", price: 590.12, change: 0.39 },
   { group: "ETFs", label: "QQQ", display: "QQQ", tvSymbol: "NASDAQ:QQQ", price: 521.77, change: 0.55 },
 ];
@@ -55,6 +57,15 @@ const services = [
       "Research-driven views on businesses, private opportunities, and long-term growth potential.",
     features: ["Private Opportunities", "Company Analysis", "Growth Investing", "Operational Due Diligence"],
   },
+];
+
+const serviceIds = services.map((service) => service.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
+const serviceMarks = services.map((_, index) => String(index + 1).padStart(2, "0"));
+const serviceTextures = [
+  { panel: "bg-[linear-gradient(180deg,rgba(14,19,33,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Cash Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(18,12,36,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Digital Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(12,22,33,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Real Asset Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(20,14,28,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Business Layer" },
 ];
 
 const socialLinks = [
@@ -236,6 +247,43 @@ function useMarketData() {
   return { coins, live };
 }
 
+function MarketTicker({ coins, live }) {
+  const items = useMemo(() => [...buildTickerItems(coins), ...buildTickerItems(coins)], [coins]);
+
+  return (
+    <div className="relative z-40 overflow-hidden border-b border-white/10 bg-[#050816]/95 text-white">
+      <style>{`
+        .ticker-track {
+          animation: tickerMarquee 24s linear infinite;
+          will-change: transform;
+        }
+        @keyframes tickerMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+      <div className="mx-auto flex w-full max-w-[94vw] items-center gap-4 px-5 py-3 text-xs font-black uppercase tracking-[0.18em]">
+        <span className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2 py-1 text-emerald-200">
+          {live ? "Live" : "Fallback"}
+        </span>
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <div className="ticker-track flex w-max items-center gap-6 whitespace-nowrap">
+            {items.map((item, index) => (
+              <div key={`${item.symbol}-${index}`} className="flex items-center gap-2 whitespace-nowrap text-slate-200">
+                <span className="text-slate-400">{item.symbol}</span>
+                <span className="font-mono text-white">{formatPrice(item.price)}</span>
+                <span className={item.change >= 0 ? "text-emerald-300" : "text-rose-300"}>
+                  {item.change >= 0 ? "+" : ""}{item.change.toFixed(2)}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Logo({ logoSizeClass = "h-16", textSizeClass = "text-lg", taglineClass = "text-xs uppercase tracking-[0.25em] text-violet-200/70" }) {
   return (
     <div className="flex items-center gap-2.5">
@@ -250,6 +298,40 @@ function Logo({ logoSizeClass = "h-16", textSizeClass = "text-lg", taglineClass 
         <p className={taglineClass}>Where Strategy Meets Legacy</p>
       </div>
     </div>
+  );
+}
+
+function HeroSection() {
+  return (
+    <section className="relative min-h-[100svh] overflow-hidden bg-[#070a14] px-5 pt-10 text-white sm:pt-14 lg:pt-16">
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${hikerPng})` }} />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(168,85,247,0.18),transparent_32%),radial-gradient(circle_at_80%_28%,rgba(59,130,246,0.10),transparent_28%),linear-gradient(180deg,rgba(7,10,20,0.22)_0%,rgba(7,10,20,0.55)_48%,rgba(7,10,20,0.88)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-[#070a14]/60 to-[#070a14]" />
+      <ShootingStars />
+
+      <div className="relative mx-auto flex min-h-[calc(100svh-4.5rem)] w-full max-w-[94vw] items-center">
+        <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-[#070a14]/18 p-6 shadow-[0_24px_90px_-45px_rgba(0,0,0,0.75)] backdrop-blur-[2px] sm:p-8 lg:p-10">
+          <Logo />
+          <p className="mt-10 text-sm font-black uppercase tracking-[0.32em] text-violet-200/85">Cash Alternatives · Crypto · Commodities · Companies</p>
+          <h1 className="mt-6 text-[clamp(3.2rem,7vw,6.8rem)] font-black leading-[0.92] tracking-tight text-white">
+            Strategy for
+            <br />
+            Durable Wealth.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+            Calo Capital pairs market insight with a long-term framework across cash alternatives, crypto, commodities, and companies.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <a href="#services" className="rounded-xl bg-[#8B5CF6] px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-[#A855F7]">
+              Explore the Platform
+            </a>
+            <a href="#contact" className="rounded-xl border border-white/15 px-6 py-3 text-sm font-black text-white transition hover:border-violet-300/40 hover:bg-white/5">
+              Contact
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -294,12 +376,12 @@ function Navbar({ currentPage, setPage }) {
           <Logo />
         </button>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-12 px-16 lg:flex lg:max-w-4xl xl:max-w-5xl">
           {links.map((label) => (
             <button
               key={label}
               onClick={() => goTo(label)}
-              className={currentPage === label ? "text-sm font-black text-white" : "text-sm font-semibold text-slate-300 transition hover:text-white"}
+              className={currentPage === label ? "px-1 text-sm font-black text-white" : "px-1 text-sm font-semibold text-slate-300 transition hover:text-white"}
             >
               {label}
             </button>
@@ -340,13 +422,14 @@ function Navbar({ currentPage, setPage }) {
 
 function ShootingStars() {
   const meteors = [
-    { top: "8%", left: "106%", angle: "164deg", length: "78px", delay: "-1.6s", cycle: "12s" },
-    { top: "20%", left: "112%", angle: "162deg", length: "86px", delay: "-7.2s", cycle: "14s" },
-    { top: "32%", left: "108%", angle: "166deg", length: "70px", delay: "-4.9s", cycle: "11.5s" },
-    { top: "46%", left: "114%", angle: "163deg", length: "90px", delay: "-9.4s", cycle: "13.5s" },
-    { top: "58%", left: "107%", angle: "165deg", length: "64px", delay: "-2.7s", cycle: "10s" },
-    { top: "70%", left: "111%", angle: "161deg", length: "84px", delay: "-6.6s", cycle: "12.5s" },
-    { top: "82%", left: "109%", angle: "167deg", length: "74px", delay: "-8.1s", cycle: "11s" },
+    { top: "12%", left: "-18%", length: "84px", delay: "-1.2s", cycle: "7.2s", angle: "16deg" },
+    { top: "20%", left: "-22%", length: "96px", delay: "-4.1s", cycle: "8.1s", angle: "18deg" },
+    { top: "32%", left: "-16%", length: "72px", delay: "-2.8s", cycle: "6.8s", angle: "14deg" },
+    { top: "46%", left: "-20%", length: "102px", delay: "-6.4s", cycle: "7.6s", angle: "19deg" },
+    { top: "58%", left: "-14%", length: "70px", delay: "-3.9s", cycle: "6.5s", angle: "12deg" },
+    { top: "70%", left: "-24%", length: "90px", delay: "-5.6s", cycle: "8.4s", angle: "17deg" },
+    { top: "18%", left: "106%", length: "80px", delay: "-2.1s", cycle: "7.9s", angle: "196deg" },
+    { top: "62%", left: "112%", length: "88px", delay: "-7.1s", cycle: "7.4s", angle: "202deg" },
   ];
 
   return (
@@ -357,27 +440,21 @@ function ShootingStars() {
           inset: 0;
           overflow: hidden;
           pointer-events: none;
-          z-index: 20;
-        }
-
-        .hero-meteor-track {
-          position: absolute;
-          width: var(--length, 80px);
-          height: 1px;
-          transform: rotate(var(--angle, 164deg));
-          transform-origin: left center;
-          opacity: 1;
+          z-index: 30;
         }
 
         .hero-meteor {
           position: absolute;
-          left: 0;
-          top: 0;
+          display: block;
           width: var(--length, 80px);
           height: 1px;
           opacity: 0;
-          animation: meteorTraverse var(--cycle, 14s) linear infinite;
+          transform: rotate(var(--angle, 16deg));
+          transform-origin: left center;
+          animation: meteorTraverse var(--cycle, 8s) linear infinite;
           animation-delay: var(--delay, 0s);
+          will-change: transform, opacity;
+          mix-blend-mode: screen;
         }
 
         .hero-meteor::before,
@@ -397,13 +474,13 @@ function ShootingStars() {
           background: linear-gradient(
             90deg,
             rgba(255, 255, 255, 0.12) 0%,
-            rgba(176, 231, 255, 0.48) 36%,
-            rgba(125, 208, 245, 0.2) 70%,
+            rgba(176, 231, 255, 0.44) 36%,
+            rgba(125, 208, 245, 0.18) 70%,
             rgba(90, 170, 210, 0) 100%
           );
           box-shadow:
-            0 0 3px rgba(168, 230, 255, 0.14),
-            0 0 6px rgba(156, 124, 255, 0.1);
+            0 0 3px rgba(168, 230, 255, 0.2),
+            0 0 6px rgba(156, 124, 255, 0.12);
         }
 
         .hero-meteor::after {
@@ -415,27 +492,34 @@ function ShootingStars() {
           border-radius: 999px;
           background: rgba(255, 255, 255, 0.96);
           box-shadow:
-            0 0 4px rgba(255, 255, 255, 0.48),
-            0 0 8px rgba(166, 228, 255, 0.4),
-            0 0 12px rgba(157, 123, 255, 0.24);
+            0 0 5px rgba(255, 255, 255, 0.58),
+            0 0 9px rgba(166, 228, 255, 0.46),
+            0 0 12px rgba(157, 123, 255, 0.26);
         }
 
         @keyframes meteorTraverse {
-          0%, 76% {
+          0% {
             opacity: 0;
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0) rotate(var(--angle, 16deg));
           }
-          80% {
-            opacity: 0.52;
-            transform: translate3d(-18vw, 24px, 0);
+          6% {
+            opacity: 0.95;
+            transform: translate3d(8vw, 12px, 0) rotate(var(--angle, 16deg));
           }
-          96% {
-            opacity: 0.52;
-            transform: translate3d(-132vw, 184px, 0);
+          30% {
+            opacity: 0.88;
+            transform: translate3d(145vw, 128px, 0) rotate(var(--angle, 16deg));
           }
-          100% {
+          34%, 100% {
             opacity: 0;
-            transform: translate3d(-132vw, 184px, 0);
+            transform: translate3d(145vw, 128px, 0) rotate(var(--angle, 16deg));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .hero-meteor::after {
+            width: 4px;
+            height: 4px;
           }
         }
       `}</style>
@@ -444,23 +528,16 @@ function ShootingStars() {
         {meteors.map((meteor, index) => (
           <span
             key={`meteor-${index}`}
-            className="hero-meteor-track"
+            className="hero-meteor"
             style={{
               top: meteor.top,
               left: meteor.left,
-              "--angle": meteor.angle,
+              "--delay": meteor.delay,
+              "--cycle": meteor.cycle,
               "--length": meteor.length,
+              "--angle": meteor.angle,
             }}
-          >
-            <span
-              className="hero-meteor"
-              style={{
-                "--delay": meteor.delay,
-                "--cycle": meteor.cycle,
-                "--length": meteor.length,
-              }}
-            />
-          </span>
+          />
         ))}
       </div>
     </>
@@ -603,7 +680,6 @@ function TradingViewChart({ symbol }) {
 function StockChart({ coins }) {
   const [selectedSymbol, setSelectedSymbol] = useState("BTCUSD");
   const selectedAsset = CHART_ASSETS.find((asset) => asset.label === selectedSymbol) || CHART_ASSETS[0];
-  const isUp = selectedAsset.change >= 0;
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-5 shadow-2xl shadow-violet-950/35 backdrop-blur-md">
@@ -653,9 +729,7 @@ function StockChart({ coins }) {
           <p className="mt-1 font-mono text-3xl font-black text-white">{formatPrice(selectedAsset.price)}</p>
         </div>
         <div className="text-right">
-          <p className={isUp ? "font-mono text-xl font-black text-emerald-300" : "font-mono text-xl font-black text-rose-300"}>
-            {isUp ? "+" : ""}{selectedAsset.change.toFixed(2)}%
-          </p>
+          <p className={selectedAsset.change >= 0 ? "font-mono text-xl font-black text-emerald-300" : "font-mono text-xl font-black text-rose-300"}>{selectedAsset.change >= 0 ? "+" : ""}{selectedAsset.change.toFixed(2)}%</p>
           <p className="text-xs text-slate-400">24h Performance</p>
         </div>
       </div>
@@ -671,134 +745,11 @@ function StockChart({ coins }) {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
-        <div>
-          <p className="text-xs text-slate-400">Selected Asset</p>
-          <p className="font-mono text-xs font-black text-white">TradingView</p>
-        </div>
-        <div>
-          <p className="text-xs text-slate-400">Inflation</p>
-          <p className="font-mono text-xs font-black text-white">N/A</p>
-        </div>
-        <div>
-          <p className="text-xs text-slate-400">Asset Value</p>
-          <p className="font-mono text-xs font-black text-white">{formatPrice(selectedAsset.price)}</p>
-        </div>
-      </div>
     </div>
   );
 }
 
-function MovingPrompt() {
-  const prompts = [
-    "Market insight across cash alternatives, crypto, commodities, and companies.",
-    "Clear strategic guidance for capital preservation and modern opportunity.",
-    "Professional education for legacy-oriented financial decisions.",
-  ];
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => setIndex((value) => (value + 1) % prompts.length), 3500);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="rounded-2xl border border-violet-300/20 bg-violet-300/10 p-4 text-sm leading-6 text-violet-50 shadow-xl shadow-violet-950/20 backdrop-blur-md">
-      <span className="mr-2">✦</span>{prompts[index]}
-    </div>
-  );
-}
-
-function HeroSection() {
-  return (
-    <section id="home" className="relative w-full overflow-hidden border-b border-white/10 bg-[#070a14] text-white" style={{ minHeight: "max(100vh, 850px)" }}>
-      <div className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${hikerPng})` }} />
-      <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(88,28,135,0.58)_0%,rgba(15,23,42,0.34)_42%,#070a14_90%)]" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#070a14]/10 via-[#070a14]/30 to-[#070a14]/72" />
-      <ShootingStars />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-40 bg-gradient-to-b from-transparent via-[#070a14]/50 to-[#070a14]" />
-    </section>
-  );
-}
-
-function MarketTicker({ coins, live }) {
-  const items = useMemo(() => {
-    const markets = buildTickerItems(coins);
-    return [...markets, ...markets];
-  }, [coins]);
-
-  return (
-    <section id="markets" className="relative overflow-hidden border-y border-white/10 bg-[#101323]/80 py-3 text-white">
-      <div className="absolute left-4 top-1/2 z-10 flex -translate-y-1/2 items-center gap-1.5 rounded border border-white/10 bg-[#070a14]/90 px-2 py-1 backdrop-blur-sm">
-        <div className={live ? "h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" : "h-1.5 w-1.5 rounded-full bg-yellow-300"} />
-        <span className="font-mono text-[10px] font-black text-slate-300">{live ? "LIVE" : "DEMO"}</span>
-      </div>
-
-      <div className="animate-[marquee_7s_linear_infinite] whitespace-nowrap pl-24">
-        {items.map((coin, index) => {
-          const up = coin.change >= 0;
-          return (
-            <span key={`${coin.symbol}-${index}`} className="inline-flex items-center gap-2.5 border-r border-white/10 px-6">
-              <span className="font-mono text-xs font-black text-white">{coin.symbol}</span>
-              <span className="hidden text-xs text-slate-400 sm:inline">{coin.name}</span>
-              <span className="font-mono text-xs font-bold text-white">{formatPrice(coin.price)}</span>
-              <span className={up ? "font-mono text-xs font-bold text-emerald-300" : "font-mono text-xs font-bold text-rose-300"}>
-                {up ? "▲" : "▼"} {Math.abs(coin.change).toFixed(2)}%
-              </span>
-            </span>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function ServicesSection({ coins, setPage }) {
-  const serviceMarks = ["I", "II", "III", "IV"];
-  const serviceIds = ["cash-alternatives", "crypto", "commodities", "companies"];
-  const serviceTextures = [
-    {
-      panel: "bg-[linear-gradient(180deg,rgba(26,35,64,0.68)_0%,rgba(5,8,22,0.88)_100%)]",
-      accent: "Liquidity Map",
-      icons: [
-        { glyph: "◔", left: "14%", top: "18%", size: "0.85rem", delay: "0s", duration: "20s" },
-        { glyph: "∿", left: "72%", top: "22%", size: "1rem", delay: "2.4s", duration: "18s" },
-        { glyph: "◌", left: "22%", top: "68%", size: "0.72rem", delay: "4.2s", duration: "22s" },
-        { glyph: "◜", left: "78%", top: "74%", size: "0.76rem", delay: "1.2s", duration: "16s" },
-      ],
-    },
-    {
-      panel: "bg-[linear-gradient(180deg,rgba(23,34,59,0.72)_0%,rgba(5,8,22,0.9)_100%)]",
-      accent: "Node Mesh",
-      icons: [
-        { glyph: "₿", left: "18%", top: "20%", size: "0.98rem", delay: "0.4s", duration: "21s" },
-        { glyph: "◇", left: "74%", top: "18%", size: "0.78rem", delay: "2.8s", duration: "17s" },
-        { glyph: "⟐", left: "30%", top: "72%", size: "0.76rem", delay: "5.2s", duration: "19s" },
-        { glyph: "⊚", left: "80%", top: "68%", size: "0.72rem", delay: "1.7s", duration: "23s" },
-      ],
-    },
-    {
-      panel: "bg-[linear-gradient(180deg,rgba(21,31,58,0.7)_0%,rgba(5,8,22,0.9)_100%)]",
-      accent: "Trend Flow",
-      icons: [
-        { glyph: "∿", left: "16%", top: "24%", size: "0.9rem", delay: "0.2s", duration: "19s" },
-        { glyph: "⌁", left: "68%", top: "26%", size: "0.76rem", delay: "3s", duration: "24s" },
-        { glyph: "⌒", left: "26%", top: "76%", size: "0.86rem", delay: "4.8s", duration: "20s" },
-        { glyph: "◠", left: "82%", top: "70%", size: "0.72rem", delay: "1.4s", duration: "18s" },
-      ],
-    },
-    {
-      panel: "bg-[linear-gradient(180deg,rgba(23,34,59,0.72)_0%,rgba(5,8,22,0.9)_100%)]",
-      accent: "Data Pulse",
-      icons: [
-        { glyph: "▦", left: "18%", top: "18%", size: "0.78rem", delay: "0.6s", duration: "22s" },
-        { glyph: "▤", left: "72%", top: "24%", size: "0.76rem", delay: "3.4s", duration: "18s" },
-        { glyph: "▢", left: "28%", top: "74%", size: "0.86rem", delay: "5.6s", duration: "20s" },
-        { glyph: "◫", left: "80%", top: "68%", size: "0.72rem", delay: "1.9s", duration: "24s" },
-      ],
-    },
-  ];
-
+function ServicesSection({ coins }) {
   return (
     <section id="services" className="relative overflow-hidden bg-[#0b0f1d] px-5 pb-20 pt-12 text-white sm:pb-24 sm:pt-16">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#070a14] to-transparent" />
@@ -812,25 +763,7 @@ function ServicesSection({ coins, setPage }) {
           </div>
 
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-slate-300/85">
-              <span className="rounded-full border border-violet-200/25 bg-[#1A2340]/60 px-2 py-1">Digital Assets</span>
-              <span className="rounded-full border border-[#C084FC]/25 bg-[#1A2340]/60 px-2 py-1">Macro Signals</span>
-              <span className="rounded-full border border-[#C084FC]/25 bg-[#1A2340]/60 px-2 py-1">Risk Lens</span>
-            </div>
             <StockChart coins={coins} />
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { label: "Gold", value: "$3,287", change: "-0.32%", up: false },
-                { label: "S&P 500", value: "5,969", change: "+0.58%", up: true },
-                { label: "ETH", value: formatPrice((coins.find((coin) => coin.symbol === "ETH") || FALLBACK_COINS[1]).price), change: "+1.87%", up: true },
-              ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
-                  <p className="text-xs text-slate-400">{item.label}</p>
-                  <p className="font-mono text-sm font-black text-white">{item.value}</p>
-                  <p className={item.up ? "font-mono text-xs font-bold text-emerald-300" : "font-mono text-xs font-bold text-rose-300"}>{item.change}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 

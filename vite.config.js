@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { createContactHandler } from './server/email.js'
+import { createMacroHandler } from './server/macro.js'
 
 async function readJsonBody(request) {
   const chunks = []
@@ -14,18 +15,18 @@ async function readJsonBody(request) {
 }
 
 function formsDevProxy() {
-  function handleRequest(handlerFactory) {
+  function handleRequest(handlerFactory, method = 'POST') {
     return async function middleware(req, res, next) {
-      if (req.method !== 'POST') {
+      if (req.method !== method) {
         next()
         return
       }
 
       try {
         const handler = handlerFactory()
-        const body = await readJsonBody(req)
+        const body = method === 'POST' ? await readJsonBody(req) : {}
         const result = await handler({
-          httpMethod: 'POST',
+          httpMethod: method,
           headers: req.headers,
           body: JSON.stringify(body),
         })
@@ -44,7 +45,8 @@ function formsDevProxy() {
   return {
     name: 'forms-dev-proxy',
     configureServer(server) {
-      server.middlewares.use('/api/contact', handleRequest(createContactHandler))
+      server.middlewares.use('/api/contact', handleRequest(createContactHandler, 'POST'))
+      server.middlewares.use('/api/macro', handleRequest(createMacroHandler, 'GET'))
     },
   }
 }
