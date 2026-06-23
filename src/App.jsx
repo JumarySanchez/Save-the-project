@@ -339,14 +339,131 @@ function Navbar({ currentPage, setPage }) {
 }
 
 function ShootingStars() {
+  const meteors = [
+    { top: "8%", left: "106%", angle: "164deg", length: "78px", delay: "-1.6s", cycle: "12s" },
+    { top: "20%", left: "112%", angle: "162deg", length: "86px", delay: "-7.2s", cycle: "14s" },
+    { top: "32%", left: "108%", angle: "166deg", length: "70px", delay: "-4.9s", cycle: "11.5s" },
+    { top: "46%", left: "114%", angle: "163deg", length: "90px", delay: "-9.4s", cycle: "13.5s" },
+    { top: "58%", left: "107%", angle: "165deg", length: "64px", delay: "-2.7s", cycle: "10s" },
+    { top: "70%", left: "111%", angle: "161deg", length: "84px", delay: "-6.6s", cycle: "12.5s" },
+    { top: "82%", left: "109%", angle: "167deg", length: "74px", delay: "-8.1s", cycle: "11s" },
+  ];
+
   return (
-    <div className="constellation-stars">
-      <span className="star-line" style={{ "--angle": "25deg" }} />
-      <span className="star-line" style={{ "--angle": "18deg" }} />
-      <span className="star-line" style={{ "--angle": "-12deg" }} />
-      <span className="star-line" style={{ "--angle": "205deg" }} />
-      <span className="star-line" style={{ "--angle": "190deg" }} />
-    </div>
+    <>
+      <style>{`
+        .constellation-stars {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: 20;
+        }
+
+        .hero-meteor-track {
+          position: absolute;
+          width: var(--length, 80px);
+          height: 1px;
+          transform: rotate(var(--angle, 164deg));
+          transform-origin: left center;
+          opacity: 1;
+        }
+
+        .hero-meteor {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: var(--length, 80px);
+          height: 1px;
+          opacity: 0;
+          animation: meteorTraverse var(--cycle, 14s) linear infinite;
+          animation-delay: var(--delay, 0s);
+        }
+
+        .hero-meteor::before,
+        .hero-meteor::after {
+          content: "";
+          position: absolute;
+          pointer-events: none;
+        }
+
+        .hero-meteor::before {
+          left: 0;
+          top: 50%;
+          width: 100%;
+          height: 1px;
+          transform: translateY(-50%);
+          border-radius: 999px;
+          background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(176, 231, 255, 0.48) 36%,
+            rgba(125, 208, 245, 0.2) 70%,
+            rgba(90, 170, 210, 0) 100%
+          );
+          box-shadow:
+            0 0 3px rgba(168, 230, 255, 0.14),
+            0 0 6px rgba(156, 124, 255, 0.1);
+        }
+
+        .hero-meteor::after {
+          left: -2px;
+          top: 50%;
+          width: 5px;
+          height: 5px;
+          transform: translateY(-50%);
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.96);
+          box-shadow:
+            0 0 4px rgba(255, 255, 255, 0.48),
+            0 0 8px rgba(166, 228, 255, 0.4),
+            0 0 12px rgba(157, 123, 255, 0.24);
+        }
+
+        @keyframes meteorTraverse {
+          0%, 76% {
+            opacity: 0;
+            transform: translate3d(0, 0, 0);
+          }
+          80% {
+            opacity: 0.52;
+            transform: translate3d(-18vw, 24px, 0);
+          }
+          96% {
+            opacity: 0.52;
+            transform: translate3d(-132vw, 184px, 0);
+          }
+          100% {
+            opacity: 0;
+            transform: translate3d(-132vw, 184px, 0);
+          }
+        }
+      `}</style>
+
+      <div className="constellation-stars">
+        {meteors.map((meteor, index) => (
+          <span
+            key={`meteor-${index}`}
+            className="hero-meteor-track"
+            style={{
+              top: meteor.top,
+              left: meteor.left,
+              "--angle": meteor.angle,
+              "--length": meteor.length,
+            }}
+          >
+            <span
+              className="hero-meteor"
+              style={{
+                "--delay": meteor.delay,
+                "--cycle": meteor.cycle,
+                "--length": meteor.length,
+              }}
+            />
+          </span>
+        ))}
+      </div>
+    </>
   );
 }
 
