@@ -738,7 +738,7 @@ function ServicesSection({ coins, setPage }) {
   ];
 
   return (
-    <section id="services" className="relative -mt-32 overflow-hidden bg-[#0b0f1d] px-5 py-20 text-white sm:py-24 sm:-mt-40">
+    <section id="services" className="relative overflow-hidden bg-[#0b0f1d] px-5 pb-20 pt-12 text-white sm:pb-24 sm:pt-16">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#070a14] to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(168,85,247,0.14),transparent_34%),radial-gradient(circle_at_82%_64%,rgba(124,58,237,0.12),transparent_36%)]" />
 
