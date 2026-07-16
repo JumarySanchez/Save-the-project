@@ -1,13 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap");
 
 :root {
   --calo-purple-primary: #8b5cf6;
   --calo-purple-bright: #a855f7;
   --calo-purple-deep: #7c3aed;
   --calo-purple-glow: #c084fc;
-  --calo-sans: "Montserrat", "Inter", system-ui, sans-serif;
-  --calo-serif: "Cormorant Garamond", Georgia, serif;
-  --calo-label: "Space Grotesk", "Montserrat", system-ui, sans-serif;
+  --calo-sans: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --calo-serif: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --calo-label: "Oswald", "Arial Narrow", Arial, sans-serif;
 }
 
 html {
@@ -20,6 +20,16 @@ body {
   font-family: var(--calo-sans);
   background: #070a14;
   color: #f4f7fb;
+}
+
+/* Ensure Tailwind font utility classes resolve to the requested font pairing. */
+.font-sans,
+.font-mono {
+  font-family: var(--calo-sans) !important;
+}
+
+.font-serif {
+  font-family: var(--calo-serif) !important;
 }
 
 main {

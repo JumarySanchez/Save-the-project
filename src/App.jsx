@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import logoPng from "../public/Calo_purple_logo.png";
 import hikerPng from "../assets/hiker.png";
+import caloGif from "../assets/Calo-gif.gif";
 import caloJpg from "../assets/calo.jpg";
 
 const FALLBACK_COINS = [
@@ -36,26 +37,26 @@ const services = [
   {
     title: "Cash Alternatives",
     description:
-      "Designed to help clients understand liquidity, cash flow, and preservation-focused strategies.",
-    features: ["Liquidity Management", "Capital Preservation", "Structured Yield", "Short-term Alternatives"],
+      "Strategic guidance on liquidity planning, cash management, and income-focused approaches designed to support capital preservation.",
+    features: ["Liquidity Planning", "Cash Management", "Income-Focused Strategies", "Capital Preservation"],
   },
   {
     title: "Crypto",
     description:
-      "Education and insight around digital assets, custody, treasury strategy, and emerging blockchain markets.",
-    features: ["Education", "Custody Guidance", "Token Research", "Strategic Insights"],
+      "Market insight on digital assets, including Bitcoin, Ethereum, and blockchain trends, with a focus on disciplined cryptocurrency strategy.",
+    features: ["Bitcoin and Ethereum Insight", "Cryptocurrency Market Analysis", "Blockchain Trends", "Digital Asset Strategy"],
   },
   {
     title: "Commodities",
     description:
-      "Perspective on precious metals, energy, and real assets as tools for diversification and resilience.",
-    features: ["Commodity Outlook", "Diversification", "Hedging", "Macro Insight"],
+      "Perspective on precious metals and energy markets to support portfolio diversification and inflation-aware financial planning.",
+    features: ["Precious Metals Perspective", "Energy Market Analysis", "Diversification Strategy", "Inflation Considerations"],
   },
   {
     title: "Companies",
     description:
-      "Research-driven views on businesses, private opportunities, and long-term growth potential.",
-    features: ["Private Opportunities", "Company Analysis", "Growth Investing", "Operational Due Diligence"],
+      "Research-driven analysis of public markets and private opportunities focused on innovation, business quality, and long-term value creation.",
+    features: ["Public Market Opportunities", "Private Opportunity Review", "Innovation Themes", "Long-Term Value Focus"],
   },
 ];
 
@@ -303,34 +304,11 @@ function Logo({ logoSizeClass = "h-16", textSizeClass = "text-lg", taglineClass 
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-[#070a14] px-5 pt-10 text-white sm:pt-14 lg:pt-16">
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${hikerPng})` }} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(168,85,247,0.18),transparent_32%),radial-gradient(circle_at_80%_28%,rgba(59,130,246,0.10),transparent_28%),linear-gradient(180deg,rgba(7,10,20,0.22)_0%,rgba(7,10,20,0.55)_48%,rgba(7,10,20,0.88)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-[#070a14]/60 to-[#070a14]" />
-      <ShootingStars />
-
-      <div className="relative mx-auto flex min-h-[calc(100svh-4.5rem)] w-full max-w-[94vw] items-center">
-        <div className="max-w-3xl rounded-[2rem] border border-white/10 bg-[#070a14]/18 p-6 shadow-[0_24px_90px_-45px_rgba(0,0,0,0.75)] backdrop-blur-[2px] sm:p-8 lg:p-10">
-          <Logo />
-          <p className="mt-10 text-sm font-black uppercase tracking-[0.32em] text-violet-200/85">Cash Alternatives · Crypto · Commodities · Companies</p>
-          <h1 className="mt-6 text-[clamp(3.2rem,7vw,6.8rem)] font-black leading-[0.92] tracking-tight text-white">
-            Strategy for
-            <br />
-            Durable Wealth.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
-            Calo Capital pairs market insight with a long-term framework across cash alternatives, crypto, commodities, and companies.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <a href="#services" className="rounded-xl bg-[#8B5CF6] px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-[#A855F7]">
-              Explore the Platform
-            </a>
-            <a href="#contact" className="rounded-xl border border-white/15 px-6 py-3 text-sm font-black text-white transition hover:border-violet-300/40 hover:bg-white/5">
-              Contact
-            </a>
-          </div>
-        </div>
-      </div>
+    <section className="relative min-h-[72svh] overflow-hidden bg-[#070a14] text-white">
+      <div
+        className="absolute inset-0 bg-[length:100%_auto] bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${caloGif})`, backgroundPosition: "center top" }}
+      />
     </section>
   );
 }
@@ -370,7 +348,7 @@ function Navbar({ currentPage, setPage }) {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070a14]/90 backdrop-blur-xl">
+    <header className="z-50 bg-[#070a14]/40">
       <div className="mx-auto flex w-full max-w-[94vw] items-center justify-between px-5 py-4">
         <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="text-left">
           <Logo />
@@ -420,130 +398,6 @@ function Navbar({ currentPage, setPage }) {
   );
 }
 
-function ShootingStars() {
-  const meteors = [
-    { top: "12%", left: "-18%", length: "84px", delay: "-1.2s", cycle: "7.2s", angle: "16deg" },
-    { top: "20%", left: "-22%", length: "96px", delay: "-4.1s", cycle: "8.1s", angle: "18deg" },
-    { top: "32%", left: "-16%", length: "72px", delay: "-2.8s", cycle: "6.8s", angle: "14deg" },
-    { top: "46%", left: "-20%", length: "102px", delay: "-6.4s", cycle: "7.6s", angle: "19deg" },
-    { top: "58%", left: "-14%", length: "70px", delay: "-3.9s", cycle: "6.5s", angle: "12deg" },
-    { top: "70%", left: "-24%", length: "90px", delay: "-5.6s", cycle: "8.4s", angle: "17deg" },
-    { top: "18%", left: "106%", length: "80px", delay: "-2.1s", cycle: "7.9s", angle: "196deg" },
-    { top: "62%", left: "112%", length: "88px", delay: "-7.1s", cycle: "7.4s", angle: "202deg" },
-  ];
-
-  return (
-    <>
-      <style>{`
-        .constellation-stars {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
-          pointer-events: none;
-          z-index: 30;
-        }
-
-        .hero-meteor {
-          position: absolute;
-          display: block;
-          width: var(--length, 80px);
-          height: 1px;
-          opacity: 0;
-          transform: rotate(var(--angle, 16deg));
-          transform-origin: left center;
-          animation: meteorTraverse var(--cycle, 8s) linear infinite;
-          animation-delay: var(--delay, 0s);
-          will-change: transform, opacity;
-          mix-blend-mode: screen;
-        }
-
-        .hero-meteor::before,
-        .hero-meteor::after {
-          content: "";
-          position: absolute;
-          pointer-events: none;
-        }
-
-        .hero-meteor::before {
-          left: 0;
-          top: 50%;
-          width: 100%;
-          height: 1px;
-          transform: translateY(-50%);
-          border-radius: 999px;
-          background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.12) 0%,
-            rgba(176, 231, 255, 0.44) 36%,
-            rgba(125, 208, 245, 0.18) 70%,
-            rgba(90, 170, 210, 0) 100%
-          );
-          box-shadow:
-            0 0 3px rgba(168, 230, 255, 0.2),
-            0 0 6px rgba(156, 124, 255, 0.12);
-        }
-
-        .hero-meteor::after {
-          left: -2px;
-          top: 50%;
-          width: 5px;
-          height: 5px;
-          transform: translateY(-50%);
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.96);
-          box-shadow:
-            0 0 5px rgba(255, 255, 255, 0.58),
-            0 0 9px rgba(166, 228, 255, 0.46),
-            0 0 12px rgba(157, 123, 255, 0.26);
-        }
-
-        @keyframes meteorTraverse {
-          0% {
-            opacity: 0;
-            transform: translate3d(0, 0, 0) rotate(var(--angle, 16deg));
-          }
-          6% {
-            opacity: 0.95;
-            transform: translate3d(8vw, 12px, 0) rotate(var(--angle, 16deg));
-          }
-          30% {
-            opacity: 0.88;
-            transform: translate3d(145vw, 128px, 0) rotate(var(--angle, 16deg));
-          }
-          34%, 100% {
-            opacity: 0;
-            transform: translate3d(145vw, 128px, 0) rotate(var(--angle, 16deg));
-          }
-        }
-
-        @media (max-width: 640px) {
-          .hero-meteor::after {
-            width: 4px;
-            height: 4px;
-          }
-        }
-      `}</style>
-
-      <div className="constellation-stars">
-        {meteors.map((meteor, index) => (
-          <span
-            key={`meteor-${index}`}
-            className="hero-meteor"
-            style={{
-              top: meteor.top,
-              left: meteor.left,
-              "--delay": meteor.delay,
-              "--cycle": meteor.cycle,
-              "--length": meteor.length,
-              "--angle": meteor.angle,
-            }}
-          />
-        ))}
-      </div>
-    </>
-  );
-}
-
 function FloatingStars() {
   const stars = useMemo(
     () =>
@@ -582,96 +436,72 @@ function MovingClouds() {
 
 function TradingViewChart({ symbol }) {
   const containerRef = useRef(null);
-  const [tvReady, setTvReady] = useState(Boolean(window.TradingView));
 
-  // Load TradingView script once and mark readiness when it is available.
   useEffect(() => {
-    if (window.TradingView) {
-      setTvReady(true);
-      return;
-    }
+    if (!containerRef.current) return;
 
-    const existingScript = document.querySelector('script[src="https://s3.tradingview.com/tv.js"]');
-    const script = existingScript || document.createElement("script");
+    const resolvedSymbol = String(symbol || "").includes(":")
+      ? String(symbol).toUpperCase()
+      : `BITSTAMP:${String(symbol || "BTCUSD").toUpperCase()}`;
 
-    const handleLoad = () => setTvReady(Boolean(window.TradingView));
-    script.addEventListener("load", handleLoad);
-
-    if (!existingScript) {
-      script.src = "https://s3.tradingview.com/tv.js";
-      script.type = "text/javascript";
-      script.async = true;
-      document.head.appendChild(script);
-    }
-
-    return () => {
-      script.removeEventListener("load", handleLoad);
-    };
-  }, []);
-
-  // Create widget when symbol changes and TradingView is loaded.
-  useEffect(() => {
-    if (!containerRef.current || !tvReady || !window.TradingView) return;
-    
-    const uid = `tradingview_${String(symbol).replace(/[:\\/]/g, "_")}_${Math.random().toString(36).slice(2, 8)}`;
-    containerRef.current.id = uid;
     containerRef.current.innerHTML = "";
 
-    try {
-      new window.TradingView.widget({
-        autosize: true,
-        symbol: String(symbol || "").includes(":") ? String(symbol).toUpperCase() : `BITSTAMP:${String(symbol || "BTCUSD").toUpperCase()}`,
-        interval: "240",
-        timezone: "Etc/UTC",
-        theme: "dark",
-        style: "1",
-        locale: "en",
-        container_id: uid,
-        allow_symbol_change: false,
-        hide_top_toolbar: false,
-        hide_side_toolbar: false,
-        withdateranges: true,
-        hide_legend: false,
-        hide_volume: false,
-        details: true,
-        calendar: false,
-        studies: [],
-        watchlist: [
-          "BITSTAMP:BTCUSD",
-          "COINBASE:ETHUSD",
-          "NASDAQ:AAPL",
-          "NASDAQ:TSLA",
-          "NASDAQ:NVDA",
-          "TVC:GOLD",
-          "SP:SPX",
-        ],
-        overrides: {
-          "paneProperties.background": "#050816",
-          "paneProperties.vertGridProperties.color": "rgba(255, 255, 255, 0.03)",
-          "paneProperties.horzGridProperties.color": "rgba(255, 255, 255, 0.03)",
-          "scalesProperties.textColor": "#B7C0D8",
-          "mainSeriesProperties.candleStyle.upColor": "#FFFFFF",
-          "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
-          "mainSeriesProperties.candleStyle.borderUpColor": "#FFFFFF",
-          "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
-          "mainSeriesProperties.candleStyle.wickUpColor": "#FFFFFF",
-          "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
-          "mainSeriesProperties.candleStyle.borderVisible": true,
-          "mainSeriesProperties.candleStyle.wickVisible": true,
-          "symbolWatermarkProperties.color": "#1A2340",
-        },
-      });
-    } catch (e) {
-      console.warn("TradingView widget error:", e);
-    }
-  }, [symbol, tvReady]);
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.async = true;
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.text = JSON.stringify({
+      autosize: true,
+      symbol: resolvedSymbol,
+      interval: "240",
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",
+      locale: "en",
+      allow_symbol_change: false,
+      withdateranges: true,
+      details: true,
+      studies: [],
+      hide_side_toolbar: false,
+      hide_top_toolbar: false,
+      save_image: true,
+      calendar: false,
+      watchlist: [
+        "BITSTAMP:BTCUSD",
+        "COINBASE:ETHUSD",
+        "NASDAQ:AAPL",
+        "NASDAQ:TSLA",
+        "NASDAQ:NVDA",
+        "TVC:GOLD",
+        "SP:SPX",
+      ],
+      overrides: {
+        "paneProperties.background": "#050816",
+        "paneProperties.vertGridProperties.color": "rgba(255, 255, 255, 0.03)",
+        "paneProperties.horzGridProperties.color": "rgba(255, 255, 255, 0.03)",
+        "scalesProperties.textColor": "#B7C0D8",
+        "mainSeriesProperties.candleStyle.upColor": "#FFFFFF",
+        "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#FFFFFF",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#FFFFFF",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
+        "symbolWatermarkProperties.color": "#1A2340",
+      },
+    });
+
+    containerRef.current.appendChild(script);
+
+    return () => {
+      if (containerRef.current) containerRef.current.innerHTML = "";
+    };
+  }, [symbol]);
 
   return (
     <div className="tradingview-widget-container w-full h-full">
       <div
         ref={containerRef}
         className="tradingview-widget-container__widget w-full h-full"
-        id="tradingview_chart"
       />
     </div>
   );
@@ -768,12 +598,12 @@ function ServicesSection({ coins }) {
         </div>
 
         <div className="max-w-[80vw]">
-          <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-[#C6B8FF]">Built for a New Era of Markets</p>
+          <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-[#C6B8FF]">Strategic Financial Guidance</p>
           <h2 className="text-3xl font-black leading-tight tracking-tight text-[#F4F7FB] sm:text-4xl lg:text-5xl">
-            Digital Asset Strategy Meets Long-Term Wealth Thinking
+            Financial Consulting for Long-Term Wealth Planning
           </h2>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg">
-            Four Pillars for the Future of Capital. Calo Capital organizes its education and market insight around cash alternatives, crypto, commodities, and companies to build a practical framework for protection, opportunity, and long-term strategy.
+            Calo Capital serves individuals, families, and business owners with personalized financial guidance, market insights, and investment strategy. Our four pillars support financial planning, portfolio diversification, and a long-term wealth strategy across changing economic trends.
           </p>
         </div>
 
@@ -797,7 +627,7 @@ function ServicesSection({ coins }) {
               </div>
 
               <div>
-                <h3 className="text-2xl font-black tracking-tight text-[#F4F7FB] group-hover:text-[#C084FC] transition" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+                <h3 className="text-2xl font-black tracking-tight text-[#F4F7FB] group-hover:text-[#C084FC] transition" style={{ fontFamily: "var(--calo-serif)" }}>
                   {service.title}
                 </h3>
                 <div className="mt-3 h-px w-8 bg-gradient-to-r from-[#C084FC] to-transparent group-hover:w-full transition-all duration-500" />
@@ -845,23 +675,33 @@ function PageHeader({ eyebrow, title, description }) {
 function AboutPage() {
   const pillars = [
     {
-      title: "Fiduciary First",
-      description: "Your goals come first. Always.",
+      title: "Transparency",
+      description: "Clear communication so you understand every recommendation and decision.",
       icon: "🛡",
     },
     {
-      title: "Independent Thinking",
-      description: "Unbiased insights and recommendations.",
+      title: "Integrity",
+      description: "Guidance grounded in honesty, consistency, and accountability.",
       icon: "↗",
     },
     {
-      title: "Global Perspective",
-      description: "Access to a diverse range of assets and ideas.",
+      title: "Client Relationships",
+      description: "Long-term partnerships built on trust, responsiveness, and care.",
       icon: "◌",
     },
     {
-      title: "Long-Term Focus",
-      description: "Building lasting wealth through discipline and patience.",
+      title: "Strategic Thinking",
+      description: "Thoughtful financial strategy shaped by data, discipline, and context.",
+      icon: "◎",
+    },
+    {
+      title: "Long-Term Perspective",
+      description: "Planning that prioritizes stability, adaptability, and durable outcomes.",
+      icon: "◎",
+    },
+    {
+      title: "Personalized Service",
+      description: "Financial solutions aligned with your goals, priorities, and timeline.",
       icon: "◎",
     },
   ];
@@ -869,23 +709,33 @@ function AboutPage() {
   const approachSteps = [
     {
       number: "01",
-      title: "Understand",
-      description: "We listen first. We take the time to understand your unique goals.",
+      title: "Transparency",
+      description: "We communicate clearly so you can move forward with confidence.",
     },
     {
       number: "02",
-      title: "Strategize",
-      description: "We design customized strategies tailored to your vision.",
+      title: "Integrity",
+      description: "We provide direct, honest guidance centered on your priorities.",
     },
     {
       number: "03",
-      title: "Execute",
-      description: "We implement with precision and active risk management.",
+      title: "Client Relationships",
+      description: "We build lasting relationships through responsive, personalized support.",
     },
     {
       number: "04",
-      title: "Steward",
-      description: "We monitor, adapt, and evolve with you over time.",
+      title: "Strategic Thinking",
+      description: "We combine market insight with disciplined financial strategy.",
+    },
+    {
+      number: "05",
+      title: "Long-Term Perspective",
+      description: "We focus on thoughtful planning designed for changing market cycles.",
+    },
+    {
+      number: "06",
+      title: "Personalized Service",
+      description: "Every recommendation is tailored to your financial goals and needs.",
     },
   ];
 
@@ -898,12 +748,12 @@ function AboutPage() {
             <div className="max-w-2xl">
               <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">About Calo Capital</p>
               <h1 className="mt-6 max-w-xl text-[clamp(3.2rem,7vw,5.4rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
-                Strategic Wealth.
+                Personalized Financial Guidance.
                 <br />
-                Built for <span className="text-[#A855F7]">Generations.</span>
+                Built Around <span className="text-[#A855F7]">Your Goals.</span>
               </h1>
               <p className="mt-6 max-w-lg text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]">
-                Calo Capital blends timeless financial principles with future-forward strategies across digital assets, commodities, and global markets.
+                Calo Capital provides financial consulting and strategic advisory services for individuals, families, and business owners seeking clear direction in today&apos;s financial landscape.
               </p>
               <div className="mt-8 h-px w-12 bg-[#A855F7]" />
             </div>
@@ -922,7 +772,7 @@ function AboutPage() {
             <div>
               <p className="text-[15px] font-serif text-[#A855F7]">Our Mission</p>
               <p className="mt-4 max-w-md text-sm leading-7 text-[#B7C0D8] sm:text-[0.95rem]">
-                To deliver strategic, thoughtful guidance that helps individuals, families, and institutions preserve and grow wealth across market cycles. We combine rigorous research, disciplined risk management, and long-term perspective to uncover opportunities in evolving global markets.
+                Our mission is to help clients make informed financial decisions through strategic guidance, personalized planning, and transparent communication across every stage of wealth planning.
               </p>
             </div>
 
@@ -949,10 +799,12 @@ function AboutPage() {
             </div>
 
             <div>
-              <p className="text-[15px] font-serif text-[#A855F7]">Our Approach</p>
+              <p className="text-[15px] font-serif text-[#A855F7]">Our Vision</p>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-[#B7C0D8] sm:text-[0.95rem]">
-                We believe wealth is more than a number. It&apos;s freedom, opportunity, and legacy. Our approach is built on four pillars that guide every decision we make.
+                Our vision is to build long-term trusted relationships while helping clients pursue financial confidence through thoughtful planning, personalized financial guidance, and consistent market insight.
               </p>
+
+              <p className="mt-6 text-[15px] font-serif text-[#A855F7]">Our Values</p>
 
               <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
                 {approachSteps.map((step) => (
@@ -976,7 +828,7 @@ function TeamPage() {
     {
       name: "Marc Calo",
       title: "CEO",
-      bio: "Over 20 years of experience in investments, markets, and alternative assets.",
+      bio: "Provides personalized financial guidance focused on investment strategy, market insights, and long-term financial planning.",
       image: caloJpg,
     },
   ];
@@ -988,12 +840,12 @@ function TeamPage() {
         <div className="relative mx-auto w-full max-w-[94vw]">
           <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">Our Team</p>
           <h1 className="mt-6 max-w-4xl text-[clamp(3rem,6.6vw,5.25rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
-            Experienced. Independent.
+            Strategic. Transparent.
             <br />
-            Aligned With <span className="text-[#A855F7]">Your Success.</span>
+            Aligned With <span className="text-[#A855F7]">Your Priorities.</span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]">
-            Our team brings decades of combined experience across traditional finance, digital assets, commodities, and global markets. We are united by a shared commitment to integrity, excellence, and long-term outcomes.
+            Calo Capital combines financial strategy, market insight, and personalized guidance to help clients navigate financial planning decisions across traditional and alternative investments.
           </p>
 
           <div className="mt-12 grid max-w-[94vw] gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -1051,11 +903,11 @@ function HomePage({ coins, live, setPage }) {
             <h1 className="text-6xl font-black tracking-tight leading-[1.1] sm:text-7xl lg:text-8xl">
               Ready to Build
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-400 to-violet-300">Your Legacy?</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-400 to-violet-300">Your Financial Strategy?</span>
             </h1>
           </div>
           <p className="mt-10 max-w-2xl text-lg leading-8 text-slate-300">
-            Strategic wealth isn't built overnight. Let's discuss how our education-first approach and multi-asset expertise can help you achieve your long-term financial goals.
+            Schedule a personalized consultation to explore financial solutions, investment opportunities, and a long-term wealth strategy tailored to your goals.
           </p>
         </div>
 
@@ -1063,9 +915,9 @@ function HomePage({ coins, live, setPage }) {
           {/* BOOKING CTA - PROMINENT */}
           <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-8 sm:p-12 backdrop-blur-sm">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-violet-300">Schedule Your Consultation</p>
-            <h2 className="mt-4 text-4xl font-black sm:text-5xl">Book a Meeting with Marc Calo</h2>
+            <h2 className="mt-4 text-4xl font-black sm:text-5xl">Build Your Strategy with Marc Calo</h2>
             <p className="mt-5 max-w-2xl text-lg text-slate-300">
-              Get direct access to strategic guidance. Choose a time that works best for you and let's explore how to elevate your wealth management strategy.
+              Use your consultation to review your financial strategy, discuss market insights, and plan next steps for retirement planning, business financial planning, and long-term wealth decisions.
             </p>
             <a
               href={SCHEDULE_CALL_URL}
@@ -1088,7 +940,7 @@ function HomePage({ coins, live, setPage }) {
               <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-8 transition hover:border-violet-500/30 hover:bg-white/[0.04]">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-xl">✉</div>
                 <h4 className="font-black text-lg">Email Us</h4>
-                <p className="mt-2 text-slate-300">Send us your questions or inquiries</p>
+                <p className="mt-2 text-slate-300">Send us your questions about financial planning and strategy</p>
                 <a href="mailto:protection@calocapital.io" className="mt-4 inline-block text-violet-400 font-bold hover:text-violet-300 transition">
                   protection@calocapital.io →
                 </a>
@@ -1097,7 +949,7 @@ function HomePage({ coins, live, setPage }) {
               {/* SOCIAL LINKS */}
               <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-8">
                 <h4 className="font-black text-lg mb-5">Follow Our Insights</h4>
-                <p className="text-sm text-slate-400 mb-5">Stay updated with market analysis and wealth management tips</p>
+                <p className="text-sm text-slate-400 mb-5">Stay informed on market insights, economic trends, and investment strategy</p>
                 <div className="flex flex-wrap gap-4">
                   {socialLinks.map((item) => (
                     <SocialLink key={item.label} item={item} />
@@ -1107,7 +959,7 @@ function HomePage({ coins, live, setPage }) {
             </div>
 
             {/* RIGHT COLUMN - WHY CHOOSE US */}
-            <div>
+            <div id="client-excellence">
               <h3 className="text-2xl font-black mb-8">Why Partner with Calo Capital?</h3>
               
               <div className="space-y-5">
@@ -1115,8 +967,8 @@ function HomePage({ coins, live, setPage }) {
                   <div className="flex items-start gap-4">
                     <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">1</div>
                     <div>
-                      <h5 className="font-black">Education-First Philosophy</h5>
-                      <p className="mt-2 text-sm text-slate-400">We believe informed investors make better decisions. Every recommendation is backed by research and context.</p>
+                      <h5 className="font-black">Transparent Communication</h5>
+                      <p className="mt-2 text-sm text-slate-400">Transparent communication keeps you informed and confident in every financial planning decision.</p>
                     </div>
                   </div>
                 </div>
@@ -1125,8 +977,8 @@ function HomePage({ coins, live, setPage }) {
                   <div className="flex items-start gap-4">
                     <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">2</div>
                     <div>
-                      <h5 className="font-black">Multi-Asset Expertise</h5>
-                      <p className="mt-2 text-sm text-slate-400">From crypto to commodities, stocks to cash alternatives—we provide strategic perspective across all major asset classes.</p>
+                      <h5 className="font-black">Personalized Financial Guidance</h5>
+                      <p className="mt-2 text-sm text-slate-400">Your strategy is tailored to your goals, timeline, and priorities with customized financial solutions.</p>
                     </div>
                   </div>
                 </div>
@@ -1135,8 +987,8 @@ function HomePage({ coins, live, setPage }) {
                   <div className="flex items-start gap-4">
                     <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">3</div>
                     <div>
-                      <h5 className="font-black">Legacy-Focused Strategy</h5>
-                      <p className="mt-2 text-sm text-slate-400">We think generationally. Your wealth strategy is built to preserve and grow capital across decades, not quarters.</p>
+                      <h5 className="font-black">Strategic Market Analysis</h5>
+                      <p className="mt-2 text-sm text-slate-400">Thoughtful market analysis supports investment strategy across cash alternatives, digital assets, commodities, and companies.</p>
                     </div>
                   </div>
                 </div>
@@ -1145,8 +997,8 @@ function HomePage({ coins, live, setPage }) {
                   <div className="flex items-start gap-4">
                     <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">4</div>
                     <div>
-                      <h5 className="font-black">Direct Access</h5>
-                      <p className="mt-2 text-sm text-slate-400">Work directly with Marc Calo. No layers, no gatekeeping—just straightforward, expert guidance.</p>
+                      <h5 className="font-black">Long-Term Relationships</h5>
+                      <p className="mt-2 text-sm text-slate-400">We focus on trusted client relationships and long-term wealth strategy supported by consistent guidance.</p>
                     </div>
                   </div>
                 </div>
@@ -1179,7 +1031,7 @@ function Footer() {
         <div className="md:col-span-2">
           <p className="text-lg font-black tracking-wide text-white">Calo Capital</p>
           <p className="mt-4 max-w-md text-sm leading-6 text-slate-400">
-            Calo Capital — Where Strategy Meets Legacy. Educational content and market insights designed to help individuals and families make more informed financial decisions.
+            Calo Capital provides financial consulting and strategic advisory services for individuals, families, and business owners seeking personalized financial guidance and long-term planning.
           </p>
         </div>
         <div>
@@ -1234,13 +1086,13 @@ function Footer() {
       <div className="mx-auto mt-10 w-full max-w-[94vw] border-t border-white/10 pt-6 text-[11px] leading-5 text-slate-500">
         Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. Asset allocation, diversification, and portfolio strategies do not guarantee profits or protect against losses in declining markets.
 
-        The information provided by Calo Capital is for educational and informational purposes only and should not be construed as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making any financial decisions.
+        The information provided by Calo Capital is for general informational purposes only and should not be construed as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making any financial decisions.
 
         This material does not take into account an individual's specific investment objectives, financial situation, risk tolerance, or needs and is not intended as a recommendation, offer, or solicitation to buy or sell any security, investment product, or strategy.
 
         Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Nothing contained on this website, in presentations, webinars, reports, or communications should be interpreted as personalized investment advice or a guarantee of future performance.
 
-        Any references to digital assets, commodities, cash alternatives, businesses, or market opportunities are provided for educational discussion only. All investments and financial decisions carry risk, and individuals are solely responsible for evaluating whether any strategy is appropriate for their circumstances.
+        Any references to digital assets, commodities, cash alternatives, businesses, or market opportunities are provided for general informational discussion only. All investments and financial decisions carry risk, and individuals are solely responsible for evaluating whether any strategy is appropriate for their circumstances.
 
         Calo Capital may discuss third-party products, platforms, or service providers. Such references do not constitute an endorsement or guarantee of results. Users should perform their own due diligence before engaging with any third-party provider.
 
