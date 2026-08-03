@@ -436,20 +436,25 @@ function MovingClouds() {
 
 function TradingViewChart({ symbol }) {
   const containerRef = useRef(null);
+  const widgetRef = useRef(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !widgetRef.current) return;
 
     const resolvedSymbol = String(symbol || "").includes(":")
       ? String(symbol).toUpperCase()
       : `BITSTAMP:${String(symbol || "BTCUSD").toUpperCase()}`;
 
-    containerRef.current.innerHTML = "";
+    widgetRef.current.innerHTML = "";
+    containerRef.current.querySelectorAll("script[data-tv-widget='advanced-chart']").forEach((node) => node.remove());
 
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.async = true;
+    script.dataset.tvWidget = "advanced-chart";
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    // Free TradingView Advanced Chart widget does not expose direct toolbar/timeframe selected-state color overrides.
+    // Use the closest supported settings via `overrides`, `studies_overrides`, and widget-level palette options.
     script.text = JSON.stringify({
       autosize: true,
       symbol: resolvedSymbol,
@@ -466,6 +471,7 @@ function TradingViewChart({ symbol }) {
       hide_top_toolbar: false,
       save_image: true,
       calendar: false,
+      toolbar_bg: "#0A0B16",
       watchlist: [
         "BITSTAMP:BTCUSD",
         "COINBASE:ETHUSD",
@@ -476,24 +482,34 @@ function TradingViewChart({ symbol }) {
         "SP:SPX",
       ],
       overrides: {
-        "paneProperties.background": "#050816",
-        "paneProperties.vertGridProperties.color": "rgba(255, 255, 255, 0.03)",
-        "paneProperties.horzGridProperties.color": "rgba(255, 255, 255, 0.03)",
-        "scalesProperties.textColor": "#B7C0D8",
-        "mainSeriesProperties.candleStyle.upColor": "#FFFFFF",
-        "mainSeriesProperties.candleStyle.downColor": "#8B5CF6",
-        "mainSeriesProperties.candleStyle.borderUpColor": "#FFFFFF",
-        "mainSeriesProperties.candleStyle.borderDownColor": "#8B5CF6",
-        "mainSeriesProperties.candleStyle.wickUpColor": "#FFFFFF",
-        "mainSeriesProperties.candleStyle.wickDownColor": "#8B5CF6",
-        "symbolWatermarkProperties.color": "#1A2340",
+        "paneProperties.background": "#0A0B16",
+        "paneProperties.vertGridProperties.color": "#1E2030",
+        "paneProperties.horzGridProperties.color": "#1E2030",
+        "paneProperties.crossHairProperties.color": "#B8B1FF",
+        "paneProperties.crossHairProperties.style": 2,
+        "scalesProperties.textColor": "#A8A9B8",
+        "scalesProperties.lineColor": "#1E2030",
+        "mainSeriesProperties.candleStyle.upColor": "#6D4AFF",
+        "mainSeriesProperties.candleStyle.downColor": "#D9D6FF",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#6D4AFF",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#D9D6FF",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#6D4AFF",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#D9D6FF",
+        "symbolWatermarkProperties.color": "#1E2030",
+      },
+      studies_overrides: {
+        "volume.volume.color.0": "#D9D6FF",
+        "volume.volume.color.1": "#6D4AFF",
       },
     });
 
     containerRef.current.appendChild(script);
 
     return () => {
-      if (containerRef.current) containerRef.current.innerHTML = "";
+      if (containerRef.current) {
+        containerRef.current.querySelectorAll("script[data-tv-widget='advanced-chart']").forEach((node) => node.remove());
+      }
+      if (widgetRef.current) widgetRef.current.innerHTML = "";
     };
   }, [symbol]);
 
@@ -501,8 +517,13 @@ function TradingViewChart({ symbol }) {
     <div className="tradingview-widget-container w-full h-full">
       <div
         ref={containerRef}
+        className="w-full h-full"
+      >
+        <div
+          ref={widgetRef}
         className="tradingview-widget-container__widget w-full h-full"
-      />
+        />
+      </div>
     </div>
   );
 }
@@ -673,72 +694,6 @@ function PageHeader({ eyebrow, title, description }) {
 }
 
 function AboutPage() {
-  const pillars = [
-    {
-      title: "Transparency",
-      description: "Clear communication so you understand every recommendation and decision.",
-      icon: "🛡",
-    },
-    {
-      title: "Integrity",
-      description: "Guidance grounded in honesty, consistency, and accountability.",
-      icon: "↗",
-    },
-    {
-      title: "Client Relationships",
-      description: "Long-term partnerships built on trust, responsiveness, and care.",
-      icon: "◌",
-    },
-    {
-      title: "Strategic Thinking",
-      description: "Thoughtful financial strategy shaped by data, discipline, and context.",
-      icon: "◎",
-    },
-    {
-      title: "Long-Term Perspective",
-      description: "Planning that prioritizes stability, adaptability, and durable outcomes.",
-      icon: "◎",
-    },
-    {
-      title: "Personalized Service",
-      description: "Financial solutions aligned with your goals, priorities, and timeline.",
-      icon: "◎",
-    },
-  ];
-
-  const approachSteps = [
-    {
-      number: "01",
-      title: "Transparency",
-      description: "We communicate clearly so you can move forward with confidence.",
-    },
-    {
-      number: "02",
-      title: "Integrity",
-      description: "We provide direct, honest guidance centered on your priorities.",
-    },
-    {
-      number: "03",
-      title: "Client Relationships",
-      description: "We build lasting relationships through responsive, personalized support.",
-    },
-    {
-      number: "04",
-      title: "Strategic Thinking",
-      description: "We combine market insight with disciplined financial strategy.",
-    },
-    {
-      number: "05",
-      title: "Long-Term Perspective",
-      description: "We focus on thoughtful planning designed for changing market cycles.",
-    },
-    {
-      number: "06",
-      title: "Personalized Service",
-      description: "Every recommendation is tailored to your financial goals and needs.",
-    },
-  ];
-
   return (
     <>
       <section id="about" className="relative overflow-hidden bg-gradient-to-b from-[#0b0f1d] via-[#090d19] to-[#070a14] px-5 pb-14 pt-16 text-white sm:pt-20">
@@ -768,55 +723,6 @@ function AboutPage() {
             </div>
           </div>
 
-          <div className="mt-16 grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
-            <div>
-              <p className="text-[15px] font-serif text-[#A855F7]">Our Mission</p>
-              <p className="mt-4 max-w-md text-sm leading-7 text-[#B7C0D8] sm:text-[0.95rem]">
-                Our mission is to help clients make informed financial decisions through strategic guidance, personalized planning, and transparent communication across every stage of wealth planning.
-              </p>
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              {pillars.map((pillar) => (
-                <article key={pillar.title} className="rounded-[1.15rem] border border-white/10 bg-white/[0.02] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                  <div>
-                    <h3 className="text-[1.02rem] font-medium text-[#F4F7FB]">{pillar.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-[#B7C0D8]">{pillar.description}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-16 grid gap-10 border-t border-white/10 pt-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
-            <div className="relative overflow-hidden rounded-[1.2rem] border border-white/10 bg-[#101323] shadow-[0_20px_45px_-30px_rgba(5,8,22,0.95)]">
-              <img
-                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&q=80"
-                alt="Modern office city view"
-                className="h-[310px] w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/45 via-transparent to-transparent" />
-            </div>
-
-            <div>
-              <p className="text-[15px] font-serif text-[#A855F7]">Our Vision</p>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#B7C0D8] sm:text-[0.95rem]">
-                Our vision is to build long-term trusted relationships while helping clients pursue financial confidence through thoughtful planning, personalized financial guidance, and consistent market insight.
-              </p>
-
-              <p className="mt-6 text-[15px] font-serif text-[#A855F7]">Our Values</p>
-
-              <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                {approachSteps.map((step) => (
-                  <article key={step.number} className="space-y-3">
-                    <p className="text-[1.6rem] font-serif text-[#A855F7]">{step.number}</p>
-                    <h3 className="text-lg font-medium text-[#F4F7FB]">{step.title}</h3>
-                    <p className="text-sm leading-6 text-[#B7C0D8]">{step.description}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </>
@@ -883,12 +789,146 @@ function TeamPage() {
   );
 }
 
+function WhyPartnerSection() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  const principles = [
+    ["Transparent Communication", "Plain-language guidance"],
+    ["Personalized Strategy", "Built around your goals"],
+    ["Strategic Market Perspective", "Long-term thinking over speculation"],
+    ["Integrity", "Honest conversations"],
+    ["Client Relationships", "Partnership beyond the transaction"],
+    ["Risk Awareness", "Disciplined decision making"],
+  ];
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(reducedMotionQuery.matches);
+    if (reducedMotionQuery.matches) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
+
+  function revealStyle(delayMs, translateY = 30) {
+    if (reduceMotion) {
+      return { opacity: 1, transform: "none" };
+    }
+
+    return {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? "translateY(0)" : `translateY(${translateY}px)`,
+      transition: `opacity 0.6s ease-out ${delayMs}ms, transform 0.6s ease-out ${delayMs}ms`,
+    };
+  }
+
+  function fadeStyle(delayMs) {
+    if (reduceMotion) {
+      return { opacity: 1 };
+    }
+
+    return {
+      opacity: isVisible ? 1 : 0,
+      transition: `opacity 0.6s ease-out ${delayMs}ms`,
+    };
+  }
+
+  return (
+    <section ref={sectionRef} id="client-excellence" className="relative overflow-hidden bg-white px-5 py-24 text-[#111111] sm:py-28 lg:py-32">
+      <div className="relative mx-auto w-full max-w-[94vw]">
+        <div style={revealStyle(0, 24)}>
+          <p className="text-xs font-black uppercase tracking-[0.4em] text-[#A855F7]" style={fadeStyle(0)}>
+            WHY PARTNER WITH CALO CAPITAL
+          </p>
+          <div className="mt-3 h-px w-28 bg-[#A855F7]/70" />
+        </div>
+
+        <h2 className="mt-10 max-w-3xl text-[clamp(2.6rem,7vw,6.1rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#111111]" style={revealStyle(150, 30)}>
+          Markets move.
+          <br />
+          <span className="text-[#A855F7]">Sound strategy</span>
+          <br />
+          endures.
+        </h2>
+
+        <div className="mt-16 grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 xl:gap-20">
+          <div style={revealStyle(300, 24)}>
+            <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#1f2937]" style={fadeStyle(300)}>
+              OUR PRINCIPLES
+            </h3>
+            <p className="mt-7 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(380)}>
+              We believe thoughtful guidance, transparent communication, and disciplined market perspective create the foundation for lasting financial relationships.
+            </p>
+            <p className="mt-8 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(460)}>
+              Every recommendation begins with understanding your goals, not chasing trends.
+            </p>
+            <p className="mt-10 text-[15px] font-serif text-[#A855F7]" style={fadeStyle(520)}>
+              Our Mission
+            </p>
+            <p className="mt-4 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(600)}>
+              Our mission is to help clients make informed financial decisions through strategic guidance, personalized planning, and transparent communication across every stage of wealth planning.
+            </p>
+            <p className="mt-8 text-[15px] font-serif text-[#A855F7]" style={fadeStyle(680)}>
+              Our Vision
+            </p>
+            <p className="mt-4 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(760)}>
+              Our vision is to build long-term trusted relationships while helping clients pursue financial confidence through thoughtful planning, personalized financial guidance, and consistent market insight.
+            </p>
+          </div>
+
+          <div className="border-t border-[#e5e7eb]">
+            {principles.map(([title, detail], index) => (
+              <div
+                key={title}
+                className="why-principle-row border-b border-[#e5e7eb] py-5 sm:py-6"
+                style={revealStyle(450 + index * 100, 20)}
+              >
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                  <p className="why-principle-label text-base font-semibold text-[#111111] sm:text-[1.04rem]" style={fadeStyle(500 + index * 100)}>
+                    {title}
+                  </p>
+                  <p className="text-sm font-medium text-[#4b5563] sm:text-right sm:text-[0.96rem]" style={fadeStyle(560 + index * 100)}>
+                    {detail}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage({ coins, live, setPage }) {
   return (
     <>
       <HeroSection />
-      <ServicesSection coins={coins} setPage={setPage} />
       <AboutPage />
+      <WhyPartnerSection />
+      <ServicesSection coins={coins} setPage={setPage} />
       <TeamPage />
       
       {/* CONTACT SECTION */}
@@ -930,9 +970,7 @@ function HomePage({ coins, live, setPage }) {
             </a>
           </div>
 
-          {/* TWO COLUMN LAYOUT */}
-          <div className="grid gap-12 lg:grid-cols-2">
-            {/* LEFT COLUMN - CONTACT INFO */}
+          <div className="grid gap-12">
             <div>
               <h3 className="text-2xl font-black mb-8">Other Ways to Connect</h3>
               
@@ -954,53 +992,6 @@ function HomePage({ coins, live, setPage }) {
                   {socialLinks.map((item) => (
                     <SocialLink key={item.label} item={item} />
                   ))}
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN - WHY CHOOSE US */}
-            <div id="client-excellence">
-              <h3 className="text-2xl font-black mb-8">Why Partner with Calo Capital?</h3>
-              
-              <div className="space-y-5">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04]">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">1</div>
-                    <div>
-                      <h5 className="font-black">Transparent Communication</h5>
-                      <p className="mt-2 text-sm text-slate-400">Transparent communication keeps you informed and confident in every financial planning decision.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04]">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">2</div>
-                    <div>
-                      <h5 className="font-black">Personalized Financial Guidance</h5>
-                      <p className="mt-2 text-sm text-slate-400">Your strategy is tailored to your goals, timeline, and priorities with customized financial solutions.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04]">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">3</div>
-                    <div>
-                      <h5 className="font-black">Strategic Market Analysis</h5>
-                      <p className="mt-2 text-sm text-slate-400">Thoughtful market analysis supports investment strategy across cash alternatives, digital assets, commodities, and companies.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04]">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/20 text-sm font-black text-violet-300 flex-shrink-0">4</div>
-                    <div>
-                      <h5 className="font-black">Long-Term Relationships</h5>
-                      <p className="mt-2 text-sm text-slate-400">We focus on trusted client relationships and long-term wealth strategy supported by consistent guidance.</p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1319,6 +1310,81 @@ function GlobalStyles() {
           transform: translateX(135vw) translateY(120px) rotate(var(--angle, 25deg));
         }
       }
+
+      .why-reveal,
+      .why-reveal-row {
+        opacity: 0;
+        transition-property: opacity, transform;
+        transition-duration: 0.6s;
+        transition-timing-function: ease-out;
+      }
+
+      .why-text-fade {
+        opacity: 0;
+        transition: opacity 0.6s ease-out;
+      }
+
+      .why-text-fade.is-visible {
+        opacity: 1;
+      }
+
+      .why-reveal {
+        transform: translateY(30px);
+      }
+
+      .why-reveal-row {
+        transform: translateY(20px);
+      }
+
+      .why-reveal.is-visible,
+      .why-reveal-row.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .why-principle-label {
+        display: inline-block;
+        position: relative;
+        transition: padding-left 0.24s ease;
+      }
+
+      .why-principle-label::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 1px;
+        background: #A855F7;
+        transition: width 0.24s ease;
+      }
+
+      .why-principle-row:hover .why-principle-label {
+        padding-left: 6px;
+      }
+
+      .why-principle-row:hover .why-principle-label::after {
+        width: 100%;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .why-reveal,
+        .why-reveal-row,
+        .why-text-fade,
+        .why-principle-label,
+        .why-principle-label::after {
+          transition: none !important;
+          animation: none !important;
+        }
+
+        .why-reveal,
+        .why-reveal-row,
+        .why-text-fade {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      }
+
       /* security-css: prevent image saving and dragging */
       img {
         user-select: none;
