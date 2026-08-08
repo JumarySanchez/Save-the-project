@@ -1,39 +1,66 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap");
-
 :root {
   --calo-purple-primary: #8b5cf6;
   --calo-purple-bright: #a855f7;
   --calo-purple-deep: #7c3aed;
   --calo-purple-glow: #c084fc;
-  --calo-sans: "Oswald", "Arial Narrow", Arial, sans-serif;
-  --calo-serif: "Oswald", "Arial Narrow", Arial, sans-serif;
-  --calo-label: "Oswald", "Arial Narrow", Arial, sans-serif;
+  --font-display: "Galica", "Palatino Linotype", "Book Antiqua", "Iowan Old Style", serif;
+  --font-body: "Arimo", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display-weight-700: 700;
+  --font-display-weight-600: 600;
+  --font-body-weight-400: 400;
+  --font-body-weight-500: 500;
+  --font-body-weight-600: 600;
+  --font-body-weight-700: 700;
+  --font-eyebrow-spacing: 0.18em;
+  --font-heading-spacing: -0.02em;
+  --font-h1-spacing: -0.03em;
+  --font-body-line-height: 1.7;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--calo-sans);
+  min-width: 320px;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight-400);
+  line-height: var(--font-body-line-height);
   background: #070a14;
   color: #f4f7fb;
 }
 
-/* Ensure Tailwind font utility classes resolve to the requested font pairing. */
-.font-sans,
-.font-mono {
-  font-family: var(--calo-sans) !important;
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
+/* Shared typography system for the site. */
+.font-display,
 .font-serif {
-  font-family: var(--calo-serif) !important;
+  font-family: var(--font-display) !important;
+}
+
+.font-body,
+.font-sans,
+.font-mono {
+  font-family: var(--font-body) !important;
 }
 
 main {
-  font-family: var(--calo-sans);
+  font-family: var(--font-body);
 }
 
 h1,
@@ -42,20 +69,55 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--calo-serif);
+  font-family: var(--font-display);
   letter-spacing: -0.02em;
+}
+
+h1 {
+  font-weight: var(--font-display-weight-700);
+  letter-spacing: var(--font-h1-spacing);
+  line-height: 1.0;
+}
+
+h2 {
+  font-weight: var(--font-display-weight-700);
+  letter-spacing: var(--font-heading-spacing);
+}
+
+h3 {
+  font-weight: var(--font-display-weight-600);
 }
 
 button,
 input,
 select,
 textarea,
-a {
-  font-family: var(--calo-sans);
+a,
+p,
+li,
+span,
+label,
+small {
+  font-family: var(--font-body);
+}
+
+.font-medium {
+  font-weight: var(--font-body-weight-500);
+}
+
+.font-semibold {
+  font-weight: var(--font-body-weight-600);
+}
+
+.font-bold,
+.font-black {
+  font-weight: var(--font-body-weight-700);
 }
 
 .uppercase:not(.font-mono):not([class*="tracking-[0.16em]"]):not([class*="tracking-[0.18em]"]) {
-  font-family: var(--calo-label);
+  font-family: var(--font-body);
+  font-weight: var(--font-body-weight-700);
+  letter-spacing: var(--font-eyebrow-spacing);
 }
 
 #root {

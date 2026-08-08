@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import logoPng from "../public/Calo_purple_logo.png";
-import hikerPng from "../assets/hiker.png";
-import caloGif from "../assets/Calo-gif.gif";
-import caloJpg from "../assets/calo.jpg";
+import hikerPng from "../assets/calo.jpg";
+import heroVideoMp4 from "../assets/Calo-finances-hero.mp4";
+import aboutImagePng from "../assets/p.png";
+import whyPartnerBgPng from "../assets/m.png";
+import cryptoWheelPng from "../assets/Crypto-Calo-capital-purple-animation.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -263,16 +265,16 @@ function MarketTicker({ coins, live }) {
           100% { transform: translateX(-50%); }
         }
       `}</style>
-      <div className="mx-auto flex w-full max-w-[94vw] items-center gap-4 px-5 py-3 text-xs font-black uppercase tracking-[0.18em]">
+      <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] sm:gap-4 sm:px-5 sm:text-xs sm:tracking-[0.18em]">
         <span className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2 py-1 text-emerald-200">
           {live ? "Live" : "Fallback"}
         </span>
         <div className="min-w-0 flex-1 overflow-hidden">
-          <div className="ticker-track flex w-max items-center gap-6 whitespace-nowrap">
+          <div className="ticker-track flex w-max items-center gap-3 whitespace-nowrap sm:gap-6">
             {items.map((item, index) => (
               <div key={`${item.symbol}-${index}`} className="flex items-center gap-2 whitespace-nowrap text-slate-200">
                 <span className="text-slate-400">{item.symbol}</span>
-                <span className="font-mono text-white">{formatPrice(item.price)}</span>
+                <span className="font-body text-white">{formatPrice(item.price)}</span>
                 <span className={item.change >= 0 ? "text-emerald-300" : "text-rose-300"}>
                   {item.change >= 0 ? "+" : ""}{item.change.toFixed(2)}%
                 </span>
@@ -285,7 +287,7 @@ function MarketTicker({ coins, live }) {
   );
 }
 
-function Logo({ logoSizeClass = "h-16", textSizeClass = "text-lg", taglineClass = "text-xs uppercase tracking-[0.25em] text-violet-200/70" }) {
+function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[10px] uppercase tracking-[0.25em] text-violet-200/70 sm:text-xs" }) {
   return (
     <div className="flex items-center gap-2.5">
       <img
@@ -304,10 +306,14 @@ function Logo({ logoSizeClass = "h-16", textSizeClass = "text-lg", taglineClass 
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[72svh] overflow-hidden bg-[#070a14] text-white">
-      <div
-        className="absolute inset-0 bg-[length:100%_auto] bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${caloGif})`, backgroundPosition: "center top" }}
+    <section className="relative min-h-[70svh] overflow-hidden bg-[#070a14] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        src={heroVideoMp4}
+        autoPlay
+        muted
+        loop
+        playsInline
       />
     </section>
   );
@@ -316,21 +322,19 @@ function HeroSection() {
 const pageRoutes = {
   Home: "#/",
   About: "#about",
-  Team: "#leadership",
   Contact: "#contact",
 };
 
 function getPageFromHash() {
   const hash = window.location.hash || "#/";
   if (hash === "#/about" || hash === "#about" || hash === "#client-excellence") return "Home";
-  if (hash === "#/team" || hash === "#team" || hash === "#leadership") return "Home";
   if (hash === "#/contact" || hash === "#contact") return "Home";
   return "Home";
 }
 
 function Navbar({ currentPage, setPage }) {
   const [open, setOpen] = useState(false);
-  const links = ["Home", "About", "Team", "Contact"];
+  const links = ["Home", "About", "Contact"];
 
   function goTo(page) {
     setPage(page);
@@ -349,12 +353,12 @@ function Navbar({ currentPage, setPage }) {
 
   return (
     <header className="z-50 bg-[#070a14]/40">
-      <div className="mx-auto flex w-full max-w-[94vw] items-center justify-between px-5 py-4">
+      <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center justify-between px-4 py-4 sm:px-5">
         <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="text-left">
           <Logo />
         </button>
 
-        <nav className="hidden flex-1 items-center justify-center gap-12 px-16 lg:flex lg:max-w-4xl xl:max-w-5xl">
+        <nav className="hidden flex-1 items-center justify-center gap-6 px-4 lg:flex lg:max-w-4xl xl:max-w-5xl xl:gap-12 xl:px-16">
           {links.map((label) => (
             <button
               key={label}
@@ -533,18 +537,18 @@ function StockChart({ coins }) {
   const selectedAsset = CHART_ASSETS.find((asset) => asset.label === selectedSymbol) || CHART_ASSETS[0];
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-5 shadow-2xl shadow-violet-950/35 backdrop-blur-md">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-4 shadow-2xl shadow-violet-950/35 backdrop-blur-md sm:p-5">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-400">Asset Selector</p>
           <p className="mt-1 text-xs text-slate-500">Switch between crypto, stocks, and ETFs</p>
         </div>
-        <label className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.28em] text-slate-400">
+        <label className="flex flex-col gap-2 text-xs font-black uppercase tracking-[0.28em] text-slate-400 sm:flex-row sm:items-center sm:gap-3">
           <span className="whitespace-nowrap">Asset</span>
           <select
             value={selectedSymbol}
             onChange={(event) => setSelectedSymbol(event.target.value)}
-            className="min-w-[180px] rounded-xl border border-white/10 bg-[#070a14] px-3 py-2 font-mono text-xs font-black tracking-[0.18em] text-white outline-none transition focus:border-violet-200/40"
+            className="w-full min-w-0 rounded-xl border border-white/10 bg-[#070a14] px-3 py-2 font-body text-xs font-black tracking-[0.18em] text-white outline-none transition focus:border-violet-200/40 sm:min-w-[180px] sm:w-auto"
           >
             <optgroup label="Crypto">
               {CHART_ASSETS.filter((asset) => asset.group === "Crypto").map((asset) => (
@@ -571,27 +575,27 @@ function StockChart({ coins }) {
         </label>
       </div>
 
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs font-black text-slate-400">{selectedAsset.display}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-body text-xs font-black text-slate-400">{selectedAsset.display}</span>
             <span className="rounded bg-violet-300/10 px-2 py-0.5 text-xs font-bold text-violet-200">INTERACTIVE</span>
           </div>
-          <p className="mt-1 font-mono text-3xl font-black text-white">{formatPrice(selectedAsset.price)}</p>
+          <p className="mt-1 font-body text-2xl font-black text-white sm:text-3xl">{formatPrice(selectedAsset.price)}</p>
         </div>
-        <div className="text-right">
-          <p className={selectedAsset.change >= 0 ? "font-mono text-xl font-black text-emerald-300" : "font-mono text-xl font-black text-rose-300"}>{selectedAsset.change >= 0 ? "+" : ""}{selectedAsset.change.toFixed(2)}%</p>
+        <div className="text-left sm:text-right">
+          <p className={selectedAsset.change >= 0 ? "font-body text-lg font-black text-emerald-300 sm:text-xl" : "font-body text-lg font-black text-rose-300 sm:text-xl"}>{selectedAsset.change >= 0 ? "+" : ""}{selectedAsset.change.toFixed(2)}%</p>
           <p className="text-xs text-slate-400">24h Performance</p>
         </div>
       </div>
       <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#070a14] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Momentum
         </div>
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Trend
         </div>
-        <div className="relative z-20 h-[500px] w-full sm:h-[560px] lg:h-[620px]">
+        <div className="relative z-20 h-[320px] w-full sm:h-[420px] lg:h-[500px]">
           <TradingViewChart symbol={selectedAsset.tvSymbol} />
         </div>
       </div>
@@ -600,77 +604,248 @@ function StockChart({ coins }) {
   );
 }
 
-function ServicesSection({ coins }) {
+function ServicesSection() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(reducedMotionQuery.matches);
+
+    if (reducedMotionQuery.matches) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  function revealStyle(delayMs) {
+    if (reduceMotion) {
+      return { opacity: 1, transform: "none" };
+    }
+
+    return {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? "translateY(0)" : "translateY(20px)",
+      transition: `opacity 620ms ease-out ${delayMs}ms, transform 620ms ease-out ${delayMs}ms`,
+    };
+  }
+
+  function dividerStyle(delayMs) {
+    if (reduceMotion) {
+      return { opacity: 1, transform: "scaleX(1)" };
+    }
+
+    return {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? "scaleX(1)" : "scaleX(0)",
+      transformOrigin: "left center",
+      transition: `opacity 520ms ease-out ${delayMs}ms, transform 520ms ease-out ${delayMs}ms`,
+    };
+  }
+
   return (
-    <section id="services" className="relative overflow-hidden bg-[#0b0f1d] px-5 pb-20 pt-12 text-white sm:pb-24 sm:pt-16">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#070a14] to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(168,85,247,0.14),transparent_34%),radial-gradient(circle_at_82%_64%,rgba(124,58,237,0.12),transparent_36%)]" />
+    <section ref={sectionRef} id="services" className="cc-guidance-section px-5 pb-20 pt-12 text-white sm:pb-24 sm:pt-16">
+      <style>{`
+        .cc-guidance-section {
+          background-color: #050914;
+        }
+        .cc-guidance-inner {
+          margin: 0 auto;
+          width: 100%;
+          max-width: 94vw;
+        }
+        .cc-guidance-intro {
+          width: 100%;
+          max-width: min(68%, 980px);
+        }
+        .cc-guidance-eyebrow {
+          color: #a855f7;
+          font-family: var(--font-body);
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+        .cc-guidance-eyebrow-line {
+          margin-top: 0.7rem;
+          height: 1px;
+          width: 70px;
+          background: #a855f7;
+        }
+        .cc-guidance-title {
+          margin-top: 1.6rem;
+          color: #f4f4f6;
+          font-family: var(--font-display);
+          font-size: clamp(2.05rem, 5.6vw, 4.2rem);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          line-height: 1.08;
+          text-wrap: balance;
+        }
+        .cc-guidance-title-accent {
+          color: #a855f7;
+        }
+        .cc-guidance-body {
+          margin-top: 1.7rem;
+          max-width: 48rem;
+          color: #b7c0d8;
+          font-size: clamp(1rem, 1.4vw, 1.125rem);
+          line-height: 1.68;
+        }
+        .cc-guidance-divider {
+          margin-top: 2.6rem;
+          border-top: 1px solid #323746;
+        }
+        .cc-guidance-grid {
+          margin-top: 2.25rem;
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0;
+        }
+        .cc-guidance-col {
+          padding: 0 1.35rem;
+        }
+        .cc-guidance-col + .cc-guidance-col {
+          border-left: 1px solid #323746;
+        }
+        .cc-guidance-col-title {
+          color: #f4f4f6;
+          font-family: var(--font-display);
+          font-size: clamp(1.65rem, 2.2vw, 2.15rem);
+          font-weight: 600;
+          letter-spacing: -0.02em;
+          line-height: 1.1;
+        }
+        .cc-guidance-col-line {
+          margin-top: 0.8rem;
+          height: 1px;
+          width: 40px;
+          background: #a855f7;
+        }
+        .cc-guidance-col-body {
+          margin-top: 1rem;
+          color: #b7c0d8;
+          font-size: 0.98rem;
+          line-height: 1.75;
+        }
+        .cc-guidance-list {
+          margin-top: 1rem;
+          padding-left: 1.1rem;
+          color: #b7c0d8;
+          font-size: 0.9rem;
+          line-height: 1.78;
+        }
+        .cc-guidance-list li::marker {
+          color: #a855f7;
+        }
 
-      <div className="relative mx-auto w-full max-w-[94vw]">
-        <div className="mb-14 space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-300/10 px-4 py-2">
-            <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-            <span className="text-xs font-bold text-[#C084FC]">Cash Alternatives · Crypto · Commodities · Companies</span>
-          </div>
+        @media (max-width: 1279px) {
+          .cc-guidance-intro {
+            max-width: 80%;
+          }
+          .cc-guidance-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .cc-guidance-col {
+            padding: 1.35rem 1.1rem;
+          }
+          .cc-guidance-col + .cc-guidance-col {
+            border-left: none;
+          }
+          .cc-guidance-col:nth-child(2n) {
+            border-left: 1px solid #323746;
+          }
+          .cc-guidance-col:nth-child(n + 3) {
+            border-top: 1px solid #323746;
+          }
+        }
 
-          <div className="space-y-4">
-            <StockChart coins={coins} />
-          </div>
-        </div>
+        @media (max-width: 767px) {
+          .cc-guidance-intro {
+            max-width: 100%;
+          }
+          .cc-guidance-title {
+            font-size: clamp(1.85rem, 9.2vw, 2.65rem);
+            line-height: 1.1;
+          }
+          .cc-guidance-body {
+            margin-top: 1.45rem;
+            line-height: 1.65;
+          }
+          .cc-guidance-divider {
+            margin-top: 2.1rem;
+          }
+          .cc-guidance-grid {
+            margin-top: 1.8rem;
+          }
+          .cc-guidance-grid {
+            grid-template-columns: 1fr;
+          }
+          .cc-guidance-col {
+            padding: 1.15rem 0;
+          }
+          .cc-guidance-col:nth-child(2n),
+          .cc-guidance-col + .cc-guidance-col {
+            border-left: none;
+          }
+          .cc-guidance-col + .cc-guidance-col {
+            border-top: 1px solid #323746;
+          }
+          .cc-guidance-col:nth-child(n + 3) {
+            border-top: 1px solid #323746;
+          }
+        }
+      `}</style>
 
-        <div className="max-w-[80vw]">
-          <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-[#C6B8FF]">Strategic Financial Guidance</p>
-          <h2 className="text-3xl font-black leading-tight tracking-tight text-[#F4F7FB] sm:text-4xl lg:text-5xl">
-            Financial Consulting for Long-Term Wealth Planning
+      <div className="cc-guidance-inner">
+        <div className="cc-guidance-intro">
+          <p className="cc-guidance-eyebrow" style={revealStyle(0)}>Strategic Financial Guidance</p>
+          <div className="cc-guidance-eyebrow-line" style={revealStyle(70)} />
+
+          <h2 className="cc-guidance-title" style={revealStyle(140)}>
+            Financial Consulting for
+            <br />
+            Long-Term Wealth <span className="cc-guidance-title-accent">Planning</span>
           </h2>
-          <p className="mt-5 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg">
+
+          <p className="cc-guidance-body" style={revealStyle(230)}>
             Calo Capital serves individuals, families, and business owners with personalized financial guidance, market insights, and investment strategy. Our four pillars support financial planning, portfolio diversification, and a long-term wealth strategy across changing economic trends.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="cc-guidance-divider" style={dividerStyle(320)} />
+
+        <div className="cc-guidance-grid">
           {services.map((service, index) => (
-            <article
-              id={serviceIds[index]}
-              key={service.title}
-              className={`service-card group relative overflow-hidden rounded-[1.55rem] border border-white/10 p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_14px_34px_-26px_rgba(5,8,22,0.95)] backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-[#C084FC]/50 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_20px_38px_-28px_rgba(168,85,247,0.55)] ${serviceTextures[index].panel}`}
-            >
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_56%,rgba(8,12,24,0.04),rgba(5,8,22,0.18)_70%,rgba(5,8,22,0.28)_100%)]" />
-              
-              {/* Top gradient line */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C084FC]/40 to-transparent group-hover:via-[#C084FC]/60 transition" />
-              
-              
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="flex-1">
-                  <p className="text-[11px] font-black uppercase tracking-[0.3em] text-[#B7C0D8] group-hover:text-[#C084FC] transition">Pillar {serviceMarks[index]}</p>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-black tracking-tight text-[#F4F7FB] group-hover:text-[#C084FC] transition" style={{ fontFamily: "var(--calo-serif)" }}>
-                  {service.title}
-                </h3>
-                <div className="mt-3 h-px w-8 bg-gradient-to-r from-[#C084FC] to-transparent group-hover:w-full transition-all duration-500" />
-                <p className="mt-4 text-sm leading-6 text-[#B7C0D8] group-hover:text-[#D8C8F0] transition">{service.description}</p>
-              </div>
-
-              {/* Features list */}
-              <div className="mt-6 space-y-2">
-                {service.features.map((feature, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs text-[#B7C0D8] group-hover:text-[#D8C8F0] transition">
-                    <span className="h-1 w-1 rounded-full bg-[#C084FC]/60 group-hover:bg-[#C084FC] transition" />
-                    <span>{feature}</span>
-                  </div>
+            <article id={serviceIds[index]} key={service.title} className="cc-guidance-col" style={revealStyle(390 + index * 90)}>
+              <h3 className="cc-guidance-col-title">{service.title}</h3>
+              <div className="cc-guidance-col-line" />
+              <p className="cc-guidance-col-body">{service.description}</p>
+              <ul className="cc-guidance-list">
+                {service.features.map((feature) => (
+                  <li key={`${service.title}-${feature}`}>{feature}</li>
                 ))}
-              </div>
-
-              {/* Bottom accent label */}
-              <div className="mt-6 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.25em] text-[#B7C0D8] group-hover:text-[#C084FC] transition">
-                <span className="h-px flex-1 bg-gradient-to-r from-[#B7C0D8]/20 group-hover:from-[#C084FC]/30 to-transparent transition" />
-                <span>{serviceTextures[index].accent}</span>
-                <span className="h-px flex-1 bg-gradient-to-l from-[#B7C0D8]/20 group-hover:from-[#C084FC]/30 to-transparent transition" />
-              </div>
+              </ul>
             </article>
           ))}
         </div>
@@ -694,94 +869,329 @@ function PageHeader({ eyebrow, title, description }) {
 }
 
 function AboutPage() {
-  return (
-    <>
-      <section id="about" className="relative overflow-hidden bg-gradient-to-b from-[#0b0f1d] via-[#090d19] to-[#070a14] px-5 pb-14 pt-16 text-white sm:pt-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(168,85,247,0.12),transparent_28%),radial-gradient(circle_at_85%_72%,rgba(99,102,241,0.08),transparent_26%)]" />
-        <div className="relative mx-auto w-full max-w-[94vw]">
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div className="max-w-2xl">
-              <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">About Calo Capital</p>
-              <h1 className="mt-6 max-w-xl text-[clamp(3.2rem,7vw,5.4rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
-                Personalized Financial Guidance.
-                <br />
-                Built Around <span className="text-[#A855F7]">Your Goals.</span>
-              </h1>
-              <p className="mt-6 max-w-lg text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]">
-                Calo Capital provides financial consulting and strategic advisory services for individuals, families, and business owners seeking clear direction in today&apos;s financial landscape.
-              </p>
-              <div className="mt-8 h-px w-12 bg-[#A855F7]" />
-            </div>
-
-            <div className="relative mx-auto w-full max-w-[460px] overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#101323] shadow-[0_24px_60px_-30px_rgba(5,8,22,0.95)]">
-              <img
-                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1400&q=80"
-                alt="Mountain peak above clouds"
-                className="h-[330px] w-full object-cover sm:h-[365px]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/32 via-transparent to-transparent" />
-            </div>
-          </div>
-
-        </div>
-      </section>
-    </>
-  );
-}
-
-function TeamPage() {
-  const team = [
-    {
-      name: "Marc Calo",
-      title: "CEO",
-      bio: "Provides personalized financial guidance focused on investment strategy, market insights, and long-term financial planning.",
-      image: caloJpg,
-    },
+  const sectionRef = useRef(null);
+  const [hasJs, setHasJs] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const headingWords = [
+    { text: "Personalized", accent: false },
+    { text: "Financial", accent: false },
+    { text: "Guidance.", accent: false },
+    { text: "Built", accent: true },
+    { text: "Around", accent: true },
+    { text: "Your", accent: true },
+    { text: "Goals.", accent: true },
+  ];
+  const paragraphWords = [
+    "Calo",
+    "Capital",
+    "provides",
+    "financial",
+    "consulting",
+    "and",
+    "strategic",
+    "advisory",
+    "services",
+    "for",
+    "individuals,",
+    "families,",
+    "and",
+    "business",
+    "owners",
+    "seeking",
+    "clear",
+    "direction",
+    "in",
+    "today's",
+    "financial",
+    "landscape.",
   ];
 
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const root = document.documentElement;
+    if (!root.classList.contains("cc-about-js")) {
+      root.classList.add("cc-about-js");
+    }
+
+    setHasJs(true);
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const motionReduced = reducedMotionQuery.matches;
+    setReduceMotion(motionReduced);
+
+    if (motionReduced) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
-      <section id="leadership" className="relative overflow-hidden bg-[#070a14] px-5 pb-16 pt-16 text-white sm:pt-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.1),transparent_26%),radial-gradient(circle_at_82%_70%,rgba(99,102,241,0.08),transparent_24%)]" />
-        <div className="relative mx-auto w-full max-w-[94vw]">
-          <p className="text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]">Our Team</p>
-          <h1 className="mt-6 max-w-4xl text-[clamp(3rem,6.6vw,5.25rem)] font-serif font-semibold leading-[0.96] tracking-tight text-[#F4F7FB]">
-            Strategic. Transparent.
-            <br />
-            Aligned With <span className="text-[#A855F7]">Your Priorities.</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]">
-            Calo Capital combines financial strategy, market insight, and personalized guidance to help clients navigate financial planning decisions across traditional and alternative investments.
-          </p>
+      <section
+        ref={sectionRef}
+        id="about"
+        className={`cc-about-section relative overflow-hidden px-5 pb-14 pt-16 text-white sm:pt-20 ${hasJs ? "cc-about-js" : ""} ${isVisible ? "cc-about-animated" : ""} ${reduceMotion ? "cc-about-reduced-motion" : ""}`}
+      >
+        <style>{`
+          .cc-about-section {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background: #2b0d3f;
+          }
+          .cc-about-background {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background-image: url(${aboutImagePng});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+          }
+          .cc-about-crypto-art {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+          }
+          .cc-about-crypto-art-inner {
+            position: absolute;
+            top: 50%;
+            right: -27vw;
+            width: min(92vw, 1120px);
+            transform: translateY(-50%);
+            transform-origin: center center;
+            will-change: transform, opacity, filter;
+          }
+          .cc-about-crypto-wheel {
+            display: block;
+            width: 100%;
+            height: auto;
+            transform-origin: center center;
+            will-change: transform;
+          }
+          .cc-about-inner {
+            position: relative;
+            z-index: 2;
+            width: min(100%, 1400px);
+            margin-inline: auto;
+            padding-inline: clamp(1.25rem, 5vw, 5rem);
+          }
+          .cc-about-copy {
+            width: min(65%, 56rem);
+            max-width: 56rem;
+          }
+          .cc-about-eyebrow {
+            display: inline-block;
+            transition-property: opacity, transform, filter;
+            transition-duration: 760ms;
+            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+          }
+          .cc-about-heading {
+            max-width: 13ch;
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 6.5rem);
+            font-weight: 700;
+            line-height: 1.01;
+            letter-spacing: -0.03em;
+            overflow-wrap: normal;
+            word-break: normal;
+            text-wrap: pretty;
+          }
+          .cc-about-heading-word {
+            display: inline-block;
+            margin-right: 0.3em;
+            will-change: transform, opacity, filter, letter-spacing;
+            transition-property: opacity, transform, filter, letter-spacing;
+            transition-duration: 920ms;
+            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+          }
+          .cc-about-heading-word:last-child {
+            margin-right: 0;
+          }
+          .cc-about-paragraph {
+            display: block;
+            max-width: 700px;
+            transition-property: opacity, transform, filter;
+            transition-duration: 900ms;
+            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+          }
+          .cc-about-underline {
+            display: block;
+            transform-origin: left;
+            transition-property: transform;
+            transition-duration: 900ms;
+            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+          }
+          .cc-about-js .cc-about-animate {
+            opacity: 0;
+          }
+          .cc-about-js .cc-about-eyebrow {
+            transform: translateY(10px);
+            filter: blur(3px);
+          }
+          .cc-about-js .cc-about-heading-word {
+            transform: translateY(18px) scale(0.985);
+            filter: blur(5px);
+            letter-spacing: 0.025em;
+          }
+          .cc-about-js .cc-about-paragraph {
+            transform: translateY(16px);
+            filter: blur(3px);
+          }
+          .cc-about-js .cc-about-underline {
+            transform: scaleX(0);
+          }
+          .cc-about-js .cc-about-crypto-art-inner {
+            opacity: 0;
+            transform: translateY(-50%) translateX(32px) scale(0.985);
+            filter: blur(6px);
+            transition: opacity 960ms ease-out 620ms, transform 960ms ease-out 620ms, filter 960ms ease-out 620ms;
+          }
+          .cc-about-animated .cc-about-crypto-art-inner,
+          .cc-about-reduced-motion .cc-about-crypto-art-inner {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0) scale(1);
+            filter: blur(0);
+          }
+          .cc-about-animated .cc-about-crypto-wheel {
+            animation: ccAboutCryptoWheelSpin 26s linear infinite;
+          }
+          .cc-about-reduced-motion .cc-about-crypto-wheel {
+            animation: none;
+          }
+          .cc-about-animated .cc-about-animate,
+          .cc-about-reduced-motion .cc-about-animate {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+            letter-spacing: 0;
+          }
+          .cc-about-animated .cc-about-underline,
+          .cc-about-reduced-motion .cc-about-underline {
+            transform: scaleX(1);
+          }
+          @media (min-width: 1024px) {
+            .cc-about-copy {
+              width: min(65%, 56rem);
+            }
+          }
+          @media (max-width: 1023px) {
+            .cc-about-copy {
+              width: min(80%, 48rem);
+            }
+          }
+          @media (max-width: 767px) {
+            .cc-about-inner {
+              padding-inline: 1.25rem;
+            }
+            .cc-about-copy {
+              width: 100%;
+              max-width: 100%;
+            }
+            .cc-about-crypto-art-inner {
+              right: -28vw;
+              width: min(128vw, 820px);
+            }
+            .cc-about-heading {
+              max-width: 14ch;
+              font-size: clamp(2.6rem, 10vw, 4.1rem);
+              line-height: 1.03;
+            }
+            .cc-about-heading-word {
+              margin-right: 0.22em;
+            }
+            .cc-about-paragraph-word {
+              margin-right: 0.18em;
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .cc-about-eyebrow,
+            .cc-about-heading-word,
+            .cc-about-paragraph-word {
+              opacity: 1 !important;
+              transform: none !important;
+              filter: none !important;
+              letter-spacing: 0 !important;
+              transition: none !important;
+            }
+            .cc-about-crypto-art-inner {
+              opacity: 1 !important;
+              transform: translateY(-50%) !important;
+              filter: none !important;
+              transition: none !important;
+            }
+            .cc-about-crypto-wheel {
+              animation: none !important;
+            }
+          }
+          @keyframes ccAboutCryptoWheelSpin {
+            from {
+              transform: rotate(0deg);
+            }
+            to {
+              transform: rotate(360deg);
+            }
+          }
+        `}</style>
 
-          <div className="mt-12 grid max-w-[94vw] gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {team.map((member) => (
-              <article key={member.name} className="group overflow-hidden rounded-[1.05rem] border border-white/10 bg-[linear-gradient(180deg,rgba(14,19,33,0.95)_0%,rgba(8,11,19,0.98)_100%)] shadow-[0_18px_40px_-30px_rgba(5,8,22,0.95)] transition duration-300 hover:-translate-y-1 hover:border-[#A855F7]/30">
-                <div className="relative">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="h-[270px] w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#070a14]/74 via-transparent to-transparent" />
-                </div>
+        <div className="cc-about-background" aria-hidden="true" />
+        <div className="cc-about-crypto-art" aria-hidden="true">
+          <div className="cc-about-crypto-art-inner">
+            <img src={cryptoWheelPng} alt="" className="cc-about-crypto-wheel" />
+          </div>
+        </div>
+        <div className="cc-about-inner relative">
+          <div className="cc-about-copy">
+            <p className="cc-about-eyebrow cc-about-animate text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "0ms" }}>
+              About Calo Capital
+            </p>
+            <h1 className="cc-about-heading mt-6 text-[#F4F7FB]" data-cc-about-split="true">
+              {headingWords.map((word, index) => {
+                const label = word.text;
+                const isAccent = word.accent;
 
-                <div className="p-5">
-                  <h3 className="text-[1.02rem] font-medium text-[#F4F7FB]">{member.name}</h3>
-                  <p className="mt-1 text-sm text-[#A855F7]">{member.title}</p>
-                  <p className="mt-4 text-sm leading-6 text-[#B7C0D8]">{member.bio}</p>
-                  <a
-                    href="https://www.linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open LinkedIn profile for ${member.name}`}
-                    className="mt-6 inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#A855F7]/45 text-[0.72rem] font-semibold text-[#A855F7] transition hover:border-[#A855F7]/70 hover:bg-[#A855F7]/10 hover:text-white"
+                return (
+                  <span
+                    key={`${label}-${index}`}
+                    className={`cc-about-heading-word cc-about-animate${isAccent ? " text-[#A855F7]" : ""}`}
+                    style={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            transitionDelay: `${260 + index * 95}ms`,
+                          }
+                    }
                   >
-                    in
-                  </a>
-                </div>
-              </article>
-            ))}
+                    {label}
+                  </span>
+                );
+              })}
+            </h1>
+            <p className="cc-about-paragraph cc-about-animate mt-6 text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
+              {paragraphWords.join(" ")}
+            </p>
+            <div className="cc-about-underline cc-about-animate mt-8 h-px w-12 bg-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "1550ms" }} />
           </div>
         </div>
       </section>
@@ -793,15 +1203,6 @@ function WhyPartnerSection() {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
-
-  const principles = [
-    ["Transparent Communication", "Plain-language guidance"],
-    ["Personalized Strategy", "Built around your goals"],
-    ["Strategic Market Perspective", "Long-term thinking over speculation"],
-    ["Integrity", "Honest conversations"],
-    ["Client Relationships", "Partnership beyond the transaction"],
-    ["Risk Awareness", "Disciplined decision making"],
-  ];
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -856,7 +1257,12 @@ function WhyPartnerSection() {
   }
 
   return (
-    <section ref={sectionRef} id="client-excellence" className="relative overflow-hidden bg-white px-5 py-24 text-[#111111] sm:py-28 lg:py-32">
+    <section
+      ref={sectionRef}
+      id="client-excellence"
+      className="relative overflow-hidden bg-[#070a14] px-5 py-24 text-white sm:py-28 lg:py-32"
+      style={{ backgroundImage: `url(${whyPartnerBgPng})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}
+    >
       <div className="relative mx-auto w-full max-w-[94vw]">
         <div style={revealStyle(0, 24)}>
           <p className="text-xs font-black uppercase tracking-[0.4em] text-[#A855F7]" style={fadeStyle(0)}>
@@ -865,7 +1271,7 @@ function WhyPartnerSection() {
           <div className="mt-3 h-px w-28 bg-[#A855F7]/70" />
         </div>
 
-        <h2 className="mt-10 max-w-3xl text-[clamp(2.6rem,7vw,6.1rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#111111]" style={revealStyle(150, 30)}>
+        <h2 className="mt-10 max-w-3xl text-[clamp(2.6rem,7vw,6.1rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB]" style={revealStyle(150, 30)}>
           Markets move.
           <br />
           <span className="text-[#A855F7]">Sound strategy</span>
@@ -873,49 +1279,28 @@ function WhyPartnerSection() {
           endures.
         </h2>
 
-        <div className="mt-16 grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 xl:gap-20">
-          <div style={revealStyle(300, 24)}>
-            <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#1f2937]" style={fadeStyle(300)}>
-              OUR PRINCIPLES
-            </h3>
-            <p className="mt-7 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(380)}>
-              We believe thoughtful guidance, transparent communication, and disciplined market perspective create the foundation for lasting financial relationships.
-            </p>
-            <p className="mt-8 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(460)}>
-              Every recommendation begins with understanding your goals, not chasing trends.
-            </p>
-            <p className="mt-10 text-[15px] font-serif text-[#A855F7]" style={fadeStyle(520)}>
-              Our Mission
-            </p>
-            <p className="mt-4 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(600)}>
-              Our mission is to help clients make informed financial decisions through strategic guidance, personalized planning, and transparent communication across every stage of wealth planning.
-            </p>
-            <p className="mt-8 text-[15px] font-serif text-[#A855F7]" style={fadeStyle(680)}>
-              Our Vision
-            </p>
-            <p className="mt-4 max-w-xl text-base leading-8 text-[#374151] sm:text-lg" style={fadeStyle(760)}>
-              Our vision is to build long-term trusted relationships while helping clients pursue financial confidence through thoughtful planning, personalized financial guidance, and consistent market insight.
-            </p>
-          </div>
-
-          <div className="border-t border-[#e5e7eb]">
-            {principles.map(([title, detail], index) => (
-              <div
-                key={title}
-                className="why-principle-row border-b border-[#e5e7eb] py-5 sm:py-6"
-                style={revealStyle(450 + index * 100, 20)}
-              >
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
-                  <p className="why-principle-label text-base font-semibold text-[#111111] sm:text-[1.04rem]" style={fadeStyle(500 + index * 100)}>
-                    {title}
-                  </p>
-                  <p className="text-sm font-medium text-[#4b5563] sm:text-right sm:text-[0.96rem]" style={fadeStyle(560 + index * 100)}>
-                    {detail}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="mt-16" style={revealStyle(300, 24)}>
+          <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
+            OUR PRINCIPLES
+          </h3>
+          <p className="mt-7 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(380)}>
+            We believe thoughtful guidance, transparent communication, and disciplined market perspective create the foundation for lasting financial relationships.
+          </p>
+          <p className="mt-8 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(460)}>
+            Every recommendation begins with understanding your goals, not chasing trends.
+          </p>
+          <p className="mt-10 text-[15px] font-display text-[#A855F7]" style={fadeStyle(520)}>
+            Our Mission
+          </p>
+          <p className="mt-4 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(600)}>
+            Our mission is to help clients make informed financial decisions through strategic guidance, personalized planning, and transparent communication across every stage of wealth planning.
+          </p>
+          <p className="mt-8 text-[15px] font-display text-[#A855F7]" style={fadeStyle(680)}>
+            Our Vision
+          </p>
+          <p className="mt-4 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(760)}>
+            Our vision is to build long-term trusted relationships while helping clients pursue financial confidence through thoughtful planning, personalized financial guidance, and consistent market insight.
+          </p>
         </div>
       </div>
     </section>
@@ -929,10 +1314,9 @@ function HomePage({ coins, live, setPage }) {
       <AboutPage />
       <WhyPartnerSection />
       <ServicesSection coins={coins} setPage={setPage} />
-      <TeamPage />
       
       {/* CONTACT SECTION */}
-      <section id="contact" className="relative overflow-hidden bg-[#070a14] px-5 py-32 text-white sm:py-44">
+      <section id="contact" className="relative overflow-hidden bg-[#070a14] px-4 py-20 text-white sm:px-5 sm:py-32 lg:py-44">
         <div className="absolute inset-0 opacity-[0.08]">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
         </div>
@@ -940,7 +1324,7 @@ function HomePage({ coins, live, setPage }) {
         <div className="relative mx-auto w-full max-w-[94vw]">
           <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Let's Connect</p>
           <div className="mt-8">
-            <h1 className="text-6xl font-black tracking-tight leading-[1.1] sm:text-7xl lg:text-8xl">
+            <h1 className="text-4xl font-black leading-[1.08] tracking-tight sm:text-6xl lg:text-8xl">
               Ready to Build
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-400 to-violet-300">Your Financial Strategy?</span>
@@ -953,10 +1337,10 @@ function HomePage({ coins, live, setPage }) {
 
         <div className="relative mx-auto mt-24 w-full max-w-[94vw] sm:mt-28">
           {/* BOOKING CTA - PROMINENT */}
-          <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-8 sm:p-12 backdrop-blur-sm">
+          <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-6 backdrop-blur-sm sm:p-12">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-violet-300">Schedule Your Consultation</p>
-            <h2 className="mt-4 text-4xl font-black sm:text-5xl">Build Your Strategy with Marc Calo</h2>
-            <p className="mt-5 max-w-2xl text-lg text-slate-300">
+            <h2 className="mt-4 text-3xl font-black sm:text-4xl lg:text-5xl">Build Your Strategy with Marc Calo</h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
               Use your consultation to review your financial strategy, discuss market insights, and plan next steps for retirement planning, business financial planning, and long-term wealth decisions.
             </p>
             <a
@@ -964,7 +1348,7 @@ function HomePage({ coins, live, setPage }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open Google Calendar booking page in a new tab"
-              className="mt-8 inline-block rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-8 py-4 text-base font-black text-white transition hover:shadow-lg hover:shadow-violet-500/50 hover:scale-105"
+              className="mt-8 inline-block w-full rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-8 py-4 text-center text-base font-black text-white transition hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50 sm:w-auto"
             >
               Open Calendar & Schedule Now →
             </a>
@@ -975,7 +1359,7 @@ function HomePage({ coins, live, setPage }) {
               <h3 className="text-2xl font-black mb-8">Other Ways to Connect</h3>
               
               {/* EMAIL */}
-              <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-8 transition hover:border-violet-500/30 hover:bg-white/[0.04]">
+              <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04] sm:p-8">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-xl">✉</div>
                 <h4 className="font-black text-lg">Email Us</h4>
                 <p className="mt-2 text-slate-300">Send us your questions about financial planning and strategy</p>
@@ -985,10 +1369,10 @@ function HomePage({ coins, live, setPage }) {
               </div>
 
               {/* SOCIAL LINKS */}
-              <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-8">
+              <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
                 <h4 className="font-black text-lg mb-5">Follow Our Insights</h4>
                 <p className="text-sm text-slate-400 mb-5">Stay informed on market insights, economic trends, and investment strategy</p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-3 sm:gap-4">
                   {socialLinks.map((item) => (
                     <SocialLink key={item.label} item={item} />
                   ))}
@@ -1011,7 +1395,6 @@ function Footer() {
   ];
   const companyLinks = [
     { label: "Our Philosophy", href: "#about" },
-    { label: "Leadership", href: "#leadership" },
     { label: "Client Excellence", href: "#client-excellence" },
     { label: "Contact", href: "#contact" },
   ];
@@ -1435,7 +1818,7 @@ export default function App() {
   }, []);
 
   function setPage(page) {
-    if (page === "About" || page === "Team" || page === "Contact") {
+    if (page === "About" || page === "Contact") {
       setCurrentPage("Home");
       window.location.hash = pageRoutes[page];
       return;
@@ -1446,12 +1829,11 @@ export default function App() {
   }
 
   return (
-    <main className="min-h-screen bg-[#070a14] font-sans">
+    <main className="min-h-screen bg-[#070a14] font-body">
       <GlobalStyles />
       <MarketTicker coins={coins} live={live} />
       <Navbar currentPage={currentPage} setPage={setPage} />
       {currentPage === "Home" && <HomePage coins={coins} live={live} setPage={setPage} />}
-      {currentPage === "Team" && <TeamPage />}
       <Footer />
     </main>
   );
