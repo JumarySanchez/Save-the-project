@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { CandlestickSeries, createChart } from "lightweight-charts";
 import logoPng from "../public/Calo_purple_logo.png";
 import hikerPng from "../assets/calo.jpg";
 import heroVideoMp4 from "../assets/Calo-finances-hero.mp4";
@@ -125,6 +126,310 @@ function SocialLink({ item }) {
 }
 
 const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
+const FINANCIAL_TOPICS_ROUTE = "/financial-topics";
+
+const HOMEPAGE_TOPICS_DISCLAIMER =
+  "This information is provided for general informational purposes only and should not be considered financial, investment, insurance, legal, or tax advice. Financial decisions should be discussed with appropriately qualified professionals.";
+
+const DETAILED_TOPICS_DISCLAIMER =
+  "The content on this page is provided for general informational purposes only. It does not consider any visitor's individual objectives, financial circumstances, or needs and should not be treated as financial, investment, insurance, legal, or tax advice. Calo Capital does not guarantee future results. Visitors should independently verify professional qualifications and consult appropriately licensed or qualified professionals.";
+
+const financialTopics = [
+  {
+    id: "protecting-your-family",
+    title: "Protecting Your Family",
+    hook: "Protection starts with clarity before urgency.",
+    shortDescription:
+      "Explore general life insurance concepts and the questions people may consider when preparing for unexpected events and protecting those who depend on them.",
+    intro:
+      "Life insurance is generally designed to provide financial support to selected beneficiaries after the insured person's death. A person's family responsibilities, income, debts, future expenses, and long-term goals may influence the type and amount of coverage they consider.",
+    concepts: [
+      "The general purpose of life insurance",
+      "Term life insurance",
+      "Permanent life insurance",
+      "Beneficiaries",
+      "Coverage amounts",
+      "Premiums",
+      "Policy exclusions and limitations",
+      "The importance of reviewing a policy carefully",
+    ],
+    professional:
+      "A properly licensed insurance professional who is authorized to discuss or sell insurance products in your state.",
+    evaluate: [
+      "Ask what insurance licenses they hold",
+      "Verify that the license is active",
+      "Ask which companies they represent",
+      "Determine whether they represent one company or multiple insurers",
+      "Ask how they are compensated",
+      "Request a clear explanation of costs, exclusions, limitations, and cancellation terms",
+    ],
+    firstConversationQuestions: [
+      "What type of coverage are you recommending, and why?",
+      "What is included and excluded?",
+      "How long are premiums expected to remain the same?",
+      "Can the premium or benefit change?",
+      "What happens if I miss a payment?",
+      "Are there surrender charges or cancellation fees?",
+      "How are you compensated?",
+      "What alternatives should I compare?",
+    ],
+    redFlags: [
+      "Pressure to sign immediately",
+      "Guaranteed claims that are not supported by policy documents",
+      "Refusal to explain exclusions or fees",
+      "Avoiding questions about licensing",
+      "Recommending coverage without asking about your needs",
+      "Asking you to provide sensitive information through an unsecured method",
+    ],
+  },
+  {
+    id: "retirement-and-iras",
+    title: "Retirement and IRAs",
+    hook: "A stronger retirement plan begins with better questions today.",
+    shortDescription:
+      "Understand common retirement priorities, the general role of IRAs, and the factors people may consider while preparing for their future.",
+    intro:
+      "Retirement planning generally involves evaluating future income needs, savings, time horizon, taxes, account rules, and personal risk tolerance. An IRA is one type of account that may be used as part of a broader retirement strategy.",
+    concepts: [
+      "The general purpose of retirement planning",
+      "Traditional IRAs",
+      "Roth IRAs",
+      "Employer-sponsored retirement accounts",
+      "Contribution rules",
+      "Withdrawal rules",
+      "Potential tax considerations",
+      "Time horizon and risk",
+    ],
+    professional:
+      "A properly registered or licensed financial professional may be appropriate, with a qualified tax professional for tax-specific questions and an attorney for legal or estate-planning issues.",
+    evaluate: [
+      "Ask what qualifications or registrations they hold",
+      "Ask whether they are acting as a fiduciary during the engagement",
+      "Ask how they are compensated",
+      "Ask what fees may apply directly or indirectly",
+      "Ask how recommendations fit your time horizon",
+      "Confirm which questions should be directed to a tax professional",
+    ],
+    firstConversationQuestions: [
+      "What qualifications or registrations do you hold?",
+      "Are you acting as a fiduciary during this engagement?",
+      "How are you compensated?",
+      "What fees would I pay directly or indirectly?",
+      "How does this approach reflect my time horizon?",
+      "What risks should I understand?",
+      "What tax questions should I discuss with a tax professional?",
+      "Are there penalties or restrictions associated with withdrawals?",
+    ],
+    redFlags: [
+      "Guaranteed retirement returns",
+      "Pressure to move retirement funds immediately",
+      "Vague or hidden fees",
+      "Recommendations made before understanding your circumstances",
+      "Advice to withdraw or transfer funds without explaining possible consequences",
+      "Requests to send money to a personal account",
+    ],
+  },
+  {
+    id: "trusts-and-legacy",
+    title: "Trusts and Legacy Planning",
+    hook: "Legacy planning is about decisions that remain useful over time.",
+    shortDescription:
+      "Learn how wills, trusts, beneficiaries, and organized financial documents may contribute to a thoughtful legacy plan.",
+    intro:
+      "Legacy planning may involve organizing assets, reviewing beneficiaries, preparing legal documents, and deciding how property should be handled in the future. Trusts and wills serve different purposes and may require qualified legal guidance.",
+    concepts: [
+      "The general purpose of a will",
+      "The general purpose of a trust",
+      "Beneficiary designations",
+      "Asset organization",
+      "Powers of attorney",
+      "Healthcare directives",
+      "The role of an executor or trustee",
+      "The importance of reviewing plans after major life changes",
+    ],
+    professional:
+      "A qualified estate-planning attorney is generally appropriate. Tax questions may also require a qualified tax professional.",
+    evaluate: [
+      "Ask whether they regularly handle estate-planning matters",
+      "Verify that the attorney is licensed to practice in your state",
+      "Ask what documents may be appropriate for your circumstances",
+      "Ask for total costs and any ongoing maintenance costs",
+      "Ask how beneficiary designations should coordinate with the plan",
+      "Ask how often the plan should be reviewed",
+    ],
+    firstConversationQuestions: [
+      "Do you regularly handle estate-planning matters?",
+      "Are you licensed to practice law in my state?",
+      "What documents may be appropriate for my circumstances?",
+      "What are the total costs?",
+      "Who will be responsible for maintaining or updating the documents?",
+      "How should beneficiary designations coordinate with the plan?",
+      "Which decisions require tax guidance?",
+      "How often should the plan be reviewed?",
+    ],
+    redFlags: [
+      "A non-attorney offering individualized legal advice",
+      "Generic documents presented as appropriate for everyone",
+      "No discussion of state-specific requirements",
+      "Unclear fees",
+      "Pressure to transfer assets without a clear explanation",
+      "No explanation of trustee responsibilities",
+    ],
+  },
+  {
+    id: "investments-and-wealth",
+    title: "Investments and Wealth Building",
+    hook: "Long-term growth decisions work best when risk is understood first.",
+    shortDescription:
+      "Explore foundational investment concepts, including time horizon, diversification, personal goals, and the relationship between potential opportunity and risk.",
+    intro:
+      "Investing involves the possibility of gains and losses. Time horizon, financial goals, liquidity needs, diversification, fees, and risk tolerance may all influence how someone evaluates investment options.",
+    concepts: [
+      "Risk and return",
+      "Time horizon",
+      "Diversification",
+      "Liquidity",
+      "Investment fees",
+      "Market volatility",
+      "Personal financial goals",
+      "The possibility of losing money",
+    ],
+    professional:
+      "A properly registered investment professional or other appropriately qualified financial professional may be appropriate, depending on the requested service.",
+    evaluate: [
+      "Ask for their full legal name and firm",
+      "Ask what licenses or registrations they hold",
+      "Independently verify their professional background",
+      "Ask whether they are acting as a fiduciary",
+      "Request written fee and conflict-of-interest disclosures",
+      "Ask where assets would be held",
+      "Confirm that accounts are not held in the professional's personal name",
+    ],
+    firstConversationQuestions: [
+      "What services do you provide?",
+      "What registrations or licenses do you hold?",
+      "Are you acting as a fiduciary?",
+      "How are you compensated?",
+      "What fees and expenses may apply?",
+      "What risks are involved?",
+      "Where would my assets be held?",
+      "How can I independently view my account?",
+      "What conflicts of interest should I understand?",
+      "What happens if I decide to end the relationship?",
+    ],
+    redFlags: [
+      "Guaranteed or unusually consistent returns",
+      "Pressure to act immediately",
+      "Secrecy surrounding the investment strategy",
+      "Refusal to provide written documentation",
+      "Requests to transfer money to a personal account",
+      "Difficulty verifying the professional or firm",
+      "Claims that an opportunity has no risk",
+      "Discouraging you from seeking a second opinion",
+    ],
+  },
+  {
+    id: "cryptocurrency",
+    title: "Cryptocurrency and Digital Assets",
+    hook: "Digital assets require security discipline as much as market awareness.",
+    shortDescription:
+      "Build a clearer understanding of cryptocurrency, market volatility, digital security, and the risks that should be considered before making financial decisions.",
+    intro:
+      "Cryptocurrency and digital assets can experience significant price changes and may involve technology, custody, fraud, liquidity, and regulatory risks. Visitors should understand how an asset works and how it would be stored before making a decision.",
+    concepts: [
+      "Market volatility",
+      "Digital wallets",
+      "Private keys and seed phrases",
+      "Custodial and self-custodial storage",
+      "Exchange risk",
+      "Scams and impersonation",
+      "Liquidity",
+      "The possibility of permanent loss",
+    ],
+    professional:
+      "A properly qualified professional for the specific service being offered, with verifiable licensing or registration where required.",
+    evaluate: [
+      "Ask what professional qualifications they hold",
+      "Ask whether they are registered or licensed for the service being offered",
+      "Ask how they are compensated",
+      "Ask who controls the digital assets",
+      "Ask where assets will be stored",
+      "Ask what fees apply and whether assets can be withdrawn",
+      "Ask how claims can be independently verified",
+    ],
+    firstConversationQuestions: [
+      "What professional qualifications do you hold?",
+      "Are you registered or licensed for the service you are offering?",
+      "How are you compensated?",
+      "Who controls the digital assets?",
+      "Where will the assets be stored?",
+      "What fees apply?",
+      "What happens if the platform fails?",
+      "Can I withdraw my assets?",
+      "What are the major risks?",
+      "How can I independently verify your claims?",
+    ],
+    redFlags: [
+      "Guaranteed profits",
+      "Promises of fast or risk-free returns",
+      "Requests for a wallet seed phrase or private key",
+      "Pressure to transfer funds immediately",
+      "Unsolicited direct messages about investments",
+      "Fake celebrity endorsements",
+      "Requests to install unknown remote-access software",
+      "Instructions to send cryptocurrency to unlock funds or pay an unexpected fee",
+    ],
+  },
+  {
+    id: "market-charts",
+    title: "Understanding Market Charts",
+    hook: "Charts can describe what happened, not promise what happens next.",
+    shortDescription:
+      "Learn the basic parts of a candlestick chart, including open, close, high, and low, and understand what market charts can and cannot communicate.",
+    intro:
+      "Market charts organize historical price information. They may help visitors observe past price movements, but they cannot guarantee or predict what a market will do next.",
+    concepts: [
+      "Open price",
+      "Close price",
+      "Highest price",
+      "Lowest price",
+      "Bullish candles",
+      "Bearish candles",
+      "Time intervals",
+      "Volume",
+      "Historical data",
+      "The limitations of chart-based analysis",
+    ],
+    professional:
+      "A qualified professional who can clearly explain whether they are providing general educational information or personalized recommendations, and whose qualifications can be independently verified.",
+    evaluate: [
+      "Ask what data source is being used",
+      "Ask whether information is current or delayed",
+      "Ask what the selected time interval represents",
+      "Ask what limitations apply to the analysis",
+      "Ask which risks are not visible on the chart",
+      "Ask what qualifications they hold and how they are compensated",
+    ],
+    firstConversationQuestions: [
+      "What data source is being used?",
+      "Is the information current or delayed?",
+      "What does the selected time interval represent?",
+      "What are the limitations of this analysis?",
+      "What risks are not visible on the chart?",
+      "Are you providing general information or a personalized recommendation?",
+      "What qualifications do you hold?",
+      "How are you compensated?",
+    ],
+    redFlags: [
+      "Claims that a chart guarantees the next market movement",
+      "Secret indicators promising certain returns",
+      "Refusal to discuss risk",
+      "Selectively showing only successful predictions",
+      "Pressure to purchase a trading signal or investment immediately",
+      "Presenting historical performance as a guaranteed future result",
+    ],
+  },
+];
 
 function getMissingConfigError() {
   const missing = [];
@@ -322,10 +627,15 @@ function HeroSection() {
 const pageRoutes = {
   Home: "#/",
   About: "#about",
+  "Why invest": "#about",
   Contact: "#contact",
+  "Financial Topics": FINANCIAL_TOPICS_ROUTE,
 };
 
 function getPageFromHash() {
+  const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
+  if (normalizedPath === FINANCIAL_TOPICS_ROUTE) return "Financial Topics";
+
   const hash = window.location.hash || "#/";
   if (hash === "#/about" || hash === "#about" || hash === "#client-excellence") return "Home";
   if (hash === "#/contact" || hash === "#contact") return "Home";
@@ -334,9 +644,23 @@ function getPageFromHash() {
 
 function Navbar({ currentPage, setPage }) {
   const [open, setOpen] = useState(false);
-  const links = ["Home", "About", "Contact"];
+  const links = ["Home", "Why invest", "Financial Topics", "Contact"];
 
   function goTo(page) {
+    if (page === "Financial Topics") {
+      setOpen(false);
+      window.location.assign(FINANCIAL_TOPICS_ROUTE);
+      return;
+    }
+
+    const isFinancialTopicsPage = window.location.pathname.replace(/\/+$/, "") === FINANCIAL_TOPICS_ROUTE;
+    if (isFinancialTopicsPage) {
+      const targetHash = page === "Home" ? "" : pageRoutes[page];
+      setOpen(false);
+      window.location.assign(`/${targetHash}`);
+      return;
+    }
+
     setPage(page);
     window.location.hash = pageRoutes[page];
     setOpen(false);
@@ -373,7 +697,7 @@ function Navbar({ currentPage, setPage }) {
           href={SCHEDULE_CALL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden rounded-xl bg-[#8B5CF6] px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-[#A855F7] lg:inline-block"
+          className="schedule-call-radiant hidden rounded-none px-4 py-2 text-sm font-black text-white transition lg:inline-block"
         >
           Schedule a Call
         </a>
@@ -1307,12 +1631,535 @@ function WhyPartnerSection() {
   );
 }
 
+function CryptoCandlestickSection() {
+  const cryptoSymbols = [
+    { label: "BTC/USD", marketSymbol: "BTCUSDT" },
+    { label: "ETH/USD", marketSymbol: "ETHUSDT" },
+    { label: "SOL/USD", marketSymbol: "SOLUSDT" },
+  ];
+  const [selectedSymbol, setSelectedSymbol] = useState(cryptoSymbols[0].marketSymbol);
+  const [chartError, setChartError] = useState("");
+  const chartContainerRef = useRef(null);
+  const chartRef = useRef(null);
+  const seriesRef = useRef(null);
+
+  useEffect(() => {
+    if (!chartContainerRef.current || chartRef.current) return;
+
+    const container = chartContainerRef.current;
+    const chart = createChart(container, {
+      width: container.clientWidth,
+      height: container.clientHeight,
+      layout: {
+        background: { color: "#070a14" },
+        textColor: "#A8A9B8",
+      },
+      grid: {
+        vertLines: { color: "#1E2030" },
+        horzLines: { color: "#1E2030" },
+      },
+      crosshair: {
+        vertLine: { color: "#B8B1FF" },
+        horzLine: { color: "#B8B1FF" },
+      },
+      rightPriceScale: {
+        borderColor: "#1E2030",
+      },
+      timeScale: {
+        borderColor: "#1E2030",
+        timeVisible: true,
+      },
+    });
+
+    const series = chart.addSeries(CandlestickSeries, {
+      upColor: "#6D4AFF",
+      downColor: "#D9D6FF",
+      borderUpColor: "#6D4AFF",
+      borderDownColor: "#D9D6FF",
+      wickUpColor: "#6D4AFF",
+      wickDownColor: "#D9D6FF",
+    });
+
+    chartRef.current = chart;
+    seriesRef.current = series;
+
+    const resizeObserver = new ResizeObserver(() => {
+      chart.applyOptions({
+        width: container.clientWidth,
+        height: container.clientHeight,
+      });
+    });
+
+    resizeObserver.observe(container);
+
+    return () => {
+      resizeObserver.disconnect();
+      chart.remove();
+      chartRef.current = null;
+      seriesRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    function buildFallbackCandles(basePrice) {
+      const nowSeconds = Math.floor(Date.now() / 1000);
+      const fourHours = 60 * 60 * 4;
+      let current = basePrice;
+
+      return Array.from({ length: 120 }, (_, index) => {
+        const drift = (Math.sin(index / 7) * 0.007 + (Math.random() - 0.5) * 0.01) * current;
+        const open = current;
+        const close = Math.max(0.0001, current + drift);
+        const high = Math.max(open, close) + Math.abs(drift) * 0.45;
+        const low = Math.min(open, close) - Math.abs(drift) * 0.45;
+        current = close;
+
+        return {
+          time: nowSeconds - (120 - index) * fourHours,
+          open,
+          high,
+          low,
+          close,
+        };
+      });
+    }
+
+    async function loadData() {
+      if (!seriesRef.current || !chartRef.current) return;
+
+      const coinbaseProductBySymbol = {
+        BTCUSDT: "BTC-USD",
+        ETHUSDT: "ETH-USD",
+        SOLUSDT: "SOL-USD",
+      };
+      const fallbackPriceBySymbol = {
+        BTCUSDT: 64000,
+        ETHUSDT: 3100,
+        SOLUSDT: 160,
+      };
+
+      try {
+        setChartError("");
+        // Coinbase candles are [time, low, high, open, close, volume] in reverse-chronological order.
+        const product = coinbaseProductBySymbol[selectedSymbol] || "BTC-USD";
+        const response = await fetch(
+          `https://api.exchange.coinbase.com/products/${product}/candles?granularity=14400`,
+          { headers: { Accept: "application/json" } }
+        );
+
+        if (!response.ok) throw new Error("Failed to load market data");
+
+        const candles = await response.json();
+        if (cancelled) return;
+
+        if (!Array.isArray(candles) || candles.length === 0) {
+          throw new Error("No market candle data available");
+        }
+
+        const chartData = candles
+          .map((candle) => ({
+            time: Number(candle[0]),
+            low: Number(candle[1]),
+            high: Number(candle[2]),
+            open: Number(candle[3]),
+            close: Number(candle[4]),
+          }))
+          .sort((a, b) => a.time - b.time);
+
+        seriesRef.current.setData(chartData);
+        chartRef.current.timeScale().fitContent();
+      } catch (error) {
+        if (cancelled) return;
+        const fallbackBase = fallbackPriceBySymbol[selectedSymbol] || 500;
+        seriesRef.current.setData(buildFallbackCandles(fallbackBase));
+        chartRef.current.timeScale().fitContent();
+        setChartError("Live feed temporarily unavailable. Showing fallback candles for visual reference.");
+      }
+    }
+
+    loadData();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedSymbol]);
+
+  return (
+    <section id="crypto-candlestick" className="relative overflow-hidden bg-[#0d1020] px-5 py-20 text-white sm:py-24">
+      <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Live Crypto Candlestick Chart</p>
+        <h2 className="mt-4 max-w-3xl text-[clamp(2rem,4vw,3.6rem)] font-black leading-[1.06] tracking-[-0.02em] text-white">
+          Track Digital Asset Price Action in Real Time
+        </h2>
+        <p className="mt-5 max-w-3xl text-base leading-8 text-[#C7B6CB] sm:text-lg">
+          Explore TradingView candlestick charts for major crypto pairs. Candlestick charts can help visualize open, close, high, and low prices over selected time intervals.
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          {cryptoSymbols.map((item) => (
+            <button
+              key={item.marketSymbol}
+              onClick={() => setSelectedSymbol(item.marketSymbol)}
+              className={selectedSymbol === item.marketSymbol
+                ? "rounded-none border border-[#D7A6FF] bg-[#D7A6FF]/15 px-4 py-2 text-sm font-black text-white"
+                : "rounded-none border border-white/20 bg-transparent px-4 py-2 text-sm font-black text-[#C7B6CB] transition hover:border-[#D7A6FF] hover:text-white"}
+              aria-pressed={selectedSymbol === item.marketSymbol}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 overflow-hidden border border-white/15 bg-[#070a14]">
+          <div ref={chartContainerRef} className="h-[380px] w-full sm:h-[460px] lg:h-[560px]" aria-label="TradingView candlestick chart" />
+          {chartError && (
+            <p className="border-t border-white/15 px-4 py-3 text-sm text-rose-200">{chartError}</p>
+          )}
+          <div className="border-t border-white/10 px-4 py-3 text-xs leading-6 text-[#C7B6CB]">
+            Powered by TradingView Lightweight Charts with market data feed for educational chart visualization.
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CandlestickIllustration() {
+  return (
+    <figure className="rounded-2xl border border-white/15 bg-[#1f0b2b] p-5" aria-labelledby="candlestick-caption">
+      <svg viewBox="0 0 640 280" className="h-auto w-full" role="img" aria-label="Simple candlestick example showing open, close, high, and low">
+        <line x1="120" y1="36" x2="120" y2="226" stroke="#E9DDEC" strokeWidth="3" />
+        <rect x="92" y="110" width="56" height="70" fill="#D7A6FF" stroke="#FFFFFF" strokeWidth="2" rx="4" />
+        <line x1="300" y1="58" x2="300" y2="240" stroke="#E9DDEC" strokeWidth="3" />
+        <rect x="272" y="94" width="56" height="82" fill="#7f4eb4" stroke="#FFFFFF" strokeWidth="2" rx="4" />
+
+        <text x="30" y="38" fill="#C7B6CB" fontSize="14">High</text>
+        <line x1="66" y1="34" x2="116" y2="34" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="30" y="112" fill="#C7B6CB" fontSize="14">Open</text>
+        <line x1="68" y1="108" x2="92" y2="108" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="30" y="184" fill="#C7B6CB" fontSize="14">Close</text>
+        <line x1="68" y1="180" x2="92" y2="180" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="30" y="230" fill="#C7B6CB" fontSize="14">Low</text>
+        <line x1="58" y1="226" x2="116" y2="226" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="160" y="144" fill="#C7B6CB" fontSize="14">Body</text>
+        <line x1="198" y1="140" x2="146" y2="140" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="360" y="84" fill="#C7B6CB" fontSize="14">Upper Wick</text>
+        <line x1="450" y1="80" x2="304" y2="80" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="360" y="242" fill="#C7B6CB" fontSize="14">Lower Wick</text>
+        <line x1="450" y1="238" x2="304" y2="238" stroke="#C7B6CB" strokeWidth="1.5" />
+
+        <text x="88" y="262" fill="#D7A6FF" fontSize="14" fontWeight="700">Bullish Candle</text>
+        <text x="264" y="262" fill="#D7A6FF" fontSize="14" fontWeight="700">Bearish Candle</text>
+      </svg>
+      <figcaption id="candlestick-caption" className="mt-3 text-sm leading-6 text-[#C7B6CB]">
+        Labeled candlestick example for educational context only. It demonstrates structure, not a prediction.
+      </figcaption>
+    </figure>
+  );
+}
+
+function FinancialTopicsSection() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const leftTopics = financialTopics.slice(0, 3);
+  const rightTopics = financialTopics.slice(3, 6);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(reducedMotionQuery.matches);
+    if (reducedMotionQuery.matches) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  function reveal(delayMs, offset = 20) {
+    if (reduceMotion) {
+      return { opacity: 1, transform: "none" };
+    }
+    return {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? "translateY(0)" : `translateY(${offset}px)`,
+      transition: `opacity 650ms ease ${delayMs}ms, transform 650ms ease ${delayMs}ms`,
+    };
+  }
+
+  function renderTopic(topic, indexOffset) {
+    return (
+      <article key={topic.id} className="ft-topic" style={reveal(160 + indexOffset * 80)}>
+        <a href={`${FINANCIAL_TOPICS_ROUTE}#${topic.id}`} className="ft-topic-link group">
+          <span className="ft-topic-title">{topic.title}</span>
+          <span className="ft-topic-arrow" aria-hidden="true">→</span>
+        </a>
+        <p className="mt-3 text-[15px] leading-7 text-[#E9DDEC]">{topic.shortDescription}</p>
+      </article>
+    );
+  }
+
+  return (
+    <section ref={sectionRef} id="financial-priorities" className="relative overflow-hidden bg-[#15021A] px-5 py-20 text-white sm:py-24 lg:py-28">
+      <style>{`
+        .ft-container {
+          margin: 0 auto;
+          width: 100%;
+          max-width: min(1440px, 94vw);
+        }
+        .ft-topic + .ft-topic {
+          margin-top: 2.2rem;
+        }
+        .ft-topic-link {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.55rem;
+          color: #D7A6FF;
+          text-decoration: none;
+          outline: none;
+        }
+        .ft-topic-title {
+          font-family: var(--font-display);
+          font-size: clamp(1.45rem, 1.8vw, 2.1rem);
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          line-height: 1.15;
+        }
+        .ft-topic-link::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: -6px;
+          width: 100%;
+          height: 1px;
+          background: #ffffff;
+          opacity: 0;
+          transform: scaleX(0.35);
+          transform-origin: left;
+          transition: transform 220ms ease, opacity 220ms ease;
+        }
+        .ft-topic-arrow {
+          font-size: 1.2rem;
+          transform: translateX(0);
+          transition: transform 220ms ease;
+        }
+        .ft-topic-link:hover,
+        .ft-topic-link:focus-visible {
+          color: #ffffff;
+        }
+        .ft-topic-link:hover::after,
+        .ft-topic-link:focus-visible::after {
+          opacity: 0.85;
+          transform: scaleX(1);
+        }
+        .ft-topic-link:hover .ft-topic-arrow,
+        .ft-topic-link:focus-visible .ft-topic-arrow {
+          transform: translateX(5px);
+        }
+        .ft-topic-link:focus-visible {
+          border-radius: 0.35rem;
+          box-shadow: 0 0 0 3px rgba(215, 166, 255, 0.5);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .ft-topic-link,
+          .ft-topic-link::after,
+          .ft-topic-arrow {
+            transition: none !important;
+          }
+        }
+      `}</style>
+
+      <div className="ft-container">
+        <p className="text-xs font-black uppercase tracking-[0.33em] text-[#D7A6FF]" style={reveal(0)}>Explore Your Priorities</p>
+        <h2 className="mt-4 max-w-4xl text-[clamp(2.1rem,4.4vw,4rem)] font-black leading-[1.04] tracking-[-0.02em] text-[#FFFFFF]" style={reveal(60)}>
+          How We Help You Explore Your Financial Goals
+        </h2>
+        <p className="mt-6 max-w-3xl text-base leading-8 text-[#E9DDEC] sm:text-lg" style={reveal(120)}>
+          Explore important financial topics, understand the questions they may raise, and learn what to consider when searching for qualified professional support.
+        </p>
+
+        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(340px,1.2fr)] lg:gap-12">
+          <div>
+            {leftTopics.map((topic, index) => renderTopic(topic, index))}
+          </div>
+          <div>
+            {rightTopics.map((topic, index) => renderTopic(topic, index + 3))}
+          </div>
+          <div className="flex items-center justify-center" style={reveal(260, 28)}>
+            <div className="relative h-[320px] w-[320px] rounded-full border border-white/20 bg-[radial-gradient(circle_at_35%_22%,#6b2b8f_0%,#2a0f36_60%,#190523_100%)] sm:h-[360px] sm:w-[360px] lg:h-[460px] lg:w-[460px]">
+              <div className="absolute inset-[12%] rounded-full border border-white/15 bg-white/5 p-7 text-center">
+                <p className="font-display text-xl font-bold text-[#FFFFFF] sm:text-2xl">Lifestyle Image Placeholder</p>
+                <p className="mt-3 text-sm leading-6 text-[#E9DDEC] sm:text-base">
+                  Final approved family-focused lifestyle image is still needed for this section.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 max-w-[62rem]" style={reveal(340, 12)}>
+          <a
+            href={FINANCIAL_TOPICS_ROUTE}
+            className="inline-flex w-full items-center justify-center rounded-xl bg-[#8B5CF6] px-8 py-4 text-base font-black text-white transition hover:bg-[#A855F7] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66] sm:w-auto"
+          >
+            Learn More About Each Section
+          </a>
+        </div>
+
+        <p className="mt-7 max-w-5xl text-sm leading-7 text-[#C7B6CB]" style={reveal(400, 8)}>
+          {HOMEPAGE_TOPICS_DISCLAIMER}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function FinancialTopicsPage() {
+  return (
+    <section className="bg-[#15021A] px-5 pb-24 pt-16 text-white sm:pt-20">
+      <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore Financial Topics</p>
+        <h1 className="mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
+          Prepare Better Questions for Your Financial Journey
+        </h1>
+        <p className="mt-5 max-w-4xl text-base leading-8 text-[#E9DDEC] sm:text-lg">
+          Understanding the basics can help you communicate your goals, recognize important qualifications, and ask more informed questions when seeking professional support.
+        </p>
+
+        <div className="mt-8 rounded-2xl border border-white/15 bg-white/[0.03] p-5 text-sm leading-7 text-[#C7B6CB]">
+          {DETAILED_TOPICS_DISCLAIMER}
+        </div>
+
+        <nav id="financial-topics-nav" className="mt-10 border-y border-white/15 bg-[#1f0b2b]/80 py-3 md:sticky md:top-2 md:z-40 md:backdrop-blur">
+          <div className="flex gap-3 overflow-x-auto px-1 pb-1 md:flex-wrap md:overflow-visible md:px-0">
+            {financialTopics.map((topic) => (
+              <a
+                key={topic.id}
+                href={`#${topic.id}`}
+                className="whitespace-nowrap rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-[#E9DDEC] transition hover:border-[#D7A6FF] hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66]"
+              >
+                {topic.title}
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <div className="mt-10 space-y-10">
+          {financialTopics.map((topic) => (
+            <article key={topic.id} id={topic.id} className="rounded-3xl border border-white/15 bg-white/[0.02] p-6 sm:p-8">
+              <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#D7A6FF]">{topic.title}</h2>
+              <p className="mt-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#C7B6CB]">{topic.hook}</p>
+              <p className="mt-4 text-base leading-8 text-[#E9DDEC]">{topic.shortDescription}</p>
+
+              <div className="mt-6 grid gap-8 lg:grid-cols-2">
+                <section>
+                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Important Concepts</h3>
+                  <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
+                    {topic.concepts.slice(0, 5).map((item) => (
+                      <li key={`${topic.id}-${item}`}>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section>
+                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Who May Be Appropriate</h3>
+                  <p className="mt-3 text-[15px] leading-7 text-[#E9DDEC]">{topic.professional}</p>
+                </section>
+              </div>
+
+              {topic.id === "market-charts" && (
+                <div className="mt-8">
+                  <CandlestickIllustration />
+                </div>
+              )}
+
+              <div className="mt-8 grid gap-8 lg:grid-cols-2">
+                <section>
+                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">How to Evaluate</h3>
+                  <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
+                    {topic.evaluate.slice(0, 5).map((item) => (
+                      <li key={`${topic.id}-evaluate-${item}`}>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section>
+                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Questions to Ask First</h3>
+                  <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
+                    {topic.firstConversationQuestions.slice(0, 6).map((item) => (
+                      <li key={`${topic.id}-question-${item}`}>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+
+              <section className="mt-8">
+                <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Warning Signs or Red Flags</h3>
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
+                  {topic.redFlags.slice(0, 6).map((item) => (
+                    <li key={`${topic.id}-redflag-${item}`}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+
+              <p className="mt-7 text-sm leading-7 text-[#C7B6CB]">
+                Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+              </p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-12 rounded-2xl border border-white/15 bg-white/[0.03] p-5 text-sm leading-7 text-[#C7B6CB]">
+          {DETAILED_TOPICS_DISCLAIMER}
+        </div>
+
+        <div className="mt-8">
+          <a
+            href={SCHEDULE_CALL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-xl bg-[#8B5CF6] px-8 py-4 text-base font-black text-white transition hover:bg-[#A855F7] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66]"
+          >
+            Schedule a Consultation with Marc Calo
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage({ coins, live, setPage }) {
   return (
     <>
       <HeroSection />
       <AboutPage />
+      <CryptoCandlestickSection />
       <WhyPartnerSection />
+      <FinancialTopicsSection />
       <ServicesSection coins={coins} setPage={setPage} />
       
       {/* CONTACT SECTION */}
@@ -1483,6 +2330,29 @@ function GlobalStyles() {
   return (
     <style>{`
       html { scroll-behavior: smooth; }
+      .schedule-call-radiant {
+        background: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%);
+        box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 18px rgba(139, 92, 246, 0.55), 0 0 36px rgba(168, 85, 247, 0.35);
+        animation: scheduleCallRadiance 2.8s ease-in-out infinite;
+      }
+      .schedule-call-radiant:hover {
+        background: linear-gradient(135deg, #7d39eb 0%, #a855f7 46%, #d8b4fe 100%);
+      }
+      .schedule-call-radiant:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(215, 166, 255, 0.6), 0 0 0 5px rgba(21, 2, 26, 0.95), 0 0 24px rgba(168, 85, 247, 0.55);
+      }
+      @keyframes scheduleCallRadiance {
+        0% {
+          box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 14px rgba(139, 92, 246, 0.42), 0 0 28px rgba(168, 85, 247, 0.28);
+        }
+        50% {
+          box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.5), 0 0 24px rgba(139, 92, 246, 0.62), 0 0 46px rgba(168, 85, 247, 0.42);
+        }
+        100% {
+          box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 14px rgba(139, 92, 246, 0.42), 0 0 28px rgba(168, 85, 247, 0.28);
+        }
+      }
       @keyframes marquee {
         0% { transform: translateX(0); }
         100% { transform: translateX(-50%); }
@@ -1794,6 +2664,7 @@ function GlobalStyles() {
 export default function App() {
   const { coins, live } = useMarketData();
   const [currentPage, setCurrentPage] = useState(getPageFromHash());
+  const isFinancialTopicsPage = window.location.pathname.replace(/\/+$/, "") === FINANCIAL_TOPICS_ROUTE;
 
   useEffect(() => {
     function handleHashChange() {
@@ -1818,7 +2689,7 @@ export default function App() {
   }, []);
 
   function setPage(page) {
-    if (page === "About" || page === "Contact") {
+    if (page === "About" || page === "Why invest" || page === "Contact") {
       setCurrentPage("Home");
       window.location.hash = pageRoutes[page];
       return;
@@ -1833,7 +2704,7 @@ export default function App() {
       <GlobalStyles />
       <MarketTicker coins={coins} live={live} />
       <Navbar currentPage={currentPage} setPage={setPage} />
-      {currentPage === "Home" && <HomePage coins={coins} live={live} setPage={setPage} />}
+      {isFinancialTopicsPage ? <FinancialTopicsPage /> : currentPage === "Home" && <HomePage coins={coins} live={live} setPage={setPage} />}
       <Footer />
     </main>
   );
