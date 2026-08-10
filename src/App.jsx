@@ -1636,6 +1636,11 @@ function CryptoCandlestickSection() {
     { label: "BTC/USD", marketSymbol: "BTCUSDT" },
     { label: "ETH/USD", marketSymbol: "ETHUSDT" },
     { label: "SOL/USD", marketSymbol: "SOLUSDT" },
+    { label: "XRP/USD", marketSymbol: "XRPUSDT" },
+    { label: "ADA/USD", marketSymbol: "ADAUSDT" },
+    { label: "DOGE/USD", marketSymbol: "DOGEUSDT" },
+    { label: "AVAX/USD", marketSymbol: "AVAXUSDT" },
+    { label: "LINK/USD", marketSymbol: "LINKUSDT" },
   ];
   const [selectedSymbol, setSelectedSymbol] = useState(cryptoSymbols[0].marketSymbol);
   const [chartError, setChartError] = useState("");
@@ -1733,11 +1738,21 @@ function CryptoCandlestickSection() {
         BTCUSDT: "BTC-USD",
         ETHUSDT: "ETH-USD",
         SOLUSDT: "SOL-USD",
+        XRPUSDT: "XRP-USD",
+        ADAUSDT: "ADA-USD",
+        DOGEUSDT: "DOGE-USD",
+        AVAXUSDT: "AVAX-USD",
+        LINKUSDT: "LINK-USD",
       };
       const fallbackPriceBySymbol = {
         BTCUSDT: 64000,
         ETHUSDT: 3100,
         SOLUSDT: 160,
+        XRPUSDT: 0.62,
+        ADAUSDT: 0.45,
+        DOGEUSDT: 0.16,
+        AVAXUSDT: 34,
+        LINKUSDT: 16,
       };
 
       try {
