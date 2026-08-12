@@ -6,6 +6,10 @@ import heroVideoMp4 from "../assets/new.mp4";
 import aboutImagePng from "../assets/p.png";
 import whyPartnerBgPng from "../assets/m.png";
 import semiPng from "../assets/semi.png";
+import semiWorldPng from "../assets/semi-world.png";
+import socialInstagramPng from "../assets/3.png";
+import socialFacebookPng from "../assets/4.png";
+import socialLinkedInPng from "../assets/5.png";
 import cryptoWheelPng from "../assets/Crypto-Calo-capital-purple-animation.png";
 
 const FALLBACK_COINS = [
@@ -76,7 +80,7 @@ const serviceTextures = [
 const socialLinks = [
   {
     label: "Instagram",
-    href: "https://www.instagram.com/p/DX-IYIihBMP/",
+    href: "https://www.instagram.com/calocapital/",
     ariaLabel: "Open Calo Capital Instagram in a new tab",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
@@ -98,7 +102,7 @@ const socialLinks = [
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/company/calocapital/",
+    href: "https://www.linkedin.com/company/calocapital/posts/?feedView=all",
     ariaLabel: "Open Calo Capital LinkedIn in a new tab",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
@@ -131,9 +135,6 @@ const FINANCIAL_TOPICS_ROUTE = "/financial-topics";
 
 const HOMEPAGE_TOPICS_DISCLAIMER =
   "This information is provided for general informational purposes only and should not be considered financial, investment, insurance, legal, or tax advice. Financial decisions should be discussed with appropriately qualified professionals.";
-
-const DETAILED_TOPICS_DISCLAIMER =
-  "The content on this page is provided for general informational purposes only. It does not consider any visitor's individual objectives, financial circumstances, or needs and should not be treated as financial, investment, insurance, legal, or tax advice. Calo Capital does not guarantee future results. Visitors should independently verify professional qualifications and consult appropriately licensed or qualified professionals.";
 
 const financialTopics = [
   {
@@ -2162,10 +2163,6 @@ function FinancialTopicsPage() {
           Understanding the basics can help you communicate your goals, recognize important qualifications, and ask more informed questions when seeking professional support.
         </p>
 
-        <div className="mt-8 rounded-2xl border border-white/15 bg-white/[0.03] p-5 text-sm leading-7 text-[#C7B6CB]">
-          {DETAILED_TOPICS_DISCLAIMER}
-        </div>
-
         <div className="mt-10 space-y-10">
           {financialTopics.map((topic) => {
             const topicOverview =
@@ -2199,20 +2196,6 @@ function FinancialTopicsPage() {
           })}
         </div>
 
-        <div className="mt-12 rounded-2xl border border-white/15 bg-white/[0.03] p-5 text-sm leading-7 text-[#C7B6CB]">
-          {DETAILED_TOPICS_DISCLAIMER}
-        </div>
-
-        <div className="mt-8">
-          <a
-            href={SCHEDULE_CALL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-xl bg-[#8B5CF6] px-8 py-4 text-base font-black text-white transition hover:bg-[#A855F7] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66]"
-          >
-            Schedule a Consultation with Marc Calo
-          </a>
-        </div>
       </div>
     </section>
   );
@@ -2359,67 +2342,104 @@ function FourCsPage() {
   );
 }
 
+const socialMediaIcons = [
+  { label: "Instagram", src: socialInstagramPng, href: "https://www.instagram.com/calocapital/" },
+  { label: "Facebook", src: socialFacebookPng, href: "https://www.facebook.com/CaloCapital/" },
+  { label: "LinkedIn", src: socialLinkedInPng, href: "https://www.linkedin.com/company/calocapital/posts/?feedView=all" },
+];
+
 function ContactPage() {
   return (
-    <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 py-20 text-white sm:px-5 sm:py-32 lg:py-44">
-      <div className="absolute inset-0 opacity-[0.08]">
-        <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
-      </div>
-
-      <div className="relative mx-auto w-full max-w-[94vw]">
-        <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Let's Connect</p>
-        <div className="mt-8">
-          <h1 className="text-4xl font-black leading-[1.08] tracking-tight sm:text-6xl lg:text-8xl">
-            Ready to Build
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-400 to-violet-300">Your Financial Strategy?</span>
-          </h1>
-        </div>
-        <p className="mt-10 max-w-2xl text-lg leading-8 text-slate-300">
-          Schedule a personalized consultation to explore financial solutions, investment opportunities, and a long-term wealth strategy tailored to your goals.
-        </p>
-      </div>
-
-      <div className="relative mx-auto mt-24 w-full max-w-[94vw] sm:mt-28">
-        <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-6 backdrop-blur-sm sm:p-12">
-          <p className="text-sm font-black uppercase tracking-[0.2em] text-violet-300">Schedule Your Consultation</p>
-          <h2 className="mt-4 text-3xl font-black sm:text-4xl lg:text-5xl">Build Your Strategy with Marc Calo</h2>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-            Use your consultation to review your financial strategy, discuss market insights, and plan next steps for retirement planning, business financial planning, and long-term wealth decisions.
-          </p>
-          <a
-            href={SCHEDULE_CALL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Open Google Calendar booking page in a new tab"
-            className="mt-8 inline-block w-full rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-8 py-4 text-center text-base font-black text-white transition hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50 sm:w-auto"
-          >
-            Open Calendar & Schedule Now →
-          </a>
+    <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 pb-0 pt-16 text-white sm:px-5 sm:pt-20 lg:pt-24">
+      <div className="relative mx-auto w-full max-w-[1180px] overflow-hidden border border-white/10 bg-[#1a0d24] shadow-[0_0_0_1px_rgba(215,166,255,0.12)]">
+        <div className="absolute inset-0">
+          <img src={semiWorldPng} alt="" className="h-full w-full object-cover object-center opacity-90" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(137,72,167,0.42),rgba(14,7,18,0.7)_66%)]" />
         </div>
 
-        <div className="grid gap-12">
-          <div>
-            <h3 className="text-2xl font-black mb-8">Other Ways to Connect</h3>
+        <div className="relative z-10 grid items-center gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-12 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-14">
+          <div className="max-w-xl min-w-0">
+            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#f1d7ff] sm:text-xs sm:tracking-[0.28em]">Get in touch</p>
+            <h2 className="text-[clamp(1.9rem,8vw,4rem)] font-black leading-[0.96] tracking-[-0.04em] text-white">
+              We are ready to hear from you
+            </h2>
+            <p className="mt-6 max-w-full text-base leading-7 text-slate-200 sm:text-lg sm:leading-8">
+              Check out our weekly updates
+              <br />
+              on the stock market
+            </p>
 
-            <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04] sm:p-8">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-xl">✉</div>
-              <h4 className="font-black text-lg">Email Us</h4>
-              <p className="mt-2 text-slate-300">Send us your questions about financial planning and strategy</p>
-              <a href="mailto:protection@calocapital.io" className="mt-4 inline-block text-violet-400 font-bold hover:text-violet-300 transition">
-                protection@calocapital.io →
-              </a>
+            <div className="mt-8 flex max-w-full flex-wrap items-center justify-center gap-3 sm:justify-start sm:gap-4">
+              {socialMediaIcons.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={item.label}
+                  className="inline-flex items-center justify-center"
+                >
+                  <img
+                    src={item.src}
+                    alt={item.label}
+                    className="social-icon h-auto w-[3.25rem] object-contain drop-shadow-[0_0_18px_rgba(168,85,247,0.28)] sm:w-[4.25rem]"
+                  />
+                </a>
+              ))}
             </div>
+          </div>
 
-            <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
-              <h4 className="font-black text-lg mb-5">Follow Our Insights</h4>
-              <p className="text-sm text-slate-400 mb-5">Stay informed on market insights, economic trends, and investment strategy</p>
-              <div className="flex flex-wrap gap-3 sm:gap-4">
-                {socialLinks.map((item) => (
-                  <SocialLink key={item.label} item={item} />
-                ))}
+          <div className="flex min-w-0 items-center justify-center">
+            <form
+              className="w-full max-w-[560px] border border-white/10 bg-[#100915]/70 p-4 backdrop-blur-md sm:p-7"
+              action="mailto:protection@calocapital.io"
+              method="post"
+              encType="text/plain"
+            >
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="text-sm font-medium text-slate-200 sm:col-span-1">
+                  First name
+                  <input
+                    type="text"
+                    placeholder="John"
+                    className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
+                  />
+                </label>
+                <label className="text-sm font-medium text-slate-200 sm:col-span-1">
+                  Last name
+                  <input
+                    type="text"
+                    placeholder="Doe"
+                    className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
+                  />
+                </label>
               </div>
-            </div>
+
+              <label className="mt-4 block text-sm font-medium text-slate-200">
+                Email address
+                <input
+                  type="email"
+                  placeholder="john@email.com"
+                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
+                />
+              </label>
+
+              <label className="mt-4 block text-sm font-medium text-slate-200">
+                Message
+                <textarea
+                  rows="4"
+                  placeholder="Tell us what you're looking for..."
+                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
+                />
+              </label>
+
+              <button
+                type="submit"
+                className="mt-6 inline-flex w-full items-center justify-center bg-[#d7a6ff] px-5 py-3 text-sm font-bold uppercase tracking-[0.12em] text-[#1a0d24] transition hover:bg-[#e4c8ff]"
+              >
+                Send inquiry
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -2434,8 +2454,8 @@ function HomePage() {
       <AboutPage />
       <CryptoCandlestickSection />
       <FourCsPage />
-      <WhyPartnerSection />
       <FinancialTopicsPage />
+      <WhyPartnerSection />
       <ContactPage />
     </>
   );
@@ -2449,22 +2469,14 @@ function Footer() {
     "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#15021a] px-5 py-12 text-white">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[#15021a] px-5 py-8 text-white">
       <div className="relative z-10 mx-auto w-full max-w-[94vw]">
-        <div className="mb-8 flex items-center justify-between gap-4 border-b border-white/10 pb-6">
-          <p className="text-lg font-black tracking-wide text-white">Calo Capital</p>
-        </div>
+        <div className="space-y-4 text-[11px] leading-6 text-slate-300">
+          <p className="font-black uppercase tracking-[0.18em] text-violet-200">Privacy Policy</p>
+          <p>{privacyPolicy}</p>
 
-        <div className="space-y-6">
-          <div className="w-full border border-white/10 bg-white/[0.02] p-5">
-            <p className="font-black uppercase tracking-[0.18em] text-violet-200">Privacy Policy</p>
-            <p className="mt-3 text-[11px] leading-6 text-slate-300">{privacyPolicy}</p>
-          </div>
-
-          <div className="w-full border border-white/10 bg-[#120419]/70 p-5 text-[11px] leading-6 text-slate-400">
-            <p className="font-black uppercase tracking-[0.18em] text-violet-200">Disclaimer</p>
-            <p className="mt-3">{disclaimer}</p>
-          </div>
+          <p className="pt-2 font-black uppercase tracking-[0.18em] text-violet-200">Disclaimer</p>
+          <p>{disclaimer}</p>
         </div>
       </div>
     </footer>
@@ -2474,7 +2486,15 @@ function Footer() {
 function GlobalStyles() {
   return (
     <style>{`
-      html { scroll-behavior: smooth; }
+      html { scroll-behavior: smooth; overflow-x: hidden; }
+      body, #root { overflow-x: hidden; }
+      * { box-sizing: border-box; }
+      img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
+      a, button, input, textarea, select { max-width: 100%; }
+      .social-icon { width: clamp(2.9rem, 15vw, 5rem); }
+      @media (max-width: 480px) {
+        .social-icon { width: clamp(2.6rem, 16vw, 3.6rem); }
+      }
       .schedule-call-radiant {
         background: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%);
         box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 18px rgba(139, 92, 246, 0.55), 0 0 36px rgba(168, 85, 247, 0.35);
