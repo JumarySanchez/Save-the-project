@@ -6,7 +6,6 @@ import heroVideoMp4 from "../assets/new.mp4";
 import aboutImagePng from "../assets/p.png";
 import whyPartnerBgPng from "../assets/m.png";
 import cryptoWheelPng from "../assets/Crypto-Calo-capital-purple-animation.png";
-import purpleGalaxyPng from "../assets/purple-galaxy.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -1302,8 +1301,8 @@ function AboutPage() {
           .cc-about-crypto-art-inner {
             position: absolute;
             top: 50%;
-            right: -18vw;
-            width: min(68vw, 840px);
+            right: -12vw;
+            width: min(48vw, 620px);
             transform: translateY(-50%);
             transform-origin: center center;
             will-change: transform, opacity, filter;
@@ -1435,8 +1434,8 @@ function AboutPage() {
               max-width: 100%;
             }
             .cc-about-crypto-art-inner {
-              right: -20vw;
-              width: min(102vw, 620px);
+              right: -12vw;
+              width: min(78vw, 420px);
             }
             .cc-about-heading {
               max-width: 14ch;
@@ -1585,8 +1584,13 @@ function WhyPartnerSection() {
     <section
       ref={sectionRef}
       id="client-excellence"
-      className="relative overflow-hidden bg-[#15021a] px-5 py-24 text-white sm:py-28 lg:py-32"
-      style={{ backgroundImage: `url(${whyPartnerBgPng})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}
+      className="relative overflow-hidden px-5 py-24 text-white sm:py-28 lg:py-32"
+      style={{
+        background: "transparent",
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translateY(0)" : "translateY(16px)",
+        transition: reduceMotion ? "none" : "opacity 0.8s ease-out, transform 0.8s ease-out",
+      }}
     >
       <div className="relative mx-auto w-full max-w-[94vw]">
         <div style={revealStyle(0, 24)}>
@@ -1608,23 +1612,14 @@ function WhyPartnerSection() {
           <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
             OUR PRINCIPLES
           </h3>
-          <p className="mt-7 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(380)}>
-            We believe thoughtful guidance, transparent communication, and disciplined market perspective create the foundation for lasting financial relationships.
+          <p className="mt-7 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(380)}>
+            At Calo Capital, we help you understand what you are getting into before you commit. We are open to answer questions and do not shy away from explaining why something may not work in your favor.
           </p>
-          <p className="mt-8 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(460)}>
-            Every recommendation begins with understanding your goals, not chasing trends.
+          <p className="mt-8 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(460)}>
+            Honesty and transparency is better than taking your money and giving you a package deal that does not do what you need it to do.
           </p>
-          <p className="mt-10 text-[15px] font-display text-[#A855F7]" style={fadeStyle(520)}>
-            Our Mission
-          </p>
-          <p className="mt-4 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(600)}>
-            Our mission is to help clients make informed financial decisions through strategic guidance, personalized planning, and transparent communication across every stage of wealth planning.
-          </p>
-          <p className="mt-8 text-[15px] font-display text-[#A855F7]" style={fadeStyle(680)}>
-            Our Vision
-          </p>
-          <p className="mt-4 max-w-xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(760)}>
-            Our vision is to build long-term trusted relationships while helping clients pursue financial confidence through thoughtful planning, personalized financial guidance, and consistent market insight.
+          <p className="mt-10 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(520)}>
+            We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
           </p>
         </div>
       </div>
@@ -1874,12 +1869,7 @@ function CryptoCandlestickSection() {
     <section
       id="crypto-candlestick"
       className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white sm:py-24"
-      style={{
-        backgroundImage: `url(${purpleGalaxyPng})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      style={{ background: "#15021a" }}
     >
       <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Live Crypto Candlestick Chart</p>
@@ -2398,6 +2388,74 @@ function FourCsPage() {
   );
 }
 
+function ContactPage() {
+  return (
+    <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 py-20 text-white sm:px-5 sm:py-32 lg:py-44">
+      <div className="absolute inset-0 opacity-[0.08]">
+        <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-[94vw]">
+        <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Let's Connect</p>
+        <div className="mt-8">
+          <h1 className="text-4xl font-black leading-[1.08] tracking-tight sm:text-6xl lg:text-8xl">
+            Ready to Build
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-400 to-violet-300">Your Financial Strategy?</span>
+          </h1>
+        </div>
+        <p className="mt-10 max-w-2xl text-lg leading-8 text-slate-300">
+          Schedule a personalized consultation to explore financial solutions, investment opportunities, and a long-term wealth strategy tailored to your goals.
+        </p>
+      </div>
+
+      <div className="relative mx-auto mt-24 w-full max-w-[94vw] sm:mt-28">
+        <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-6 backdrop-blur-sm sm:p-12">
+          <p className="text-sm font-black uppercase tracking-[0.2em] text-violet-300">Schedule Your Consultation</p>
+          <h2 className="mt-4 text-3xl font-black sm:text-4xl lg:text-5xl">Build Your Strategy with Marc Calo</h2>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+            Use your consultation to review your financial strategy, discuss market insights, and plan next steps for retirement planning, business financial planning, and long-term wealth decisions.
+          </p>
+          <a
+            href={SCHEDULE_CALL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open Google Calendar booking page in a new tab"
+            className="mt-8 inline-block w-full rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-8 py-4 text-center text-base font-black text-white transition hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50 sm:w-auto"
+          >
+            Open Calendar & Schedule Now →
+          </a>
+        </div>
+
+        <div className="grid gap-12">
+          <div>
+            <h3 className="text-2xl font-black mb-8">Other Ways to Connect</h3>
+
+            <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04] sm:p-8">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-xl">✉</div>
+              <h4 className="font-black text-lg">Email Us</h4>
+              <p className="mt-2 text-slate-300">Send us your questions about financial planning and strategy</p>
+              <a href="mailto:protection@calocapital.io" className="mt-4 inline-block text-violet-400 font-bold hover:text-violet-300 transition">
+                protection@calocapital.io →
+              </a>
+            </div>
+
+            <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+              <h4 className="font-black text-lg mb-5">Follow Our Insights</h4>
+              <p className="text-sm text-slate-400 mb-5">Stay informed on market insights, economic trends, and investment strategy</p>
+              <div className="flex flex-wrap gap-3 sm:gap-4">
+                {socialLinks.map((item) => (
+                  <SocialLink key={item.label} item={item} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
   return (
     <>
@@ -2405,74 +2463,6 @@ function HomePage() {
       <AboutPage />
       <CryptoCandlestickSection />
       <WhyPartnerSection />
-      
-      {/* CONTACT SECTION */}
-      <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 py-20 text-white sm:px-5 sm:py-32 lg:py-44">
-        <div className="absolute inset-0 opacity-[0.08]">
-          <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
-        </div>
-        
-        <div className="relative mx-auto w-full max-w-[94vw]">
-          <p className="text-sm font-black uppercase tracking-[0.28em] text-violet-300">Let's Connect</p>
-          <div className="mt-8">
-            <h1 className="text-4xl font-black leading-[1.08] tracking-tight sm:text-6xl lg:text-8xl">
-              Ready to Build
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-400 to-violet-300">Your Financial Strategy?</span>
-            </h1>
-          </div>
-          <p className="mt-10 max-w-2xl text-lg leading-8 text-slate-300">
-            Schedule a personalized consultation to explore financial solutions, investment opportunities, and a long-term wealth strategy tailored to your goals.
-          </p>
-        </div>
-
-        <div className="relative mx-auto mt-24 w-full max-w-[94vw] sm:mt-28">
-          {/* BOOKING CTA - PROMINENT */}
-          <div className="mb-24 rounded-3xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-purple-500/5 p-6 backdrop-blur-sm sm:p-12">
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-violet-300">Schedule Your Consultation</p>
-            <h2 className="mt-4 text-3xl font-black sm:text-4xl lg:text-5xl">Build Your Strategy with Marc Calo</h2>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-              Use your consultation to review your financial strategy, discuss market insights, and plan next steps for retirement planning, business financial planning, and long-term wealth decisions.
-            </p>
-            <a
-              href={SCHEDULE_CALL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open Google Calendar booking page in a new tab"
-              className="mt-8 inline-block w-full rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 px-8 py-4 text-center text-base font-black text-white transition hover:scale-105 hover:shadow-lg hover:shadow-violet-500/50 sm:w-auto"
-            >
-              Open Calendar & Schedule Now →
-            </a>
-          </div>
-
-          <div className="grid gap-12">
-            <div>
-              <h3 className="text-2xl font-black mb-8">Other Ways to Connect</h3>
-              
-              {/* EMAIL */}
-              <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition hover:border-violet-500/30 hover:bg-white/[0.04] sm:p-8">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/20 text-xl">✉</div>
-                <h4 className="font-black text-lg">Email Us</h4>
-                <p className="mt-2 text-slate-300">Send us your questions about financial planning and strategy</p>
-                <a href="mailto:protection@calocapital.io" className="mt-4 inline-block text-violet-400 font-bold hover:text-violet-300 transition">
-                  protection@calocapital.io →
-                </a>
-              </div>
-
-              {/* SOCIAL LINKS */}
-              <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
-                <h4 className="font-black text-lg mb-5">Follow Our Insights</h4>
-                <p className="text-sm text-slate-400 mb-5">Stay informed on market insights, economic trends, and investment strategy</p>
-                <div className="flex flex-wrap gap-3 sm:gap-4">
-                  {socialLinks.map((item) => (
-                    <SocialLink key={item.label} item={item} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
@@ -3008,7 +2998,9 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {isFinancialTopicsPage ? (
+        {renderedPage === "Contact" ? (
+          <ContactPage />
+        ) : isFinancialTopicsPage ? (
           <FinancialTopicsPage />
         ) : isFourCsPage ? (
           <FourCsPage />
