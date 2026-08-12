@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CandlestickSeries, createChart } from "lightweight-charts";
 import logoPng from "../public/Calo_purple_logo.png";
 import hikerPng from "../assets/calo.jpg";
-import heroVideoMp4 from "../assets/Calo-finances-hero.mp4";
+import heroVideoMp4 from "../assets/new.mp4";
 import aboutImagePng from "../assets/p.png";
 import whyPartnerBgPng from "../assets/m.png";
 import cryptoWheelPng from "../assets/Crypto-Calo-capital-purple-animation.png";
+import purpleGalaxyPng from "../assets/purple-galaxy.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -611,7 +612,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[70svh] overflow-hidden bg-[#070a14] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
+    <section className="relative min-h-[70svh] overflow-hidden bg-[#15021a] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={heroVideoMp4}
@@ -625,58 +626,58 @@ function HeroSection() {
 }
 
 const pageRoutes = {
-  Home: "#/",
-  About: "#about",
-  "Why invest": "#about",
-  Contact: "#contact",
+  Home: "/",
+  "Why invest": "/why-invest",
+  "Four C's": "/four-cs",
+  Contact: "/contact",
   "Financial Topics": FINANCIAL_TOPICS_ROUTE,
 };
 
-function getPageFromHash() {
-  const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
-  if (normalizedPath === FINANCIAL_TOPICS_ROUTE) return "Financial Topics";
+function normalizePath(pathname) {
+  return pathname.replace(/\/+$/, "") || "/";
+}
 
-  const hash = window.location.hash || "#/";
-  if (hash === "#/about" || hash === "#about" || hash === "#client-excellence") return "Home";
-  if (hash === "#/contact" || hash === "#contact") return "Home";
+function getPageFromLocation() {
+  const normalizedPath = normalizePath(window.location.pathname);
+  if (normalizedPath === FINANCIAL_TOPICS_ROUTE) return "Financial Topics";
+  if (normalizedPath === "/why-invest") return "Why invest";
+  if (normalizedPath === "/four-cs") return "Four C's";
+  if (normalizedPath === "/contact") return "Contact";
   return "Home";
+}
+
+function getHomeSectionFromPage(page) {
+  if (page === "Why invest") return "about";
+  if (page === "Contact") return "contact";
+  return "";
+}
+
+function scrollToHomeSection(page) {
+  const sectionId = getHomeSectionFromPage(page);
+  if (!sectionId) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 function Navbar({ currentPage, setPage }) {
   const [open, setOpen] = useState(false);
-  const links = ["Home", "Why invest", "Financial Topics", "Contact"];
+  const links = ["Home", "Why invest", "Four C's", "Financial Topics", "Contact"];
 
   function goTo(page) {
-    if (page === "Financial Topics") {
-      setOpen(false);
-      window.location.assign(FINANCIAL_TOPICS_ROUTE);
-      return;
-    }
-
-    const isFinancialTopicsPage = window.location.pathname.replace(/\/+$/, "") === FINANCIAL_TOPICS_ROUTE;
-    if (isFinancialTopicsPage) {
-      const targetHash = page === "Home" ? "" : pageRoutes[page];
-      setOpen(false);
-      window.location.assign(`/${targetHash}`);
-      return;
-    }
-
     setPage(page);
-    window.location.hash = pageRoutes[page];
     setOpen(false);
-    setTimeout(() => {
-      const sectionId = pageRoutes[page].replace("#/", "").replace("#", "");
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    }, 0);
   }
 
   return (
-    <header className="z-50 bg-[#070a14]/40">
+    <header className="z-50 bg-[#15021a]/40">
       <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center justify-between px-4 py-4 sm:px-5">
         <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="text-left">
           <Logo />
@@ -712,7 +713,7 @@ function Navbar({ currentPage, setPage }) {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-[#070a14] px-5 py-4 lg:hidden">
+        <div className="border-t border-white/10 bg-[#15021a] px-5 py-4 lg:hidden">
           <div className="flex flex-col gap-4">
             {links.map((label) => (
               <button key={label} onClick={() => goTo(label)} className={currentPage === label ? "text-left text-sm font-black text-white" : "text-left text-sm font-semibold text-slate-300"}>
@@ -757,7 +758,7 @@ function MovingClouds() {
     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-48 overflow-hidden">
       <div className="cloud-layer cloud-layer-one absolute bottom-[-52px] left-0 h-36 w-[220%] opacity-70" />
       <div className="cloud-layer cloud-layer-two absolute bottom-[-68px] left-0 h-44 w-[240%] opacity-55" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#070a14] via-[#070a14]/75 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#15021a] via-[#15021a]/75 to-transparent" />
     </div>
   );
 }
@@ -799,7 +800,7 @@ function TradingViewChart({ symbol }) {
       hide_top_toolbar: false,
       save_image: true,
       calendar: false,
-      toolbar_bg: "#0A0B16",
+      toolbar_bg: "#15021a",
       watchlist: [
         "BITSTAMP:BTCUSD",
         "COINBASE:ETHUSD",
@@ -810,7 +811,7 @@ function TradingViewChart({ symbol }) {
         "SP:SPX",
       ],
       overrides: {
-        "paneProperties.background": "#0A0B16",
+        "paneProperties.background": "#15021a",
         "paneProperties.vertGridProperties.color": "#1E2030",
         "paneProperties.horzGridProperties.color": "#1E2030",
         "paneProperties.crossHairProperties.color": "#B8B1FF",
@@ -861,7 +862,7 @@ function StockChart({ coins }) {
   const selectedAsset = CHART_ASSETS.find((asset) => asset.label === selectedSymbol) || CHART_ASSETS[0];
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#101323]/85 p-4 shadow-2xl shadow-violet-950/35 backdrop-blur-md sm:p-5">
+    <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#15021a]/85 p-4 shadow-2xl shadow-violet-950/35 backdrop-blur-md sm:p-5">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-400">Asset Selector</p>
@@ -872,7 +873,7 @@ function StockChart({ coins }) {
           <select
             value={selectedSymbol}
             onChange={(event) => setSelectedSymbol(event.target.value)}
-            className="w-full min-w-0 rounded-xl border border-white/10 bg-[#070a14] px-3 py-2 font-body text-xs font-black tracking-[0.18em] text-white outline-none transition focus:border-violet-200/40 sm:min-w-[180px] sm:w-auto"
+            className="w-full min-w-0 rounded-xl border border-white/10 bg-[#15021a] px-3 py-2 font-body text-xs font-black tracking-[0.18em] text-white outline-none transition focus:border-violet-200/40 sm:min-w-[180px] sm:w-auto"
           >
             <optgroup label="Crypto">
               {CHART_ASSETS.filter((asset) => asset.group === "Crypto").map((asset) => (
@@ -912,11 +913,11 @@ function StockChart({ coins }) {
           <p className="text-xs text-slate-400">24h Performance</p>
         </div>
       </div>
-      <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#070a14] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+      <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#15021a] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Momentum
         </div>
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#1A2340]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
           Trend
         </div>
         <div className="relative z-20 h-[320px] w-full sm:h-[420px] lg:h-[500px]">
@@ -991,7 +992,7 @@ function ServicesSection() {
     <section ref={sectionRef} id="services" className="cc-guidance-section px-5 pb-20 pt-12 text-white sm:pb-24 sm:pt-16">
       <style>{`
         .cc-guidance-section {
-          background-color: #050914;
+          background-color: #15021a;
         }
         .cc-guidance-inner {
           margin: 0 auto;
@@ -1180,7 +1181,7 @@ function ServicesSection() {
 
 function PageHeader({ eyebrow, title, description }) {
   return (
-    <section className="relative overflow-hidden bg-[#070a14] px-5 py-20 text-white">
+    <section className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white">
       <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: `url(${hikerPng})` }} />
       <div className="relative mx-auto w-full max-w-[94vw]">
         <Logo />
@@ -1280,7 +1281,7 @@ function AboutPage() {
             position: relative;
             overflow: hidden;
             isolation: isolate;
-            background: #2b0d3f;
+            background: #15021a;
           }
           .cc-about-background {
             position: absolute;
@@ -1301,8 +1302,8 @@ function AboutPage() {
           .cc-about-crypto-art-inner {
             position: absolute;
             top: 50%;
-            right: -27vw;
-            width: min(92vw, 1120px);
+            right: -18vw;
+            width: min(68vw, 840px);
             transform: translateY(-50%);
             transform-origin: center center;
             will-change: transform, opacity, filter;
@@ -1434,8 +1435,8 @@ function AboutPage() {
               max-width: 100%;
             }
             .cc-about-crypto-art-inner {
-              right: -28vw;
-              width: min(128vw, 820px);
+              right: -20vw;
+              width: min(102vw, 620px);
             }
             .cc-about-heading {
               max-width: 14ch;
@@ -1584,7 +1585,7 @@ function WhyPartnerSection() {
     <section
       ref={sectionRef}
       id="client-excellence"
-      className="relative overflow-hidden bg-[#070a14] px-5 py-24 text-white sm:py-28 lg:py-32"
+      className="relative overflow-hidden bg-[#15021a] px-5 py-24 text-white sm:py-28 lg:py-32"
       style={{ backgroundImage: `url(${whyPartnerBgPng})`, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}
     >
       <div className="relative mx-auto w-full max-w-[94vw]">
@@ -1656,7 +1657,7 @@ function CryptoCandlestickSection() {
       width: container.clientWidth,
       height: container.clientHeight,
       layout: {
-        background: { color: "#070a14" },
+        background: { color: "#15021a" },
         textColor: "#A8A9B8",
       },
       grid: {
@@ -1744,6 +1745,16 @@ function CryptoCandlestickSection() {
         AVAXUSDT: "AVAX-USD",
         LINKUSDT: "LINK-USD",
       };
+      const coinGeckoCoinBySymbol = {
+        BTCUSDT: "bitcoin",
+        ETHUSDT: "ethereum",
+        SOLUSDT: "solana",
+        XRPUSDT: "ripple",
+        ADAUSDT: "cardano",
+        DOGEUSDT: "dogecoin",
+        AVAXUSDT: "avalanche-2",
+        LINKUSDT: "chainlink",
+      };
       const fallbackPriceBySymbol = {
         BTCUSDT: 64000,
         ETHUSDT: 3100,
@@ -1755,33 +1766,92 @@ function CryptoCandlestickSection() {
         LINKUSDT: 16,
       };
 
-      try {
-        setChartError("");
+      function normalizeCandles(candles) {
+        const chartData = candles
+          .map((candle) => ({
+            time: Number(candle.time),
+            low: Number(candle.low),
+            high: Number(candle.high),
+            open: Number(candle.open),
+            close: Number(candle.close),
+          }))
+          .filter((candle) => Number.isFinite(candle.time) && Number.isFinite(candle.low) && Number.isFinite(candle.high) && Number.isFinite(candle.open) && Number.isFinite(candle.close))
+          .sort((a, b) => a.time - b.time);
+
+        if (chartData.length === 0) {
+          throw new Error("No market candle data available");
+        }
+
+        return chartData;
+      }
+
+      async function fetchCoinbaseCandles(product) {
         // Coinbase candles are [time, low, high, open, close, volume] in reverse-chronological order.
-        const product = coinbaseProductBySymbol[selectedSymbol] || "BTC-USD";
         const response = await fetch(
           `https://api.exchange.coinbase.com/products/${product}/candles?granularity=14400`,
           { headers: { Accept: "application/json" } }
         );
 
-        if (!response.ok) throw new Error("Failed to load market data");
-
-        const candles = await response.json();
-        if (cancelled) return;
-
-        if (!Array.isArray(candles) || candles.length === 0) {
-          throw new Error("No market candle data available");
+        if (!response.ok) {
+          throw new Error(`Coinbase request failed: ${response.status}`);
         }
 
-        const chartData = candles
-          .map((candle) => ({
-            time: Number(candle[0]),
-            low: Number(candle[1]),
-            high: Number(candle[2]),
-            open: Number(candle[3]),
-            close: Number(candle[4]),
+        const raw = await response.json();
+        if (!Array.isArray(raw) || raw.length === 0) {
+          throw new Error("Coinbase returned no candles");
+        }
+
+        return normalizeCandles(
+          raw.map((candle) => ({
+            time: candle[0],
+            low: candle[1],
+            high: candle[2],
+            open: candle[3],
+            close: candle[4],
           }))
-          .sort((a, b) => a.time - b.time);
+        );
+      }
+
+      async function fetchCoinGeckoCandles(coinId) {
+        // CoinGecko OHLC is [timestamp_ms, open, high, low, close].
+        const response = await fetch(
+          `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=30`,
+          { headers: { Accept: "application/json" } }
+        );
+
+        if (!response.ok) {
+          throw new Error(`CoinGecko request failed: ${response.status}`);
+        }
+
+        const raw = await response.json();
+        if (!Array.isArray(raw) || raw.length === 0) {
+          throw new Error("CoinGecko returned no candles");
+        }
+
+        return normalizeCandles(
+          raw.map((candle) => ({
+            time: Math.floor(Number(candle[0]) / 1000),
+            open: candle[1],
+            high: candle[2],
+            low: candle[3],
+            close: candle[4],
+          }))
+        );
+      }
+
+      try {
+        setChartError("");
+        const product = coinbaseProductBySymbol[selectedSymbol] || "BTC-USD";
+        const coinId = coinGeckoCoinBySymbol[selectedSymbol] || "bitcoin";
+
+        let chartData;
+        try {
+          chartData = await fetchCoinbaseCandles(product);
+        } catch {
+          chartData = await fetchCoinGeckoCandles(coinId);
+        }
+
+        if (cancelled) return;
 
         seriesRef.current.setData(chartData);
         chartRef.current.timeScale().fitContent();
@@ -1801,7 +1871,16 @@ function CryptoCandlestickSection() {
   }, [selectedSymbol]);
 
   return (
-    <section id="crypto-candlestick" className="relative overflow-hidden bg-[#0d1020] px-5 py-20 text-white sm:py-24">
+    <section
+      id="crypto-candlestick"
+      className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white sm:py-24"
+      style={{
+        backgroundImage: `url(${purpleGalaxyPng})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Live Crypto Candlestick Chart</p>
         <h2 className="mt-4 max-w-3xl text-[clamp(2rem,4vw,3.6rem)] font-black leading-[1.06] tracking-[-0.02em] text-white">
@@ -1826,7 +1905,7 @@ function CryptoCandlestickSection() {
           ))}
         </div>
 
-        <div className="mt-8 overflow-hidden border border-white/15 bg-[#070a14]">
+        <div className="mt-8 overflow-hidden border border-white/15 bg-[#15021a]">
           <div ref={chartContainerRef} className="h-[380px] w-full sm:h-[460px] lg:h-[560px]" aria-label="TradingView candlestick chart" />
           {chartError && (
             <p className="border-t border-white/15 px-4 py-3 text-sm text-rose-200">{chartError}</p>
@@ -1842,7 +1921,7 @@ function CryptoCandlestickSection() {
 
 function CandlestickIllustration() {
   return (
-    <figure className="rounded-2xl border border-white/15 bg-[#1f0b2b] p-5" aria-labelledby="candlestick-caption">
+    <figure className="rounded-2xl border border-white/15 bg-[#15021a] p-5" aria-labelledby="candlestick-caption">
       <svg viewBox="0 0 640 280" className="h-auto w-full" role="img" aria-label="Simple candlestick example showing open, close, high, and low">
         <line x1="120" y1="36" x2="120" y2="226" stroke="#E9DDEC" strokeWidth="3" />
         <rect x="92" y="110" width="56" height="70" fill="#D7A6FF" stroke="#FFFFFF" strokeWidth="2" rx="4" />
@@ -1880,7 +1959,7 @@ function CandlestickIllustration() {
   );
 }
 
-function FinancialTopicsSection() {
+function FinancialTopicsSection({ setPage }) {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -1928,7 +2007,14 @@ function FinancialTopicsSection() {
   function renderTopic(topic, indexOffset) {
     return (
       <article key={topic.id} className="ft-topic" style={reveal(160 + indexOffset * 80)}>
-        <a href={`${FINANCIAL_TOPICS_ROUTE}#${topic.id}`} className="ft-topic-link group">
+        <a
+          href={FINANCIAL_TOPICS_ROUTE}
+          onClick={(event) => {
+            event.preventDefault();
+            setPage("Financial Topics");
+          }}
+          className="ft-topic-link group"
+        >
           <span className="ft-topic-title">{topic.title}</span>
           <span className="ft-topic-arrow" aria-hidden="true">→</span>
         </a>
@@ -1938,7 +2024,7 @@ function FinancialTopicsSection() {
   }
 
   return (
-    <section ref={sectionRef} id="financial-priorities" className="relative overflow-hidden bg-[#15021A] px-5 py-20 text-white sm:py-24 lg:py-28">
+    <section ref={sectionRef} id="financial-priorities" className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white sm:py-24 lg:py-28">
       <style>{`
         .ft-container {
           margin: 0 auto;
@@ -2039,6 +2125,10 @@ function FinancialTopicsSection() {
         <div className="mt-12 max-w-[62rem]" style={reveal(340, 12)}>
           <a
             href={FINANCIAL_TOPICS_ROUTE}
+            onClick={(event) => {
+              event.preventDefault();
+              setPage("Financial Topics");
+            }}
             className="inline-flex w-full items-center justify-center rounded-xl bg-[#8B5CF6] px-8 py-4 text-base font-black text-white transition hover:bg-[#A855F7] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66] sm:w-auto"
           >
             Learn More About Each Section
@@ -2055,7 +2145,7 @@ function FinancialTopicsSection() {
 
 function FinancialTopicsPage() {
   return (
-    <section className="bg-[#15021A] px-5 pb-24 pt-16 text-white sm:pt-20">
+    <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore Financial Topics</p>
         <h1 className="mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
@@ -2069,7 +2159,7 @@ function FinancialTopicsPage() {
           {DETAILED_TOPICS_DISCLAIMER}
         </div>
 
-        <nav id="financial-topics-nav" className="mt-10 border-y border-white/15 bg-[#1f0b2b]/80 py-3 md:sticky md:top-2 md:z-40 md:backdrop-blur">
+        <nav id="financial-topics-nav" className="mt-10 border-y border-white/15 bg-[#15021a]/80 py-3 md:sticky md:top-2 md:z-40 md:backdrop-blur">
           <div className="flex gap-3 overflow-x-auto px-1 pb-1 md:flex-wrap md:overflow-visible md:px-0">
             {financialTopics.map((topic) => (
               <a
@@ -2167,18 +2257,157 @@ function FinancialTopicsPage() {
   );
 }
 
-function HomePage({ coins, live, setPage }) {
+function FourCsPage() {
+  const [flippedCard, setFlippedCard] = useState(null);
+  const fourCsCards = services.map((service, index) => {
+    const cardMeaning =
+      index === 0
+        ? "Cash alternatives are the more liquid or income-oriented places money may be held when the goal is to preserve capital and keep funds accessible."
+        : index === 1
+          ? "Crypto represents digital assets and blockchain exposure, where volatility, custody, and security matter just as much as opportunity."
+          : index === 2
+            ? "Commodities focus on tangible assets like metals and energy that may behave differently from cash or equity markets."
+            : "Companies refers to investing in businesses, where fundamentals, innovation, and long-term value creation drive the conversation.";
+
+    const cardExample =
+      index === 0
+        ? "Examples: money market funds, treasury-style holdings, or other liquid approaches used to manage cash efficiently."
+        : index === 1
+          ? "Examples: Bitcoin, Ethereum, and other digital assets considered alongside wallet security and exchange risk."
+          : index === 2
+            ? "Examples: gold, silver, energy exposure, and other real-asset themes used for diversification."
+            : "Examples: public-market research, private opportunity review, and long-term business quality analysis.";
+
+    const questionText = index === 1 ? `What is ${service.title}?` : `What are ${service.title}?`;
+
+    return {
+      ...service,
+      mark: serviceMarks[index],
+      texture: serviceTextures[index],
+      question: questionText,
+      meaning: cardMeaning,
+      example: cardExample,
+    };
+  });
+
+  function toggleCard(index) {
+    setFlippedCard((current) => (current === index ? null : index));
+  }
+
+  return (
+    <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
+      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Our Four C&apos;s</p>
+        <h1 className="mt-4 max-w-4xl text-[clamp(2.1rem,4.5vw,3.8rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
+          The four pillars behind our approach to wealth planning.
+        </h1>
+        <p className="mt-5 max-w-3xl text-base leading-8 text-[#E9DDEC] sm:text-lg">
+          Calo Capital uses these four focus areas to guide conversations around liquidity, digital assets, real assets, and business opportunities.
+        </p>
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
+          {fourCsCards.map((service, index) => {
+            const isFlipped = flippedCard === index;
+
+            return (
+              <button
+                key={service.title}
+                id={serviceIds[index]}
+                type="button"
+                onClick={() => toggleCard(index)}
+                aria-pressed={isFlipped}
+                className={`four-cs-card group relative min-h-[350px] overflow-hidden rounded-md border border-[#d7a6ff66] bg-white text-left shadow-[0_18px_55px_rgba(73,20,108,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66]${isFlipped ? " is-flipped" : ""}`}
+              >
+                <style>{`
+                  .four-cs-card {
+                    perspective: 1400px;
+                    transition: transform 780ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 780ms cubic-bezier(0.22, 1, 0.36, 1);
+                    transform: translateY(0);
+                    will-change: transform, box-shadow;
+                  }
+                  .four-cs-card.is-flipped {
+                    transform: translateY(-10px);
+                    box-shadow: 0 28px 80px rgba(73, 20, 108, 0.18);
+                  }
+                  .four-cs-card-inner {
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    min-height: 350px;
+                    transform-style: preserve-3d;
+                    transform-origin: center center;
+                    transition: transform 780ms cubic-bezier(0.22, 1, 0.36, 1);
+                    will-change: transform;
+                  }
+                  .four-cs-card.is-flipped .four-cs-card-inner {
+                    transform: rotateY(180deg) translateZ(36px);
+                  }
+                  .four-cs-card-face {
+                    position: absolute;
+                    inset: 0;
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                    overflow: hidden;
+                  }
+                  .four-cs-card-back {
+                    transform: rotateY(180deg);
+                  }
+                `}</style>
+                <div className={`four-cs-card-inner${isFlipped ? " is-flipped" : ""}`}>
+                  <div className="four-cs-card-face rounded-md border border-[#d7a6ff66] bg-[linear-gradient(135deg,#ffffff_0%,#f6ecff_52%,#ead8ff_100%)] p-6">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.18),transparent_32%),radial-gradient(circle_at_85%_80%,rgba(215,166,255,0.16),transparent_28%)]" aria-hidden="true" />
+                    <div className="relative z-10 flex h-full items-center justify-center text-center">
+                      <h2 className="max-w-[12ch] text-[clamp(1.9rem,3vw,2.6rem)] font-black leading-[1.04] tracking-[-0.03em] text-[#5B21B6]">
+                        {service.question}
+                      </h2>
+                    </div>
+                  </div>
+
+                  <div className="four-cs-card-face four-cs-card-back rounded-md border border-[#d7a6ff66] bg-[linear-gradient(180deg,#ffffff_0%,#f9f5ff_100%)] p-6">
+                    <div className="flex h-full flex-col">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-sm font-black uppercase tracking-[0.24em] text-[#7C3AED]">{service.mark}</p>
+                          <h2 className="mt-4 text-[clamp(1.35rem,2.2vw,1.7rem)] font-black leading-tight text-[#6D28D9]">{service.title}</h2>
+                        </div>
+                        <span className="rounded-full border border-[#d7a6ff66] bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[#6D28D9] shadow-sm">
+                          Flip Back
+                        </span>
+                      </div>
+                      <div className="mt-6 space-y-5 text-sm leading-7 text-[#111827]">
+                        <p>{service.meaning}</p>
+                        <p>{service.example}</p>
+                      </div>
+                      <div className="mt-auto pt-6">
+                        <p className="text-xs font-black uppercase tracking-[0.2em] text-[#7C3AED]">Why it matters</p>
+                        <p className="mt-2 text-sm leading-7 text-[#111827]">
+                          This pillar helps frame the kind of questions and tradeoffs that belong in the conversation before any decision is made.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+function HomePage() {
   return (
     <>
       <HeroSection />
       <AboutPage />
       <CryptoCandlestickSection />
       <WhyPartnerSection />
-      <FinancialTopicsSection />
-      <ServicesSection coins={coins} setPage={setPage} />
       
       {/* CONTACT SECTION */}
-      <section id="contact" className="relative overflow-hidden bg-[#070a14] px-4 py-20 text-white sm:px-5 sm:py-32 lg:py-44">
+      <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 py-20 text-white sm:px-5 sm:py-32 lg:py-44">
         <div className="absolute inset-0 opacity-[0.08]">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:92px_92px]" />
         </div>
@@ -2262,7 +2491,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="border-t border-white/10 bg-[#070a14] px-5 py-12 text-white">
+    <footer className="border-t border-white/10 bg-[#15021a] px-5 py-12 text-white">
       <div className="mx-auto grid w-full max-w-[94vw] gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <p className="text-lg font-black tracking-wide text-white">Calo Capital</p>
@@ -2678,48 +2907,115 @@ function GlobalStyles() {
 
 export default function App() {
   const { coins, live } = useMarketData();
-  const [currentPage, setCurrentPage] = useState(getPageFromHash());
-  const isFinancialTopicsPage = window.location.pathname.replace(/\/+$/, "") === FINANCIAL_TOPICS_ROUTE;
+  const [currentPage, setCurrentPage] = useState(getPageFromLocation());
+  const [renderedPage, setRenderedPage] = useState(getPageFromLocation());
+  const [transitionPhase, setTransitionPhase] = useState("idle");
+  const [pendingPage, setPendingPage] = useState(null);
+  const transitionTimerRef = useRef(null);
 
-  useEffect(() => {
-    function handleHashChange() {
-      const hash = window.location.hash || "#/";
-      setCurrentPage(getPageFromHash());
+  const TRANSITION_OUT_MS = 160;
+  const TRANSITION_IN_MS = 280;
 
-      const anchorId = hash.startsWith("#/") ? "" : hash.slice(1);
-      requestAnimationFrame(() => {
-        if (anchorId) {
-          const target = document.getElementById(anchorId);
-          if (target) {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-            return;
-          }
-        }
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
+  const clearTransitionTimer = useCallback(() => {
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current);
+      transitionTimerRef.current = null;
     }
-
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  function setPage(page) {
-    if (page === "About" || page === "Why invest" || page === "Contact") {
-      setCurrentPage("Home");
-      window.location.hash = pageRoutes[page];
+  const startPageTransition = useCallback(
+    (nextPage) => {
+      if (nextPage === renderedPage) {
+        setCurrentPage(nextPage);
+        return;
+      }
+
+      clearTransitionTimer();
+      setCurrentPage(nextPage);
+      setPendingPage(nextPage);
+      setTransitionPhase("out");
+    },
+    [clearTransitionTimer, renderedPage]
+  );
+
+  useEffect(() => {
+    function handleLocationChange() {
+      startPageTransition(getPageFromLocation());
+    }
+
+    window.addEventListener("popstate", handleLocationChange);
+    return () => window.removeEventListener("popstate", handleLocationChange);
+  }, [startPageTransition]);
+
+  useEffect(() => {
+    if (transitionPhase === "out" && pendingPage) {
+      clearTransitionTimer();
+      transitionTimerRef.current = setTimeout(() => {
+        setRenderedPage(pendingPage);
+        setTransitionPhase("in");
+      }, TRANSITION_OUT_MS);
       return;
     }
 
-    setCurrentPage(page);
-    window.location.hash = pageRoutes[page];
+    if (transitionPhase === "in") {
+      clearTransitionTimer();
+      transitionTimerRef.current = setTimeout(() => {
+        setTransitionPhase("idle");
+        setPendingPage(null);
+      }, TRANSITION_IN_MS);
+    }
+  }, [clearTransitionTimer, pendingPage, transitionPhase]);
+
+  useEffect(() => {
+    return () => clearTransitionTimer();
+  }, [clearTransitionTimer]);
+
+  useEffect(() => {
+    if (renderedPage === "Financial Topics") return;
+
+    requestAnimationFrame(() => {
+      scrollToHomeSection(renderedPage);
+    });
+  }, [renderedPage]);
+
+  function setPage(page) {
+    if (!Object.prototype.hasOwnProperty.call(pageRoutes, page)) {
+      return;
+    }
+
+    const targetPath = pageRoutes[page];
+    const currentPath = normalizePath(window.location.pathname);
+    if (currentPath !== targetPath) {
+      window.history.pushState({}, "", targetPath);
+    }
+
+    startPageTransition(page);
   }
 
+  const isFinancialTopicsPage = renderedPage === "Financial Topics";
+  const isFourCsPage = renderedPage === "Four C's";
+  const pageTransitionStateClass = transitionPhase === "out" ? "opacity-0 translate-y-1 scale-[0.998]" : "opacity-100 translate-y-0 scale-100";
+  const pageTransitionStyle = {
+    filter: transitionPhase === "out" ? "blur(1.2px)" : "blur(0px)",
+  };
+
   return (
-    <main className="min-h-screen bg-[#070a14] font-body">
+    <main className="min-h-screen bg-[#15021a] font-body">
       <GlobalStyles />
       <MarketTicker coins={coins} live={live} />
       <Navbar currentPage={currentPage} setPage={setPage} />
-      {isFinancialTopicsPage ? <FinancialTopicsPage /> : currentPage === "Home" && <HomePage coins={coins} live={live} setPage={setPage} />}
+      <div
+        className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
+        style={pageTransitionStyle}
+      >
+        {isFinancialTopicsPage ? (
+          <FinancialTopicsPage />
+        ) : isFourCsPage ? (
+          <FourCsPage />
+        ) : (
+          <HomePage />
+        )}
+      </div>
       <Footer />
     </main>
   );
