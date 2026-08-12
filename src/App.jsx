@@ -5,6 +5,7 @@ import hikerPng from "../assets/calo.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
 import aboutImagePng from "../assets/p.png";
 import whyPartnerBgPng from "../assets/m.png";
+import semiPng from "../assets/semi.png";
 import cryptoWheelPng from "../assets/Crypto-Calo-capital-purple-animation.png";
 
 const FALLBACK_COINS = [
@@ -611,7 +612,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 
 function HeroSection() {
   return (
-    <section className="relative min-h-[70svh] overflow-hidden bg-[#15021a] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
+    <section id="home" className="relative min-h-[70svh] overflow-hidden bg-[#15021a] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={heroVideoMp4}
@@ -626,10 +627,10 @@ function HeroSection() {
 
 const pageRoutes = {
   Home: "/",
-  "Why invest": "/why-invest",
-  "Four C's": "/four-cs",
-  Contact: "/contact",
-  "Financial Topics": FINANCIAL_TOPICS_ROUTE,
+  "Why invest": "/",
+  "Four C's": "/",
+  Contact: "/",
+  "Financial Topics": "/",
 };
 
 function normalizePath(pathname) {
@@ -1904,15 +1905,31 @@ function CryptoCandlestickSection() {
             Powered by TradingView Lightweight Charts with market data feed for educational chart visualization.
           </div>
         </div>
+
+        <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="lg:max-w-[52%]">
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Understanding Market Charts</p>
+              <h3 className="mt-3 text-2xl font-black text-white sm:text-3xl">Candlesticks show price movement, not certainty.</h3>
+              <p className="mt-3 text-base leading-7 text-[#C7B6CB]">
+                Each candle shows the opening, closing, highest, and lowest prices for a time period. Green or purple candles usually mean prices moved up, while lighter candles can signal a move down.
+              </p>
+            </div>
+
+            <div className="lg:max-w-[420px] lg:flex-1">
+              <CandlestickIllustration compact />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-function CandlestickIllustration() {
+function CandlestickIllustration({ compact = false }) {
   return (
-    <figure className="rounded-2xl border border-white/15 bg-[#15021a] p-5" aria-labelledby="candlestick-caption">
-      <svg viewBox="0 0 640 280" className="h-auto w-full" role="img" aria-label="Simple candlestick example showing open, close, high, and low">
+    <figure className={compact ? "mx-auto max-w-[380px] rounded-xl border border-white/10 bg-[#15021a] p-3" : "rounded-2xl border border-white/15 bg-[#15021a] p-5"} aria-labelledby="candlestick-caption">
+      <svg viewBox="0 0 640 280" className={compact ? "h-auto w-full" : "h-auto w-full"} role="img" aria-label="Simple candlestick example showing open, close, high, and low">
         <line x1="120" y1="36" x2="120" y2="226" stroke="#E9DDEC" strokeWidth="3" />
         <rect x="92" y="110" width="56" height="70" fill="#D7A6FF" stroke="#FFFFFF" strokeWidth="2" rx="4" />
         <line x1="300" y1="58" x2="300" y2="240" stroke="#E9DDEC" strokeWidth="3" />
@@ -2135,7 +2152,7 @@ function FinancialTopicsSection({ setPage }) {
 
 function FinancialTopicsPage() {
   return (
-    <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
+    <section id="financial-topics" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore Financial Topics</p>
         <h1 className="mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
@@ -2149,83 +2166,37 @@ function FinancialTopicsPage() {
           {DETAILED_TOPICS_DISCLAIMER}
         </div>
 
-        <nav id="financial-topics-nav" className="mt-10 border-y border-white/15 bg-[#15021a]/80 py-3 md:sticky md:top-2 md:z-40 md:backdrop-blur">
-          <div className="flex gap-3 overflow-x-auto px-1 pb-1 md:flex-wrap md:overflow-visible md:px-0">
-            {financialTopics.map((topic) => (
-              <a
-                key={topic.id}
-                href={`#${topic.id}`}
-                className="whitespace-nowrap rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-[#E9DDEC] transition hover:border-[#D7A6FF] hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66]"
-              >
-                {topic.title}
-              </a>
-            ))}
-          </div>
-        </nav>
-
         <div className="mt-10 space-y-10">
-          {financialTopics.map((topic) => (
-            <article key={topic.id} id={topic.id} className="rounded-3xl border border-white/15 bg-white/[0.02] p-6 sm:p-8">
-              <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#D7A6FF]">{topic.title}</h2>
-              <p className="mt-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#C7B6CB]">{topic.hook}</p>
-              <p className="mt-4 text-base leading-8 text-[#E9DDEC]">{topic.shortDescription}</p>
+          {financialTopics.map((topic) => {
+            const topicOverview =
+              topic.id === "protecting-your-family"
+                ? "Life insurance is designed to provide financial support for the people you care about, helping cover income replacement, debt, future expenses, and household stability after a loss. It can be useful because it gives families a way to protect their plans and obligations when life changes unexpectedly, and common options include term life for set periods and permanent policies for longer-term coverage."
+                : topic.id === "retirement-and-iras"
+                  ? "Retirement planning is about building a strategy for future income, long-term flexibility, and sustainable withdrawals later in life. IRAs can be part of that conversation, with traditional and Roth accounts often used for different tax and planning goals, and the reason it matters is that the decisions made early can shape how comfortable and prepared someone feels in retirement."
+                  : topic.id === "trusts-and-legacy"
+                    ? "Trusts and legacy planning help organize how assets, responsibilities, and personal wishes are handled over time. These tools may be used to support family transitions, reduce confusion, and preserve long-term intentions, while common approaches include wills, revocable trusts, and beneficiary designations that need to align with a broader estate plan."
+                    : topic.id === "investments-and-wealth"
+                      ? "Investing is about matching long-term financial goals with the right balance of risk, time horizon, and liquidity. It matters because markets can rise and fall, so diversification, costs, and discipline often matter as much as the investment itself, and common options include stocks, bonds, mutual funds, and diversified portfolios."
+                      : topic.id === "cryptocurrency"
+                        ? "Cryptocurrency and digital assets are a newer category of financial exposure that can move quickly and carry meaningful technology, custody, and security risks. The importance of understanding them is that they are not just price charts; they also involve wallets, private keys, platform risk, fraud exposure, and the possibility of permanent loss, with common approaches including holding crypto directly, using exchanges, and storing assets in self-custody or custodial accounts."
+                        : "Market charts can help explain how prices have moved over time, but they do not predict the future and should be used as context rather than certainty. They matter because trends, volume, and price action may help people ask better questions about risk and timing, while common chart types include candlesticks, line charts, and moving averages that describe history differently.";
 
-              <div className="mt-6 grid gap-8 lg:grid-cols-2">
-                <section>
-                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Important Concepts</h3>
-                  <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
-                    {topic.concepts.slice(0, 5).map((item) => (
-                      <li key={`${topic.id}-${item}`}>{item}</li>
-                    ))}
-                  </ul>
-                </section>
+            return (
+              <article key={topic.id} id={topic.id} className="space-y-4 py-4 sm:py-6">
+                <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#D7A6FF]">{topic.title}</h2>
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#C7B6CB]">{topic.hook}</p>
+                <p className="text-base leading-8 text-[#E9DDEC]">{topic.shortDescription}</p>
+                <p className="text-base leading-8 text-[#E9DDEC]">{topicOverview}</p>
+                <p className="text-base leading-8 text-[#E9DDEC]">
+                  Why it matters: {topic.id === "protecting-your-family" ? "A clear life insurance plan can help reduce financial stress, preserve household goals, and give families a framework for dealing with unexpected losses." : topic.id === "retirement-and-iras" ? "The structure of retirement accounts and timing can materially affect long-term flexibility, tax efficiency, and peace of mind later in life." : topic.id === "trusts-and-legacy" ? "Thoughtful legacy planning can help avoid confusion, preserve intentions, and make future transitions easier for family members and beneficiaries." : topic.id === "investments-and-wealth" ? "The right investment approach depends on goals, time horizon, and risk tolerance, which is why understanding the basics helps people make more informed decisions." : topic.id === "cryptocurrency" ? "Because the market moves quickly and security mistakes can be costly, it is important to understand both the opportunity and the risk before getting involved." : "Charts are most useful when they are treated as information tools, not promises, which helps people keep perspective on risk, timing, and market uncertainty."}
+                </p>
 
-                <section>
-                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Who May Be Appropriate</h3>
-                  <p className="mt-3 text-[15px] leading-7 text-[#E9DDEC]">{topic.professional}</p>
-                </section>
-              </div>
-
-              {topic.id === "market-charts" && (
-                <div className="mt-8">
-                  <CandlestickIllustration />
-                </div>
-              )}
-
-              <div className="mt-8 grid gap-8 lg:grid-cols-2">
-                <section>
-                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">How to Evaluate</h3>
-                  <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
-                    {topic.evaluate.slice(0, 5).map((item) => (
-                      <li key={`${topic.id}-evaluate-${item}`}>{item}</li>
-                    ))}
-                  </ul>
-                </section>
-
-                <section>
-                  <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Questions to Ask First</h3>
-                  <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
-                    {topic.firstConversationQuestions.slice(0, 6).map((item) => (
-                      <li key={`${topic.id}-question-${item}`}>{item}</li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-
-              <section className="mt-8">
-                <h3 className="text-base font-black uppercase tracking-[0.18em] text-[#FFFFFF]">Warning Signs or Red Flags</h3>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#E9DDEC]">
-                  {topic.redFlags.slice(0, 6).map((item) => (
-                    <li key={`${topic.id}-redflag-${item}`}>{item}</li>
-                  ))}
-                </ul>
-              </section>
-
-              <p className="mt-7 text-sm leading-7 text-[#C7B6CB]">
-                Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-              </p>
-            </article>
-          ))}
+                <p className="text-sm leading-7 text-[#C7B6CB]">
+                  Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+                </p>
+              </article>
+            );
+          })}
         </div>
 
         <div className="mt-12 rounded-2xl border border-white/15 bg-white/[0.03] p-5 text-sm leading-7 text-[#C7B6CB]">
@@ -2285,7 +2256,7 @@ function FourCsPage() {
   }
 
   return (
-    <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
+    <section id="four-cs" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Our Four C&apos;s</p>
         <h1 className="mt-4 max-w-4xl text-[clamp(2.1rem,4.5vw,3.8rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
@@ -2462,99 +2433,39 @@ function HomePage() {
       <HeroSection />
       <AboutPage />
       <CryptoCandlestickSection />
+      <FourCsPage />
       <WhyPartnerSection />
+      <FinancialTopicsPage />
+      <ContactPage />
     </>
   );
 }
 
 function Footer() {
-  const serviceLinks = [
-    { label: "Cash Alternatives", href: "#cash-alternatives" },
-    { label: "Crypto", href: "#crypto" },
-    { label: "Commodities", href: "#commodities" },
-    { label: "Companies", href: "#companies" },
-  ];
-  const companyLinks = [
-    { label: "Our Philosophy", href: "#about" },
-    { label: "Client Excellence", href: "#client-excellence" },
-    { label: "Contact", href: "#contact" },
-  ];
+  const privacyPolicy =
+    "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
+
+  const disclaimer =
+    "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
 
   return (
-    <footer className="border-t border-white/10 bg-[#15021a] px-5 py-12 text-white">
-      <div className="mx-auto grid w-full max-w-[94vw] gap-10 md:grid-cols-4">
-        <div className="md:col-span-2">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[#15021a] px-5 py-12 text-white">
+      <div className="relative z-10 mx-auto w-full max-w-[94vw]">
+        <div className="mb-8 flex items-center justify-between gap-4 border-b border-white/10 pb-6">
           <p className="text-lg font-black tracking-wide text-white">Calo Capital</p>
-          <p className="mt-4 max-w-md text-sm leading-6 text-slate-400">
-            Calo Capital provides financial consulting and strategic advisory services for individuals, families, and business owners seeking personalized financial guidance and long-term planning.
-          </p>
         </div>
-        <div>
-          <p className="mb-4 font-black">Services</p>
-          <div className="space-y-2">
-            {serviceLinks.map((link) => (
-              <a 
-                key={link.label} 
-                href={link.href} 
-                onClick={(e) => {
-                  if (link.href.startsWith("#")) {
-                    e.preventDefault();
-                    const sectionId = link.href.replace("#", "");
-                    const element = document.getElementById(sectionId);
-                    if (element) {
-                      element.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }
-                  }
-                }}
-                className="block text-sm text-slate-400 hover:text-white cursor-pointer"
-              >
-                {link.label}
-              </a>
-            ))}
+
+        <div className="space-y-6">
+          <div className="w-full border border-white/10 bg-white/[0.02] p-5">
+            <p className="font-black uppercase tracking-[0.18em] text-violet-200">Privacy Policy</p>
+            <p className="mt-3 text-[11px] leading-6 text-slate-300">{privacyPolicy}</p>
+          </div>
+
+          <div className="w-full border border-white/10 bg-[#120419]/70 p-5 text-[11px] leading-6 text-slate-400">
+            <p className="font-black uppercase tracking-[0.18em] text-violet-200">Disclaimer</p>
+            <p className="mt-3">{disclaimer}</p>
           </div>
         </div>
-        <div>
-          <p className="mb-4 font-black">Company</p>
-          <div className="space-y-2">
-            {companyLinks.map((link) => (
-              <a 
-                key={link.label} 
-                href={link.href} 
-                onClick={(e) => {
-                  if (link.href.startsWith("#")) {
-                    e.preventDefault();
-                    const sectionId = link.href.replace("#", "");
-                    const element = document.getElementById(sectionId);
-                    if (element) {
-                      element.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }
-                  }
-                }}
-                className="block text-sm text-slate-400 hover:text-white cursor-pointer"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="mx-auto mt-10 w-full max-w-[94vw] border-t border-white/10 pt-6 text-[11px] leading-5 text-slate-500">
-        Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. Asset allocation, diversification, and portfolio strategies do not guarantee profits or protect against losses in declining markets.
-
-        The information provided by Calo Capital is for general informational purposes only and should not be construed as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making any financial decisions.
-
-        This material does not take into account an individual's specific investment objectives, financial situation, risk tolerance, or needs and is not intended as a recommendation, offer, or solicitation to buy or sell any security, investment product, or strategy.
-
-        Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Nothing contained on this website, in presentations, webinars, reports, or communications should be interpreted as personalized investment advice or a guarantee of future performance.
-
-        Any references to digital assets, commodities, cash alternatives, businesses, or market opportunities are provided for general informational discussion only. All investments and financial decisions carry risk, and individuals are solely responsible for evaluating whether any strategy is appropriate for their circumstances.
-
-        Calo Capital may discuss third-party products, platforms, or service providers. Such references do not constitute an endorsement or guarantee of results. Users should perform their own due diligence before engaging with any third-party provider.
-
-        By using this website, you acknowledge that you are responsible for your own financial decisions and agree that Calo Capital shall not be held liable for any losses arising from reliance on information presented through this website or related materials.
-      </div>
-      <div className="mx-auto mt-6 flex w-full max-w-[94vw] flex-wrap gap-3">
-        {/* Footer social links intentionally removed per request */}
       </div>
     </footer>
   );
@@ -2969,17 +2880,28 @@ export default function App() {
   }, [renderedPage]);
 
   function setPage(page) {
-    if (!Object.prototype.hasOwnProperty.call(pageRoutes, page)) {
-      return;
+    const sectionMap = {
+      Home: "",
+      "Why invest": "client-excellence",
+      "Four C's": "four-cs",
+      "Financial Topics": "financial-topics",
+      Contact: "contact",
+    };
+
+    const targetSectionId = sectionMap[page];
+    if (targetSectionId) {
+      const element = document.getElementById(targetSectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (page === "Home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
 
-    const targetPath = pageRoutes[page];
-    const currentPath = normalizePath(window.location.pathname);
-    if (currentPath !== targetPath) {
-      window.history.pushState({}, "", targetPath);
-    }
-
-    startPageTransition(page);
+    setCurrentPage(page);
+    setRenderedPage("Home");
+    setTransitionPhase("idle");
+    setPendingPage(null);
   }
 
   const isFinancialTopicsPage = renderedPage === "Financial Topics";
@@ -2998,15 +2920,7 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? (
-          <ContactPage />
-        ) : isFinancialTopicsPage ? (
-          <FinancialTopicsPage />
-        ) : isFourCsPage ? (
-          <FourCsPage />
-        ) : (
-          <HomePage />
-        )}
+        <HomePage />
       </div>
       <Footer />
     </main>
