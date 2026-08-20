@@ -2376,8 +2376,8 @@ function ContactPage() {
   }
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 pb-0 pt-16 text-white sm:px-5 sm:pt-20 lg:pt-24">
-      <div className="relative mx-auto w-full max-w-[1180px] overflow-hidden border border-white/10 bg-[#1a0d24] shadow-[0_0_0_1px_rgba(215,166,255,0.12)]">
+    <section id="contact" className="relative overflow-hidden bg-[#1a0d24] px-0 pb-0 pt-0 text-white">
+      <div className="relative min-h-[620px] w-full overflow-hidden border-y border-white/10 bg-[#1a0d24] shadow-[0_0_0_1px_rgba(215,166,255,0.12)] lg:min-h-[calc(100svh-6rem)]">
         <div className="absolute inset-0">
           <img src={semiWorldPng} alt="" className="h-full w-full object-cover object-center opacity-90" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(137,72,167,0.42),rgba(14,7,18,0.7)_66%)]" />
