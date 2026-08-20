@@ -1303,7 +1303,7 @@ function AboutPage() {
           .cc-about-crypto-art-inner {
             position: absolute;
             top: 50%;
-            right: -12vw;
+            right: 0;
             width: min(48vw, 620px);
             transform: translateY(-50%);
             transform-origin: center center;
@@ -1436,8 +1436,15 @@ function AboutPage() {
               max-width: 100%;
             }
             .cc-about-crypto-art-inner {
-              right: -12vw;
-              width: min(78vw, 420px);
+              top: auto;
+              right: -8vw;
+              bottom: -9rem;
+              width: min(62vw, 280px);
+              transform: translateX(32px) scale(0.985);
+            }
+            .cc-about-animated .cc-about-crypto-art-inner,
+            .cc-about-reduced-motion .cc-about-crypto-art-inner {
+              transform: translateX(0) scale(1);
             }
             .cc-about-heading {
               max-width: 14ch;
@@ -1862,8 +1869,11 @@ function CryptoCandlestickSection() {
     }
 
     loadData();
+    const refreshIntervalId = window.setInterval(loadData, 3_000);
+
     return () => {
       cancelled = true;
+      window.clearInterval(refreshIntervalId);
     };
   }, [selectedSymbol]);
 
@@ -2478,6 +2488,12 @@ function Footer() {
           <p className="pt-2 font-black uppercase tracking-[0.18em] text-violet-200">Disclaimer</p>
           <p>{disclaimer}</p>
         </div>
+        <script
+          src="https://widgets.leadconnectorhq.com/loader.js"
+          data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
+          data-widget-id="6a1cf7b21ce15bb9e9033aac"
+          data-source="WEB_USER"
+        />
       </div>
     </footer>
   );
