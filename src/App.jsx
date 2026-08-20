@@ -1601,7 +1601,7 @@ function WhyPartnerSection() {
         transition: reduceMotion ? "none" : "opacity 0.8s ease-out, transform 0.8s ease-out",
       }}
     >
-      <div className="relative mx-auto w-full max-w-[94vw]">
+      <div className="relative mx-auto w-full max-w-[min(1400px,94vw)]">
         <div style={revealStyle(0, 24)}>
           <p className="text-xs font-black uppercase tracking-[0.4em] text-[#A855F7]" style={fadeStyle(0)}>
             WHY PARTNER WITH CALO CAPITAL
@@ -2472,6 +2472,19 @@ function HomePage() {
 }
 
 function Footer() {
+  useEffect(() => {
+    const widgetSelector = 'script[data-widget-id="6a1cf7b21ce15bb9e9033aac"]';
+    if (document.querySelector(widgetSelector)) return;
+
+    const widgetScript = document.createElement("script");
+    widgetScript.src = "https://widgets.leadconnectorhq.com/loader.js";
+    widgetScript.async = true;
+    widgetScript.dataset.resourcesUrl = "https://widgets.leadconnectorhq.com/chat-widget/loader.js";
+    widgetScript.dataset.widgetId = "6a1cf7b21ce15bb9e9033aac";
+    widgetScript.dataset.source = "WEB_USER";
+    document.body.appendChild(widgetScript);
+  }, []);
+
   const privacyPolicy =
     "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
 
@@ -2488,12 +2501,6 @@ function Footer() {
           <p className="pt-2 font-black uppercase tracking-[0.18em] text-violet-200">Disclaimer</p>
           <p>{disclaimer}</p>
         </div>
-        <script
-          src="https://widgets.leadconnectorhq.com/loader.js"
-          data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
-          data-widget-id="6a1cf7b21ce15bb9e9033aac"
-          data-source="WEB_USER"
-        />
       </div>
     </footer>
   );
@@ -2507,6 +2514,10 @@ function GlobalStyles() {
       * { box-sizing: border-box; }
       img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
       a, button, input, textarea, select { max-width: 100%; }
+      chat-widget {
+        --chat-widget-bubble-color: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%) !important;
+        --chat-widget-button-color: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%) !important;
+      }
       .social-icon { width: clamp(2.9rem, 15vw, 5rem); }
       @media (max-width: 480px) {
         .social-icon { width: clamp(2.6rem, 16vw, 3.6rem); }
