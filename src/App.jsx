@@ -2424,14 +2424,14 @@ function HomePage() {
 
 function Footer() {
   useEffect(() => {
-    const widgetSelector = 'script[data-widget-id="6a1cf7b21ce15bb9e9033aac"]';
+    const widgetSelector = 'script[data-widget-id="6a872b48b433348f40d6511c"]';
     if (document.querySelector(widgetSelector)) return;
 
     const widgetScript = document.createElement("script");
     widgetScript.src = "https://widgets.leadconnectorhq.com/loader.js";
     widgetScript.async = true;
     widgetScript.dataset.resourcesUrl = "https://widgets.leadconnectorhq.com/chat-widget/loader.js";
-    widgetScript.dataset.widgetId = "6a1cf7b21ce15bb9e9033aac";
+    widgetScript.dataset.widgetId = "6a872b48b433348f40d6511c";
     widgetScript.dataset.source = "WEB_USER";
     document.body.appendChild(widgetScript);
   }, []);
