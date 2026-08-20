@@ -2359,6 +2359,22 @@ const socialMediaIcons = [
 ];
 
 function ContactPage() {
+  const submitted = new URLSearchParams(window.location.search).get("submitted") === "true";
+  const [message, setMessage] = useState("");
+  const messageTemplates = {
+    "Life Insurance": "I would like to learn more about life insurance options and how they may fit my financial goals.",
+    "Roth IRA": "I would like to learn more about Roth IRAs, eligibility, contributions, and how one may fit into my retirement planning.",
+    Trusts: "I would like to learn more about trusts and legacy planning for my family and financial goals.",
+    Crypto: "I would like to learn more about cryptocurrency, digital assets, and the risks and opportunities involved.",
+    Retirement: "I would like to discuss retirement planning, income goals, and strategies for preparing for the future.",
+    Investments: "I would like to learn more about investment planning and approaches that may fit my goals and risk tolerance.",
+    "General inquiry": "",
+  };
+
+  function handleTopicChange(event) {
+    setMessage(messageTemplates[event.target.value] || "");
+  }
+
   return (
     <section id="contact" className="relative overflow-hidden bg-[#15021a] px-4 pb-0 pt-16 text-white sm:px-5 sm:pt-20 lg:pt-24">
       <div className="relative mx-auto w-full max-w-[1180px] overflow-hidden border border-white/10 bg-[#1a0d24] shadow-[0_0_0_1px_rgba(215,166,255,0.12)]">
@@ -2402,24 +2418,17 @@ function ContactPage() {
           <div className="flex min-w-0 items-center justify-center">
             <form
               className="w-full max-w-[560px] border border-white/10 bg-[#100915]/70 p-4 backdrop-blur-md sm:p-7"
-              action="mailto:protection@calocapital.io"
-              method="post"
-              encType="text/plain"
+              action="https://formsubmit.co/protection@calocapital.io"
+              method="POST"
             >
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="text-sm font-medium text-slate-200 sm:col-span-1">
-                  First name
+              <div className="grid gap-4">
+                <label className="text-sm font-medium text-slate-200">
+                  Full name
                   <input
+                    name="name"
                     type="text"
-                    placeholder="John"
-                    className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
-                  />
-                </label>
-                <label className="text-sm font-medium text-slate-200 sm:col-span-1">
-                  Last name
-                  <input
-                    type="text"
-                    placeholder="Doe"
+                    placeholder="John Doe"
+                    required
                     className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
                   />
                 </label>
@@ -2428,8 +2437,36 @@ function ContactPage() {
               <label className="mt-4 block text-sm font-medium text-slate-200">
                 Email address
                 <input
+                  name="email"
                   type="email"
                   placeholder="john@email.com"
+                  required
+                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
+                />
+              </label>
+
+              <label className="mt-4 block text-sm font-medium text-slate-200">
+                What can we help with?
+                <select
+                  name="serviceType"
+                  defaultValue=""
+                  onChange={handleTopicChange}
+                  required
+                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white focus:border-[#d7a6ff] focus:outline-none"
+                >
+                  <option value="" disabled>Select a topic</option>
+                  {Object.keys(messageTemplates).map((topic) => (
+                    <option key={topic} value={topic}>{topic}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="mt-4 block text-sm font-medium text-slate-200">
+                Phone number
+                <input
+                  name="phone"
+                  type="tel"
+                  placeholder="(555) 555-5555"
                   className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
                 />
               </label>
@@ -2437,8 +2474,12 @@ function ContactPage() {
               <label className="mt-4 block text-sm font-medium text-slate-200">
                 Message
                 <textarea
+                  name="message"
                   rows="4"
                   placeholder="Tell us what you're looking for..."
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  required
                   className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
                 />
               </label>
@@ -2449,6 +2490,11 @@ function ContactPage() {
               >
                 Send inquiry
               </button>
+              <input type="hidden" name="_subject" value="New inquiry from Calo Capital website" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" value="https://calocapital.io/contact?submitted=true" />
+              <input type="text" name="_honey" tabIndex="-1" autoComplete="off" className="hidden" aria-hidden="true" />
+              {submitted && <p className="mt-4 text-sm leading-6 text-violet-200" role="status">Thank you. Your inquiry has been submitted.</p>}
             </form>
           </div>
         </div>

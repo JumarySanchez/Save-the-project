@@ -1,32 +1,7 @@
-# Webflow Forms Setup
+# Forms Setup
 
-## Contact Form
+The contact form is a native React/HTML form, not a Webflow form. It submits directly to FormSubmit:
 
-- Add a Webflow Form Block in the Contact section.
-- Include fields for Name, Email, Phone Number, Service Type, and Message.
-- Mark Name, Email, Service Type, and Message as required.
+`https://formsubmit.co/protection@calocapital.io`
 
-## Crypto Services Waitlist Form
-
-- Add a Webflow Form Block in the Waitlist / Crypto Services section.
-- Include fields for Name, Email, Phone Number, Service Type, and Message.
-- Keep the same visual styling as the current site.
-
-## Notifications
-
-- Send form notifications to `protection@calocapital.io`.
-- Send form notifications to `marc@calocapital.io`.
-
-## Success Message
-
-- Use: `Thank you. Your request has been submitted.`
-
-## Error Message
-
-- Use: `Submission failed. Please email marc@calocapital.io directly.`
-
-## Publish and Test
-
-- Publish the Webflow site.
-- Submit both forms on the live domain.
-- Confirm both inboxes receive the submission.
+No serverless contact handler, Resend API key, or environment variables are required. FormSubmit redirects to `/contact?submitted=true` after submission.
