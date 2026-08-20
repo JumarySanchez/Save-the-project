@@ -2359,22 +2359,6 @@ const socialMediaIcons = [
 ];
 
 function ContactPage() {
-  const submitted = new URLSearchParams(window.location.search).get("submitted") === "true";
-  const [message, setMessage] = useState("");
-  const messageTemplates = {
-    "Life Insurance": "I would like to learn more about life insurance options and how they may fit my financial goals.",
-    "Roth IRA": "I would like to learn more about Roth IRAs, eligibility, contributions, and how one may fit into my retirement planning.",
-    Trusts: "I would like to learn more about trusts and legacy planning for my family and financial goals.",
-    Crypto: "I would like to learn more about cryptocurrency, digital assets, and the risks and opportunities involved.",
-    Retirement: "I would like to discuss retirement planning, income goals, and strategies for preparing for the future.",
-    Investments: "I would like to learn more about investment planning and approaches that may fit my goals and risk tolerance.",
-    "General inquiry": "",
-  };
-
-  function handleTopicChange(event) {
-    setMessage(messageTemplates[event.target.value] || "");
-  }
-
   return (
     <section id="contact" className="relative overflow-hidden bg-[#1a0d24] px-0 pb-0 pt-0 text-white">
       <div className="relative min-h-[620px] w-full overflow-hidden border-y border-white/10 bg-[#1a0d24] shadow-[0_0_0_1px_rgba(215,166,255,0.12)] lg:min-h-[calc(100svh-6rem)]">
@@ -2416,86 +2400,8 @@ function ContactPage() {
           </div>
 
           <div className="flex min-w-0 items-center justify-center">
-            <form
-              className="w-full max-w-[560px] border border-white/10 bg-[#100915]/70 p-4 backdrop-blur-md sm:p-7"
-              action="https://formsubmit.co/protection@calocapital.io"
-              method="POST"
-            >
-              <div className="grid gap-4">
-                <label className="text-sm font-medium text-slate-200">
-                  Full name
-                  <input
-                    name="name"
-                    type="text"
-                    placeholder="John Doe"
-                    required
-                    className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
-                  />
-                </label>
-              </div>
-
-              <label className="mt-4 block text-sm font-medium text-slate-200">
-                Email address
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="john@email.com"
-                  required
-                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
-                />
-              </label>
-
-              <label className="mt-4 block text-sm font-medium text-slate-200">
-                What can we help with?
-                <select
-                  name="serviceType"
-                  defaultValue=""
-                  onChange={handleTopicChange}
-                  required
-                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white focus:border-[#d7a6ff] focus:outline-none"
-                >
-                  <option value="" disabled>Select a topic</option>
-                  {Object.keys(messageTemplates).map((topic) => (
-                    <option key={topic} value={topic}>{topic}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="mt-4 block text-sm font-medium text-slate-200">
-                Phone number
-                <input
-                  name="phone"
-                  type="tel"
-                  placeholder="(555) 555-5555"
-                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
-                />
-              </label>
-
-              <label className="mt-4 block text-sm font-medium text-slate-200">
-                Message
-                <textarea
-                  name="message"
-                  rows="4"
-                  placeholder="Tell us what you're looking for..."
-                  value={message}
-                  onChange={(event) => setMessage(event.target.value)}
-                  required
-                  className="mt-2 w-full border border-white/10 bg-[#1d1025]/90 px-3 py-3 text-white placeholder:text-slate-400 focus:border-[#d7a6ff] focus:outline-none"
-                />
-              </label>
-
-              <button
-                type="submit"
-                className="mt-6 inline-flex w-full items-center justify-center bg-[#d7a6ff] px-5 py-3 text-sm font-bold uppercase tracking-[0.12em] text-[#1a0d24] transition hover:bg-[#e4c8ff]"
-              >
-                Send inquiry
-              </button>
-              <input type="hidden" name="_subject" value="New inquiry from Calo Capital website" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="https://calocapital.io/contact?submitted=true" />
-              <input type="text" name="_honey" tabIndex="-1" autoComplete="off" className="hidden" aria-hidden="true" />
-              {submitted && <p className="mt-4 text-sm leading-6 text-violet-200" role="status">Thank you. Your inquiry has been submitted.</p>}
-            </form>
+            {/* Contact form removed; new form will be embedded from Webflow */}
+            <div className="w-full max-w-[560px]" />
           </div>
         </div>
       </div>
@@ -2512,7 +2418,6 @@ function HomePage() {
       <FourCsPage />
       <FinancialTopicsPage />
       <WhyPartnerSection />
-      <ContactPage />
     </>
   );
 }
@@ -2965,7 +2870,7 @@ export default function App() {
   }, [clearTransitionTimer]);
 
   useEffect(() => {
-    if (renderedPage === "Financial Topics") return;
+    if (renderedPage === "Financial Topics" || renderedPage === "Contact") return;
 
     requestAnimationFrame(() => {
       scrollToHomeSection(renderedPage);
@@ -2973,12 +2878,25 @@ export default function App() {
   }, [renderedPage]);
 
   function setPage(page) {
+    if (page === "Contact") {
+      window.history.pushState({}, "", "/contact");
+      setCurrentPage(page);
+      setRenderedPage("Contact");
+      setTransitionPhase("idle");
+      setPendingPage(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (renderedPage === "Contact") {
+      window.history.pushState({}, "", "/");
+    }
+
     const sectionMap = {
       Home: "",
       "Why invest": "client-excellence",
       "Four C's": "four-cs",
       "Financial Topics": "financial-topics",
-      Contact: "contact",
     };
 
     const targetSectionId = sectionMap[page];
@@ -3013,7 +2931,7 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        <HomePage />
+        {renderedPage === "Contact" ? <ContactPage /> : <HomePage />}
       </div>
       <Footer />
     </main>
