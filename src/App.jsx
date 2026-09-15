@@ -10,7 +10,12 @@ import semiWorldPng from "../assets/semi-world.png";
 import socialInstagramPng from "../assets/3.png";
 import socialFacebookPng from "../assets/4.png";
 import socialLinkedInPng from "../assets/5.png";
-import cryptoWheelPng from "../assets/Crypto-Calo-capital-purple-animation.png";
+import lifePng from "../assets/life.png";
+import iraPng from "../assets/ira.png";
+import trustPng from "../assets/trust.png";
+import retirePng from "../assets/retire.png";
+import cryptPng from "../assets/crypt.png";
+import chartsPng from "../assets/charts.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -615,7 +620,7 @@ function HeroSection() {
   return (
     <section id="home" className="relative min-h-[70svh] overflow-hidden bg-[#15021a] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
       <video
-        className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
         src={heroVideoMp4}
         autoPlay
         muted
@@ -632,6 +637,7 @@ const pageRoutes = {
   "Four C's": "/",
   Contact: "/",
   "Financial Topics": "/",
+  Legal: "/legal",
 };
 
 function normalizePath(pathname) {
@@ -644,6 +650,7 @@ function getPageFromLocation() {
   if (normalizedPath === "/why-invest") return "Why invest";
   if (normalizedPath === "/four-cs") return "Four C's";
   if (normalizedPath === "/contact") return "Contact";
+  if (normalizedPath === "/legal") return "Legal";
   return "Home";
 }
 
@@ -1293,29 +1300,6 @@ function AboutPage() {
             background-position: center;
             background-repeat: no-repeat;
           }
-          .cc-about-crypto-art {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-          }
-          .cc-about-crypto-art-inner {
-            position: absolute;
-            top: 50%;
-            right: 0;
-            width: min(48vw, 620px);
-            transform: translateY(-50%);
-            transform-origin: center center;
-            will-change: transform, opacity, filter;
-          }
-          .cc-about-crypto-wheel {
-            display: block;
-            width: 100%;
-            height: auto;
-            transform-origin: center center;
-            will-change: transform;
-          }
           .cc-about-inner {
             position: relative;
             z-index: 2;
@@ -1388,24 +1372,6 @@ function AboutPage() {
           .cc-about-js .cc-about-underline {
             transform: scaleX(0);
           }
-          .cc-about-js .cc-about-crypto-art-inner {
-            opacity: 0;
-            transform: translateY(-50%) translateX(32px) scale(0.985);
-            filter: blur(6px);
-            transition: opacity 960ms ease-out 620ms, transform 960ms ease-out 620ms, filter 960ms ease-out 620ms;
-          }
-          .cc-about-animated .cc-about-crypto-art-inner,
-          .cc-about-reduced-motion .cc-about-crypto-art-inner {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0) scale(1);
-            filter: blur(0);
-          }
-          .cc-about-animated .cc-about-crypto-wheel {
-            animation: ccAboutCryptoWheelSpin 26s linear infinite;
-          }
-          .cc-about-reduced-motion .cc-about-crypto-wheel {
-            animation: none;
-          }
           .cc-about-animated .cc-about-animate,
           .cc-about-reduced-motion .cc-about-animate {
             opacity: 1;
@@ -1474,26 +1440,10 @@ function AboutPage() {
               filter: none !important;
               transition: none !important;
             }
-            .cc-about-crypto-wheel {
-              animation: none !important;
-            }
-          }
-          @keyframes ccAboutCryptoWheelSpin {
-            from {
-              transform: rotate(0deg);
-            }
-            to {
-              transform: rotate(360deg);
-            }
           }
         `}</style>
 
         <div className="cc-about-background" aria-hidden="true" />
-        <div className="cc-about-crypto-art" aria-hidden="true">
-          <div className="cc-about-crypto-art-inner">
-            <img src={cryptoWheelPng} alt="" className="cc-about-crypto-wheel" />
-          </div>
-        </div>
         <div className="cc-about-inner relative">
           <div className="cc-about-copy">
             <p className="cc-about-eyebrow cc-about-animate text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "0ms" }}>
@@ -1521,7 +1471,7 @@ function AboutPage() {
                 );
               })}
             </h1>
-            <p className="cc-about-paragraph cc-about-animate mt-6 text-base leading-7 text-[#B7C0D8] sm:text-[1.02rem]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
+            <p className="cc-about-paragraph cc-about-animate mt-6 text-[22px] leading-[1.6] text-[#B7C0D8]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
               {paragraphWords.join(" ")}
             </p>
             <div className="cc-about-underline cc-about-animate mt-8 h-px w-12 bg-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "1550ms" }} />
@@ -1609,25 +1559,21 @@ function WhyPartnerSection() {
           <div className="mt-3 h-px w-28 bg-[#A855F7]/70" />
         </div>
 
-        <h2 className="mt-10 max-w-3xl text-[clamp(2.6rem,7vw,6.1rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB]" style={revealStyle(150, 30)}>
-          Markets move.
-          <br />
-          <span className="text-[#A855F7]">Sound strategy</span>
-          <br />
-          endures.
+        <h2 className="cc-slow-fade mt-10 max-w-[none] text-[34px] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] whitespace-nowrap" style={revealStyle(150, 30)}>
+          Markets move. <span className="text-[#A855F7]">Sound strategy</span> endures.
         </h2>
 
         <div className="mt-16" style={revealStyle(300, 24)}>
           <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
             OUR PRINCIPLES
           </h3>
-          <p className="mt-7 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(380)}>
+          <p className="mt-7 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(380)}>
             At Calo Capital, we help you understand what you are getting into before you commit. We are open to answer questions and do not shy away from explaining why something may not work in your favor.
           </p>
-          <p className="mt-8 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(460)}>
+          <p className="mt-8 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(460)}>
             Honesty and transparency is better than taking your money and giving you a package deal that does not do what you need it to do.
           </p>
-          <p className="mt-10 max-w-3xl text-base leading-8 text-[#B7C0D8] sm:text-lg" style={fadeStyle(520)}>
+          <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(520)}>
             We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
           </p>
         </div>
@@ -1885,10 +1831,10 @@ function CryptoCandlestickSection() {
     >
       <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Live Crypto Candlestick Chart</p>
-        <h2 className="mt-4 max-w-3xl text-[clamp(2rem,4vw,3.6rem)] font-black leading-[1.06] tracking-[-0.02em] text-white">
+        <h2 className="mt-4 max-w-3xl text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-white">
           Track Digital Asset Price Action in Real Time
         </h2>
-        <p className="mt-5 max-w-3xl text-base leading-8 text-[#C7B6CB] sm:text-lg">
+        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#C7B6CB]">
           Explore TradingView candlestick charts for major crypto pairs. Candlestick charts can help visualize open, close, high, and low prices over selected time intervals.
         </p>
 
@@ -1917,18 +1863,16 @@ function CryptoCandlestickSection() {
           </div>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
+        <div className="mt-8 bg-white/[0.02] p-5 sm:p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="lg:max-w-[52%]">
               <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Understanding Market Charts</p>
-              <h3 className="mt-3 text-2xl font-black text-white sm:text-3xl">Candlesticks show price movement, not certainty.</h3>
-              <p className="mt-3 text-base leading-7 text-[#C7B6CB]">
+              <h3 className="mt-3 text-2xl font-black text-white sm:text-3xl">
+                Candlesticks show price movement, <span className="text-[#D7A6FF]">not certainty.</span>
+              </h3>
+              <p className="mt-3 text-[22px] leading-[1.6] text-[#C7B6CB]">
                 Each candle shows the opening, closing, highest, and lowest prices for a time period. Green or purple candles usually mean prices moved up, while lighter candles can signal a move down.
               </p>
-            </div>
-
-            <div className="lg:max-w-[420px] lg:flex-1">
-              <CandlestickIllustration compact />
             </div>
           </div>
         </div>
@@ -1937,225 +1881,52 @@ function CryptoCandlestickSection() {
   );
 }
 
-function CandlestickIllustration({ compact = false }) {
-  return (
-    <figure className={compact ? "mx-auto max-w-[380px] rounded-xl border border-white/10 bg-[#15021a] p-3" : "rounded-2xl border border-white/15 bg-[#15021a] p-5"} aria-labelledby="candlestick-caption">
-      <svg viewBox="0 0 640 280" className={compact ? "h-auto w-full" : "h-auto w-full"} role="img" aria-label="Simple candlestick example showing open, close, high, and low">
-        <line x1="120" y1="36" x2="120" y2="226" stroke="#E9DDEC" strokeWidth="3" />
-        <rect x="92" y="110" width="56" height="70" fill="#D7A6FF" stroke="#FFFFFF" strokeWidth="2" rx="4" />
-        <line x1="300" y1="58" x2="300" y2="240" stroke="#E9DDEC" strokeWidth="3" />
-        <rect x="272" y="94" width="56" height="82" fill="#7f4eb4" stroke="#FFFFFF" strokeWidth="2" rx="4" />
 
-        <text x="30" y="38" fill="#C7B6CB" fontSize="14">High</text>
-        <line x1="66" y1="34" x2="116" y2="34" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="30" y="112" fill="#C7B6CB" fontSize="14">Open</text>
-        <line x1="68" y1="108" x2="92" y2="108" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="30" y="184" fill="#C7B6CB" fontSize="14">Close</text>
-        <line x1="68" y1="180" x2="92" y2="180" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="30" y="230" fill="#C7B6CB" fontSize="14">Low</text>
-        <line x1="58" y1="226" x2="116" y2="226" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="160" y="144" fill="#C7B6CB" fontSize="14">Body</text>
-        <line x1="198" y1="140" x2="146" y2="140" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="360" y="84" fill="#C7B6CB" fontSize="14">Upper Wick</text>
-        <line x1="450" y1="80" x2="304" y2="80" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="360" y="242" fill="#C7B6CB" fontSize="14">Lower Wick</text>
-        <line x1="450" y1="238" x2="304" y2="238" stroke="#C7B6CB" strokeWidth="1.5" />
-
-        <text x="88" y="262" fill="#D7A6FF" fontSize="14" fontWeight="700">Bullish Candle</text>
-        <text x="264" y="262" fill="#D7A6FF" fontSize="14" fontWeight="700">Bearish Candle</text>
-      </svg>
-      <figcaption id="candlestick-caption" className="mt-3 text-sm leading-6 text-[#C7B6CB]">
-        Labeled candlestick example for educational context only. It demonstrates structure, not a prediction.
-      </figcaption>
-    </figure>
-  );
-}
-
-function FinancialTopicsSection({ setPage }) {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const leftTopics = financialTopics.slice(0, 3);
-  const rightTopics = financialTopics.slice(3, 6);
+function FinancialTopicsSection() {
+  const slides = [lifePng, iraPng, trustPng, retirePng, cryptPng, chartsPng];
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % slides.length);
+    }, 4000);
 
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(reducedMotionQuery.matches);
-    if (reducedMotionQuery.matches) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  function reveal(delayMs, offset = 20) {
-    if (reduceMotion) {
-      return { opacity: 1, transform: "none" };
-    }
-    return {
-      opacity: isVisible ? 1 : 0,
-      transform: isVisible ? "translateY(0)" : `translateY(${offset}px)`,
-      transition: `opacity 650ms ease ${delayMs}ms, transform 650ms ease ${delayMs}ms`,
-    };
-  }
-
-  function renderTopic(topic, indexOffset) {
-    return (
-      <article key={topic.id} className="ft-topic" style={reveal(160 + indexOffset * 80)}>
-        <a
-          href={FINANCIAL_TOPICS_ROUTE}
-          onClick={(event) => {
-            event.preventDefault();
-            setPage("Financial Topics");
-          }}
-          className="ft-topic-link group"
-        >
-          <span className="ft-topic-title">{topic.title}</span>
-          <span className="ft-topic-arrow" aria-hidden="true">→</span>
-        </a>
-        <p className="mt-3 text-[15px] leading-7 text-[#E9DDEC]">{topic.shortDescription}</p>
-      </article>
-    );
-  }
+    return () => window.clearInterval(intervalId);
+  }, [slides.length]);
 
   return (
-    <section ref={sectionRef} id="financial-priorities" className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white sm:py-24 lg:py-28">
-      <style>{`
-        .ft-container {
-          margin: 0 auto;
-          width: 100%;
-          max-width: min(1440px, 94vw);
-        }
-        .ft-topic + .ft-topic {
-          margin-top: 2.2rem;
-        }
-        .ft-topic-link {
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.55rem;
-          color: #D7A6FF;
-          text-decoration: none;
-          outline: none;
-        }
-        .ft-topic-title {
-          font-family: var(--font-display);
-          font-size: clamp(1.45rem, 1.8vw, 2.1rem);
-          font-weight: 700;
-          letter-spacing: -0.01em;
-          line-height: 1.15;
-        }
-        .ft-topic-link::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -6px;
-          width: 100%;
-          height: 1px;
-          background: #ffffff;
-          opacity: 0;
-          transform: scaleX(0.35);
-          transform-origin: left;
-          transition: transform 220ms ease, opacity 220ms ease;
-        }
-        .ft-topic-arrow {
-          font-size: 1.2rem;
-          transform: translateX(0);
-          transition: transform 220ms ease;
-        }
-        .ft-topic-link:hover,
-        .ft-topic-link:focus-visible {
-          color: #ffffff;
-        }
-        .ft-topic-link:hover::after,
-        .ft-topic-link:focus-visible::after {
-          opacity: 0.85;
-          transform: scaleX(1);
-        }
-        .ft-topic-link:hover .ft-topic-arrow,
-        .ft-topic-link:focus-visible .ft-topic-arrow {
-          transform: translateX(5px);
-        }
-        .ft-topic-link:focus-visible {
-          border-radius: 0.35rem;
-          box-shadow: 0 0 0 3px rgba(215, 166, 255, 0.5);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .ft-topic-link,
-          .ft-topic-link::after,
-          .ft-topic-arrow {
-            transition: none !important;
-          }
-        }
-      `}</style>
-
-      <div className="ft-container">
-        <p className="text-xs font-black uppercase tracking-[0.33em] text-[#D7A6FF]" style={reveal(0)}>Explore Your Priorities</p>
-        <h2 className="mt-4 max-w-4xl text-[clamp(2.1rem,4.4vw,4rem)] font-black leading-[1.04] tracking-[-0.02em] text-[#FFFFFF]" style={reveal(60)}>
-          How We Help You Explore Your Financial Goals
-        </h2>
-        <p className="mt-6 max-w-3xl text-base leading-8 text-[#E9DDEC] sm:text-lg" style={reveal(120)}>
-          Explore important financial topics, understand the questions they may raise, and learn what to consider when searching for qualified professional support.
-        </p>
-
-        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(340px,1.2fr)] lg:gap-12">
-          <div>
-            {leftTopics.map((topic, index) => renderTopic(topic, index))}
-          </div>
-          <div>
-            {rightTopics.map((topic, index) => renderTopic(topic, index + 3))}
-          </div>
-          <div className="flex items-center justify-center" style={reveal(260, 28)}>
-            <div className="relative h-[320px] w-[320px] rounded-full border border-white/20 bg-[radial-gradient(circle_at_35%_22%,#6b2b8f_0%,#2a0f36_60%,#190523_100%)] sm:h-[360px] sm:w-[360px] lg:h-[460px] lg:w-[460px]">
-              <div className="absolute inset-[12%] rounded-full border border-white/15 bg-white/5 p-7 text-center">
-                <p className="font-display text-xl font-bold text-[#FFFFFF] sm:text-2xl">Lifestyle Image Placeholder</p>
-                <p className="mt-3 text-sm leading-6 text-[#E9DDEC] sm:text-base">
-                  Final approved family-focused lifestyle image is still needed for this section.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-12 max-w-[62rem]" style={reveal(340, 12)}>
-          <a
-            href={FINANCIAL_TOPICS_ROUTE}
-            onClick={(event) => {
-              event.preventDefault();
-              setPage("Financial Topics");
-            }}
-            className="inline-flex w-full items-center justify-center rounded-xl bg-[#8B5CF6] px-8 py-4 text-base font-black text-white transition hover:bg-[#A855F7] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66] sm:w-auto"
+    <section id="financial-priorities" className="relative overflow-hidden bg-[#15021a] px-4 py-10 sm:py-16">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="relative mx-auto w-full overflow-hidden rounded-[26px]">
+          <div
+            className="flex transition-transform duration-700 ease-out"
+            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
-            Learn More About Each Section
-          </a>
+            {slides.map((slide, index) => (
+              <div key={`${slide}-${index}`} className="min-w-full">
+                <img
+                  src={slide}
+                  alt="Financial topic slide"
+                  className="h-[76vh] max-h-[780px] w-full object-contain select-none"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <p className="mt-7 max-w-5xl text-sm leading-7 text-[#C7B6CB]" style={reveal(400, 8)}>
-          {HOMEPAGE_TOPICS_DISCLAIMER}
-        </p>
+        <div className="mt-5 flex items-center justify-center gap-3">
+          {slides.map((slide, index) => (
+            <button
+              key={`dot-${slide}-${index}`}
+              type="button"
+              aria-label={`Show slide ${index + 1}`}
+              onClick={() => setActiveIndex(index)}
+              className={`h-3 w-3 rounded-full border border-white/30 transition-all duration-200 ${
+                index === activeIndex ? "w-8 bg-[#d78cff]" : "bg-white/20"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -2166,10 +1937,10 @@ function FinancialTopicsPage() {
     <section id="financial-topics" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore Financial Topics</p>
-        <h1 className="mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
+        <h1 className="cc-slow-fade mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
           Prepare Better Questions for Your Financial Journey
         </h1>
-        <p className="mt-5 max-w-4xl text-base leading-8 text-[#E9DDEC] sm:text-lg">
+        <p className="mt-5 max-w-4xl text-[22px] leading-[1.6] text-[#E9DDEC]">
           Understanding the basics can help you communicate your goals, recognize important qualifications, and ask more informed questions when seeking professional support.
         </p>
 
@@ -2192,9 +1963,9 @@ function FinancialTopicsPage() {
               <article key={topic.id} id={topic.id} className="space-y-4 py-4 sm:py-6">
                 <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#D7A6FF]">{topic.title}</h2>
                 <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#C7B6CB]">{topic.hook}</p>
-                <p className="text-base leading-8 text-[#E9DDEC]">{topic.shortDescription}</p>
-                <p className="text-base leading-8 text-[#E9DDEC]">{topicOverview}</p>
-                <p className="text-base leading-8 text-[#E9DDEC]">
+                <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">{topic.shortDescription}</p>
+                <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">{topicOverview}</p>
+                <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">
                   Why it matters: {topic.id === "protecting-your-family" ? "A clear life insurance plan can help reduce financial stress, preserve household goals, and give families a framework for dealing with unexpected losses." : topic.id === "retirement-and-iras" ? "The structure of retirement accounts and timing can materially affect long-term flexibility, tax efficiency, and peace of mind later in life." : topic.id === "trusts-and-legacy" ? "Thoughtful legacy planning can help avoid confusion, preserve intentions, and make future transitions easier for family members and beneficiaries." : topic.id === "investments-and-wealth" ? "The right investment approach depends on goals, time horizon, and risk tolerance, which is why understanding the basics helps people make more informed decisions." : topic.id === "cryptocurrency" ? "Because the market moves quickly and security mistakes can be costly, it is important to understand both the opportunity and the risk before getting involved." : "Charts are most useful when they are treated as information tools, not promises, which helps people keep perspective on risk, timing, and market uncertainty."}
                 </p>
 
@@ -2212,7 +1983,7 @@ function FinancialTopicsPage() {
 }
 
 function FourCsPage() {
-  const [flippedCard, setFlippedCard] = useState(null);
+  const [activeCard, setActiveCard] = useState(null);
   const fourCsCards = services.map((service, index) => {
     const cardMeaning =
       index === 0
@@ -2245,104 +2016,202 @@ function FourCsPage() {
   });
 
   function toggleCard(index) {
-    setFlippedCard((current) => (current === index ? null : index));
+    setActiveCard((current) => (current === index ? null : index));
   }
 
   return (
     <section id="four-cs" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Our Four C&apos;s</p>
-        <h1 className="mt-4 max-w-4xl text-[clamp(2.1rem,4.5vw,3.8rem)] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
+        <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
           The four pillars behind our approach to wealth planning.
         </h1>
-        <p className="mt-5 max-w-3xl text-base leading-8 text-[#E9DDEC] sm:text-lg">
+        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#E9DDEC]">
           Calo Capital uses these four focus areas to guide conversations around liquidity, digital assets, real assets, and business opportunities.
         </p>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
+        <style>{`
+          .four-cs-panels {
+            display: grid;
+            min-height: 0;
+            gap: 1px;
+            overflow: hidden;
+            border: 1px solid rgba(215, 166, 255, 0.28);
+            background: rgba(215, 166, 255, 0.28);
+          }
+          .four-cs-panel {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(230px, 0.34fr) minmax(0, 0.66fr);
+            min-height: 92px;
+            overflow: hidden;
+            color: #f4f7fb;
+            background: linear-gradient(180deg, rgba(34, 15, 47, 0.96), rgba(18, 5, 25, 0.98));
+            transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
+          }
+          .four-cs-panel.is-active {
+            min-height: 430px;
+            background: linear-gradient(140deg, rgba(86, 35, 113, 0.96), rgba(25, 7, 34, 0.99) 72%);
+            box-shadow: inset 0 0 0 1px rgba(215, 166, 255, 0.2);
+          }
+          .four-cs-panel-button {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+          }
+          .four-cs-panel-button:focus-visible {
+            outline: 2px solid #d7a6ff;
+            outline-offset: -5px;
+          }
+          .four-cs-panel-rail {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            padding: 24px 28px;
+            pointer-events: none;
+          }
+          .four-cs-panel-number {
+            color: #d7a6ff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+          }
+          .four-cs-panel-title {
+            color: #f4eafb;
+            font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+          }
+          .four-cs-panel-content {
+            position: relative;
+            z-index: 1;
+            min-width: 0;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 32px 0 4px;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: max-height 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease 80ms, transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 40ms, padding 600ms ease;
+            pointer-events: none;
+          }
+          .four-cs-panel.is-active .four-cs-panel-content {
+            display: block;
+            max-height: 430px;
+            padding: 30px 32px 28px 4px;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+          }
+          .four-cs-panel-content h2,
+          .four-cs-panel-content p {
+            max-width: 31rem;
+          }
+          .four-cs-illustration {
+            display: none !important;
+          }
+          @media (max-width: 767px) {
+            .four-cs-panels {
+              display: block;
+              min-height: 0;
+            }
+            .four-cs-panel {
+              display: block;
+              min-height: 74px;
+              border-bottom: 1px solid rgba(215, 166, 255, 0.2);
+              transition: min-height 560ms cubic-bezier(0.22, 1, 0.36, 1), background 560ms ease;
+            }
+            .four-cs-panel:last-child {
+              border-bottom: 0;
+            }
+            .four-cs-panel.is-active {
+              min-height: 470px;
+            }
+            .four-cs-panel-rail {
+              width: 100%;
+              height: 74px;
+              flex-direction: row;
+              align-items: center;
+              padding: 18px 20px;
+            }
+            .four-cs-panel-title {
+              writing-mode: horizontal-tb;
+              transform: none;
+              font-size: 1.15rem;
+            }
+            .four-cs-panel-content {
+              display: block;
+              max-height: 0;
+              padding: 0 20px;
+              transform: translateY(10px);
+            }
+            .four-cs-panel.is-active .four-cs-panel-content {
+              display: block;
+              grid-template-columns: none;
+              max-height: 500px;
+              padding: 8px 20px 24px;
+            }
+            .four-cs-illustration {
+              min-height: 120px;
+              margin-top: 22px;
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .four-cs-panel,
+            .four-cs-panel-content,
+            .four-cs-illustration {
+              transition-duration: 0.01ms;
+              transition-delay: 0ms;
+            }
+          }
+        `}</style>
+        <div className="four-cs-panels mt-10" role="list">
           {fourCsCards.map((service, index) => {
-            const isFlipped = flippedCard === index;
+            const isActive = activeCard === index;
 
             return (
-              <button
+              <article
                 key={service.title}
                 id={serviceIds[index]}
-                type="button"
-                onClick={() => toggleCard(index)}
-                aria-pressed={isFlipped}
-                className={`four-cs-card group relative min-h-[350px] overflow-hidden rounded-md border border-[#d7a6ff66] bg-white text-left shadow-[0_18px_55px_rgba(73,20,108,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d7a6ff66]${isFlipped ? " is-flipped" : ""}`}
+                role="listitem"
+                className={`four-cs-panel${isActive ? " is-active" : ""}`}
+                onMouseEnter={() => setActiveCard(index)}
+                onMouseLeave={() => setActiveCard(null)}
               >
-                <style>{`
-                  .four-cs-card {
-                    perspective: 1400px;
-                    transition: transform 780ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 780ms cubic-bezier(0.22, 1, 0.36, 1);
-                    transform: translateY(0);
-                    will-change: transform, box-shadow;
-                  }
-                  .four-cs-card.is-flipped {
-                    transform: translateY(-10px);
-                    box-shadow: 0 28px 80px rgba(73, 20, 108, 0.18);
-                  }
-                  .four-cs-card-inner {
-                    position: absolute;
-                    inset: 0;
-                    width: 100%;
-                    height: 100%;
-                    min-height: 350px;
-                    transform-style: preserve-3d;
-                    transform-origin: center center;
-                    transition: transform 780ms cubic-bezier(0.22, 1, 0.36, 1);
-                    will-change: transform;
-                  }
-                  .four-cs-card.is-flipped .four-cs-card-inner {
-                    transform: rotateY(180deg) translateZ(36px);
-                  }
-                  .four-cs-card-face {
-                    position: absolute;
-                    inset: 0;
-                    backface-visibility: hidden;
-                    -webkit-backface-visibility: hidden;
-                    overflow: hidden;
-                  }
-                  .four-cs-card-back {
-                    transform: rotateY(180deg);
-                  }
-                `}</style>
-                <div className={`four-cs-card-inner${isFlipped ? " is-flipped" : ""}`}>
-                  <div className="four-cs-card-face rounded-md border border-[#d7a6ff66] bg-[linear-gradient(135deg,#ffffff_0%,#f6ecff_52%,#ead8ff_100%)] p-6">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.18),transparent_32%),radial-gradient(circle_at_85%_80%,rgba(215,166,255,0.16),transparent_28%)]" aria-hidden="true" />
-                    <div className="relative z-10 flex h-full items-center justify-center text-center">
-                      <h2 className="max-w-[12ch] text-[clamp(1.9rem,3vw,2.6rem)] font-black leading-[1.04] tracking-[-0.03em] text-[#5B21B6]">
-                        {service.question}
-                      </h2>
-                    </div>
-                  </div>
-
-                  <div className="four-cs-card-face four-cs-card-back rounded-md border border-[#d7a6ff66] bg-[linear-gradient(180deg,#ffffff_0%,#f9f5ff_100%)] p-6">
-                    <div className="flex h-full flex-col">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-sm font-black uppercase tracking-[0.24em] text-[#7C3AED]">{service.mark}</p>
-                          <h2 className="mt-4 text-[clamp(1.35rem,2.2vw,1.7rem)] font-black leading-tight text-[#6D28D9]">{service.title}</h2>
-                        </div>
-                        <span className="rounded-full border border-[#d7a6ff66] bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[#6D28D9] shadow-sm">
-                          Flip Back
-                        </span>
-                      </div>
-                      <div className="mt-6 space-y-5 text-sm leading-7 text-[#111827]">
-                        <p>{service.meaning}</p>
-                        <p>{service.example}</p>
-                      </div>
-                      <div className="mt-auto pt-6">
-                        <p className="text-xs font-black uppercase tracking-[0.2em] text-[#7C3AED]">Why it matters</p>
-                        <p className="mt-2 text-sm leading-7 text-[#111827]">
-                          This pillar helps frame the kind of questions and tradeoffs that belong in the conversation before any decision is made.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <button
+                  type="button"
+                  className="four-cs-panel-button"
+                  onClick={() => toggleCard(index)}
+                  onFocus={() => setActiveCard(index)}
+                  onBlur={() => setActiveCard(null)}
+                  aria-expanded={isActive}
+                  aria-controls={`${serviceIds[index]}-content`}
+                >
+                  <span className="sr-only">{isActive ? "Collapse" : "Expand"} {service.title}</span>
+                </button>
+                <div className="four-cs-panel-rail" aria-hidden="true">
+                  <span className="four-cs-panel-number">{service.mark}</span>
+                  <span className="four-cs-panel-title">{service.title}</span>
                 </div>
-              </button>
+                <div id={`${serviceIds[index]}-content`} className="four-cs-panel-content">
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-[#D7A6FF]">{service.texture.accent}</p>
+                  <h2 className="mt-4 text-[clamp(1.65rem,3vw,2.5rem)] font-black leading-[1.03] text-white">{service.question}</h2>
+                  <div className="mt-5 space-y-4 text-sm leading-7 text-[#E9DDEC] sm:text-base">
+                    <p>{service.meaning}</p>
+                    <p>{service.example}</p>
+                  </div>
+                  <div className="four-cs-illustration" aria-hidden="true" />
+                </div>
+              </article>
             );
           })}
         </div>
@@ -2370,10 +2239,10 @@ function ContactPage() {
         <div className="relative z-10 grid items-center gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-12 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-14">
           <div className="max-w-xl min-w-0">
             <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#f1d7ff] sm:text-xs sm:tracking-[0.28em]">Get in touch</p>
-            <h2 className="text-[clamp(1.9rem,8vw,4rem)] font-black leading-[0.96] tracking-[-0.04em] text-white">
+            <h2 className="text-[34px] font-black leading-[0.96] tracking-[-0.04em] text-white">
               We are ready to hear from you
             </h2>
-            <p className="mt-6 max-w-full text-base leading-7 text-slate-200 sm:text-lg sm:leading-8">
+            <p className="mt-6 max-w-full text-[22px] leading-[1.6] text-slate-200">
               Check out our weekly updates
               <br />
               on the stock market
@@ -2409,20 +2278,66 @@ function ContactPage() {
   );
 }
 
-function HomePage() {
+function HomePage({ setPage }) {
   return (
     <>
       <HeroSection />
       <AboutPage />
       <CryptoCandlestickSection />
       <FourCsPage />
-      <FinancialTopicsPage />
+      <FinancialTopicsSection setPage={setPage} />
       <WhyPartnerSection />
     </>
   );
 }
 
-function Footer() {
+const privacyPolicy =
+  "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
+
+const disclaimer =
+  "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
+
+function LegalPage() {
+  useEffect(() => {
+    const targetId = window.location.hash.slice(1);
+    if (!targetId) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
+
+  return (
+    <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-24">
+      <div className="mx-auto w-full max-w-[min(900px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Calo Capital</p>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-white">Privacy &amp; Disclaimer</h1>
+        <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#E9DDEC]">
+          Important information about privacy, educational content, and the use of this website.
+        </p>
+
+        <div className="mt-14 space-y-14">
+          <article id="privacy-policy" className="scroll-mt-28 border-t border-[#d7a6ff66] pt-7">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#D7A6FF]">01</p>
+            <h2 className="mt-3 text-3xl font-black text-white">Privacy Policy</h2>
+            <p className="mt-5 text-[22px] leading-[1.6] text-[#E9DDEC]">{privacyPolicy}</p>
+          </article>
+
+          <article id="disclaimer" className="scroll-mt-28 border-t border-[#d7a6ff66] pt-7">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#D7A6FF]">02</p>
+            <h2 className="mt-3 text-3xl font-black text-white">Disclaimer</h2>
+            <p className="mt-5 text-[22px] leading-[1.6] text-[#E9DDEC]">{disclaimer}</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer({ setPage }) {
   useEffect(() => {
     const widgetSelector = 'script[data-widget-id="6a872b48b433348f40d6511c"]';
     if (document.querySelector(widgetSelector)) return;
@@ -2436,21 +2351,30 @@ function Footer() {
     document.body.appendChild(widgetScript);
   }, []);
 
-  const privacyPolicy =
-    "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
-
-  const disclaimer =
-    "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
-
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-[#15021a] px-5 py-8 text-white">
       <div className="relative z-10 mx-auto w-full max-w-[94vw]">
-        <div className="space-y-4 text-[11px] leading-6 text-slate-300">
-          <p className="font-black uppercase tracking-[0.18em] text-violet-200">Privacy Policy</p>
-          <p>{privacyPolicy}</p>
-
-          <p className="pt-2 font-black uppercase tracking-[0.18em] text-violet-200">Disclaimer</p>
-          <p>{disclaimer}</p>
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[11px] leading-6 text-slate-300">
+          <a
+            href="/legal#privacy-policy"
+            onClick={(event) => {
+              event.preventDefault();
+              setPage("Legal", "privacy-policy");
+            }}
+            className="font-black uppercase tracking-[0.18em] text-violet-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
+          >
+            Privacy Policy
+          </a>
+          <a
+            href="/legal#disclaimer"
+            onClick={(event) => {
+              event.preventDefault();
+              setPage("Legal", "disclaimer");
+            }}
+            className="font-black uppercase tracking-[0.18em] text-violet-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
+          >
+            Disclaimer
+          </a>
         </div>
       </div>
     </footer>
@@ -2463,6 +2387,24 @@ function GlobalStyles() {
       html { scroll-behavior: smooth; overflow-x: hidden; }
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
+      .cc-slow-fade {
+        animation: ccSlowFade 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      @keyframes ccSlowFade {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .cc-slow-fade {
+          animation: none;
+        }
+      }
       img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
       a, button, input, textarea, select { max-width: 100%; }
       chat-widget {
@@ -2870,14 +2812,14 @@ export default function App() {
   }, [clearTransitionTimer]);
 
   useEffect(() => {
-    if (renderedPage === "Financial Topics" || renderedPage === "Contact") return;
+    if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal") return;
 
     requestAnimationFrame(() => {
       scrollToHomeSection(renderedPage);
     });
   }, [renderedPage]);
 
-  function setPage(page) {
+  function setPage(page, hash = "") {
     if (page === "Contact") {
       window.history.pushState({}, "", "/contact");
       setCurrentPage(page);
@@ -2885,6 +2827,22 @@ export default function App() {
       setTransitionPhase("idle");
       setPendingPage(null);
       window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (page === "Legal") {
+      window.history.pushState({}, "", `/legal${hash ? `#${hash}` : ""}`);
+      setCurrentPage(page);
+      setRenderedPage(page);
+      setTransitionPhase("idle");
+      setPendingPage(null);
+      requestAnimationFrame(() => {
+        if (hash) {
+          document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
       return;
     }
 
@@ -2931,9 +2889,9 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? <ContactPage /> : <HomePage />}
+        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : <HomePage setPage={setPage} />}
       </div>
-      <Footer />
+      <Footer setPage={setPage} />
     </main>
   );
 }
