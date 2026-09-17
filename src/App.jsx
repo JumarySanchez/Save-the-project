@@ -16,6 +16,7 @@ import trustDesignPng from "../assets/Trust-design.png";
 import investmentDesignPng from "../assets/Investment-design.png";
 import cryptoDesignPng from "../assets/Currency-design.png";
 import marketChartDesignPng from "../assets/marketchart-design.png";
+import pillar1DesignPng from "../assets/Pillar1-design.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -2318,14 +2319,19 @@ function FourCsPage() {
             position: relative;
             display: flex;
             flex-direction: column;
-            min-height: 190px;
+            min-height: 360px;
             overflow: hidden;
             color: #f4f7fb;
             background: linear-gradient(180deg, rgba(34, 15, 47, 0.96), rgba(18, 5, 25, 0.98));
             transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
           }
+          .four-cs-panel.has-cover {
+            background-image: linear-gradient(180deg, rgba(20, 8, 30, 0.2), rgba(18, 5, 25, 0.94)), var(--four-cs-cover);
+            background-position: center;
+            background-size: cover;
+          }
           .four-cs-panel.is-active {
-            min-height: 310px;
+            min-height: 520px;
             background: linear-gradient(140deg, rgba(86, 35, 113, 0.96), rgba(25, 7, 34, 0.99) 72%);
             box-shadow: inset 0 0 0 1px rgba(215, 166, 255, 0.2);
           }
@@ -2364,7 +2370,7 @@ function FourCsPage() {
           }
           .four-cs-panel-title {
             color: #f4eafb;
-            font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
             font-weight: 700;
             letter-spacing: -0.02em;
             line-height: 1.05;
@@ -2383,7 +2389,7 @@ function FourCsPage() {
           }
           .four-cs-panel.is-active .four-cs-panel-content {
             display: block;
-            max-height: 250px;
+            max-height: 560px;
             padding: 0 22px 22px;
             opacity: 1;
             transform: translateY(0);
@@ -2395,6 +2401,17 @@ function FourCsPage() {
           }
           .four-cs-illustration {
             display: none !important;
+          }
+          @media (min-width: 768px) {
+            .four-cs-panels {
+              gap: 16px;
+              border: 0;
+              background: transparent;
+              overflow: visible;
+            }
+            .four-cs-panel {
+              border: 1px solid rgba(215, 166, 255, 0.28);
+            }
           }
           @media (max-width: 767px) {
             .four-cs-panels {
@@ -2411,7 +2428,7 @@ function FourCsPage() {
               border-bottom: 0;
             }
             .four-cs-panel.is-active {
-              min-height: 470px;
+              min-height: 0;
             }
             .four-cs-panel-rail {
               width: 100%;
@@ -2423,7 +2440,7 @@ function FourCsPage() {
             .four-cs-panel-title {
               writing-mode: horizontal-tb;
               transform: none;
-              font-size: 1.15rem;
+              font-size: 1rem;
             }
             .four-cs-panel-content {
               display: block;
@@ -2434,7 +2451,7 @@ function FourCsPage() {
             .four-cs-panel.is-active .four-cs-panel-content {
               display: block;
               grid-template-columns: none;
-              max-height: 500px;
+              max-height: 700px;
               padding: 8px 20px 24px;
             }
             .four-cs-illustration {
@@ -2460,7 +2477,8 @@ function FourCsPage() {
                 key={service.title}
                 id={serviceIds[index]}
                 role="listitem"
-                className={`four-cs-panel${isActive ? " is-active" : ""}`}
+                className={`four-cs-panel${index === 0 ? " has-cover" : ""}${isActive ? " is-active" : ""}`}
+                style={index === 0 ? { "--four-cs-cover": `url(${pillar1DesignPng})` } : undefined}
                 onMouseEnter={() => setActiveCard(index)}
                 onMouseLeave={() => setActiveCard(null)}
               >
