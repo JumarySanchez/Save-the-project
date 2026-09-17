@@ -10,12 +10,12 @@ import semiWorldPng from "../assets/semi-world.png";
 import socialInstagramPng from "../assets/3.png";
 import socialFacebookPng from "../assets/4.png";
 import socialLinkedInPng from "../assets/5.png";
-import lifePng from "../assets/life.png";
-import iraPng from "../assets/ira.png";
-import trustPng from "../assets/trust.png";
-import retirePng from "../assets/retire.png";
-import cryptPng from "../assets/crypt.png";
-import chartsPng from "../assets/charts.png";
+import lifeDesignPng from "../assets/life-design.png";
+import iraDesignPng from "../assets/IRA-design.png";
+import trustDesignPng from "../assets/Trust-design.png";
+import investmentDesignPng from "../assets/Investment-design.png";
+import cryptoDesignPng from "../assets/Currency-design.png";
+import marketChartDesignPng from "../assets/marketchart-design.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -1883,46 +1883,320 @@ function CryptoCandlestickSection() {
 
 
 function FinancialTopicsSection() {
-  const slides = [lifePng, iraPng, trustPng, retirePng, cryptPng, chartsPng];
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const slideCount = 6;
 
   useEffect(() => {
+    if (isPaused) return undefined;
+
     const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % slides.length);
-    }, 4000);
+      setActiveSlide((current) => (current + 1) % slideCount);
+    }, 5000);
 
     return () => window.clearInterval(intervalId);
-  }, [slides.length]);
+  }, [isPaused]);
 
   return (
-    <section id="financial-priorities" className="relative overflow-hidden bg-[#15021a] px-4 py-10 sm:py-16">
+    <section
+      id="financial-priorities"
+      className="relative overflow-hidden bg-[#15021a] px-4 py-10 sm:py-16"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false);
+      }}
+    >
       <div className="mx-auto max-w-[1400px]">
-        <div className="relative mx-auto w-full overflow-hidden rounded-[26px]">
-          <div
-            className="flex transition-transform duration-700 ease-out"
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-          >
-            {slides.map((slide, index) => (
-              <div key={`${slide}-${index}`} className="min-w-full">
-                <img
-                  src={slide}
-                  alt="Financial topic slide"
-                  className="h-[76vh] max-h-[780px] w-full object-contain select-none"
-                />
-              </div>
-            ))}
+        <style>{`
+          @keyframes financialSlideIn {
+            from { opacity: 0; transform: translateX(18px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          .financial-carousel-slide {
+            animation: financialSlideIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+          }
+        `}</style>
+        <article className="financial-carousel-slide life-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 0 ? "block" : "none" }}>
+          <style>{`
+            .life-insurance-slide {
+              position: relative;
+              aspect-ratio: 2034 / 912;
+              border: 1px solid rgba(215, 166, 255, 0.14);
+            }
+            .life-insurance-art {
+              position: absolute;
+              inset: 0;
+              background: center / cover no-repeat url(${lifeDesignPng});
+            }
+            .life-insurance-copy {
+              position: relative;
+              z-index: 1;
+              width: min(57%, 760px);
+              padding: clamp(2rem, 5vw, 5.5rem) clamp(1.25rem, 5vw, 5.75rem);
+            }
+            .life-insurance-title {
+              margin: 0;
+              color: #ffffff;
+              font-family: var(--font-display);
+              font-size: clamp(2rem, 4.3vw, 5rem);
+              font-weight: 700;
+              letter-spacing: -0.03em;
+              line-height: 0.98;
+            }
+            .life-insurance-title span,
+            .life-insurance-why strong {
+              color: #a855f7;
+            }
+            .life-insurance-hook {
+              margin: 1rem 0 0;
+              color: #ffffff;
+              font-size: clamp(0.95rem, 1.45vw, 1.45rem);
+              font-weight: 700;
+              line-height: 1.35;
+            }
+            .life-insurance-body,
+            .life-insurance-why,
+            .life-insurance-disclaimer {
+              color: #f3eaf6;
+              font-size: clamp(0.82rem, 1.25vw, 1.18rem);
+              line-height: 1.55;
+            }
+            .life-insurance-body {
+              margin: clamp(1.5rem, 3vw, 3rem) 0 0;
+            }
+            .life-insurance-why {
+              margin: clamp(1rem, 2vw, 2rem) 0 0;
+            }
+            .life-insurance-why strong {
+              font-weight: 700;
+            }
+            .life-insurance-disclaimer {
+              margin: 0.8rem 0 0;
+              color: #dfcfe5;
+              font-size: clamp(0.72rem, 1vw, 0.98rem);
+            }
+            @media (max-width: 767px) {
+              .life-insurance-slide {
+                aspect-ratio: auto;
+              }
+              .life-insurance-art {
+                position: relative;
+                aspect-ratio: 2034 / 912;
+                background-size: contain;
+                background-position: center top;
+              }
+              .life-insurance-copy {
+                width: 100%;
+                padding: 1.5rem 1.25rem 2rem;
+              }
+              .life-insurance-title {
+                font-size: clamp(2.2rem, 11vw, 3.6rem);
+              }
+              .life-insurance-hook {
+                margin-top: 0.8rem;
+                font-size: 1rem;
+              }
+              .life-insurance-body,
+              .life-insurance-why {
+                font-size: 1rem;
+                line-height: 1.55;
+              }
+              .life-insurance-disclaimer {
+                font-size: 0.82rem;
+              }
+            }
+          `}</style>
+          <div className="life-insurance-art" aria-hidden="true" />
+          <div className="life-insurance-copy">
+            <h2 className="life-insurance-title">
+              Protect Your <span>family</span>
+            </h2>
+            <p className="life-insurance-hook">Protection starts with clarity before urgency.</p>
+            <p className="life-insurance-body">
+              Explore general life insurance concepts and the questions people may consider when preparing for unexpected events and protecting those who depend on them. Common options include term life for set periods and permanent policies for longer term coverage.
+            </p>
+            <p className="life-insurance-why">
+              <strong>Why it matters:</strong> A clear life insurance plan can help reduce financial stress, preserve household goals, and give families a framework for dealing with unexpected losses.
+            </p>
+            <p className="life-insurance-disclaimer">
+              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+            </p>
           </div>
-        </div>
+        </article>
 
-        <div className="mt-5 flex items-center justify-center gap-3">
-          {slides.map((slide, index) => (
+        <article className="financial-carousel-slide life-insurance-slide ira-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 1 ? "block" : "none" }}>
+          <style>{`
+            .ira-insurance-art {
+              background-image: url(${iraDesignPng});
+              background-position: right center;
+              background-size: 45% auto;
+            }
+            @media (max-width: 767px) {
+              .ira-insurance-art {
+                background-position: center top;
+                background-size: contain;
+              }
+            }
+          `}</style>
+          <div className="life-insurance-art ira-insurance-art" aria-hidden="true" />
+          <div className="life-insurance-copy">
+            <h2 className="life-insurance-title">
+              Retirement and <span>IRAs</span>
+            </h2>
+            <p className="life-insurance-hook">A stronger retirement plan begins with better questions today.</p>
+            <p className="life-insurance-body">
+              Understand common retirement priorities, the general role of IRAs, and the factors people may consider while preparing for their future. IRAs can be part of that conversation, with traditional and Roth accounts often used for different tax and planning goals, and the reason it matters is that the decisions made early can shape how comfortable and prepared someone feels in retirement.
+            </p>
+            <p className="life-insurance-why">
+              <strong>Why it matters:</strong> The structure of retirement accounts and timing can materially affect long-term flexibility, tax efficiency, and peace of mind later in life.
+            </p>
+            <p className="life-insurance-disclaimer">
+              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+            </p>
+          </div>
+        </article>
+
+        <article className="financial-carousel-slide life-insurance-slide trust-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 2 ? "block" : "none" }}>
+          <style>{`
+            .trust-insurance-art {
+              background-image: url(${trustDesignPng});
+              background-position: right center;
+              background-size: 43% auto;
+            }
+            @media (max-width: 767px) {
+              .trust-insurance-art {
+                background-position: center top;
+                background-size: contain;
+              }
+            }
+          `}</style>
+          <div className="life-insurance-art trust-insurance-art" aria-hidden="true" />
+          <div className="life-insurance-copy">
+            <h2 className="life-insurance-title">
+              Trusts and <span>Legacy Planning</span>
+            </h2>
+            <p className="life-insurance-hook">A thoughtful legacy plan begins with better questions today.</p>
+            <p className="life-insurance-body">
+              Learn how wills, trusts, beneficiaries, and organized financial documents may contribute to a thoughtful legacy plan. Trusts and legacy planning help organize how assets, responsibilities, and personal wishes are handled over time. These tools may be used to support family transitions, reduce confusion, and preserve long-term intentions, while common approaches include wills, revocable trusts, and beneficiary designations that need to align with a broader estate plan.
+            </p>
+            <p className="life-insurance-why">
+              <strong>Why it matters:</strong> Thoughtful legacy planning can help avoid confusion, preserve intentions, and make future transitions easier for family members and beneficiaries.
+            </p>
+            <p className="life-insurance-disclaimer">
+              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+            </p>
+          </div>
+        </article>
+
+        <article className="financial-carousel-slide life-insurance-slide investment-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 3 ? "block" : "none" }}>
+          <style>{`
+            .investment-insurance-art {
+              background-image: url(${investmentDesignPng});
+              background-position: right center;
+              background-size: auto 96%;
+            }
+            @media (max-width: 767px) {
+              .investment-insurance-art {
+                background-position: center top;
+                background-size: contain;
+              }
+            }
+          `}</style>
+          <div className="life-insurance-art investment-insurance-art" aria-hidden="true" />
+          <div className="life-insurance-copy">
+            <h2 className="life-insurance-title">
+              Investments and <span>Wealth Building</span>
+            </h2>
+            <p className="life-insurance-hook">Long-term growth decisions work best when risk is understood first.</p>
+            <p className="life-insurance-body">
+              Explore foundational investment concepts, including time horizon, diversification, personal goals, and the relationship between potential opportunity and risk. Investing is about matching long-term financial goals with the right balance of risk, time horizon, and liquidity. It matters because markets can rise and fall, so diversification, costs, and discipline often matter as much as the investment itself, and common options include stocks, bonds, mutual funds, and diversified portfolios.
+            </p>
+            <p className="life-insurance-why">
+              <strong>Why it matters:</strong> The right investment approach depends on goals, time horizon, and risk tolerance, which is why understanding the basics helps people make more informed decisions.
+            </p>
+            <p className="life-insurance-disclaimer">
+              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+            </p>
+          </div>
+        </article>
+
+        <article className="financial-carousel-slide life-insurance-slide crypto-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 4 ? "block" : "none" }}>
+          <style>{`
+            .crypto-insurance-art {
+              background-image: url(${cryptoDesignPng});
+              background-position: right center;
+              background-size: auto 86%;
+            }
+            @media (max-width: 767px) {
+              .crypto-insurance-art {
+                background-position: center top;
+                background-size: contain;
+              }
+            }
+          `}</style>
+          <div className="life-insurance-art crypto-insurance-art" aria-hidden="true" />
+          <div className="life-insurance-copy">
+            <h2 className="life-insurance-title">
+              <span>Cryptocurrency</span> and Digital Assets
+            </h2>
+            <p className="life-insurance-hook">Digital assets require security discipline as much as market awareness.</p>
+            <p className="life-insurance-body">
+              Build a clearer understanding of cryptocurrency, market volatility, digital security, and the risks to consider before making financial decisions. Cryptocurrency and digital assets are a newer category of financial exposure that can move quickly and carry meaningful technology, custody, and security risks. The importance of understanding them is that they are not just price charts; they also involve wallets, private keys, platform risk, fraud exposure, and the possibility of permanent loss, with common approaches including holding crypto directly, using exchanges, and storing assets in self-custody or custodial accounts.
+            </p>
+            <p className="life-insurance-why">
+              <strong>Why it matters:</strong> Because the market moves quickly and security mistakes can be costly, it is important to understand both the opportunity and the risk before getting involved.
+            </p>
+            <p className="life-insurance-disclaimer">
+              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+            </p>
+          </div>
+        </article>
+
+        <article className="financial-carousel-slide life-insurance-slide market-chart-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 5 ? "block" : "none" }}>
+          <style>{`
+            .market-chart-art {
+              background-image: url(${marketChartDesignPng});
+              background-position: right center;
+              background-size: auto 108%;
+            }
+            @media (max-width: 767px) {
+              .market-chart-art {
+                background-position: center top;
+                background-size: contain;
+                aspect-ratio: 1 / 1;
+              }
+            }
+          `}</style>
+          <div className="life-insurance-art market-chart-art" aria-hidden="true" />
+          <div className="life-insurance-copy">
+            <h2 className="life-insurance-title">
+              Understanding <span>Market Charts</span>
+            </h2>
+            <p className="life-insurance-hook">Charts can describe what happened, not promise what happens next.</p>
+            <p className="life-insurance-body">
+              Learn the basic parts of a candlestick chart, including open, close, high, and low, and understand what market charts can and cannot communicate. Market charts can help explain how prices have moved over time, but they do not predict the future and should be used as context rather than certainty. They matter because trends, volume, and price action may help people ask better questions about risk and timing, while common chart types include candlesticks, line charts, and moving averages that describe history differently.
+            </p>
+            <p className="life-insurance-why">
+              <strong>Why it matters:</strong> Charts are most useful when they are treated as information tools, not promises, which helps people keep perspective on risk, timing, and market uncertainty.
+            </p>
+            <p className="life-insurance-disclaimer">
+              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
+            </p>
+          </div>
+        </article>
+
+        <div className="mt-5 flex items-center justify-center gap-3" aria-label="Financial topic slides">
+          {Array.from({ length: slideCount }, (_, index) => (
             <button
-              key={`dot-${slide}-${index}`}
+              key={`financial-slide-${index}`}
               type="button"
-              aria-label={`Show slide ${index + 1}`}
-              onClick={() => setActiveIndex(index)}
-              className={`h-3 w-3 rounded-full border border-white/30 transition-all duration-200 ${
-                index === activeIndex ? "w-8 bg-[#d78cff]" : "bg-white/20"
+              aria-label={`Show financial topic slide ${index + 1}`}
+              aria-current={activeSlide === index ? "true" : undefined}
+              onClick={() => setActiveSlide(index)}
+              className={`h-3 w-3 rounded-full border border-white/30 transition-all duration-300 ${
+                activeSlide === index ? "w-8 bg-[#d78cff]" : "bg-white/20"
               }`}
             />
           ))}
