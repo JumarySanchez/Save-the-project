@@ -2307,6 +2307,7 @@ function FourCsPage() {
         <style>{`
           .four-cs-panels {
             display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             min-height: 0;
             gap: 1px;
             overflow: hidden;
@@ -2315,16 +2316,16 @@ function FourCsPage() {
           }
           .four-cs-panel {
             position: relative;
-            display: grid;
-            grid-template-columns: minmax(230px, 0.34fr) minmax(0, 0.66fr);
-            min-height: 92px;
+            display: flex;
+            flex-direction: column;
+            min-height: 190px;
             overflow: hidden;
             color: #f4f7fb;
             background: linear-gradient(180deg, rgba(34, 15, 47, 0.96), rgba(18, 5, 25, 0.98));
             transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
           }
           .four-cs-panel.is-active {
-            min-height: 320px;
+            min-height: 310px;
             background: linear-gradient(140deg, rgba(86, 35, 113, 0.96), rgba(25, 7, 34, 0.99) 72%);
             box-shadow: inset 0 0 0 1px rgba(215, 166, 255, 0.2);
           }
@@ -2349,8 +2350,10 @@ function FourCsPage() {
             z-index: 1;
             display: flex;
             align-items: center;
-            gap: 28px;
-            padding: 24px 28px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 24px 22px 18px;
             pointer-events: none;
           }
           .four-cs-panel-number {
@@ -2372,7 +2375,7 @@ function FourCsPage() {
             min-width: 0;
             max-height: 0;
             overflow: hidden;
-            padding: 0 32px 0 4px;
+            padding: 0 22px;
             opacity: 0;
             transform: translateY(16px);
             transition: max-height 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease 80ms, transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 40ms, padding 600ms ease;
@@ -2380,8 +2383,8 @@ function FourCsPage() {
           }
           .four-cs-panel.is-active .four-cs-panel-content {
             display: block;
-            max-height: 320px;
-            padding: 24px 32px 24px 4px;
+            max-height: 250px;
+            padding: 0 22px 22px;
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
