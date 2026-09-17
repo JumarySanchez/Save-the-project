@@ -2294,7 +2294,7 @@ function FourCsPage() {
   }
 
   return (
-    <section id="four-cs" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
+    <section id="four-cs" className="bg-[#15021a] px-5 pb-12 pt-16 text-white sm:pb-16 sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Our Four C&apos;s</p>
         <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
@@ -2324,7 +2324,7 @@ function FourCsPage() {
             transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
           }
           .four-cs-panel.is-active {
-            min-height: 430px;
+            min-height: 320px;
             background: linear-gradient(140deg, rgba(86, 35, 113, 0.96), rgba(25, 7, 34, 0.99) 72%);
             box-shadow: inset 0 0 0 1px rgba(215, 166, 255, 0.2);
           }
@@ -2380,8 +2380,8 @@ function FourCsPage() {
           }
           .four-cs-panel.is-active .four-cs-panel-content {
             display: block;
-            max-height: 430px;
-            padding: 30px 32px 28px 4px;
+            max-height: 320px;
+            padding: 24px 32px 24px 4px;
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
