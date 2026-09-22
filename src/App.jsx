@@ -1491,7 +1491,7 @@ function AboutPage() {
                 );
               })}
             </h1>
-            <p className="cc-about-paragraph cc-about-animate mt-6 text-[22px] leading-[1.6] text-[#B7C0D8]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
+            <p className="cc-about-paragraph cc-about-animate mt-6 text-[22px] leading-[1.6] text-[#F4F7FB]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
               {paragraphWords.join(" ")}
             </p>
             <div className="cc-about-underline cc-about-animate mt-8 h-px w-12 bg-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "1550ms" }} />
@@ -1587,13 +1587,13 @@ function WhyPartnerSection() {
           <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
             OUR PRINCIPLES
           </h3>
-          <p className="mt-7 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(380)}>
+          <p className="mt-7 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(380)}>
             At Calo Capital, we help you understand what you are getting into before you commit. We are open to answer questions and do not shy away from explaining why something may not work in your favor.
           </p>
-          <p className="mt-8 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(460)}>
+          <p className="mt-8 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(460)}>
             Honesty and transparency is better than taking your money and giving you a package deal that does not do what you need it to do.
           </p>
-          <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(520)}>
+          <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(520)}>
             We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
           </p>
 
@@ -1863,7 +1863,7 @@ function CryptoCandlestickSection() {
         <h2 className="mt-4 max-w-3xl text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-white">
           Track Digital Asset Price Action in Real Time
         </h2>
-        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#A855F7]">
+        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]">
           Explore TradingView candlestick charts for major crypto pairs. Candlestick charts can help visualize open, close, high, and low prices over selected time intervals.
         </p>
 
@@ -1899,7 +1899,7 @@ function CryptoCandlestickSection() {
               <h3 className="mt-3 text-2xl font-black text-white sm:text-3xl">
                 Candlesticks show price movement, <span className="text-[#A855F7]">not certainty.</span>
               </h3>
-              <p className="mt-3 text-[22px] leading-[1.6] text-[#A855F7]">
+              <p className="mt-3 text-[22px] leading-[1.6] text-[#F4F7FB]">
                 Each candle shows the opening, closing, highest, and lowest prices for a time period. Green or purple candles usually mean prices moved up, while lighter candles can signal a move down.
               </p>
             </div>
