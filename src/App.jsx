@@ -721,17 +721,39 @@ function Navbar({ currentPage, setPage }) {
         </button>
       </div>
 
-      {open && (
-        <div className="border-t border-white/10 bg-[#15021a] px-5 py-4 lg:hidden">
-          <div className="flex flex-col gap-4">
-            {links.map((label) => (
-              <button key={label} onClick={() => goTo(label)} className={currentPage === label ? "text-left text-sm font-black text-white" : "text-left text-sm font-semibold text-slate-300"}>
+      <div
+        className={
+          `overflow-hidden border-t border-white/10 bg-[#15021a]/95 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
+            open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`
+        }
+        aria-hidden={!open}
+      >
+        <div className="px-5 py-4">
+          <div
+            className="flex flex-col gap-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              transform: open ? "translateY(0) scale(1)" : "translateY(-18px) scale(0.98)",
+              opacity: open ? 1 : 0,
+            }}
+          >
+            {links.map((label, index) => (
+              <button
+                key={label}
+                onClick={() => goTo(label)}
+                className={currentPage === label ? "text-left text-sm font-black text-white" : "text-left text-sm font-semibold text-slate-300"}
+                style={{
+                  opacity: open ? 1 : 0,
+                  transform: open ? "translateX(0)" : "translateX(-18px)",
+                  transition: `opacity 0.45s ease ${index * 0.08 + 0.12}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.08 + 0.12}s`,
+                }}
+              >
                 {label}
               </button>
             ))}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }
