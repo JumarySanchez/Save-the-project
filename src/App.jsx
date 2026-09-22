@@ -128,7 +128,7 @@ function SocialLink({ item }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={item.ariaLabel}
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-violet-300/35 hover:bg-violet-300/10 hover:text-white"
+        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-violet-300/35 hover:bg-violet-300/10 hover:text-white"
     >
       {item.icon}
       <span>{item.label}</span>
@@ -514,33 +514,30 @@ function useMarketData() {
 
     async function fetchPrices() {
       try {
-        const ids = "bitcoin,ethereum,solana,binancecoin,ripple,cardano";
-        const res = await fetch(
-          `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,
-          { headers: { Accept: "application/json" } }
+        const symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT"];
+        const responses = await Promise.all(
+          symbols.map((symbol) =>
+            fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`, {
+              headers: { Accept: "application/json" },
+            }).then((res) => (res.ok ? res.json() : null))
+          )
         );
 
-        if (!res.ok) return;
-        const data = await res.json();
         if (cancelled) return;
 
-        const map = [
-          ["bitcoin", "BTC", "Bitcoin"],
-          ["ethereum", "ETH", "Ethereum"],
-          ["solana", "SOL", "Solana"],
-          ["binancecoin", "BNB", "BNB"],
-          ["ripple", "XRP", "XRP"],
-          ["cardano", "ADA", "Cardano"],
-        ];
+        const nextCoins = symbols.map((symbol, index) => {
+          const fallback = FALLBACK_COINS[index];
+          const item = responses[index];
+          if (!item) return fallback;
 
-        const nextCoins = map.map(([id, symbol, name], index) => {
-          const item = data[id];
-          if (!item) return FALLBACK_COINS[index];
+          const price = Number(item.lastPrice);
+          const change = Number(item.priceChangePercent);
+
           return {
-            symbol,
-            name,
-            price: Number(item.usd || FALLBACK_COINS[index].price),
-            change: Number(item.usd_24h_change || 0),
+            symbol: fallback.symbol,
+            name: fallback.name,
+            price: Number.isFinite(price) ? price : fallback.price,
+            change: Number.isFinite(change) ? change : fallback.change,
           };
         });
 
@@ -600,7 +597,7 @@ function MarketTicker({ coins, live }) {
   );
 }
 
-function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[9px] uppercase tracking-[0.2em] text-violet-200/70 sm:text-xs" }) {
+function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[9px] uppercase tracking-[0.2em] text-[#A855F7]/70 sm:text-xs" }) {
   return (
     <div className="flex min-w-0 items-center gap-2.5">
       <img
@@ -627,7 +624,7 @@ function HeroSection() {
         muted
         loop
         playsInline
-      />
+        />
     </section>
   );
 }
@@ -935,7 +932,7 @@ function StockChart({ coins }) {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-body text-xs font-black text-slate-400">{selectedAsset.display}</span>
-            <span className="rounded bg-violet-300/10 px-2 py-0.5 text-xs font-bold text-violet-200">INTERACTIVE</span>
+            <span className="rounded bg-violet-300/10 px-2 py-0.5 text-xs font-bold text-[#A855F7]">INTERACTIVE</span>
           </div>
           <p className="mt-1 font-body text-2xl font-black text-white sm:text-3xl">{formatPrice(selectedAsset.price)}</p>
         </div>
@@ -945,10 +942,10 @@ function StockChart({ coins }) {
         </div>
       </div>
       <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#15021a] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#A855F7]">
           Momentum
         </div>
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-violet-100">
+        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#A855F7]">
           Trend
         </div>
         <div className="relative z-20 h-[320px] w-full sm:h-[420px] lg:h-[500px]">
@@ -1216,7 +1213,7 @@ function PageHeader({ eyebrow, title, description }) {
       <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: `url(${hikerPng})` }} />
       <div className="relative mx-auto w-full max-w-[94vw]">
         <Logo />
-        <p className="mt-10 text-sm font-black uppercase tracking-[0.3em] text-violet-200">{eyebrow}</p>
+        <p className="mt-10 text-sm font-black uppercase tracking-[0.3em] text-[#A855F7]">{eyebrow}</p>
         <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">{title}</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{description}</p>
       </div>
@@ -1599,6 +1596,15 @@ function WhyPartnerSection() {
           <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]" style={fadeStyle(520)}>
             We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
           </p>
+
+          <div className="mt-14 max-w-3xl border-t border-[#A855F7]/40 pt-8" style={fadeStyle(600)}>
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#A855F7]">Main Office</p>
+            <div className="mt-4 space-y-2 text-[18px] leading-[1.8] text-[#F4F7FB]">
+              <p>Nashville, TN • 41 Peabody Street, 37210</p>
+              <p>Monday to Friday, 9:00 AM to 5:00 PM</p>
+              <p>Email: protection@calocapital.io</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1853,11 +1859,11 @@ function CryptoCandlestickSection() {
       style={{ background: "#15021a" }}
     >
       <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Live Crypto Candlestick Chart</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Live Crypto Candlestick Chart</p>
         <h2 className="mt-4 max-w-3xl text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-white">
           Track Digital Asset Price Action in Real Time
         </h2>
-        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#C7B6CB]">
+        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#A855F7]">
           Explore TradingView candlestick charts for major crypto pairs. Candlestick charts can help visualize open, close, high, and low prices over selected time intervals.
         </p>
 
@@ -1868,7 +1874,7 @@ function CryptoCandlestickSection() {
               onClick={() => setSelectedSymbol(item.marketSymbol)}
               className={selectedSymbol === item.marketSymbol
                 ? "rounded-none border border-[#D7A6FF] bg-[#D7A6FF]/15 px-4 py-2 text-sm font-black text-white"
-                : "rounded-none border border-white/20 bg-transparent px-4 py-2 text-sm font-black text-[#C7B6CB] transition hover:border-[#D7A6FF] hover:text-white"}
+                : "rounded-none border border-white/20 bg-transparent px-4 py-2 text-sm font-black text-[#A855F7] transition hover:border-[#D7A6FF] hover:text-white"}
               aria-pressed={selectedSymbol === item.marketSymbol}
             >
               {item.label}
@@ -1881,7 +1887,7 @@ function CryptoCandlestickSection() {
           {chartError && (
             <p className="border-t border-white/15 px-4 py-3 text-sm text-rose-200">{chartError}</p>
           )}
-          <div className="border-t border-white/10 px-4 py-3 text-xs leading-6 text-[#C7B6CB]">
+          <div className="border-t border-white/10 px-4 py-3 text-xs leading-6 text-[#A855F7]">
             Powered by TradingView Lightweight Charts with market data feed for educational chart visualization.
           </div>
         </div>
@@ -1889,11 +1895,11 @@ function CryptoCandlestickSection() {
         <div className="mt-8 bg-white/[0.02] p-5 sm:p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="lg:max-w-[52%]">
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Understanding Market Charts</p>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Understanding Market Charts</p>
               <h3 className="mt-3 text-2xl font-black text-white sm:text-3xl">
-                Candlesticks show price movement, <span className="text-[#D7A6FF]">not certainty.</span>
+                Candlesticks show price movement, <span className="text-[#A855F7]">not certainty.</span>
               </h3>
-              <p className="mt-3 text-[22px] leading-[1.6] text-[#C7B6CB]">
+              <p className="mt-3 text-[22px] leading-[1.6] text-[#A855F7]">
                 Each candle shows the opening, closing, highest, and lowest prices for a time period. Green or purple candles usually mean prices moved up, while lighter candles can signal a move down.
               </p>
             </div>
@@ -1948,7 +1954,7 @@ function FinancialTopicsSection() {
     >
       <div className="mx-auto max-w-[1400px]">
         <div className="mb-6 text-center sm:mb-8">
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore</p>
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Explore</p>
           <h2 className="mt-3 text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-white">Financial Topics</h2>
         </div>
         <style>{`
@@ -2274,7 +2280,7 @@ function FinancialTopicsPage() {
   return (
     <section id="financial-topics" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore Financial Topics</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Explore Financial Topics</p>
         <h1 className="cc-slow-fade mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
           Prepare Better Questions for Your Financial Journey
         </h1>
@@ -2299,15 +2305,15 @@ function FinancialTopicsPage() {
 
             return (
               <article key={topic.id} id={topic.id} className="space-y-4 py-4 sm:py-6">
-                <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#D7A6FF]">{topic.title}</h2>
-                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#C7B6CB]">{topic.hook}</p>
+                <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#A855F7]">{topic.title}</h2>
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#A855F7]">{topic.hook}</p>
                 <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">{topic.shortDescription}</p>
                 <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">{topicOverview}</p>
                 <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">
                   Why it matters: {topic.id === "protecting-your-family" ? "A clear life insurance plan can help reduce financial stress, preserve household goals, and give families a framework for dealing with unexpected losses." : topic.id === "retirement-and-iras" ? "The structure of retirement accounts and timing can materially affect long-term flexibility, tax efficiency, and peace of mind later in life." : topic.id === "trusts-and-legacy" ? "Thoughtful legacy planning can help avoid confusion, preserve intentions, and make future transitions easier for family members and beneficiaries." : topic.id === "investments-and-wealth" ? "The right investment approach depends on goals, time horizon, and risk tolerance, which is why understanding the basics helps people make more informed decisions." : topic.id === "cryptocurrency" ? "Because the market moves quickly and security mistakes can be costly, it is important to understand both the opportunity and the risk before getting involved." : "Charts are most useful when they are treated as information tools, not promises, which helps people keep perspective on risk, timing, and market uncertainty."}
                 </p>
 
-                <p className="text-sm leading-7 text-[#C7B6CB]">
+                <p className="text-sm leading-7 text-[#A855F7]">
                   Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
                 </p>
               </article>
@@ -2362,7 +2368,7 @@ function FourCsPage() {
   return (
     <section id="four-cs" className="bg-[#15021a] px-5 pb-12 pt-16 text-white sm:pb-16 sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Our Four C&apos;s</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Our Four C&apos;s</p>
         <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
           The four pillars behind our approach to wealth planning.
         </h1>
@@ -2428,7 +2434,7 @@ function FourCsPage() {
             pointer-events: none;
           }
           .four-cs-panel-number {
-            color: #d7a6ff;
+            color: #a855f7;
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 0.2em;
@@ -2571,7 +2577,7 @@ function FourCsPage() {
                   <span className="four-cs-panel-title">{service.title}</span>
                 </div>
                 <div id={`${serviceIds[index]}-content`} className="four-cs-panel-content">
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-[#D7A6FF]">{service.texture.accent}</p>
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-[#A855F7]">{service.texture.accent}</p>
                   <h2 className="mt-4 text-[clamp(1.65rem,3vw,2.5rem)] font-black leading-[1.03] text-white">{service.question}</h2>
                   <div className="mt-5 space-y-4 text-sm leading-7 text-[#E9DDEC] sm:text-base">
                     <p>{service.meaning}</p>
@@ -2681,7 +2687,7 @@ function LegalPage() {
   return (
     <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Calo Capital</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Calo Capital</p>
         <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-white">Privacy &amp; Disclaimer</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#E9DDEC]">
           Important information about privacy, educational content, and the use of this website.
@@ -2689,13 +2695,13 @@ function LegalPage() {
 
         <div className="mt-14 space-y-14">
           <article id="privacy-policy" className="scroll-mt-28 border-t border-[#d7a6ff66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#D7A6FF]">01</p>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#A855F7]">01</p>
             <h2 className="mt-3 text-3xl font-black text-white">Privacy Policy</h2>
             <p className="mt-5 text-[22px] leading-[1.6] text-[#E9DDEC]">{privacyPolicy}</p>
           </article>
 
           <article id="disclaimer" className="scroll-mt-28 border-t border-[#d7a6ff66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#D7A6FF]">02</p>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#A855F7]">02</p>
             <h2 className="mt-3 text-3xl font-black text-white">Disclaimer</h2>
             <p className="mt-5 text-[22px] leading-[1.6] text-[#E9DDEC]">{disclaimer}</p>
           </article>
@@ -2729,7 +2735,7 @@ function Footer({ setPage }) {
               event.preventDefault();
               setPage("Legal", "privacy-policy");
             }}
-            className="font-black uppercase tracking-[0.18em] text-violet-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
+            className="font-black uppercase tracking-[0.18em] text-[#A855F7] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
           >
             Privacy Policy
           </a>
@@ -2739,7 +2745,7 @@ function Footer({ setPage }) {
               event.preventDefault();
               setPage("Legal", "disclaimer");
             }}
-            className="font-black uppercase tracking-[0.18em] text-violet-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
+            className="font-black uppercase tracking-[0.18em] text-[#A855F7] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
           >
             Disclaimer
           </a>
