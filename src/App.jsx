@@ -600,18 +600,18 @@ function MarketTicker({ coins, live }) {
   );
 }
 
-function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[10px] uppercase tracking-[0.25em] text-violet-200/70 sm:text-xs" }) {
+function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[9px] uppercase tracking-[0.2em] text-violet-200/70 sm:text-xs" }) {
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex min-w-0 items-center gap-2.5">
       <img
         src={logoPng}
         alt="Calo Capital Logo"
         className={`${logoSizeClass} w-auto shrink-0 self-center object-contain`}
         style={{ background: 'transparent' }}
       />
-      <div className="text-left leading-tight">
+      <div className="min-w-0 text-left leading-tight">
         <p className={`${textSizeClass} font-black tracking-wide text-white`}>Calo Capital</p>
-        <p className={taglineClass}>Where Strategy Meets Legacy</p>
+        <p className={`${taglineClass} whitespace-normal`}>Where Strategy Meets Legacy</p>
       </div>
     </div>
   );
@@ -688,7 +688,7 @@ function Navbar({ currentPage, setPage }) {
   return (
     <header className="z-50 bg-[#15021a]/40">
       <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center justify-between px-4 py-4 sm:px-5">
-        <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="text-left">
+        <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="max-w-full text-left">
           <Logo />
         </button>
 
@@ -1560,7 +1560,7 @@ function WhyPartnerSection() {
           <div className="mt-3 h-px w-28 bg-[#A855F7]/70" />
         </div>
 
-        <h2 className="cc-slow-fade mt-10 max-w-[none] text-[34px] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] whitespace-nowrap" style={revealStyle(150, 30)}>
+        <h2 className="cc-slow-fade mt-10 max-w-[12ch] text-[clamp(2.3rem,7vw,4rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] sm:max-w-none" style={revealStyle(150, 30)}>
           Markets move. <span className="text-[#A855F7]">Sound strategy</span> endures.
         </h2>
 
@@ -1888,6 +1888,21 @@ function FinancialTopicsSection() {
   const [isPaused, setIsPaused] = useState(false);
   const slideCount = 6;
 
+  const goToSlide = (index) => {
+    setActiveSlide(index);
+    setIsPaused(true);
+  };
+
+  const goToPreviousSlide = () => {
+    setActiveSlide((current) => (current - 1 + slideCount) % slideCount);
+    setIsPaused(true);
+  };
+
+  const goToNextSlide = () => {
+    setActiveSlide((current) => (current + 1) % slideCount);
+    setIsPaused(true);
+  };
+
   useEffect(() => {
     if (isPaused) return undefined;
 
@@ -1896,7 +1911,7 @@ function FinancialTopicsSection() {
     }, 5000);
 
     return () => window.clearInterval(intervalId);
-  }, [isPaused]);
+  }, [isPaused, slideCount]);
 
   return (
     <section
@@ -1910,6 +1925,10 @@ function FinancialTopicsSection() {
       }}
     >
       <div className="mx-auto max-w-[1400px]">
+        <div className="mb-6 text-center sm:mb-8">
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#D7A6FF]">Explore</p>
+          <h2 className="mt-3 text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-white">Financial Topics</h2>
+        </div>
         <style>{`
           @keyframes financialSlideIn {
             from { opacity: 0; transform: translateX(18px); }
@@ -2188,19 +2207,41 @@ function FinancialTopicsSection() {
           </div>
         </article>
 
-        <div className="mt-5 flex items-center justify-center gap-3" aria-label="Financial topic slides">
-          {Array.from({ length: slideCount }, (_, index) => (
+        <div className="mt-5 flex flex-col items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-3" aria-label="Financial slide navigation">
             <button
-              key={`financial-slide-${index}`}
               type="button"
-              aria-label={`Show financial topic slide ${index + 1}`}
-              aria-current={activeSlide === index ? "true" : undefined}
-              onClick={() => setActiveSlide(index)}
-              className={`h-3 w-3 rounded-full border border-white/30 transition-all duration-300 ${
-                activeSlide === index ? "w-8 bg-[#d78cff]" : "bg-white/20"
-              }`}
-            />
-          ))}
+              aria-label="Previous financial topic slide"
+              onClick={goToPreviousSlide}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/5 text-xl font-bold text-white transition hover:border-[#d7a6ff] hover:bg-[#d7a6ff]/10"
+            >
+              ←
+            </button>
+
+            <div className="flex items-center justify-center gap-3" aria-label="Financial topic slides">
+              {Array.from({ length: slideCount }, (_, index) => (
+                <button
+                  key={`financial-slide-${index}`}
+                  type="button"
+                  aria-label={`Show financial topic slide ${index + 1}`}
+                  aria-current={activeSlide === index ? "true" : undefined}
+                  onClick={() => goToSlide(index)}
+                  className={`h-3 w-3 rounded-full border border-white/30 transition-all duration-300 ${
+                    activeSlide === index ? "w-8 bg-[#d78cff]" : "bg-white/20"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              aria-label="Next financial topic slide"
+              onClick={goToNextSlide}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/5 text-xl font-bold text-white transition hover:border-[#d7a6ff] hover:bg-[#d7a6ff]/10"
+            >
+              →
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -2289,6 +2330,8 @@ function FourCsPage() {
       example: cardExample,
     };
   });
+
+  const supportsHover = typeof window !== "undefined" ? window.matchMedia("(hover: hover)").matches : true;
 
   function toggleCard(index) {
     setActiveCard((current) => (current === index ? null : index));
@@ -2479,15 +2522,23 @@ function FourCsPage() {
                 role="listitem"
                 className={`four-cs-panel${index === 0 ? " has-cover" : ""}${isActive ? " is-active" : ""}`}
                 style={index === 0 ? { "--four-cs-cover": `url(${pillar1DesignPng})` } : undefined}
-                onMouseEnter={() => setActiveCard(index)}
-                onMouseLeave={() => setActiveCard(null)}
+                onMouseEnter={() => {
+                  if (supportsHover) setActiveCard(index);
+                }}
+                onMouseLeave={() => {
+                  if (supportsHover) setActiveCard(null);
+                }}
               >
                 <button
                   type="button"
                   className="four-cs-panel-button"
                   onClick={() => toggleCard(index)}
-                  onFocus={() => setActiveCard(index)}
-                  onBlur={() => setActiveCard(null)}
+                  onFocus={() => {
+                    if (supportsHover) setActiveCard(index);
+                  }}
+                  onBlur={() => {
+                    if (supportsHover) setActiveCard(null);
+                  }}
                   aria-expanded={isActive}
                   aria-controls={`${serviceIds[index]}-content`}
                 >
@@ -3149,7 +3200,7 @@ export default function App() {
       Home: "",
       "Why invest": "client-excellence",
       "Four C's": "four-cs",
-      "Financial Topics": "financial-topics",
+      "Financial Topics": "financial-priorities",
     };
 
     const targetSectionId = sectionMap[page];
