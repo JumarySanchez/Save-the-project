@@ -514,35 +514,47 @@ function useMarketData() {
 
     async function fetchPrices() {
       try {
-        const symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT"];
-        const responses = await Promise.all(
-          symbols.map((symbol) =>
-            fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`, {
-              headers: { Accept: "application/json" },
-            }).then((res) => (res.ok ? res.json() : null))
-          )
+        const symbols = [
+          { symbol: "BTC", pair: "XBTUSD", resultKey: "XXBTZUSD" },
+          { symbol: "ETH", pair: "ETHUSD", resultKey: "XETHZUSD" },
+          { symbol: "SOL", pair: "SOLUSD", resultKey: "SOLUSD" },
+          { symbol: "XRP", pair: "XRPUSD", resultKey: "XXRPZUSD" },
+          { symbol: "ADA", pair: "ADAUSD", resultKey: "ADAUSD" },
+        ];
+        const response = await fetch(
+          `https://api.kraken.com/0/public/Ticker?pair=${symbols.map((item) => item.pair).join(",")}`,
+          { headers: { Accept: "application/json" } }
         );
+
+        if (!response.ok) throw new Error(`Market feed returned ${response.status}`);
+        const payload = await response.json();
+        if (payload.error?.length) throw new Error(payload.error.join(", "));
 
         if (cancelled) return;
 
-        const nextCoins = symbols.map((symbol, index) => {
-          const fallback = FALLBACK_COINS[index];
-          const item = responses[index];
-          if (!item) return fallback;
+        let liveCount = 0;
+        const nextCoins = symbols.map(({ symbol, resultKey }) => {
+          const fallback = FALLBACK_COINS.find((coin) => coin.symbol === symbol);
+          const item = payload.result?.[resultKey];
+          if (!item || !fallback) return fallback;
 
-          const price = Number(item.lastPrice);
-          const change = Number(item.priceChangePercent);
+          const price = Number(item.c?.[0]);
+          const openingPrice = Number(item.o);
+          if (!Number.isFinite(price) || !Number.isFinite(openingPrice) || openingPrice <= 0) return fallback;
+
+          liveCount += 1;
+          const change = openingPrice > 0 ? ((price - openingPrice) / openingPrice) * 100 : fallback.change;
 
           return {
             symbol: fallback.symbol,
             name: fallback.name,
-            price: Number.isFinite(price) ? price : fallback.price,
+            price,
             change: Number.isFinite(change) ? change : fallback.change,
           };
         });
 
         setCoins(nextCoins);
-        setLive(true);
+        setLive(liveCount === symbols.length);
       } catch (error) {
         setLive(false);
       }
@@ -1861,7 +1873,7 @@ function CryptoCandlestickSection() {
       <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Live Crypto Candlestick Chart</p>
         <h2 className="mt-4 max-w-3xl text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-white">
-          Track Digital Asset Price Action in Real Time
+          Track <span className="text-[#A855F7]">Digital Asset</span> Price Action in Real Time
         </h2>
         <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]">
           Explore TradingView candlestick charts for major crypto pairs. Candlestick charts can help visualize open, close, high, and low prices over selected time intervals.
@@ -2278,7 +2290,7 @@ function FinancialTopicsSection() {
 
 function FinancialTopicsPage() {
   return (
-    <section id="financial-topics" className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
+    <section id="financial-topics" className="cc-slow-fade bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Explore Financial Topics</p>
         <h1 className="cc-slow-fade mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
@@ -2366,7 +2378,7 @@ function FourCsPage() {
   }
 
   return (
-    <section id="four-cs" className="bg-[#15021a] px-5 pb-12 pt-16 text-white sm:pb-16 sm:pt-20">
+    <section id="four-cs" className="cc-slow-fade bg-[#15021a] px-5 pb-12 pt-16 text-white sm:pb-16 sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Our Four C&apos;s</p>
         <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
