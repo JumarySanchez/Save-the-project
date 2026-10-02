@@ -694,11 +694,22 @@ function scrollToHomeSection(page) {
 
 function Navbar({ currentPage, setPage }) {
   const [open, setOpen] = useState(false);
-  const links = ["Home", "Explore", "Four C's", "Financial Topics", "Contact"];
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const links = ["Home", "Four C's", "Contact"];
 
   function goTo(page) {
     setPage(page);
     setOpen(false);
+    setSolutionsOpen(false);
+  }
+
+  function goToSolution(solutionId, block = "center") {
+    goTo("Explore");
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById(solutionId)?.scrollIntoView({ behavior: "smooth", block });
+      });
+    });
   }
 
   return (
@@ -709,7 +720,57 @@ function Navbar({ currentPage, setPage }) {
         </button>
 
         <nav className="hidden flex-1 items-center justify-center gap-6 px-4 lg:flex lg:max-w-4xl xl:max-w-5xl xl:gap-12 xl:px-16">
-          {links.map((label) => (
+          <button
+            onClick={() => goTo("Home")}
+            className={currentPage === "Home" ? "px-1 text-sm font-black text-[#F4F7FB]" : "px-1 text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"}
+          >
+            Home
+          </button>
+          <div
+            className="relative"
+            onKeyDown={(event) => {
+              if (event.key === "Escape") setSolutionsOpen(false);
+            }}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setSolutionsOpen(false);
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setSolutionsOpen((value) => !value)}
+              className={currentPage === "Explore" ? "px-1 text-sm font-black text-[#F4F7FB]" : "px-1 text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"}
+              aria-haspopup="menu"
+              aria-expanded={solutionsOpen}
+              aria-controls="financial-solutions-menu"
+            >
+              Financial Solutions
+            </button>
+            {solutionsOpen && (
+              <div id="financial-solutions-menu" role="menu" className="absolute left-0 top-full z-[60] mt-3 w-64 border border-[#B7C0D8]/20 bg-[#0B1028] py-2 shadow-[0_14px_40px_rgba(0,0,0,0.45)]">
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => goToSolution("financial-solutions", "start")}
+                  className="block w-full px-4 py-2.5 text-left text-sm font-black text-[#F4F7FB] transition hover:bg-white/[0.05]"
+                >
+                  All Solutions
+                </button>
+                <div className="my-1 border-t border-[#B7C0D8]/15" aria-hidden="true" />
+                {financialSolutions.map((solution) => (
+                  <button
+                    key={solution.id}
+                    type="button"
+                    role="menuitem"
+                    onClick={() => goToSolution(solution.id)}
+                    className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-[#B7C0D8] transition hover:bg-white/[0.05] hover:text-[#F4F7FB]"
+                  >
+                    {solution.title}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {links.slice(1).map((label) => (
             <button
               key={label}
               onClick={() => goTo(label)}
@@ -740,7 +801,7 @@ function Navbar({ currentPage, setPage }) {
       <div
         className={
           `overflow-hidden border-t border-[#B7C0D8]/10 bg-[#050816]/95 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
-            open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+            open ? "max-h-[42rem] opacity-100" : "max-h-0 opacity-0"
           }`
         }
         aria-hidden={!open}
@@ -753,7 +814,44 @@ function Navbar({ currentPage, setPage }) {
               opacity: open ? 1 : 0,
             }}
           >
-            {links.map((label, index) => (
+            <button
+              onClick={() => goTo("Home")}
+              className={currentPage === "Home" ? "text-left text-sm font-black text-[#F4F7FB]" : "text-left text-sm font-semibold text-[#B7C0D8]"}
+            >
+              Home
+            </button>
+            <button
+              type="button"
+              onClick={() => setSolutionsOpen((value) => !value)}
+              className={currentPage === "Explore" ? "flex items-center justify-between text-left text-sm font-black text-[#F4F7FB]" : "flex items-center justify-between text-left text-sm font-semibold text-[#B7C0D8]"}
+              aria-expanded={solutionsOpen}
+              aria-controls="financial-solutions-menu-mobile"
+            >
+              Financial Solutions
+              <span aria-hidden="true">{solutionsOpen ? "−" : "+"}</span>
+            </button>
+            {solutionsOpen && (
+              <div id="financial-solutions-menu-mobile" className="ml-3 flex flex-col gap-3 border-l border-[#B7C0D8]/20 pl-4">
+                <button
+                  type="button"
+                  onClick={() => goToSolution("financial-solutions", "start")}
+                  className="text-left text-sm font-black text-[#F4F7FB]"
+                >
+                  All Solutions
+                </button>
+                {financialSolutions.map((solution) => (
+                  <button
+                    key={solution.id}
+                    type="button"
+                    onClick={() => goToSolution(solution.id)}
+                    className="text-left text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"
+                  >
+                    {solution.title}
+                  </button>
+                ))}
+              </div>
+            )}
+            {links.slice(1).map((label, index) => (
               <button
                 key={label}
                 onClick={() => goTo(label)}
@@ -1924,63 +2022,375 @@ function CryptoCandlestickSection() {
 
 const financialSolutions = [
   {
+    id: "working-capital",
     title: "Working Capital",
     description: "Explore flexible financing options for short-term business cash flow needs.",
   },
   {
+    id: "sba-loans",
     title: "SBA Loans",
     description: "Learn about government-backed financing programs for eligible businesses.",
   },
   {
+    id: "real-estate-financing",
     title: "Real Estate Financing",
     description: "Explore financing options for commercial property purchases and projects.",
   },
   {
+    id: "credit-card-processing",
     title: "Credit Card Processing",
     description: "Review payment processing options for accepting customer card payments.",
   },
   {
+    id: "equipment-financing",
     title: "Equipment Financing",
     description: "Explore financing options for essential business equipment.",
   },
   {
+    id: "credit-repair",
     title: "Credit Repair",
     description: "Learn about services intended to help businesses improve their credit profiles.",
   },
 ];
 
 function FinancialSolutionsSection() {
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
+  const [monthlyRevenue, setMonthlyRevenue] = useState("");
+  const [monthlyExpenses, setMonthlyExpenses] = useState("");
+  const [monthlyDebtPayments, setMonthlyDebtPayments] = useState("");
+  const [fundingRequest, setFundingRequest] = useState("");
+  const [timeInBusiness, setTimeInBusiness] = useState("");
+  const [fundingUse, setFundingUse] = useState("");
+  const calculatorTriggerRef = useRef(null);
+  const calculatorDialogRef = useRef(null);
+  const calculatorCloseRef = useRef(null);
+  const revenueValue = Number(monthlyRevenue);
+  const expensesValue = Number(monthlyExpenses);
+  const debtPaymentsValue = Number(monthlyDebtPayments);
+  const fundingValue = Number(fundingRequest);
+  const monthlyProfit = monthlyRevenue !== "" && monthlyExpenses !== ""
+    && Number.isFinite(revenueValue) && Number.isFinite(expensesValue) && revenueValue > 0 && expensesValue >= 0
+    ? revenueValue - expensesValue
+    : null;
+  const monthlyCashAfterDebt = monthlyDebtPayments !== "" && monthlyProfit !== null
+    && Number.isFinite(debtPaymentsValue) && debtPaymentsValue >= 0
+    ? monthlyProfit - debtPaymentsValue
+    : null;
+  const cashFlowMonths = monthlyCashAfterDebt !== null && monthlyCashAfterDebt > 0 && Number.isFinite(fundingValue) && fundingValue > 0
+    ? fundingValue / monthlyCashAfterDebt
+    : null;
+
+  useEffect(() => {
+    const dialog = calculatorDialogRef.current;
+    if (!calculatorOpen || !dialog) return;
+
+    dialog.showModal();
+    calculatorCloseRef.current?.focus();
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setCalculatorOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      if (dialog.open) dialog.close();
+    };
+  }, [calculatorOpen]);
 
   return (
-    <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
-      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-        <header className="text-center">
-          <h2 className="text-[clamp(2rem,4vw,3rem)] font-black leading-tight text-[#9B7CFF]">
-            Our Financial Solutions
-          </h2>
-          <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
-            Explore small-business financing options on CapNow.
-          </p>
-        </header>
+    <>
+      <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
+        <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
+          <header className="text-center">
+            <h2 className="text-[clamp(2rem,4vw,3rem)] font-black leading-tight text-[#9B7CFF]">
+              Our Financial Solutions
+            </h2>
+            <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
+              Explore small-business financing options on CapNow.
+            </p>
+          </header>
 
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {financialSolutions.map((solution) => (
-            <article
-              key={solution.title}
-              className="financial-galactic-card flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]"
-            >
-              <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
-                {solution.title}
-              </span>
-              <span className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">
-                {solution.description}
-              </span>
-              <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
-            </article>
-          ))}
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+            {financialSolutions.map((solution) => {
+              const isWorkingCapital = solution.id === "working-capital";
+              const Card = isWorkingCapital ? "button" : "article";
+
+              return (
+                <Card
+                  id={solution.id}
+                  key={solution.title}
+                  type={isWorkingCapital ? "button" : undefined}
+                  ref={isWorkingCapital ? calculatorTriggerRef : undefined}
+                  onClick={isWorkingCapital ? () => setCalculatorOpen(true) : undefined}
+                  aria-label={isWorkingCapital ? "Open Working Capital funding calculator" : undefined}
+                  aria-haspopup={isWorkingCapital ? "dialog" : undefined}
+                  aria-controls={isWorkingCapital ? "working-capital-calculator" : undefined}
+                  className={`financial-galactic-card scroll-mt-8 flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]${isWorkingCapital ? " cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6B8FF]" : ""}`}
+                >
+                  <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
+                    {solution.title}
+                  </span>
+                  <span className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">
+                    {solution.description}
+                  </span>
+                  <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
+                </Card>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {calculatorOpen && (
+        <dialog
+          ref={calculatorDialogRef}
+          id="working-capital-calculator"
+          aria-labelledby="working-capital-calculator-title"
+          className="m-auto max-h-[90dvh] w-[min(960px,calc(100vw-2rem))] max-w-none border-0 bg-transparent p-0 text-left text-[#F4F7FB]"
+          onClose={() => setCalculatorOpen(false)}
+          onCancel={() => setCalculatorOpen(false)}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setCalculatorOpen(false);
+          }}
+        >
+          <style>{`
+            dialog#working-capital-calculator::backdrop {
+              background: rgba(5, 8, 22, 0.84);
+              backdrop-filter: blur(6px);
+            }
+            .funding-calculator-atmosphere {
+              position: relative;
+              isolation: isolate;
+              overflow: hidden;
+              background:
+                radial-gradient(ellipse at 82% 76%, rgba(109, 94, 245, 0.22), transparent 42%),
+                radial-gradient(ellipse at 12% 18%, rgba(155, 124, 255, 0.2), transparent 40%),
+                linear-gradient(145deg, #050816, #1A2340 64%, #050816);
+            }
+            .funding-calculator-atmosphere::before,
+            .funding-calculator-atmosphere::after {
+              position: absolute;
+              z-index: -1;
+              content: "";
+              pointer-events: none;
+            }
+            .funding-calculator-atmosphere::before {
+              inset: -22%;
+              background:
+                radial-gradient(ellipse at 38% 48%, rgba(109, 94, 245, 0.3), transparent 35%),
+                radial-gradient(ellipse at 74% 66%, rgba(198, 184, 255, 0.16), transparent 30%);
+              animation: funding-nebula-drift 28s ease-in-out infinite alternate;
+            }
+            .funding-calculator-atmosphere::after {
+              inset: 0;
+              background-image:
+                radial-gradient(circle at 12% 18%, rgba(244, 247, 251, 0.85) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 29% 72%, rgba(198, 184, 255, 0.75) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 48% 28%, rgba(244, 247, 251, 0.78) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 67% 84%, rgba(183, 192, 216, 0.8) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 84% 34%, rgba(244, 247, 251, 0.82) 0 1px, transparent 1.5px);
+              opacity: 0.62;
+              animation: funding-star-drift 36s ease-in-out infinite alternate;
+            }
+            .funding-calculator-atmosphere > * {
+              position: relative;
+              z-index: 1;
+            }
+            @keyframes funding-nebula-drift {
+              from { transform: scale(1.04) translate3d(-2%, 1%, 0); }
+              to { transform: scale(1.18) translate3d(2%, -1%, 0); }
+            }
+            @keyframes funding-star-drift {
+              from { transform: translate3d(-1%, 1%, 0); opacity: 0.4; }
+              to { transform: translate3d(1%, -1%, 0); opacity: 0.85; }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .funding-calculator-atmosphere::before,
+              .funding-calculator-atmosphere::after {
+                animation: none;
+              }
+            }
+          `}</style>
+          <div className="relative grid max-h-[90dvh] overflow-y-auto rounded-lg bg-[#050816] shadow-[0_28px_90px_rgba(5,8,22,0.7),0_0_40px_rgba(109,94,245,0.18)] md:grid-cols-2">
+            <button
+              ref={calculatorCloseRef}
+              type="button"
+              onClick={() => setCalculatorOpen(false)}
+              aria-label="Close funding calculator"
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center border border-[#1A2340]/15 bg-[#F4F7FB] text-2xl text-[#050816] transition hover:bg-[#C6B8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6D5EF5]"
+            >
+              ×
+            </button>
+
+            <section className="funding-calculator-atmosphere flex flex-col justify-center px-7 py-10 sm:px-10 md:py-12">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#C6B8FF]">Calo Capital · Working Capital</p>
+              <h2 id="working-capital-calculator-title" className="mt-5 max-w-sm text-3xl font-black leading-tight text-[#F4F7FB] sm:text-4xl">
+                Quick Funding Calculator
+              </h2>
+              <p className="mt-5 max-w-md text-base leading-7 text-[#B7C0D8]">
+                Add your monthly sales, operating costs, existing debt payments, and funding details to review your business cash flow.
+              </p>
+              <p className="mt-6 max-w-md text-sm leading-6 text-[#B7C0D8]">
+                <span className="font-bold text-[#F4F7FB]">Direct lenders commonly review:</span> recent business bank statements, time in business, credit history, cash flow, current obligations, and how funds will be used. Requirements differ by lender.
+              </p>
+            </section>
+
+            <form
+              onSubmit={(event) => event.preventDefault()}
+              className="flex flex-col justify-center gap-5 bg-[#F4F7FB] px-6 py-8 text-[#050816] sm:px-9 sm:py-10"
+            >
+              <h3 className="text-center text-2xl font-black text-[#050816]">Business cash flow</h3>
+              <label htmlFor="working-capital-monthly-revenue" className="block text-sm font-bold">
+                Monthly revenue
+                <span className="relative mt-2 block">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
+                  <input
+                    id="working-capital-monthly-revenue"
+                    type="number"
+                    min="1"
+                    step="any"
+                    inputMode="decimal"
+                    required
+                    value={monthlyRevenue}
+                    onChange={(event) => setMonthlyRevenue(event.target.value)}
+                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
+                  />
+                </span>
+              </label>
+              <label htmlFor="working-capital-monthly-expenses" className="block text-sm font-bold">
+                Monthly operating expenses
+                <span className="relative mt-2 block">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
+                  <input
+                    id="working-capital-monthly-expenses"
+                    type="number"
+                    min="0"
+                    step="any"
+                    inputMode="decimal"
+                    required
+                    value={monthlyExpenses}
+                    onChange={(event) => setMonthlyExpenses(event.target.value)}
+                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
+                  />
+                </span>
+              </label>
+              <label htmlFor="working-capital-monthly-debt" className="block text-sm font-bold">
+                Existing monthly debt payments
+                <span className="relative mt-2 block">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
+                  <input
+                    id="working-capital-monthly-debt"
+                    type="number"
+                    min="0"
+                    step="any"
+                    inputMode="decimal"
+                    required
+                    value={monthlyDebtPayments}
+                    onChange={(event) => setMonthlyDebtPayments(event.target.value)}
+                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
+                  />
+                </span>
+              </label>
+              <label htmlFor="working-capital-time-in-business" className="block text-sm font-bold">
+                Time in business
+                <select
+                  id="working-capital-time-in-business"
+                  required
+                  value={timeInBusiness}
+                  onChange={(event) => setTimeInBusiness(event.target.value)}
+                  className="mt-2 h-14 w-full border border-[#B7C0D8] bg-white px-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
+                >
+                  <option value="" disabled>Select a range</option>
+                  <option value="Under 6 months">Under 6 months</option>
+                  <option value="6-12 months">6-12 months</option>
+                  <option value="1-2 years">1-2 years</option>
+                  <option value="2-5 years">2-5 years</option>
+                  <option value="Over 5 years">Over 5 years</option>
+                </select>
+              </label>
+              <label htmlFor="working-capital-funding-request" className="block text-sm font-bold">
+                Funding amount requested
+                <span className="relative mt-2 block">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
+                  <input
+                    id="working-capital-funding-request"
+                    type="number"
+                    min="1"
+                    step="any"
+                    inputMode="decimal"
+                    required
+                    value={fundingRequest}
+                    onChange={(event) => setFundingRequest(event.target.value)}
+                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
+                  />
+                </span>
+              </label>
+              <label htmlFor="working-capital-use" className="block text-sm font-bold">
+                Planned use of funds
+                <select
+                  id="working-capital-use"
+                  required
+                  value={fundingUse}
+                  onChange={(event) => setFundingUse(event.target.value)}
+                  className="mt-2 h-14 w-full border border-[#B7C0D8] bg-white px-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
+                >
+                  <option value="" disabled>Select a use</option>
+                  <option value="Working capital">Working capital</option>
+                  <option value="Inventory">Inventory</option>
+                  <option value="Equipment">Equipment</option>
+                  <option value="Payroll">Payroll</option>
+                  <option value="Marketing or expansion">Marketing or expansion</option>
+                  <option value="Refinancing existing debt">Refinancing existing debt</option>
+                  <option value="Other business need">Other business need</option>
+                </select>
+              </label>
+              <div aria-live="polite" className="space-y-4 border border-[#B7C0D8] bg-white p-4">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#1A2340]">Estimated monthly profit before debt payments</p>
+                  <p className="mt-2 text-xl font-black text-[#6D5EF5]">
+                    {monthlyProfit === null
+                      ? "Enter revenue and expenses"
+                      : new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(monthlyProfit)}
+                  </p>
+                </div>
+                <div className="border-t border-[#B7C0D8]/60 pt-3">
+                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#1A2340]">Cash remaining after listed debt payments</p>
+                  <p className="mt-2 text-xl font-black text-[#6D5EF5]">
+                    {monthlyCashAfterDebt === null
+                      ? "Enter monthly debt payments"
+                      : new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(monthlyCashAfterDebt)}
+                  </p>
+                </div>
+                <div className="border-t border-[#B7C0D8]/60 pt-3">
+                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#1A2340]">Request compared with available cash flow</p>
+                  <p className="mt-2 text-base font-bold text-[#6D5EF5]">
+                    {monthlyCashAfterDebt === null
+                      ? "Complete cash-flow fields to compare"
+                      : cashFlowMonths === null
+                        ? "No positive cash flow entered"
+                        : `${cashFlowMonths.toFixed(1)} months of current cash flow`}
+                  </p>
+                    </div>
+              </div>
+              <a
+                href={SCHEDULE_CALL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-12 items-center justify-center bg-[#9B7CFF] px-5 py-3 text-center text-sm font-black text-[#050816] transition hover:bg-[#C6B8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6D5EF5]"
+              >
+                Schedule a Calo consultation
+              </a>
+              <p className="text-xs leading-5 text-[#1A2340]">
+                This snapshot is informational only. It does not predict a maximum offer or approval. Lenders may also request bank statements and review business and personal credit.
+              </p>
+            </form>
+          </div>
+        </dialog>
+      )}
+    </>
   );
 }
 
