@@ -2059,8 +2059,52 @@ const financialSolutions = [
   },
 ];
 
+const sbaLoanPrograms = [
+  {
+    title: "SBA 7(a) Loans",
+    description: "The SBA's primary business loan program, offered through participating lenders.",
+    facts: [
+      "Maximum loan amount: up to $5 million",
+      "May support working capital, equipment, real estate, or ownership changes",
+      "Repayment terms and rates depend on loan use and lender",
+    ],
+    href: "https://www.sba.gov/funding-programs/loans/7a-loans",
+  },
+  {
+    title: "SBA 504 Loans",
+    description: "Long-term, fixed-rate financing for major fixed assets that support business growth.",
+    facts: [
+      "Maximum SBA loan amount: up to $5.5 million",
+      "Common uses include commercial property and long-term equipment",
+      "10-, 20-, and 25-year maturities are available",
+    ],
+    href: "https://www.sba.gov/funding-programs/loans/504-loans",
+  },
+  {
+    title: "SBA Express Loans",
+    description: "A streamlined 7(a) option for eligible small-business financing needs.",
+    facts: [
+      "Maximum loan amount: up to $500,000",
+      "May be structured as a term loan or revolving line of credit",
+      "The 36-hour target is SBA's response to the lender, not a promise of borrower approval",
+    ],
+    href: "https://www.sba.gov/funding-programs/loans/7a-loans",
+  },
+  {
+    title: "SBA Microloans",
+    description: "Smaller loans made through nonprofit intermediary lenders for startups and small businesses.",
+    facts: [
+      "Loan amounts: up to $50,000",
+      "Maximum repayment term: up to 7 years",
+      "May support working capital, inventory, supplies, or equipment; not real estate or existing debt",
+    ],
+    href: "https://www.sba.gov/funding-programs/loans/microloans",
+  },
+];
+
 function FinancialSolutionsSection() {
   const [calculatorOpen, setCalculatorOpen] = useState(false);
+  const [sbaProgramsOpen, setSbaProgramsOpen] = useState(false);
   const [expandedSolutionId, setExpandedSolutionId] = useState(null);
   const [monthlyRevenue, setMonthlyRevenue] = useState("");
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
@@ -2071,6 +2115,9 @@ function FinancialSolutionsSection() {
   const calculatorTriggerRef = useRef(null);
   const calculatorDialogRef = useRef(null);
   const calculatorCloseRef = useRef(null);
+  const sbaTriggerRef = useRef(null);
+  const sbaDialogRef = useRef(null);
+  const sbaCloseRef = useRef(null);
   const revenueValue = Number(monthlyRevenue);
   const expensesValue = Number(monthlyExpenses);
   const debtPaymentsValue = Number(monthlyDebtPayments);
@@ -2107,6 +2154,26 @@ function FinancialSolutionsSection() {
     };
   }, [calculatorOpen]);
 
+  useEffect(() => {
+    const dialog = sbaDialogRef.current;
+    if (!sbaProgramsOpen || !dialog) return;
+
+    dialog.showModal();
+    sbaCloseRef.current?.focus();
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setSbaProgramsOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      if (dialog.open) dialog.close();
+    };
+  }, [sbaProgramsOpen]);
+
   return (
     <>
       <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
@@ -2123,6 +2190,7 @@ function FinancialSolutionsSection() {
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
             {financialSolutions.map((solution) => {
               const isWorkingCapital = solution.id === "working-capital";
+              const isSbaLoan = solution.id === "sba-loans";
               const isExpanded = expandedSolutionId === solution.id;
 
               return (
@@ -2140,14 +2208,22 @@ function FinancialSolutionsSection() {
                   <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
                   <button
                     type="button"
-                    onClick={() => setExpandedSolutionId((current) => current === solution.id ? null : solution.id)}
-                    aria-expanded={isExpanded}
-                    aria-controls={`details-${solution.id}`}
+                    ref={isSbaLoan ? sbaTriggerRef : undefined}
+                    onClick={() => {
+                      if (isSbaLoan) {
+                        setSbaProgramsOpen(true);
+                      } else {
+                        setExpandedSolutionId((current) => current === solution.id ? null : solution.id);
+                      }
+                    }}
+                    aria-expanded={isSbaLoan ? undefined : isExpanded}
+                    aria-haspopup={isSbaLoan ? "dialog" : undefined}
+                    aria-controls={isSbaLoan ? "sba-loan-programs" : `details-${solution.id}`}
                     className="mt-4 border-b border-[#9B7CFF]/60 pb-1 text-sm font-bold text-[#C6B8FF] transition hover:border-[#C6B8FF] hover:text-[#F4F7FB] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6B8FF]"
                   >
-                    {isExpanded ? "Show less" : "Click to learn more"}
+                    {!isSbaLoan && isExpanded ? "Show less" : "Click to learn more"}
                   </button>
-                  <div id={`details-${solution.id}`} hidden={!isExpanded} className="mt-4 max-w-[22rem] border-t border-[#B7C0D8]/20 pt-4 text-sm leading-6 text-[#B7C0D8]">
+                  <div id={`details-${solution.id}`} hidden={!isExpanded || isSbaLoan} className="mt-4 max-w-[22rem] border-t border-[#B7C0D8]/20 pt-4 text-sm leading-6 text-[#B7C0D8]">
                     <p>{solution.details}</p>
                     {isWorkingCapital && (
                       <button
@@ -2168,6 +2244,95 @@ function FinancialSolutionsSection() {
           </div>
         </div>
       </section>
+
+      {sbaProgramsOpen && (
+        <dialog
+          ref={sbaDialogRef}
+          id="sba-loan-programs"
+          aria-labelledby="sba-loan-programs-title"
+          className="m-auto max-h-[90dvh] w-[min(1040px,calc(100vw-2rem))] max-w-none border-0 bg-transparent p-0 text-left text-[#F4F7FB]"
+          onClose={() => setSbaProgramsOpen(false)}
+          onCancel={() => setSbaProgramsOpen(false)}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setSbaProgramsOpen(false);
+          }}
+        >
+          <style>{`
+            dialog#sba-loan-programs::backdrop {
+              background: rgba(5, 8, 22, 0.84);
+              backdrop-filter: blur(6px);
+            }
+            .sba-programs-header {
+              position: relative;
+              isolation: isolate;
+              overflow: hidden;
+              background: linear-gradient(130deg, #1A2340, #10172F 60%, #050816);
+            }
+            .sba-programs-header::before {
+              position: absolute;
+              z-index: -1;
+              inset: -35%;
+              background: radial-gradient(ellipse at 72% 52%, rgba(109, 94, 245, 0.34), transparent 48%);
+              content: "";
+              animation: sba-programs-glow 24s ease-in-out infinite alternate;
+            }
+            @keyframes sba-programs-glow {
+              from { transform: translate3d(-2%, 1%, 0) scale(1); }
+              to { transform: translate3d(2%, -1%, 0) scale(1.12); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .sba-programs-header::before { animation: none; }
+            }
+          `}</style>
+          <div className="max-h-[90dvh] overflow-y-auto rounded-lg border border-[#C6B8FF]/25 bg-[#050816] shadow-[0_28px_90px_rgba(5,8,22,0.7),0_0_40px_rgba(109,94,245,0.18)]">
+            <header className="sba-programs-header px-6 py-8 pr-16 sm:px-9 sm:py-9">
+              <button
+                ref={sbaCloseRef}
+                type="button"
+                onClick={() => setSbaProgramsOpen(false)}
+                aria-label="Close SBA loan programs"
+                className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center border border-[#B7C0D8]/25 bg-[#050816]/60 text-2xl text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C6B8FF]"
+              >
+                ×
+              </button>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#C6B8FF]">Calo Capital · Small Business Financing</p>
+              <h2 id="sba-loan-programs-title" className="mt-3 text-3xl font-black text-[#F4F7FB] sm:text-4xl">SBA Loan Programs</h2>
+              <p className="mt-3 max-w-3xl text-sm leading-6 text-[#B7C0D8] sm:text-base">
+                Compare common SBA-backed options. Program limits are not guaranteed offers; eligibility, rates, fees, and approval depend on program rules and the participating lender.
+              </p>
+            </header>
+
+            <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
+              {sbaLoanPrograms.map((program) => (
+                <article key={program.title} className="rounded-md border border-[#B7C0D8]/20 bg-[#1A2340]/70 p-5 sm:p-6">
+                  <h3 className="text-lg font-black text-[#F4F7FB] sm:text-xl">{program.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#B7C0D8]">{program.description}</p>
+                  <ul className="mt-4 space-y-3">
+                    {program.facts.map((fact) => (
+                      <li key={fact} className="flex gap-3 text-sm leading-5 text-[#F4F7FB]">
+                        <span aria-hidden="true" className="shrink-0 text-[#9B7CFF]">✓</span>
+                        <span>{fact}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={program.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex text-sm font-bold text-[#C6B8FF] underline decoration-[#9B7CFF]/60 underline-offset-4 transition hover:text-[#F4F7FB]"
+                  >
+                    Official SBA program details
+                  </a>
+                </article>
+              ))}
+            </div>
+
+            <p className="border-t border-[#B7C0D8]/15 px-5 py-4 text-xs leading-5 text-[#B7C0D8] sm:px-8">
+              This overview is for general education and is not a loan offer. Confirm current requirements and terms with an SBA-approved lender.
+            </p>
+          </div>
+        </dialog>
+      )}
 
       {calculatorOpen && (
         <dialog
