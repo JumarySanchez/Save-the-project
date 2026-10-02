@@ -2025,36 +2025,43 @@ const financialSolutions = [
     id: "working-capital",
     title: "Working Capital",
     description: "Explore flexible financing options for short-term business cash flow needs.",
+    details: "Working capital may help with short-term business cash flow. Lenders may review revenue, expenses, current debt payments, time in business, and how funds will be used. Requirements vary by lender.",
   },
   {
     id: "sba-loans",
     title: "SBA Loans",
     description: "Learn about government-backed financing programs for eligible businesses.",
+    details: "SBA-backed financing is offered through participating lenders. Programs, eligibility, documentation, and terms vary, so review current requirements with a lender.",
   },
   {
     id: "real-estate-financing",
     title: "Real Estate Financing",
     description: "Explore financing options for commercial property purchases and projects.",
+    details: "Commercial property financing may support purchases or projects. Lenders may consider property details, project costs, the repayment plan, and business qualifications. Terms vary.",
   },
   {
     id: "credit-card-processing",
     title: "Credit Card Processing",
     description: "Review payment processing options for accepting customer card payments.",
+    details: "When comparing processors, review transaction fees, payout timing, hardware or software needs, contract terms, and chargeback support.",
   },
   {
     id: "equipment-financing",
     title: "Equipment Financing",
     description: "Explore financing options for essential business equipment.",
+    details: "Equipment financing may help purchase business-use equipment. Compare fees, any down payment, repayment terms, and ownership terms before choosing an offer.",
   },
   {
     id: "credit-repair",
     title: "Credit Repair",
     description: "Learn about services intended to help businesses improve their credit profiles.",
+    details: "Credit services may help review reports and address inaccurate information. Accurate negative information cannot be guaranteed removed, and results vary.",
   },
 ];
 
 function FinancialSolutionsSection() {
   const [calculatorOpen, setCalculatorOpen] = useState(false);
+  const [expandedSolutionId, setExpandedSolutionId] = useState(null);
   const [monthlyRevenue, setMonthlyRevenue] = useState("");
   const [monthlyExpenses, setMonthlyExpenses] = useState("");
   const [monthlyDebtPayments, setMonthlyDebtPayments] = useState("");
@@ -2109,26 +2116,20 @@ function FinancialSolutionsSection() {
               Our Financial Solutions
             </h2>
             <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
-              Explore small-business financing options on CapNow.
+              Explore small-business financing options with Calo Capital.
             </p>
           </header>
 
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
             {financialSolutions.map((solution) => {
               const isWorkingCapital = solution.id === "working-capital";
-              const Card = isWorkingCapital ? "button" : "article";
+              const isExpanded = expandedSolutionId === solution.id;
 
               return (
-                <Card
+                <article
                   id={solution.id}
                   key={solution.title}
-                  type={isWorkingCapital ? "button" : undefined}
-                  ref={isWorkingCapital ? calculatorTriggerRef : undefined}
-                  onClick={isWorkingCapital ? () => setCalculatorOpen(true) : undefined}
-                  aria-label={isWorkingCapital ? "Open Working Capital funding calculator" : undefined}
-                  aria-haspopup={isWorkingCapital ? "dialog" : undefined}
-                  aria-controls={isWorkingCapital ? "working-capital-calculator" : undefined}
-                  className={`financial-galactic-card scroll-mt-8 flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]${isWorkingCapital ? " cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6B8FF]" : ""}`}
+                  className="financial-galactic-card scroll-mt-8 flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]"
                 >
                   <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
                     {solution.title}
@@ -2137,7 +2138,31 @@ function FinancialSolutionsSection() {
                     {solution.description}
                   </span>
                   <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
-                </Card>
+                  <button
+                    type="button"
+                    onClick={() => setExpandedSolutionId((current) => current === solution.id ? null : solution.id)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`details-${solution.id}`}
+                    className="mt-4 border-b border-[#9B7CFF]/60 pb-1 text-sm font-bold text-[#C6B8FF] transition hover:border-[#C6B8FF] hover:text-[#F4F7FB] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6B8FF]"
+                  >
+                    {isExpanded ? "Show less" : "Click to learn more"}
+                  </button>
+                  <div id={`details-${solution.id}`} hidden={!isExpanded} className="mt-4 max-w-[22rem] border-t border-[#B7C0D8]/20 pt-4 text-sm leading-6 text-[#B7C0D8]">
+                    <p>{solution.details}</p>
+                    {isWorkingCapital && (
+                      <button
+                        ref={calculatorTriggerRef}
+                        type="button"
+                        onClick={() => setCalculatorOpen(true)}
+                        aria-haspopup="dialog"
+                        aria-controls="working-capital-calculator"
+                        className="mt-4 border border-[#9B7CFF]/50 px-4 py-2 font-bold text-[#F4F7FB] transition hover:bg-[#9B7CFF]/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C6B8FF]"
+                      >
+                        Open funding calculator
+                      </button>
+                    )}
+                  </div>
+                </article>
               );
             })}
           </div>
