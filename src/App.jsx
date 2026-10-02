@@ -16,7 +16,6 @@ import trustDesignPng from "../assets/Trust-design.png";
 import investmentDesignPng from "../assets/Investment-design.png";
 import cryptoDesignPng from "../assets/Currency-design.png";
 import marketChartDesignPng from "../assets/marketchart-design.png";
-import pillar1DesignPng from "../assets/Pillar1-design.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -2340,6 +2339,7 @@ function FinancialTopicsPage() {
 
 function FourCsPage() {
   const [activeCard, setActiveCard] = useState(null);
+  const [pinnedCard, setPinnedCard] = useState(null);
   const fourCsCards = services.map((service, index) => {
     const cardMeaning =
       index === 0
@@ -2371,20 +2371,18 @@ function FourCsPage() {
     };
   });
 
-  const supportsHover = typeof window !== "undefined" ? window.matchMedia("(hover: hover)").matches : true;
-
   function toggleCard(index) {
-    setActiveCard((current) => (current === index ? null : index));
+    setPinnedCard((current) => (current === index ? null : index));
   }
 
   return (
-    <section id="four-cs" className="cc-slow-fade bg-[#15021a] px-5 pb-12 pt-16 text-white sm:pb-16 sm:pt-20">
+    <section id="four-cs" className="cc-slow-fade bg-[#050816] px-5 pb-12 pt-16 text-[#F4F7FB] sm:pb-16 sm:pt-20">
       <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Our Four C&apos;s</p>
-        <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#FFFFFF]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Our Four C&apos;s</p>
+        <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#F4F7FB]">
           The four pillars behind our approach to wealth planning.
         </h1>
-        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#E9DDEC]">
+        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]">
           Calo Capital uses these four focus areas to guide conversations around liquidity, digital assets, real assets, and business opportunities.
         </p>
 
@@ -2392,11 +2390,12 @@ function FourCsPage() {
           .four-cs-panels {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
+            align-items: start;
             min-height: 0;
             gap: 1px;
             overflow: hidden;
-            border: 1px solid rgba(215, 166, 255, 0.28);
-            background: rgba(215, 166, 255, 0.28);
+            border: 1px solid rgba(198, 184, 255, 0.28);
+            background: rgba(198, 184, 255, 0.28);
           }
           .four-cs-panel {
             position: relative;
@@ -2405,18 +2404,56 @@ function FourCsPage() {
             min-height: 360px;
             overflow: hidden;
             color: #f4f7fb;
-            background: linear-gradient(180deg, rgba(34, 15, 47, 0.96), rgba(18, 5, 25, 0.98));
+            background-color: #050816;
             transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
           }
-          .four-cs-panel.has-cover {
-            background-image: linear-gradient(180deg, rgba(20, 8, 30, 0.2), rgba(18, 5, 25, 0.94)), var(--four-cs-cover);
-            background-position: center;
-            background-size: cover;
+          .four-cs-panel::before {
+            position: absolute;
+            z-index: 0;
+            inset: -14%;
+            background-image:
+              radial-gradient(ellipse at 28% 38%, rgba(91, 78, 190, 0.58), rgba(44, 48, 108, 0.18) 30%, transparent 52%),
+              radial-gradient(ellipse at 72% 64%, rgba(20, 137, 161, 0.34), rgba(18, 78, 111, 0.12) 28%, transparent 50%),
+              radial-gradient(ellipse at 62% 20%, rgba(203, 112, 195, 0.22), transparent 40%),
+              linear-gradient(135deg, #060919, #0b1028 54%, #050816);
+            content: "";
+            animation: four-cs-galaxy-drift 24s ease-in-out infinite alternate;
+            pointer-events: none;
+          }
+          .four-cs-panel::after {
+            position: absolute;
+            z-index: 0;
+            inset: 0;
+            background-image:
+              radial-gradient(circle at 12% 21%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.5px),
+              radial-gradient(circle at 27% 74%, rgba(183, 219, 255, 0.8) 0 1px, transparent 1.5px),
+              radial-gradient(circle at 43% 18%, rgba(255, 255, 255, 0.78) 0 1px, transparent 1.5px),
+              radial-gradient(circle at 59% 48%, rgba(206, 193, 255, 0.85) 0 1px, transparent 1.5px),
+              radial-gradient(circle at 76% 29%, rgba(255, 255, 255, 0.82) 0 1px, transparent 1.5px),
+              radial-gradient(circle at 89% 78%, rgba(183, 219, 255, 0.78) 0 1px, transparent 1.5px);
+            content: "";
+            opacity: 0.72;
+            animation: four-cs-star-drift 38s ease-in-out infinite alternate, four-cs-star-twinkle 5s ease-in-out infinite alternate;
+            pointer-events: none;
           }
           .four-cs-panel.is-active {
             min-height: 520px;
-            background: linear-gradient(140deg, rgba(86, 35, 113, 0.96), rgba(25, 7, 34, 0.99) 72%);
-            box-shadow: inset 0 0 0 1px rgba(215, 166, 255, 0.2);
+            box-shadow: inset 0 0 0 1px rgba(198, 184, 255, 0.2);
+          }
+          .four-cs-panel.is-active::before {
+            filter: brightness(1.18) saturate(1.12);
+          }
+          @keyframes four-cs-galaxy-drift {
+            from { transform: scale(1.08) translate3d(-4%, 2%, 0) rotate(-2deg); }
+            to { transform: scale(1.28) translate3d(4%, -2%, 0) rotate(2deg); }
+          }
+          @keyframes four-cs-star-drift {
+            from { transform: scale(1.06) translate3d(-2.5%, 1.5%, 0); }
+            to { transform: scale(1.06) translate3d(2.5%, -1.5%, 0); }
+          }
+          @keyframes four-cs-star-twinkle {
+            from { opacity: 0.42; }
+            to { opacity: 0.92; }
           }
           .four-cs-panel-button {
             position: absolute;
@@ -2431,7 +2468,7 @@ function FourCsPage() {
             text-align: left;
           }
           .four-cs-panel-button:focus-visible {
-            outline: 2px solid #d7a6ff;
+            outline: 2px solid #C6B8FF;
             outline-offset: -5px;
           }
           .four-cs-panel-rail {
@@ -2446,13 +2483,13 @@ function FourCsPage() {
             pointer-events: none;
           }
           .four-cs-panel-number {
-            color: #a855f7;
+            color: #9B7CFF;
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 0.2em;
           }
           .four-cs-panel-title {
-            color: #f4eafb;
+            color: #B7C0D8;
             font-size: clamp(0.95rem, 1.5vw, 1.15rem);
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -2493,7 +2530,7 @@ function FourCsPage() {
               overflow: visible;
             }
             .four-cs-panel {
-              border: 1px solid rgba(215, 166, 255, 0.28);
+              border: 1px solid rgba(198, 184, 255, 0.28);
             }
           }
           @media (max-width: 767px) {
@@ -2504,7 +2541,7 @@ function FourCsPage() {
             .four-cs-panel {
               display: block;
               min-height: 74px;
-              border-bottom: 1px solid rgba(215, 166, 255, 0.2);
+              border-bottom: 1px solid rgba(198, 184, 255, 0.2);
               transition: min-height 560ms cubic-bezier(0.22, 1, 0.36, 1), background 560ms ease;
             }
             .four-cs-panel:last-child {
@@ -2549,36 +2586,31 @@ function FourCsPage() {
               transition-duration: 0.01ms;
               transition-delay: 0ms;
             }
+            .four-cs-panel::before {
+              animation: none;
+            }
+            .four-cs-panel::after {
+              animation: none;
+            }
           }
         `}</style>
         <div className="four-cs-panels mt-10" role="list">
           {fourCsCards.map((service, index) => {
-            const isActive = activeCard === index;
+            const isActive = pinnedCard === null ? activeCard === index : pinnedCard === index;
 
             return (
               <article
                 key={service.title}
                 id={serviceIds[index]}
                 role="listitem"
-                className={`four-cs-panel${index === 0 ? " has-cover" : ""}${isActive ? " is-active" : ""}`}
-                style={index === 0 ? { "--four-cs-cover": `url(${pillar1DesignPng})` } : undefined}
-                onMouseEnter={() => {
-                  if (supportsHover) setActiveCard(index);
-                }}
-                onMouseLeave={() => {
-                  if (supportsHover) setActiveCard(null);
-                }}
+                className={`four-cs-panel${isActive ? " is-active" : ""}`}
+                onMouseEnter={() => setActiveCard(index)}
+                onMouseLeave={() => setActiveCard(null)}
               >
                 <button
                   type="button"
                   className="four-cs-panel-button"
                   onClick={() => toggleCard(index)}
-                  onFocus={() => {
-                    if (supportsHover) setActiveCard(index);
-                  }}
-                  onBlur={() => {
-                    if (supportsHover) setActiveCard(null);
-                  }}
                   aria-expanded={isActive}
                   aria-controls={`${serviceIds[index]}-content`}
                 >
@@ -2589,9 +2621,9 @@ function FourCsPage() {
                   <span className="four-cs-panel-title">{service.title}</span>
                 </div>
                 <div id={`${serviceIds[index]}-content`} className="four-cs-panel-content">
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-[#A855F7]">{service.texture.accent}</p>
-                  <h2 className="mt-4 text-[clamp(1.65rem,3vw,2.5rem)] font-black leading-[1.03] text-white">{service.question}</h2>
-                  <div className="mt-5 space-y-4 text-sm leading-7 text-[#E9DDEC] sm:text-base">
+                  <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">{service.texture.accent}</p>
+                  <h2 className="mt-4 text-[clamp(1.65rem,3vw,2.5rem)] font-black leading-[1.03] text-[#F4F7FB]">{service.question}</h2>
+                  <div className="mt-5 space-y-4 text-sm leading-7 text-[#B7C0D8] sm:text-base">
                     <p>{service.meaning}</p>
                     <p>{service.example}</p>
                   </div>
