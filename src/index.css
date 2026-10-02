@@ -1,8 +1,8 @@
 :root {
-  --calo-purple-primary: #8b5cf6;
-  --calo-purple-bright: #a855f7;
-  --calo-purple-deep: #7c3aed;
-  --calo-purple-glow: #c084fc;
+  --calo-purple-primary: #9B7CFF;
+  --calo-purple-bright: #9B7CFF;
+  --calo-purple-deep: #6D5EF5;
+  --calo-purple-glow: #C6B8FF;
   --font-display: "Glacial Indifference", sans-serif;
   --font-body: "Glacial Indifference", sans-serif;
   --font-display-weight-700: 700;
@@ -35,7 +35,7 @@ body {
   font-family: var(--font-body);
   font-weight: var(--font-body-weight-400);
   line-height: var(--font-body-line-height);
-  background: #15021a;
+  background: #050816;
   color: #f4f7fb;
 }
 
@@ -122,6 +122,66 @@ small {
 #root {
   width: 100%;
   margin: 0;
+}
+
+.financial-galactic-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), border-color 280ms ease, box-shadow 280ms ease;
+}
+
+.financial-galactic-card::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 14% 22%, rgba(198, 184, 255, 0.85) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 82% 27%, rgba(198, 184, 255, 0.72) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 72% 80%, rgba(155, 124, 255, 0.68) 0 1px, transparent 1.5px),
+    radial-gradient(ellipse at 50% -12%, rgba(109, 94, 245, 0.42), transparent 72%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.financial-galactic-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.financial-galactic-rule {
+  transition: width 280ms ease, box-shadow 280ms ease;
+}
+
+@media (any-hover: hover) {
+  .financial-galactic-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(198, 184, 255, 0.88);
+    box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.42), 0 18px 42px rgba(109, 94, 245, 0.3), 0 0 38px rgba(109, 94, 245, 0.28);
+  }
+
+  .financial-galactic-card:hover::before {
+    opacity: 1;
+  }
+
+  .financial-galactic-card:hover .financial-galactic-rule {
+    width: 3rem;
+    box-shadow: 0 0 10px rgba(109, 94, 245, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .financial-galactic-card,
+  .financial-galactic-card::before,
+  .financial-galactic-rule {
+    transition: none;
+  }
+
+  .financial-galactic-card:hover {
+    transform: none;
+  }
 }
 
 /* Shooting star animations (subtle) */

@@ -76,10 +76,10 @@ const services = [
 const serviceIds = services.map((service) => service.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
 const serviceMarks = services.map((_, index) => String(index + 1).padStart(2, "0"));
 const serviceTextures = [
-  { panel: "bg-[linear-gradient(180deg,rgba(14,19,33,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Cash Layer" },
-  { panel: "bg-[linear-gradient(180deg,rgba(18,12,36,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Digital Layer" },
-  { panel: "bg-[linear-gradient(180deg,rgba(12,22,33,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Real Asset Layer" },
-  { panel: "bg-[linear-gradient(180deg,rgba(20,14,28,0.9)_0%,rgba(8,11,19,0.96)_100%)]", accent: "Business Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Cash Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Digital Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Real Asset Layer" },
+  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Business Layer" },
 ];
 
 const socialLinks = [
@@ -127,7 +127,7 @@ function SocialLink({ item }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={item.ariaLabel}
-        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-violet-300/35 hover:bg-violet-300/10 hover:text-white"
+        className="inline-flex items-center gap-2 rounded-full border border-[#B7C0D8]/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-[#B7C0D8] transition hover:border-[#C6B8FF]/35 hover:bg-[#6D5EF5]/10 hover:text-[#F4F7FB]"
     >
       {item.icon}
       <span>{item.label}</span>
@@ -575,7 +575,7 @@ function MarketTicker({ coins, live }) {
   const items = useMemo(() => [...buildTickerItems(coins), ...buildTickerItems(coins)], [coins]);
 
   return (
-    <div className="relative z-40 overflow-hidden border-b border-white/10 bg-[#050816]/95 text-white">
+    <div className="relative z-40 overflow-hidden border-b border-[#B7C0D8]/10 bg-[#050816]/95 text-[#F4F7FB]">
       <style>{`
         .ticker-track {
           animation: tickerMarquee 24s linear infinite;
@@ -587,16 +587,16 @@ function MarketTicker({ coins, live }) {
         }
       `}</style>
       <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] sm:gap-4 sm:px-5 sm:text-xs sm:tracking-[0.18em]">
-        <span className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2 py-1 text-emerald-200">
+        <span className="rounded-full border border-[#6D5EF5]/25 bg-[#6D5EF5]/10 px-2 py-1 text-[#9B7CFF]">
           {live ? "Live" : "Fallback"}
         </span>
         <div className="min-w-0 flex-1 overflow-hidden">
           <div className="ticker-track flex w-max items-center gap-3 whitespace-nowrap sm:gap-6">
             {items.map((item, index) => (
-              <div key={`${item.symbol}-${index}`} className="flex items-center gap-2 whitespace-nowrap text-slate-200">
-                <span className="text-slate-400">{item.symbol}</span>
-                <span className="font-body text-white">{formatPrice(item.price)}</span>
-                <span className={item.change >= 0 ? "text-emerald-300" : "text-rose-300"}>
+              <div key={`${item.symbol}-${index}`} className="flex items-center gap-2 whitespace-nowrap text-[#B7C0D8]">
+                <span className="text-[#B7C0D8]">{item.symbol}</span>
+                <span className="font-body text-[#F4F7FB]">{formatPrice(item.price)}</span>
+                <span className={item.change >= 0 ? "text-[#9B7CFF]" : "text-[#C6B8FF]"}>
                   {item.change >= 0 ? "+" : ""}{item.change.toFixed(2)}%
                 </span>
               </div>
@@ -608,7 +608,7 @@ function MarketTicker({ coins, live }) {
   );
 }
 
-function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[9px] uppercase tracking-[0.2em] text-[#A855F7]/70 sm:text-xs" }) {
+function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:text-lg", taglineClass = "text-[9px] uppercase tracking-[0.2em] text-[#9B7CFF]/70 sm:text-xs" }) {
   return (
     <div className="flex min-w-0 items-center gap-2.5">
       <img
@@ -618,7 +618,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
         style={{ background: 'transparent' }}
       />
       <div className="min-w-0 text-left leading-tight">
-        <p className={`${textSizeClass} font-black tracking-wide text-white`}>Calo Capital</p>
+        <p className={`${textSizeClass} font-black tracking-wide text-[#F4F7FB]`}>Calo Capital</p>
         <p className={`${taglineClass} whitespace-normal`}>Where Strategy Meets Legacy</p>
       </div>
     </div>
@@ -627,7 +627,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 
 function HeroSection() {
   return (
-    <section id="home" className="relative min-h-[70svh] overflow-hidden bg-[#15021a] text-white sm:min-h-[80svh] lg:min-h-[90svh]">
+    <section id="home" className="relative min-h-[70svh] overflow-hidden bg-[#050816] text-[#F4F7FB] sm:min-h-[80svh] lg:min-h-[90svh]">
       <video
           className="absolute inset-0 h-full w-full object-cover"
         src={heroVideoMp4}
@@ -642,10 +642,10 @@ function HeroSection() {
 
 const pageRoutes = {
   Home: "/",
-  "Why invest": "/",
-  "Four C's": "/",
+  Explore: "/",
+  "Four C's": "/financial-topics#four-cs",
   Contact: "/",
-  "Financial Topics": "/",
+  "Financial Topics": FINANCIAL_TOPICS_ROUTE,
   Legal: "/legal",
 };
 
@@ -655,16 +655,24 @@ function normalizePath(pathname) {
 
 function getPageFromLocation() {
   const normalizedPath = normalizePath(window.location.pathname);
-  if (normalizedPath === FINANCIAL_TOPICS_ROUTE) return "Financial Topics";
-  if (normalizedPath === "/why-invest") return "Why invest";
-  if (normalizedPath === "/four-cs") return "Four C's";
+  if (normalizedPath === FINANCIAL_TOPICS_ROUTE || normalizedPath === "/four-cs") return "Financial Topics";
+  if (normalizedPath === "/why-invest") return "Explore";
   if (normalizedPath === "/contact") return "Contact";
   if (normalizedPath === "/legal") return "Legal";
   return "Home";
 }
 
+function scrollToFinancialTopicsLocation() {
+  const targetId = window.location.hash.slice(1) || (normalizePath(window.location.pathname) === "/four-cs" ? "four-cs" : "");
+  if (targetId) {
+    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 function getHomeSectionFromPage(page) {
-  if (page === "Why invest") return "about";
+  if (page === "Explore" || page === "Why invest") return "financial-solutions";
   if (page === "Contact") return "contact";
   return "";
 }
@@ -686,7 +694,7 @@ function scrollToHomeSection(page) {
 
 function Navbar({ currentPage, setPage }) {
   const [open, setOpen] = useState(false);
-  const links = ["Home", "Why invest", "Four C's", "Financial Topics", "Contact"];
+  const links = ["Home", "Explore", "Four C's", "Financial Topics", "Contact"];
 
   function goTo(page) {
     setPage(page);
@@ -694,7 +702,7 @@ function Navbar({ currentPage, setPage }) {
   }
 
   return (
-    <header className="z-50 bg-[#15021a]/40">
+    <header className="z-50 bg-[#050816]/40">
       <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center justify-between px-4 py-4 sm:px-5">
         <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="max-w-full text-left">
           <Logo />
@@ -705,7 +713,7 @@ function Navbar({ currentPage, setPage }) {
             <button
               key={label}
               onClick={() => goTo(label)}
-              className={currentPage === label ? "px-1 text-sm font-black text-white" : "px-1 text-sm font-semibold text-slate-300 transition hover:text-white"}
+              className={currentPage === label ? "px-1 text-sm font-black text-[#F4F7FB]" : "px-1 text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"}
             >
               {label}
             </button>
@@ -715,14 +723,14 @@ function Navbar({ currentPage, setPage }) {
           href={SCHEDULE_CALL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="schedule-call-radiant hidden rounded-none px-4 py-2 text-sm font-black text-white transition lg:inline-block"
+          className="schedule-call-radiant hidden rounded-none px-4 py-2 text-sm font-black text-[#F4F7FB] transition lg:inline-block"
         >
           Schedule a Call
         </a>
 
         <button
           onClick={() => setOpen((value) => !value)}
-          className="rounded-xl border border-white/15 px-3 py-2 text-white lg:hidden"
+          className="rounded-xl border border-[#B7C0D8]/15 px-3 py-2 text-[#F4F7FB] lg:hidden"
           aria-label="Toggle menu"
         >
           {open ? "✕" : "☰"}
@@ -731,7 +739,7 @@ function Navbar({ currentPage, setPage }) {
 
       <div
         className={
-          `overflow-hidden border-t border-white/10 bg-[#15021a]/95 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
+          `overflow-hidden border-t border-[#B7C0D8]/10 bg-[#050816]/95 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
             open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`
         }
@@ -749,7 +757,7 @@ function Navbar({ currentPage, setPage }) {
               <button
                 key={label}
                 onClick={() => goTo(label)}
-                className={currentPage === label ? "text-left text-sm font-black text-white" : "text-left text-sm font-semibold text-slate-300"}
+                className={currentPage === label ? "text-left text-sm font-black text-[#F4F7FB]" : "text-left text-sm font-semibold text-[#B7C0D8]"}
                 style={{
                   opacity: open ? 1 : 0,
                   transform: open ? "translateX(0)" : "translateX(-18px)",
@@ -797,7 +805,7 @@ function MovingClouds() {
     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-48 overflow-hidden">
       <div className="cloud-layer cloud-layer-one absolute bottom-[-52px] left-0 h-36 w-[220%] opacity-70" />
       <div className="cloud-layer cloud-layer-two absolute bottom-[-68px] left-0 h-44 w-[240%] opacity-55" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#15021a] via-[#15021a]/75 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050816] via-[#050816]/75 to-transparent" />
     </div>
   );
 }
@@ -839,7 +847,7 @@ function TradingViewChart({ symbol }) {
       hide_top_toolbar: false,
       save_image: true,
       calendar: false,
-      toolbar_bg: "#15021a",
+      toolbar_bg: "#050816",
       watchlist: [
         "BITSTAMP:BTCUSD",
         "COINBASE:ETHUSD",
@@ -850,24 +858,24 @@ function TradingViewChart({ symbol }) {
         "SP:SPX",
       ],
       overrides: {
-        "paneProperties.background": "#15021a",
-        "paneProperties.vertGridProperties.color": "#1E2030",
-        "paneProperties.horzGridProperties.color": "#1E2030",
-        "paneProperties.crossHairProperties.color": "#B8B1FF",
+        "paneProperties.background": "#050816",
+        "paneProperties.vertGridProperties.color": "#1A2340",
+        "paneProperties.horzGridProperties.color": "#1A2340",
+        "paneProperties.crossHairProperties.color": "#C6B8FF",
         "paneProperties.crossHairProperties.style": 2,
-        "scalesProperties.textColor": "#A8A9B8",
-        "scalesProperties.lineColor": "#1E2030",
-        "mainSeriesProperties.candleStyle.upColor": "#6D4AFF",
-        "mainSeriesProperties.candleStyle.downColor": "#D9D6FF",
-        "mainSeriesProperties.candleStyle.borderUpColor": "#6D4AFF",
-        "mainSeriesProperties.candleStyle.borderDownColor": "#D9D6FF",
-        "mainSeriesProperties.candleStyle.wickUpColor": "#6D4AFF",
-        "mainSeriesProperties.candleStyle.wickDownColor": "#D9D6FF",
-        "symbolWatermarkProperties.color": "#1E2030",
+        "scalesProperties.textColor": "#B7C0D8",
+        "scalesProperties.lineColor": "#1A2340",
+        "mainSeriesProperties.candleStyle.upColor": "#6D5EF5",
+        "mainSeriesProperties.candleStyle.downColor": "#F4F7FB",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#6D5EF5",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#F4F7FB",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#6D5EF5",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#F4F7FB",
+        "symbolWatermarkProperties.color": "#1A2340",
       },
       studies_overrides: {
-        "volume.volume.color.0": "#D9D6FF",
-        "volume.volume.color.1": "#6D4AFF",
+        "volume.volume.color.0": "#F4F7FB",
+        "volume.volume.color.1": "#6D5EF5",
       },
     });
 
@@ -901,18 +909,18 @@ function StockChart({ coins }) {
   const selectedAsset = CHART_ASSETS.find((asset) => asset.label === selectedSymbol) || CHART_ASSETS[0];
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-violet-200/20 bg-[#15021a]/85 p-4 shadow-2xl shadow-violet-950/35 backdrop-blur-md sm:p-5">
+    <div className="relative overflow-hidden rounded-3xl border border-[#C6B8FF]/20 bg-[#050816]/85 p-4 shadow-2xl shadow-[#050816]/35 backdrop-blur-md sm:p-5">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-400">Asset Selector</p>
-          <p className="mt-1 text-xs text-slate-500">Switch between crypto, stocks, and ETFs</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.32em] text-[#B7C0D8]">Asset Selector</p>
+          <p className="mt-1 text-xs text-[#B7C0D8]">Switch between crypto, stocks, and ETFs</p>
         </div>
-        <label className="flex flex-col gap-2 text-xs font-black uppercase tracking-[0.28em] text-slate-400 sm:flex-row sm:items-center sm:gap-3">
+        <label className="flex flex-col gap-2 text-xs font-black uppercase tracking-[0.28em] text-[#B7C0D8] sm:flex-row sm:items-center sm:gap-3">
           <span className="whitespace-nowrap">Asset</span>
           <select
             value={selectedSymbol}
             onChange={(event) => setSelectedSymbol(event.target.value)}
-            className="w-full min-w-0 rounded-xl border border-white/10 bg-[#15021a] px-3 py-2 font-body text-xs font-black tracking-[0.18em] text-white outline-none transition focus:border-violet-200/40 sm:min-w-[180px] sm:w-auto"
+            className="w-full min-w-0 rounded-xl border border-[#B7C0D8]/10 bg-[#050816] px-3 py-2 font-body text-xs font-black tracking-[0.18em] text-[#F4F7FB] outline-none transition focus:border-[#C6B8FF]/40 sm:min-w-[180px] sm:w-auto"
           >
             <optgroup label="Crypto">
               {CHART_ASSETS.filter((asset) => asset.group === "Crypto").map((asset) => (
@@ -942,21 +950,21 @@ function StockChart({ coins }) {
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-body text-xs font-black text-slate-400">{selectedAsset.display}</span>
-            <span className="rounded bg-violet-300/10 px-2 py-0.5 text-xs font-bold text-[#A855F7]">INTERACTIVE</span>
+            <span className="font-body text-xs font-black text-[#B7C0D8]">{selectedAsset.display}</span>
+            <span className="rounded bg-[#6D5EF5]/10 px-2 py-0.5 text-xs font-bold text-[#9B7CFF]">INTERACTIVE</span>
           </div>
-          <p className="mt-1 font-body text-2xl font-black text-white sm:text-3xl">{formatPrice(selectedAsset.price)}</p>
+          <p className="mt-1 font-body text-2xl font-black text-[#F4F7FB] sm:text-3xl">{formatPrice(selectedAsset.price)}</p>
         </div>
         <div className="text-left sm:text-right">
-          <p className={selectedAsset.change >= 0 ? "font-body text-lg font-black text-emerald-300 sm:text-xl" : "font-body text-lg font-black text-rose-300 sm:text-xl"}>{selectedAsset.change >= 0 ? "+" : ""}{selectedAsset.change.toFixed(2)}%</p>
-          <p className="text-xs text-slate-400">24h Performance</p>
+          <p className={selectedAsset.change >= 0 ? "font-body text-lg font-black text-[#9B7CFF] sm:text-xl" : "font-body text-lg font-black text-[#C6B8FF] sm:text-xl"}>{selectedAsset.change >= 0 ? "+" : ""}{selectedAsset.change.toFixed(2)}%</p>
+          <p className="text-xs text-[#B7C0D8]">24h Performance</p>
         </div>
       </div>
-      <div className="relative overflow-visible rounded-2xl border border-violet-200/20 bg-[#15021a] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#A855F7]">
+      <div className="relative overflow-visible rounded-2xl border border-[#C6B8FF]/20 bg-[#050816] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-[#C6B8FF]/25 bg-[#050816]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#9B7CFF]">
           Momentum
         </div>
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-violet-200/25 bg-[#15021a]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#A855F7]">
+        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-[#C6B8FF]/25 bg-[#050816]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#9B7CFF]">
           Trend
         </div>
         <div className="relative z-20 h-[320px] w-full sm:h-[420px] lg:h-[500px]">
@@ -1028,10 +1036,10 @@ function ServicesSection() {
   }
 
   return (
-    <section ref={sectionRef} id="services" className="cc-guidance-section px-5 pb-20 pt-12 text-white sm:pb-24 sm:pt-16">
+    <section ref={sectionRef} id="services" className="cc-guidance-section px-5 pb-20 pt-12 text-[#F4F7FB] sm:pb-24 sm:pt-16">
       <style>{`
         .cc-guidance-section {
-          background-color: #15021a;
+          background-color: #050816;
         }
         .cc-guidance-inner {
           margin: 0 auto;
@@ -1043,7 +1051,7 @@ function ServicesSection() {
           max-width: min(68%, 980px);
         }
         .cc-guidance-eyebrow {
-          color: #a855f7;
+          color: #9B7CFF;
           font-family: var(--font-body);
           font-size: 0.75rem;
           font-weight: 700;
@@ -1054,11 +1062,11 @@ function ServicesSection() {
           margin-top: 0.7rem;
           height: 1px;
           width: 70px;
-          background: #a855f7;
+          background: #9B7CFF;
         }
         .cc-guidance-title {
           margin-top: 1.6rem;
-          color: #f4f4f6;
+          color: #F4F7FB;
           font-family: var(--font-display);
           font-size: clamp(2.05rem, 5.6vw, 4.2rem);
           font-weight: 700;
@@ -1067,7 +1075,7 @@ function ServicesSection() {
           text-wrap: balance;
         }
         .cc-guidance-title-accent {
-          color: #a855f7;
+          color: #9B7CFF;
         }
         .cc-guidance-body {
           margin-top: 1.7rem;
@@ -1078,7 +1086,7 @@ function ServicesSection() {
         }
         .cc-guidance-divider {
           margin-top: 2.6rem;
-          border-top: 1px solid #323746;
+          border-top: 1px solid #1A2340;
         }
         .cc-guidance-grid {
           margin-top: 2.25rem;
@@ -1090,10 +1098,10 @@ function ServicesSection() {
           padding: 0 1.35rem;
         }
         .cc-guidance-col + .cc-guidance-col {
-          border-left: 1px solid #323746;
+          border-left: 1px solid #1A2340;
         }
         .cc-guidance-col-title {
-          color: #f4f4f6;
+          color: #F4F7FB;
           font-family: var(--font-display);
           font-size: clamp(1.65rem, 2.2vw, 2.15rem);
           font-weight: 600;
@@ -1104,7 +1112,7 @@ function ServicesSection() {
           margin-top: 0.8rem;
           height: 1px;
           width: 40px;
-          background: #a855f7;
+          background: #9B7CFF;
         }
         .cc-guidance-col-body {
           margin-top: 1rem;
@@ -1120,7 +1128,7 @@ function ServicesSection() {
           line-height: 1.78;
         }
         .cc-guidance-list li::marker {
-          color: #a855f7;
+          color: #9B7CFF;
         }
 
         @media (max-width: 1279px) {
@@ -1137,10 +1145,10 @@ function ServicesSection() {
             border-left: none;
           }
           .cc-guidance-col:nth-child(2n) {
-            border-left: 1px solid #323746;
+            border-left: 1px solid #1A2340;
           }
           .cc-guidance-col:nth-child(n + 3) {
-            border-top: 1px solid #323746;
+            border-top: 1px solid #1A2340;
           }
         }
 
@@ -1173,10 +1181,10 @@ function ServicesSection() {
             border-left: none;
           }
           .cc-guidance-col + .cc-guidance-col {
-            border-top: 1px solid #323746;
+            border-top: 1px solid #1A2340;
           }
           .cc-guidance-col:nth-child(n + 3) {
-            border-top: 1px solid #323746;
+            border-top: 1px solid #1A2340;
           }
         }
       `}</style>
@@ -1220,13 +1228,13 @@ function ServicesSection() {
 
 function PageHeader({ eyebrow, title, description }) {
   return (
-    <section className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white">
+    <section className="relative overflow-hidden bg-[#050816] px-5 py-20 text-[#F4F7FB]">
       <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: `url(${hikerPng})` }} />
       <div className="relative mx-auto w-full max-w-[94vw]">
         <Logo />
-        <p className="mt-10 text-sm font-black uppercase tracking-[0.3em] text-[#A855F7]">{eyebrow}</p>
+        <p className="mt-10 text-sm font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{eyebrow}</p>
         <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">{title}</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{description}</p>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-[#B7C0D8]">{description}</p>
       </div>
     </section>
   );
@@ -1313,33 +1321,27 @@ function AboutPage() {
       <section
         ref={sectionRef}
         id="about"
-        className={`cc-about-section relative overflow-hidden px-5 pb-14 pt-16 text-white sm:pt-20 ${hasJs ? "cc-about-js" : ""} ${isVisible ? "cc-about-animated" : ""} ${reduceMotion ? "cc-about-reduced-motion" : ""}`}
+        className={`cc-about-section relative overflow-hidden px-5 py-10 text-[#F4F7FB] sm:py-14 lg:py-8 ${hasJs ? "cc-about-js" : ""} ${isVisible ? "cc-about-animated" : ""} ${reduceMotion ? "cc-about-reduced-motion" : ""}`}
       >
         <style>{`
           .cc-about-section {
             position: relative;
             overflow: hidden;
             isolation: isolate;
-            background: #15021a;
-          }
-          .cc-about-background {
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            background-image: url(${aboutImagePng});
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: transparent;
           }
           .cc-about-inner {
             position: relative;
             z-index: 2;
+            display: flex;
+            align-items: center;
             width: min(100%, 1400px);
+            height: 100%;
             margin-inline: auto;
             padding-inline: clamp(1.25rem, 5vw, 5rem);
           }
           .cc-about-copy {
-            width: min(65%, 56rem);
+            width: min(100%, 56rem);
             max-width: 56rem;
           }
           .cc-about-eyebrow {
@@ -1349,9 +1351,9 @@ function AboutPage() {
             transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
           }
           .cc-about-heading {
-            max-width: 13ch;
+            max-width: 14ch;
             font-family: var(--font-display);
-            font-size: clamp(3rem, 6vw, 6.5rem);
+            font-size: clamp(2.5rem, 4.6vw, 5rem);
             font-weight: 700;
             line-height: 1.01;
             letter-spacing: -0.03em;
@@ -1373,6 +1375,7 @@ function AboutPage() {
           .cc-about-paragraph {
             display: block;
             max-width: 700px;
+            font-size: 18px;
             transition-property: opacity, transform, filter;
             transition-duration: 900ms;
             transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
@@ -1416,12 +1419,12 @@ function AboutPage() {
           }
           @media (min-width: 1024px) {
             .cc-about-copy {
-              width: min(65%, 56rem);
+              width: min(100%, 56rem);
             }
           }
           @media (max-width: 1023px) {
             .cc-about-copy {
-              width: min(80%, 48rem);
+              width: min(100%, 48rem);
             }
           }
           @media (max-width: 767px) {
@@ -1445,8 +1448,11 @@ function AboutPage() {
             }
             .cc-about-heading {
               max-width: 14ch;
-              font-size: clamp(2.6rem, 10vw, 4.1rem);
+              font-size: clamp(2.4rem, 9vw, 3.6rem);
               line-height: 1.03;
+            }
+            .cc-about-paragraph {
+              font-size: 17px;
             }
             .cc-about-heading-word {
               margin-right: 0.22em;
@@ -1474,10 +1480,9 @@ function AboutPage() {
           }
         `}</style>
 
-        <div className="cc-about-background" aria-hidden="true" />
         <div className="cc-about-inner relative">
           <div className="cc-about-copy">
-            <p className="cc-about-eyebrow cc-about-animate text-xs font-black uppercase tracking-[0.42em] text-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "0ms" }}>
+            <p className="cc-about-eyebrow cc-about-animate text-xs font-black uppercase tracking-[0.42em] text-[#9B7CFF]" style={reduceMotion ? undefined : { transitionDelay: "0ms" }}>
               About Calo Capital
             </p>
             <h1 className="cc-about-heading mt-6 text-[#F4F7FB]" data-cc-about-split="true">
@@ -1488,7 +1493,7 @@ function AboutPage() {
                 return (
                   <span
                     key={`${label}-${index}`}
-                    className={`cc-about-heading-word cc-about-animate${isAccent ? " text-[#A855F7]" : ""}`}
+                    className={`cc-about-heading-word cc-about-animate${isAccent ? " text-[#9B7CFF]" : ""}`}
                     style={
                       reduceMotion
                         ? undefined
@@ -1505,7 +1510,7 @@ function AboutPage() {
             <p className="cc-about-paragraph cc-about-animate mt-6 text-[22px] leading-[1.6] text-[#F4F7FB]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
               {paragraphWords.join(" ")}
             </p>
-            <div className="cc-about-underline cc-about-animate mt-8 h-px w-12 bg-[#A855F7]" style={reduceMotion ? undefined : { transitionDelay: "1550ms" }} />
+            <div className="cc-about-underline cc-about-animate mt-8 h-px w-12 bg-[#9B7CFF]" style={reduceMotion ? undefined : { transitionDelay: "1550ms" }} />
           </div>
         </div>
       </section>
@@ -1574,7 +1579,7 @@ function WhyPartnerSection() {
     <section
       ref={sectionRef}
       id="client-excellence"
-      className="relative overflow-hidden px-5 py-24 text-white sm:py-28 lg:py-32"
+      className="relative overflow-hidden px-5 py-24 text-[#F4F7FB] sm:py-28 lg:py-32"
       style={{
         background: "transparent",
         opacity: isVisible ? 1 : 0,
@@ -1584,14 +1589,14 @@ function WhyPartnerSection() {
     >
       <div className="relative mx-auto w-full max-w-[min(1400px,94vw)]">
         <div style={revealStyle(0, 24)}>
-          <p className="text-xs font-black uppercase tracking-[0.4em] text-[#A855F7]" style={fadeStyle(0)}>
+          <p className="text-xs font-black uppercase tracking-[0.4em] text-[#9B7CFF]" style={fadeStyle(0)}>
             WHY PARTNER WITH CALO CAPITAL
           </p>
-          <div className="mt-3 h-px w-28 bg-[#A855F7]/70" />
+          <div className="mt-3 h-px w-28 bg-[#9B7CFF]/70" />
         </div>
 
         <h2 className="cc-slow-fade mt-10 max-w-[12ch] text-[clamp(2.3rem,7vw,4rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] sm:max-w-none" style={revealStyle(150, 30)}>
-          Markets move. <span className="text-[#A855F7]">Sound strategy</span> endures.
+          Markets move. <span className="text-[#9B7CFF]">Sound strategy</span> endures.
         </h2>
 
         <div className="mt-16" style={revealStyle(300, 24)}>
@@ -1608,14 +1613,6 @@ function WhyPartnerSection() {
             We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
           </p>
 
-          <div className="mt-14 max-w-3xl border-t border-[#A855F7]/40 pt-8" style={fadeStyle(600)}>
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#A855F7]">Main Office</p>
-            <div className="mt-4 space-y-2 text-[18px] leading-[1.8] text-[#F4F7FB]">
-              <p>Nashville, TN • 41 Peabody Street, 37210</p>
-              <p>Monday to Friday, 9:00 AM to 5:00 PM</p>
-              <p>Email: protection@calocapital.io</p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -1634,7 +1631,7 @@ function CryptoCandlestickSection() {
     { label: "LINK/USD", marketSymbol: "LINKUSDT" },
   ];
   const [selectedSymbol, setSelectedSymbol] = useState(cryptoSymbols[0].marketSymbol);
-  const [chartError, setChartError] = useState("");
+  const [chartStatus, setChartStatus] = useState("Connecting to live market feed...");
   const chartContainerRef = useRef(null);
   const chartRef = useRef(null);
   const seriesRef = useRef(null);
@@ -1647,33 +1644,33 @@ function CryptoCandlestickSection() {
       width: container.clientWidth,
       height: container.clientHeight,
       layout: {
-        background: { color: "#15021a" },
-        textColor: "#A8A9B8",
+        background: { color: "#050816" },
+        textColor: "#B7C0D8",
       },
       grid: {
-        vertLines: { color: "#1E2030" },
-        horzLines: { color: "#1E2030" },
+        vertLines: { color: "#1A2340" },
+        horzLines: { color: "#1A2340" },
       },
       crosshair: {
-        vertLine: { color: "#B8B1FF" },
-        horzLine: { color: "#B8B1FF" },
+        vertLine: { color: "#C6B8FF" },
+        horzLine: { color: "#C6B8FF" },
       },
       rightPriceScale: {
-        borderColor: "#1E2030",
+        borderColor: "#1A2340",
       },
       timeScale: {
-        borderColor: "#1E2030",
+        borderColor: "#1A2340",
         timeVisible: true,
       },
     });
 
     const series = chart.addSeries(CandlestickSeries, {
-      upColor: "#6D4AFF",
-      downColor: "#D9D6FF",
-      borderUpColor: "#6D4AFF",
-      borderDownColor: "#D9D6FF",
-      wickUpColor: "#6D4AFF",
-      wickDownColor: "#D9D6FF",
+      upColor: "#6D5EF5",
+      downColor: "#F4F7FB",
+      borderUpColor: "#6D5EF5",
+      borderDownColor: "#F4F7FB",
+      wickUpColor: "#6D5EF5",
+      wickDownColor: "#F4F7FB",
     });
 
     chartRef.current = chart;
@@ -1698,6 +1695,7 @@ function CryptoCandlestickSection() {
 
   useEffect(() => {
     let cancelled = false;
+    setChartStatus(`Loading ${selectedSymbol.replace("USDT", "/USD")} market data...`);
 
     function buildFallbackCandles(basePrice) {
       const nowSeconds = Math.floor(Date.now() / 1000);
@@ -1830,7 +1828,6 @@ function CryptoCandlestickSection() {
       }
 
       try {
-        setChartError("");
         const product = coinbaseProductBySymbol[selectedSymbol] || "BTC-USD";
         const coinId = coinGeckoCoinBySymbol[selectedSymbol] || "bitcoin";
 
@@ -1845,12 +1842,13 @@ function CryptoCandlestickSection() {
 
         seriesRef.current.setData(chartData);
         chartRef.current.timeScale().fitContent();
-      } catch (error) {
+        setChartStatus("Live market feed connected.");
+      } catch {
         if (cancelled) return;
         const fallbackBase = fallbackPriceBySymbol[selectedSymbol] || 500;
         seriesRef.current.setData(buildFallbackCandles(fallbackBase));
         chartRef.current.timeScale().fitContent();
-        setChartError("Live feed temporarily unavailable. Showing fallback candles for visual reference.");
+        setChartStatus("Live feed temporarily unavailable. Showing fallback candles for visual reference.");
       }
     }
 
@@ -1866,26 +1864,19 @@ function CryptoCandlestickSection() {
   return (
     <section
       id="crypto-candlestick"
-      className="relative overflow-hidden bg-[#15021a] px-5 py-20 text-white sm:py-24"
-      style={{ background: "#15021a" }}
+      className="relative min-w-0 overflow-hidden bg-transparent px-5 py-8 text-[#F4F7FB] sm:py-10 lg:py-8"
     >
       <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Live Crypto Candlestick Chart</p>
-        <h2 className="mt-4 max-w-3xl text-[34px] font-black leading-[1.06] tracking-[-0.02em] text-white">
-          Track <span className="text-[#A855F7]">Digital Asset</span> Price Action in Real Time
-        </h2>
-        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]">
-          Explore TradingView candlestick charts for major crypto pairs. Candlestick charts can help visualize open, close, high, and low prices over selected time intervals.
-        </p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Live Crypto Candlestick Chart</p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-4 flex flex-wrap gap-2">
           {cryptoSymbols.map((item) => (
             <button
               key={item.marketSymbol}
               onClick={() => setSelectedSymbol(item.marketSymbol)}
               className={selectedSymbol === item.marketSymbol
-                ? "rounded-none border border-[#D7A6FF] bg-[#D7A6FF]/15 px-4 py-2 text-sm font-black text-white"
-                : "rounded-none border border-white/20 bg-transparent px-4 py-2 text-sm font-black text-[#A855F7] transition hover:border-[#D7A6FF] hover:text-white"}
+                ? "rounded-none border border-[#C6B8FF] bg-[#C6B8FF]/15 px-3 py-1.5 text-xs font-black text-[#F4F7FB]"
+                : "rounded-none border border-[#B7C0D8]/20 bg-transparent px-3 py-1.5 text-xs font-black text-[#9B7CFF] transition hover:border-[#C6B8FF] hover:text-[#F4F7FB]"}
               aria-pressed={selectedSymbol === item.marketSymbol}
             >
               {item.label}
@@ -1893,24 +1884,33 @@ function CryptoCandlestickSection() {
           ))}
         </div>
 
-        <div className="mt-8 overflow-hidden border border-white/15 bg-[#15021a]">
-          <div ref={chartContainerRef} className="h-[380px] w-full sm:h-[460px] lg:h-[560px]" aria-label="TradingView candlestick chart" />
-          {chartError && (
-            <p className="border-t border-white/15 px-4 py-3 text-sm text-rose-200">{chartError}</p>
-          )}
-          <div className="border-t border-white/10 px-4 py-3 text-xs leading-6 text-[#A855F7]">
+        <div className="mt-4 overflow-hidden border border-[#B7C0D8]/15 bg-[#050816]">
+          <div
+            ref={chartContainerRef}
+            role="img"
+            aria-label={`${selectedSymbol.replace("USDT", "/USD")} candlestick chart showing historical four-hour open, high, low, and close prices.`}
+            className="h-[280px] w-full sm:h-[340px] lg:h-[240px]"
+          />
+          <div
+            role="status"
+            aria-live="polite"
+            className={`flex h-[72px] items-center border-t border-[#B7C0D8]/15 px-4 py-3 text-sm leading-5 ${chartStatus.startsWith("Live feed temporarily unavailable") ? "text-[#B7C0D8]" : chartStatus.startsWith("Live market feed connected") ? "text-[#9B7CFF]" : "text-[#B7C0D8]"}`}
+          >
+            {chartStatus}
+          </div>
+          <div className="border-t border-[#B7C0D8]/10 px-4 py-3 text-xs leading-6 text-[#9B7CFF]">
             Powered by TradingView Lightweight Charts with market data feed for educational chart visualization.
           </div>
         </div>
 
-        <div className="mt-8 bg-white/[0.02] p-5 sm:p-6">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="lg:max-w-[52%]">
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Understanding Market Charts</p>
-              <h3 className="mt-3 text-2xl font-black text-white sm:text-3xl">
-                Candlesticks show price movement, <span className="text-[#A855F7]">not certainty.</span>
+        <div className="mt-4 bg-white/[0.02] p-4">
+          <div>
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Understanding Market Charts</p>
+              <h3 className="mt-1 text-lg font-black text-[#F4F7FB] sm:text-xl">
+                Candlesticks show price movement, <span className="text-[#9B7CFF]">not certainty.</span>
               </h3>
-              <p className="mt-3 text-[22px] leading-[1.6] text-[#F4F7FB]">
+              <p className="mt-1 text-sm leading-5 text-[#F4F7FB]">
                 Each candle shows the opening, closing, highest, and lowest prices for a time period. Green or purple candles usually mean prices moved up, while lighter candles can signal a move down.
               </p>
             </div>
@@ -1921,6 +1921,114 @@ function CryptoCandlestickSection() {
   );
 }
 
+
+const financialSolutions = [
+  {
+    title: "Working Capital",
+    description: "Explore flexible financing options for short-term business cash flow needs.",
+  },
+  {
+    title: "SBA Loans",
+    description: "Learn about government-backed financing programs for eligible businesses.",
+  },
+  {
+    title: "Real Estate Financing",
+    description: "Explore financing options for commercial property purchases and projects.",
+  },
+  {
+    title: "Credit Card Processing",
+    description: "Review payment processing options for accepting customer card payments.",
+  },
+  {
+    title: "Equipment Financing",
+    description: "Explore financing options for essential business equipment.",
+  },
+  {
+    title: "Credit Repair",
+    description: "Learn about services intended to help businesses improve their credit profiles.",
+  },
+];
+
+function FinancialSolutionsSection() {
+
+  return (
+    <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
+      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
+        <header className="text-center">
+          <h2 className="text-[clamp(2rem,4vw,3rem)] font-black leading-tight text-[#9B7CFF]">
+            Our Financial Solutions
+          </h2>
+          <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
+            Explore small-business financing options on CapNow.
+          </p>
+        </header>
+
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {financialSolutions.map((solution) => (
+            <article
+              key={solution.title}
+              className="financial-galactic-card flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]"
+            >
+              <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
+                {solution.title}
+              </span>
+              <span className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">
+                {solution.description}
+              </span>
+              <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const additionalBusinessFinancing = [
+  {
+    title: "Business Term Loans",
+    description: "Review financing with a defined repayment schedule for planned business expenses and growth projects.",
+  },
+  {
+    title: "Business Lines of Credit",
+    description: "Explore flexible access to funds for recurring or unexpected business expenses, subject to provider terms.",
+  },
+  {
+    title: "Invoice Factoring",
+    description: "Learn how eligible unpaid invoices may be used to access working capital, with fees and terms set by the provider.",
+  },
+];
+
+function AdditionalBusinessFinancingSection() {
+  return (
+    <section id="business-financing-options" className="border-t border-[#B7C0D8]/20 bg-[#1A2340] px-5 pb-16 pt-8 text-[#F4F7FB] sm:pb-20 sm:pt-10">
+      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
+        <header className="max-w-3xl">
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Business Financing</p>
+          <h2 className="mt-3 text-[clamp(1.8rem,3vw,2.5rem)] font-black leading-tight text-[#F4F7FB]">
+            More ways to support your next move
+          </h2>
+          <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
+            Explore additional financing structures for business needs, with eligibility and terms determined by the funding provider.
+          </p>
+        </header>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {additionalBusinessFinancing.map((solution) => (
+            <article
+              key={solution.title}
+              className="financial-galactic-card flex min-h-[190px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#050816] px-6 py-7 text-center shadow-[0_8px_24px_rgba(109,94,245,0.1)]"
+            >
+              <h3 className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">{solution.title}</h3>
+              <p className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">{solution.description}</p>
+              <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function FinancialTopicsSection() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -1955,7 +2063,7 @@ function FinancialTopicsSection() {
   return (
     <section
       id="financial-priorities"
-      className="relative overflow-hidden bg-[#15021a] px-4 py-10 sm:py-16"
+      className="relative overflow-hidden bg-[#050816] px-4 py-10 sm:py-16"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -1965,8 +2073,7 @@ function FinancialTopicsSection() {
     >
       <div className="mx-auto max-w-[1400px]">
         <div className="mb-6 text-center sm:mb-8">
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Explore</p>
-          <h2 className="mt-3 text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-white">Financial Topics</h2>
+            <h2 className="text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-[#F4F7FB]">Explore Topics</h2>
         </div>
         <style>{`
           @keyframes financialSlideIn {
@@ -1977,12 +2084,12 @@ function FinancialTopicsSection() {
             animation: financialSlideIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
           }
         `}</style>
-        <article className="financial-carousel-slide life-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 0 ? "block" : "none" }}>
+        <article className="financial-carousel-slide life-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 0 ? "block" : "none" }}>
           <style>{`
             .life-insurance-slide {
               position: relative;
               aspect-ratio: 2034 / 912;
-              border: 1px solid rgba(215, 166, 255, 0.14);
+              border: 1px solid rgba(198, 184, 255, 0.14);
             }
             .life-insurance-art {
               position: absolute;
@@ -1997,7 +2104,7 @@ function FinancialTopicsSection() {
             }
             .life-insurance-title {
               margin: 0;
-              color: #ffffff;
+              color: #F4F7FB;
               font-family: var(--font-display);
               font-size: clamp(2rem, 4.3vw, 5rem);
               font-weight: 700;
@@ -2006,11 +2113,11 @@ function FinancialTopicsSection() {
             }
             .life-insurance-title span,
             .life-insurance-why strong {
-              color: #a855f7;
+              color: #9B7CFF;
             }
             .life-insurance-hook {
               margin: 1rem 0 0;
-              color: #ffffff;
+              color: #F4F7FB;
               font-size: clamp(0.95rem, 1.45vw, 1.45rem);
               font-weight: 700;
               line-height: 1.35;
@@ -2018,7 +2125,7 @@ function FinancialTopicsSection() {
             .life-insurance-body,
             .life-insurance-why,
             .life-insurance-disclaimer {
-              color: #f3eaf6;
+              color: #B7C0D8;
               font-size: clamp(0.82rem, 1.25vw, 1.18rem);
               line-height: 1.55;
             }
@@ -2033,7 +2140,7 @@ function FinancialTopicsSection() {
             }
             .life-insurance-disclaimer {
               margin: 0.8rem 0 0;
-              color: #dfcfe5;
+              color: #B7C0D8;
               font-size: clamp(0.72rem, 1vw, 0.98rem);
             }
             @media (max-width: 767px) {
@@ -2085,7 +2192,7 @@ function FinancialTopicsSection() {
           </div>
         </article>
 
-        <article className="financial-carousel-slide life-insurance-slide ira-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 1 ? "block" : "none" }}>
+        <article className="financial-carousel-slide life-insurance-slide ira-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 1 ? "block" : "none" }}>
           <style>{`
             .ira-insurance-art {
               background-image: url(${iraDesignPng});
@@ -2117,7 +2224,7 @@ function FinancialTopicsSection() {
           </div>
         </article>
 
-        <article className="financial-carousel-slide life-insurance-slide trust-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 2 ? "block" : "none" }}>
+        <article className="financial-carousel-slide life-insurance-slide trust-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 2 ? "block" : "none" }}>
           <style>{`
             .trust-insurance-art {
               background-image: url(${trustDesignPng});
@@ -2149,7 +2256,7 @@ function FinancialTopicsSection() {
           </div>
         </article>
 
-        <article className="financial-carousel-slide life-insurance-slide investment-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 3 ? "block" : "none" }}>
+        <article className="financial-carousel-slide life-insurance-slide investment-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 3 ? "block" : "none" }}>
           <style>{`
             .investment-insurance-art {
               background-image: url(${investmentDesignPng});
@@ -2181,7 +2288,7 @@ function FinancialTopicsSection() {
           </div>
         </article>
 
-        <article className="financial-carousel-slide life-insurance-slide crypto-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 4 ? "block" : "none" }}>
+        <article className="financial-carousel-slide life-insurance-slide crypto-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 4 ? "block" : "none" }}>
           <style>{`
             .crypto-insurance-art {
               background-image: url(${cryptoDesignPng});
@@ -2213,7 +2320,7 @@ function FinancialTopicsSection() {
           </div>
         </article>
 
-        <article className="financial-carousel-slide life-insurance-slide market-chart-slide mt-12 overflow-hidden rounded-[26px] bg-[#15021a] text-white" style={{ display: activeSlide === 5 ? "block" : "none" }}>
+        <article className="financial-carousel-slide life-insurance-slide market-chart-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 5 ? "block" : "none" }}>
           <style>{`
             .market-chart-art {
               background-image: url(${marketChartDesignPng});
@@ -2252,7 +2359,7 @@ function FinancialTopicsSection() {
               type="button"
               aria-label="Previous financial topic slide"
               onClick={goToPreviousSlide}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/5 text-xl font-bold text-white transition hover:border-[#d7a6ff] hover:bg-[#d7a6ff]/10"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B7C0D8]/30 bg-white/5 text-xl font-bold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:bg-[#C6B8FF]/10"
             >
               ←
             </button>
@@ -2265,8 +2372,8 @@ function FinancialTopicsSection() {
                   aria-label={`Show financial topic slide ${index + 1}`}
                   aria-current={activeSlide === index ? "true" : undefined}
                   onClick={() => goToSlide(index)}
-                  className={`h-3 w-3 rounded-full border border-white/30 transition-all duration-300 ${
-                    activeSlide === index ? "w-8 bg-[#d78cff]" : "bg-white/20"
+                  className={`h-3 w-3 rounded-full border border-[#B7C0D8]/30 transition-all duration-300 ${
+                    activeSlide === index ? "w-8 bg-[#9B7CFF]" : "bg-white/20"
                   }`}
                 />
               ))}
@@ -2276,7 +2383,7 @@ function FinancialTopicsSection() {
               type="button"
               aria-label="Next financial topic slide"
               onClick={goToNextSlide}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/5 text-xl font-bold text-white transition hover:border-[#d7a6ff] hover:bg-[#d7a6ff]/10"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B7C0D8]/30 bg-white/5 text-xl font-bold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:bg-[#C6B8FF]/10"
             >
               →
             </button>
@@ -2289,51 +2396,10 @@ function FinancialTopicsSection() {
 
 function FinancialTopicsPage() {
   return (
-    <section id="financial-topics" className="cc-slow-fade bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-20">
-      <div className="mx-auto w-full max-w-[min(1440px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Explore Financial Topics</p>
-        <h1 className="cc-slow-fade mt-4 max-w-4xl text-[clamp(2.2rem,4.9vw,4.5rem)] font-black leading-[1.05] text-[#FFFFFF]">
-          Prepare Better Questions for Your Financial Journey
-        </h1>
-        <p className="mt-5 max-w-4xl text-[22px] leading-[1.6] text-[#E9DDEC]">
-          Understanding the basics can help you communicate your goals, recognize important qualifications, and ask more informed questions when seeking professional support.
-        </p>
-
-        <div className="mt-10 space-y-10">
-          {financialTopics.map((topic) => {
-            const topicOverview =
-              topic.id === "protecting-your-family"
-                ? "Life insurance is designed to provide financial support for the people you care about, helping cover income replacement, debt, future expenses, and household stability after a loss. It can be useful because it gives families a way to protect their plans and obligations when life changes unexpectedly, and common options include term life for set periods and permanent policies for longer-term coverage."
-                : topic.id === "retirement-and-iras"
-                  ? "Retirement planning is about building a strategy for future income, long-term flexibility, and sustainable withdrawals later in life. IRAs can be part of that conversation, with traditional and Roth accounts often used for different tax and planning goals, and the reason it matters is that the decisions made early can shape how comfortable and prepared someone feels in retirement."
-                  : topic.id === "trusts-and-legacy"
-                    ? "Trusts and legacy planning help organize how assets, responsibilities, and personal wishes are handled over time. These tools may be used to support family transitions, reduce confusion, and preserve long-term intentions, while common approaches include wills, revocable trusts, and beneficiary designations that need to align with a broader estate plan."
-                    : topic.id === "investments-and-wealth"
-                      ? "Investing is about matching long-term financial goals with the right balance of risk, time horizon, and liquidity. It matters because markets can rise and fall, so diversification, costs, and discipline often matter as much as the investment itself, and common options include stocks, bonds, mutual funds, and diversified portfolios."
-                      : topic.id === "cryptocurrency"
-                        ? "Cryptocurrency and digital assets are a newer category of financial exposure that can move quickly and carry meaningful technology, custody, and security risks. The importance of understanding them is that they are not just price charts; they also involve wallets, private keys, platform risk, fraud exposure, and the possibility of permanent loss, with common approaches including holding crypto directly, using exchanges, and storing assets in self-custody or custodial accounts."
-                        : "Market charts can help explain how prices have moved over time, but they do not predict the future and should be used as context rather than certainty. They matter because trends, volume, and price action may help people ask better questions about risk and timing, while common chart types include candlesticks, line charts, and moving averages that describe history differently.";
-
-            return (
-              <article key={topic.id} id={topic.id} className="space-y-4 py-4 sm:py-6">
-                <h2 className="text-[clamp(1.65rem,2.8vw,2.5rem)] font-black leading-tight text-[#A855F7]">{topic.title}</h2>
-                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#A855F7]">{topic.hook}</p>
-                <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">{topic.shortDescription}</p>
-                <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">{topicOverview}</p>
-                <p className="text-[22px] leading-[1.6] text-[#E9DDEC]">
-                  Why it matters: {topic.id === "protecting-your-family" ? "A clear life insurance plan can help reduce financial stress, preserve household goals, and give families a framework for dealing with unexpected losses." : topic.id === "retirement-and-iras" ? "The structure of retirement accounts and timing can materially affect long-term flexibility, tax efficiency, and peace of mind later in life." : topic.id === "trusts-and-legacy" ? "Thoughtful legacy planning can help avoid confusion, preserve intentions, and make future transitions easier for family members and beneficiaries." : topic.id === "investments-and-wealth" ? "The right investment approach depends on goals, time horizon, and risk tolerance, which is why understanding the basics helps people make more informed decisions." : topic.id === "cryptocurrency" ? "Because the market moves quickly and security mistakes can be costly, it is important to understand both the opportunity and the risk before getting involved." : "Charts are most useful when they are treated as information tools, not promises, which helps people keep perspective on risk, timing, and market uncertainty."}
-                </p>
-
-                <p className="text-sm leading-7 text-[#A855F7]">
-                  Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-                </p>
-              </article>
-            );
-          })}
-        </div>
-
-      </div>
-    </section>
+    <>
+      <FourCsPage />
+      <FinancialTopicsSection />
+    </>
   );
 }
 
@@ -2647,20 +2713,20 @@ const socialMediaIcons = [
 
 function ContactPage() {
   return (
-    <section id="contact" className="relative overflow-hidden bg-[#1a0d24] px-0 pb-0 pt-0 text-white">
-      <div className="relative min-h-[620px] w-full overflow-hidden border-y border-white/10 bg-[#1a0d24] shadow-[0_0_0_1px_rgba(215,166,255,0.12)] lg:min-h-[calc(100svh-6rem)]">
+    <section id="contact" className="relative overflow-hidden bg-[#1A2340] px-0 pb-0 pt-0 text-[#F4F7FB]">
+      <div className="relative min-h-[620px] w-full overflow-hidden border-y border-[#B7C0D8]/10 bg-[#1A2340] shadow-[0_0_0_1px_rgba(198, 184, 255,0.12)] lg:min-h-[calc(100svh-6rem)]">
         <div className="absolute inset-0">
           <img src={semiWorldPng} alt="" className="h-full w-full object-cover object-center opacity-90" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(137,72,167,0.42),rgba(14,7,18,0.7)_66%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(109, 94, 245,0.42),rgba(5, 8, 22,0.7)_66%)]" />
         </div>
 
         <div className="relative z-10 grid items-center gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-12 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-14">
           <div className="max-w-xl min-w-0">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#f1d7ff] sm:text-xs sm:tracking-[0.28em]">Get in touch</p>
-            <h2 className="text-[34px] font-black leading-[0.96] tracking-[-0.04em] text-white">
+            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#C6B8FF] sm:text-xs sm:tracking-[0.28em]">Get in touch</p>
+            <h2 className="text-[34px] font-black leading-[0.96] tracking-[-0.04em] text-[#F4F7FB]">
               We are ready to hear from you
             </h2>
-            <p className="mt-6 max-w-full text-[22px] leading-[1.6] text-slate-200">
+            <p className="mt-6 max-w-full text-[22px] leading-[1.6] text-[#B7C0D8]">
               Check out our weekly updates
               <br />
               on the stock market
@@ -2679,7 +2745,7 @@ function ContactPage() {
                   <img
                     src={item.src}
                     alt={item.label}
-                    className="social-icon h-auto w-[3.25rem] object-contain drop-shadow-[0_0_18px_rgba(168,85,247,0.28)] sm:w-[4.25rem]"
+                    className="social-icon h-auto w-[3.25rem] object-contain drop-shadow-[0_0_18px_rgba(155, 124, 255,0.28)] sm:w-[4.25rem]"
                   />
                 </a>
               ))}
@@ -2687,8 +2753,14 @@ function ContactPage() {
           </div>
 
           <div className="flex min-w-0 items-center justify-center">
-            {/* Contact form removed; new form will be embedded from Webflow */}
-            <div className="w-full max-w-[560px]" />
+            <div className="w-full max-w-[560px] border-t border-[#9B7CFF]/40 pt-8">
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-[#9B7CFF]">Main Office</p>
+              <div className="mt-4 space-y-2 text-[18px] leading-[1.8] text-[#F4F7FB]">
+                <p>Nashville, TN • 41 Peabody Street, 37210</p>
+                <p>Monday to Friday, 9:00 AM to 5:00 PM</p>
+                <p>Email: protection@calocapital.io</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2700,10 +2772,19 @@ function HomePage({ setPage }) {
   return (
     <>
       <HeroSection />
-      <AboutPage />
-      <CryptoCandlestickSection />
-      <FourCsPage />
-      <FinancialTopicsSection setPage={setPage} />
+      <div
+        className="relative grid items-stretch lg:grid-cols-[0.9fr_1.1fr]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(5, 8, 22, 0.32), rgba(5, 8, 22, 0.62)), url(${aboutImagePng})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      >
+        <AboutPage />
+        <CryptoCandlestickSection />
+      </div>
+      <FinancialSolutionsSection />
+      <AdditionalBusinessFinancingSection />
       <WhyPartnerSection />
     </>
   );
@@ -2729,25 +2810,25 @@ function LegalPage() {
   }, []);
 
   return (
-    <section className="bg-[#15021a] px-5 pb-24 pt-16 text-white sm:pt-24">
+    <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#A855F7]">Calo Capital</p>
-        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-white">Privacy &amp; Disclaimer</h1>
-        <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#E9DDEC]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Privacy &amp; Disclaimer</h1>
+        <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
           Important information about privacy, educational content, and the use of this website.
         </p>
 
         <div className="mt-14 space-y-14">
-          <article id="privacy-policy" className="scroll-mt-28 border-t border-[#d7a6ff66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#A855F7]">01</p>
-            <h2 className="mt-3 text-3xl font-black text-white">Privacy Policy</h2>
-            <p className="mt-5 text-[22px] leading-[1.6] text-[#E9DDEC]">{privacyPolicy}</p>
+          <article id="privacy-policy" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">01</p>
+            <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Privacy Policy</h2>
+            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{privacyPolicy}</p>
           </article>
 
-          <article id="disclaimer" className="scroll-mt-28 border-t border-[#d7a6ff66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#A855F7]">02</p>
-            <h2 className="mt-3 text-3xl font-black text-white">Disclaimer</h2>
-            <p className="mt-5 text-[22px] leading-[1.6] text-[#E9DDEC]">{disclaimer}</p>
+          <article id="disclaimer" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">02</p>
+            <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Disclaimer</h2>
+            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{disclaimer}</p>
           </article>
         </div>
       </div>
@@ -2770,16 +2851,16 @@ function Footer({ setPage }) {
   }, []);
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#15021a] px-5 py-8 text-white">
+    <footer className="relative overflow-hidden border-t border-[#B7C0D8]/10 bg-[#050816] px-5 py-8 text-[#F4F7FB]">
       <div className="relative z-10 mx-auto w-full max-w-[94vw]">
-        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[11px] leading-6 text-slate-300">
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[11px] leading-6 text-[#B7C0D8]">
           <a
             href="/legal#privacy-policy"
             onClick={(event) => {
               event.preventDefault();
               setPage("Legal", "privacy-policy");
             }}
-            className="font-black uppercase tracking-[0.18em] text-[#A855F7] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
+            className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
           >
             Privacy Policy
           </a>
@@ -2789,7 +2870,7 @@ function Footer({ setPage }) {
               event.preventDefault();
               setPage("Legal", "disclaimer");
             }}
-            className="font-black uppercase tracking-[0.18em] text-[#A855F7] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7A6FF]"
+            className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
           >
             Disclaimer
           </a>
@@ -2826,34 +2907,34 @@ function GlobalStyles() {
       img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
       a, button, input, textarea, select { max-width: 100%; }
       chat-widget {
-        --chat-widget-bubble-color: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%) !important;
-        --chat-widget-button-color: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%) !important;
+        --chat-widget-bubble-color: linear-gradient(135deg, #6D5EF5 0%, #9B7CFF 42%, #C6B8FF 100%) !important;
+        --chat-widget-button-color: linear-gradient(135deg, #6D5EF5 0%, #9B7CFF 42%, #C6B8FF 100%) !important;
       }
       .social-icon { width: clamp(2.9rem, 15vw, 5rem); }
       @media (max-width: 480px) {
         .social-icon { width: clamp(2.6rem, 16vw, 3.6rem); }
       }
       .schedule-call-radiant {
-        background: linear-gradient(135deg, #6f2ae4 0%, #8B5CF6 42%, #c084fc 100%);
-        box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 18px rgba(139, 92, 246, 0.55), 0 0 36px rgba(168, 85, 247, 0.35);
+        background: linear-gradient(135deg, #6D5EF5 0%, #9B7CFF 42%, #C6B8FF 100%);
+        box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.4), 0 0 18px rgba(109, 94, 245, 0.55), 0 0 36px rgba(155, 124, 255, 0.35);
         animation: scheduleCallRadiance 2.8s ease-in-out infinite;
       }
       .schedule-call-radiant:hover {
-        background: linear-gradient(135deg, #7d39eb 0%, #a855f7 46%, #d8b4fe 100%);
+        background: linear-gradient(135deg, #6D5EF5 0%, #9B7CFF 46%, #C6B8FF 100%);
       }
       .schedule-call-radiant:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(215, 166, 255, 0.6), 0 0 0 5px rgba(21, 2, 26, 0.95), 0 0 24px rgba(168, 85, 247, 0.55);
+        box-shadow: 0 0 0 3px rgba(198, 184, 255, 0.6), 0 0 0 5px rgba(5, 8, 22, 0.95), 0 0 24px rgba(155, 124, 255, 0.55);
       }
       @keyframes scheduleCallRadiance {
         0% {
-          box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 14px rgba(139, 92, 246, 0.42), 0 0 28px rgba(168, 85, 247, 0.28);
+          box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.4), 0 0 14px rgba(109, 94, 245, 0.42), 0 0 28px rgba(155, 124, 255, 0.28);
         }
         50% {
-          box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.5), 0 0 24px rgba(139, 92, 246, 0.62), 0 0 46px rgba(168, 85, 247, 0.42);
+          box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.5), 0 0 24px rgba(109, 94, 245, 0.62), 0 0 46px rgba(155, 124, 255, 0.42);
         }
         100% {
-          box-shadow: 0 0 0 1px rgba(215, 166, 255, 0.4), 0 0 14px rgba(139, 92, 246, 0.42), 0 0 28px rgba(168, 85, 247, 0.28);
+          box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.4), 0 0 14px rgba(109, 94, 245, 0.42), 0 0 28px rgba(155, 124, 255, 0.28);
         }
       }
       @keyframes marquee {
@@ -2875,15 +2956,15 @@ function GlobalStyles() {
       .service-card-aurora {
       .cloud-layer {
           radial-gradient(circle at 18% 18%, rgba(155,124,255,0.2) 0 18%, transparent 38%),
-          radial-gradient(circle at 82% 72%, rgba(124,58,237,0.16) 0 16%, transparent 34%),
-          linear-gradient(135deg, rgba(168,85,247,0.1) 0%, rgba(67,56,202,0.04) 34%, transparent 64%);
+          radial-gradient(circle at 82% 72%, rgba(109, 94, 245,0.16) 0 16%, transparent 34%),
+          linear-gradient(135deg, rgba(155, 124, 255,0.1) 0%, rgba(109, 94, 245,0.04) 34%, transparent 64%);
           radial-gradient(circle at 15% 60%, rgba(255,255,255,.42) 0 55px, transparent 56px),
         animation: cardAuroraDrift 18s ease-in-out infinite;
         0% { transform: translate3d(0, 0, 0); opacity: 0.18; }
         50% { transform: translate3d(-10px, 6px, 0); opacity: 0.28; }
         100% { transform: translate3d(0, 0, 0); opacity: 0.18; }
       }
-        box-shadow: 0 0 0 1px rgba(192,132,252,0.12), 0 0 22px rgba(124,58,237,0.12);
+        box-shadow: 0 0 0 1px rgba(192,132,252,0.12), 0 0 22px rgba(109, 94, 245,0.12);
         0% { transform: translateX(-9px); opacity: 0.12; }
         50% { transform: translateX(9px); opacity: 0.2; }
         100% { transform: translateX(-9px); opacity: 0.12; }
@@ -2908,7 +2989,7 @@ function GlobalStyles() {
       .service-card-shimmer {
         background:
           radial-gradient(circle at 50% 50%, rgba(198,184,255,0.05), transparent 40%),
-          linear-gradient(122deg, transparent 0%, transparent 46%, rgba(168,85,247,0.09) 50%, transparent 54%, transparent 100%);
+          linear-gradient(122deg, transparent 0%, transparent 46%, rgba(155, 124, 255,0.09) 50%, transparent 54%, transparent 100%);
         animation: cardGridShimmer 20s ease-in-out infinite;
       }
       @keyframes serviceIconFloat {
@@ -2934,7 +3015,7 @@ function GlobalStyles() {
         0% {
           transform: translate(0, 0) rotate(var(--angle)) scaleX(var(--scale));
           opacity: 0;
-          box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.9), 0 0 40px 16px rgba(103, 232, 249, 0.6);
+          box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.9), 0 0 40px 16px rgba(109, 94, 245, 0.6);
         }
         10% {
           opacity: 1;
@@ -2945,7 +3026,7 @@ function GlobalStyles() {
         100% {
           transform: translate(1500px, 1500px) rotate(var(--angle)) scaleX(var(--scale));
           opacity: 0;
-          box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.4), 0 0 40px 16px rgba(103, 232, 249, 0.2);
+          box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.4), 0 0 40px 16px rgba(109, 94, 245, 0.2);
         }
       }
       .shooting-star {
@@ -2972,13 +3053,13 @@ function GlobalStyles() {
         background: linear-gradient(
           90deg,
           transparent,
-          rgba(175, 235, 255, 0.9),
-          rgba(190, 140, 255, 0.8),
+          rgba(198, 184, 255, 0.9),
+          rgba(198, 184, 255, 0.8),
           transparent
         );
         box-shadow:
-          0 0 8px rgba(175, 235, 255, 0.9),
-          0 0 18px rgba(160, 90, 255, 0.55);
+          0 0 8px rgba(198, 184, 255, 0.9),
+          0 0 18px rgba(155, 124, 255, 0.55);
         opacity: 0;
         transform: rotate(var(--angle, 25deg));
         animation: constellationDrift 9s linear infinite;
@@ -2996,8 +3077,8 @@ function GlobalStyles() {
         transform: translateY(-50%);
         box-shadow:
           0 0 10px white,
-          0 0 22px rgba(160, 220, 255, 0.9),
-          0 0 34px rgba(160, 90, 255, 0.7);
+          0 0 22px rgba(198, 184, 255, 0.9),
+          0 0 34px rgba(155, 124, 255, 0.7);
       }
 
       .star-line::before {
@@ -3111,7 +3192,7 @@ function GlobalStyles() {
         bottom: -2px;
         width: 0;
         height: 1px;
-        background: #A855F7;
+        background: #9B7CFF;
         transition: width 0.24s ease;
       }
 
@@ -3186,6 +3267,9 @@ export default function App() {
     (nextPage) => {
       if (nextPage === renderedPage) {
         setCurrentPage(nextPage);
+        if (nextPage === "Financial Topics") {
+          requestAnimationFrame(scrollToFinancialTopicsLocation);
+        }
         return;
       }
 
@@ -3233,11 +3317,26 @@ export default function App() {
     if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal") return;
 
     requestAnimationFrame(() => {
-      scrollToHomeSection(renderedPage);
+      scrollToHomeSection(renderedPage === "Home" ? currentPage : renderedPage);
     });
+  }, [currentPage, renderedPage]);
+
+  useEffect(() => {
+    if (renderedPage !== "Financial Topics") return;
+    requestAnimationFrame(scrollToFinancialTopicsLocation);
   }, [renderedPage]);
 
   function setPage(page, hash = "") {
+    if (page === "Financial Topics" || page === "Four C's") {
+      window.history.pushState({}, "", pageRoutes[page]);
+      setCurrentPage(page);
+      setRenderedPage("Financial Topics");
+      setTransitionPhase("idle");
+      setPendingPage(null);
+      requestAnimationFrame(scrollToFinancialTopicsLocation);
+      return;
+    }
+
     if (page === "Contact") {
       window.history.pushState({}, "", "/contact");
       setCurrentPage(page);
@@ -3264,15 +3363,14 @@ export default function App() {
       return;
     }
 
-    if (renderedPage === "Contact") {
+    if (renderedPage === "Contact" || renderedPage === "Financial Topics") {
       window.history.pushState({}, "", "/");
     }
 
     const sectionMap = {
       Home: "",
-      "Why invest": "client-excellence",
-      "Four C's": "four-cs",
-      "Financial Topics": "financial-priorities",
+      Explore: "financial-solutions",
+      "Why invest": "financial-solutions",
     };
 
     const targetSectionId = sectionMap[page];
@@ -3292,14 +3390,13 @@ export default function App() {
   }
 
   const isFinancialTopicsPage = renderedPage === "Financial Topics";
-  const isFourCsPage = renderedPage === "Four C's";
   const pageTransitionStateClass = transitionPhase === "out" ? "opacity-0 translate-y-1 scale-[0.998]" : "opacity-100 translate-y-0 scale-100";
   const pageTransitionStyle = {
     filter: transitionPhase === "out" ? "blur(1.2px)" : "blur(0px)",
   };
 
   return (
-    <main className="min-h-screen bg-[#15021a] font-body">
+    <main className="min-h-screen bg-[#050816] font-body">
       <GlobalStyles />
       <MarketTicker coins={coins} live={live} />
       <Navbar currentPage={currentPage} setPage={setPage} />
@@ -3307,7 +3404,7 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : <HomePage setPage={setPage} />}
+        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} />}
       </div>
       <Footer setPage={setPage} />
     </main>
