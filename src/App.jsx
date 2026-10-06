@@ -1616,107 +1616,6 @@ function AboutPage() {
   );
 }
 
-function WhyPartnerSection() {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(reducedMotionQuery.matches);
-    if (reducedMotionQuery.matches) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(node);
-
-    return () => observer.disconnect();
-  }, []);
-
-  function revealStyle(delayMs, translateY = 30) {
-    if (reduceMotion) {
-      return { opacity: 1, transform: "none" };
-    }
-
-    return {
-      opacity: isVisible ? 1 : 0,
-      transform: isVisible ? "translateY(0)" : `translateY(${translateY}px)`,
-      transition: `opacity 0.6s ease-out ${delayMs}ms, transform 0.6s ease-out ${delayMs}ms`,
-    };
-  }
-
-  function fadeStyle(delayMs) {
-    if (reduceMotion) {
-      return { opacity: 1 };
-    }
-
-    return {
-      opacity: isVisible ? 1 : 0,
-      transition: `opacity 0.6s ease-out ${delayMs}ms`,
-    };
-  }
-
-  return (
-    <section
-      ref={sectionRef}
-      id="client-excellence"
-      className="relative overflow-hidden px-5 py-24 text-[#F4F7FB] sm:py-28 lg:py-32"
-      style={{
-        background: "transparent",
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translateY(0)" : "translateY(16px)",
-        transition: reduceMotion ? "none" : "opacity 0.8s ease-out, transform 0.8s ease-out",
-      }}
-    >
-      <div className="relative mx-auto w-full max-w-[min(1400px,94vw)]">
-        <div style={revealStyle(0, 24)}>
-          <p className="text-xs font-black uppercase tracking-[0.4em] text-[#9B7CFF]" style={fadeStyle(0)}>
-            WHY PARTNER WITH CALO CAPITAL
-          </p>
-          <div className="mt-3 h-px w-28 bg-[#9B7CFF]/70" />
-        </div>
-
-        <h2 className="cc-slow-fade mt-10 max-w-[12ch] text-[clamp(2.3rem,7vw,4rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] sm:max-w-none" style={revealStyle(150, 30)}>
-          Markets move. <span className="text-[#9B7CFF]">Sound strategy</span> endures.
-        </h2>
-
-        <div className="mt-16" style={revealStyle(300, 24)}>
-          <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
-            OUR PRINCIPLES
-          </h3>
-          <p className="mt-7 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(380)}>
-            At Calo Capital, we help you understand what you are getting into before you commit. We are open to answer questions and do not shy away from explaining why something may not work in your favor.
-          </p>
-          <p className="mt-8 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(460)}>
-            Honesty and transparency is better than taking your money and giving you a package deal that does not do what you need it to do.
-          </p>
-          <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(520)}>
-            We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
-          </p>
-
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CryptoCandlestickSection() {
   const cryptoSymbols = [
     { label: "BTC/USD", marketSymbol: "BTCUSDT" },
@@ -3385,13 +3284,67 @@ function HomePage({ setPage }) {
       </div>
       <FinancialSolutionsSection />
       <AdditionalBusinessFinancingSection />
-      <WhyPartnerSection />
     </>
   );
 }
 
-const privacyPolicy =
-  "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
+const privacySections = [
+  {
+    title: "Information we collect",
+    body: "We may collect information you choose to provide, such as your name, email address, phone number, business details, and the contents of a message or consultation request. Please do not submit account credentials, payment-card details, government identification numbers, or other sensitive personal information through general website forms. When you visit the site, basic technical information such as your IP address, browser type, device information, and pages viewed may also be processed by our hosting and site-support providers.",
+  },
+  {
+    title: "How we use information",
+    body: "We use information to respond to requests, communicate about our services, operate and protect the website, maintain business records, and understand or improve how the site is used. We may also use information to meet legal obligations and prevent fraud, misuse, or security incidents. We do not use a website inquiry by itself to make a financial recommendation or determine whether you qualify for a third-party product.",
+  },
+  {
+    title: "Sharing and service providers",
+    body: "We do not sell personal information. We may provide information to service providers that help us host, secure, analyze, or operate the site and respond to inquiries. Those providers may process information on our behalf under their own privacy terms and applicable safeguards. We may also disclose information when required by law, to protect rights or safety, or in connection with a business reorganization or transfer. We do not control how an independent lender, financial provider, or other third party handles information you provide directly to them.",
+  },
+  {
+    title: "Cookies and similar technologies",
+    body: "The site or its service providers may use cookies, server logs, or similar technologies for essential site functions, security, or usage measurement. You can manage cookies through your browser settings; disabling them may affect some site features. Third-party tools embedded in or linked from the site may use their own technologies and are governed by the providers’ policies.",
+  },
+  {
+    title: "Retention and security",
+    body: "We retain information for as long as reasonably needed for the purposes described here, including responding to you, maintaining business and legal records, and resolving disputes. Retention periods depend on the type of information and the circumstances. We use reasonable administrative and technical safeguards, but no website, transmission, or storage system can be guaranteed to be completely secure.",
+  },
+  {
+    title: "Your choices and privacy requests",
+    body: "Depending on where you live, you may have rights to request access to, correction of, deletion of, or a copy of certain personal information, or to object to or limit particular processing. These rights are subject to applicable law and exceptions. To ask a question or make a request, email protection@calocapital.io. We may need to verify your identity and will respond as required by applicable law.",
+  },
+  {
+    title: "Children, external links, and policy updates",
+    body: "This site is intended for a general audience and is not directed to children under 13; please do not knowingly submit a child’s personal information. The site may link to external websites that we do not operate, and their privacy practices are their own. We may update this policy from time to time by posting a revised version here. Your continued use of the site after an update means you have had an opportunity to review the revised policy.",
+  },
+];
+
+const termsSections = [
+  {
+    title: "Acceptance and permitted use",
+    body: "These Terms of Service apply to your access to and use of the Calo Capital website. By using the site, you agree to these terms. If you do not agree, do not use the site. You may use the site for lawful, personal, and business informational purposes. You may not interfere with the site, attempt unauthorized access, introduce malicious code, scrape or harvest information in a way that burdens or abuses the service, or use the site to violate another person’s rights or the law.",
+  },
+  {
+    title: "Information is not professional advice or an offer",
+    body: "Website content is general information only. It is not investment, financial, legal, tax, accounting, or other professional advice, and it does not create an advisory, fiduciary, lender, broker, or client relationship. Content is not an offer, solicitation, or recommendation to buy or sell a security, digital asset, commodity, loan, or other product. Consider your own circumstances and consult qualified professionals before making decisions. See the Disclaimer on this page for additional information.",
+  },
+  {
+    title: "Third-party products and services",
+    body: "References to lenders, providers, products, or external websites are for general information and convenience. Third parties set their own eligibility requirements, rates, fees, terms, and privacy practices; we do not control or guarantee them. You are responsible for reviewing a provider’s current disclosures and agreements before sharing information or entering into a transaction. Any relationship or transaction with a third party is between you and that third party.",
+  },
+  {
+    title: "Content, availability, and changes",
+    body: "We make reasonable efforts to keep the site useful, but content may be incomplete, outdated, or inaccurate, and we do not promise uninterrupted availability or that the site will be error-free. We may change, suspend, or remove site content or features at any time. Unless otherwise stated, site text, design, and branding belong to Calo Capital or its licensors and may not be copied, republished, or commercially exploited without permission. You may link to publicly available pages in a lawful way that does not imply endorsement or misrepresent your relationship with us.",
+  },
+  {
+    title: "Disclaimers and limits of responsibility",
+    body: "To the extent permitted by law, the site and its content are provided “as is” and “as available,” without warranties of any kind. Calo Capital is not responsible for decisions you make based on general website content, third-party products or websites, or interruptions or errors outside our reasonable control. To the extent permitted by law, Calo Capital will not be liable for indirect, incidental, special, consequential, or punitive loss arising from your use of the site. Nothing in these terms excludes liability that cannot lawfully be excluded.",
+  },
+  {
+    title: "Updates and contact",
+    body: "We may revise these terms by posting an updated version on this page. Changes apply when posted, subject to applicable law. Continued use of the site after changes are posted indicates acceptance of the revised terms. Questions about these terms may be sent to protection@calocapital.io.",
+  },
+];
 
 const disclaimer =
   "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
@@ -3413,22 +3366,43 @@ function LegalPage() {
     <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
-        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Privacy &amp; Disclaimer</h1>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Legal Information</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
-          Important information about privacy, educational content, and the use of this website.
+          Privacy, website terms, and important information about the content on this site.
         </p>
 
         <div className="mt-14 space-y-14">
           <article id="privacy-policy" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">01</p>
             <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Privacy Policy</h2>
-            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{privacyPolicy}</p>
+            <div className="mt-7 space-y-7">
+              {privacySections.map((section) => (
+                <div key={section.title}>
+                  <h3 className="text-xl font-bold text-[#F4F7FB]">{section.title}</h3>
+                  <p className="mt-2 text-lg leading-[1.7] text-[#B7C0D8]">{section.body}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article id="terms-of-service" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">02</p>
+            <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Terms of Service</h2>
+            <p className="mt-4 text-lg leading-[1.7] text-[#B7C0D8]">These terms govern your use of this website. They do not replace any separate written agreement you may have with Calo Capital or another provider.</p>
+            <div className="mt-7 space-y-7">
+              {termsSections.map((section) => (
+                <div key={section.title}>
+                  <h3 className="text-xl font-bold text-[#F4F7FB]">{section.title}</h3>
+                  <p className="mt-2 text-lg leading-[1.7] text-[#B7C0D8]">{section.body}</p>
+                </div>
+              ))}
+            </div>
           </article>
 
           <article id="disclaimer" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">02</p>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">03</p>
             <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Disclaimer</h2>
-            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{disclaimer}</p>
+            <p className="mt-5 text-lg leading-[1.7] text-[#B7C0D8]">{disclaimer}</p>
           </article>
         </div>
       </div>
@@ -3473,6 +3447,16 @@ function Footer({ setPage }) {
             className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
           >
             Disclaimer
+          </a>
+          <a
+            href="/legal#terms-of-service"
+            onClick={(event) => {
+              event.preventDefault();
+              setPage("Legal", "terms-of-service");
+            }}
+            className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
+          >
+            Terms of Service
           </a>
         </div>
       </div>
