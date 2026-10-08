@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CandlestickSeries, createChart } from "lightweight-charts";
 import logoPng from "../public/Calo_purple_logo.png";
+import galaxyCoverPng from "./assets/purple-galaxy.png";
 import hikerPng from "../assets/calo.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
 import aboutImagePng from "../assets/p.png";
@@ -694,22 +695,11 @@ function scrollToHomeSection(page) {
 
 function Navbar({ currentPage, setPage }) {
   const [open, setOpen] = useState(false);
-  const [solutionsOpen, setSolutionsOpen] = useState(false);
-  const links = ["Home", "Four C's", "Contact"];
+  const links = ["Home", "Explore", "Four C's", "Financial Topics", "Contact"];
 
   function goTo(page) {
     setPage(page);
     setOpen(false);
-    setSolutionsOpen(false);
-  }
-
-  function goToSolution(solutionId, block = "center") {
-    goTo("Explore");
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.getElementById(solutionId)?.scrollIntoView({ behavior: "smooth", block });
-      });
-    });
   }
 
   return (
@@ -720,57 +710,7 @@ function Navbar({ currentPage, setPage }) {
         </button>
 
         <nav className="hidden flex-1 items-center justify-center gap-6 px-4 lg:flex lg:max-w-4xl xl:max-w-5xl xl:gap-12 xl:px-16">
-          <button
-            onClick={() => goTo("Home")}
-            className={currentPage === "Home" ? "px-1 text-sm font-black text-[#F4F7FB]" : "px-1 text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"}
-          >
-            Home
-          </button>
-          <div
-            className="relative"
-            onKeyDown={(event) => {
-              if (event.key === "Escape") setSolutionsOpen(false);
-            }}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) setSolutionsOpen(false);
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => setSolutionsOpen((value) => !value)}
-              className={currentPage === "Explore" ? "px-1 text-sm font-black text-[#F4F7FB]" : "px-1 text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"}
-              aria-haspopup="menu"
-              aria-expanded={solutionsOpen}
-              aria-controls="financial-solutions-menu"
-            >
-              Financial Solutions
-            </button>
-            {solutionsOpen && (
-              <div id="financial-solutions-menu" role="menu" className="absolute left-0 top-full z-[60] mt-3 w-64 border border-[#B7C0D8]/20 bg-[#0B1028] py-2 shadow-[0_14px_40px_rgba(0,0,0,0.45)]">
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => goToSolution("financial-solutions", "start")}
-                  className="block w-full px-4 py-2.5 text-left text-sm font-black text-[#F4F7FB] transition hover:bg-white/[0.05]"
-                >
-                  All Solutions
-                </button>
-                <div className="my-1 border-t border-[#B7C0D8]/15" aria-hidden="true" />
-                {financialSolutions.map((solution) => (
-                  <button
-                    key={solution.id}
-                    type="button"
-                    role="menuitem"
-                    onClick={() => goToSolution(solution.id)}
-                    className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-[#B7C0D8] transition hover:bg-white/[0.05] hover:text-[#F4F7FB]"
-                  >
-                    {solution.title}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          {links.slice(1).map((label) => (
+          {links.map((label) => (
             <button
               key={label}
               onClick={() => goTo(label)}
@@ -801,7 +741,7 @@ function Navbar({ currentPage, setPage }) {
       <div
         className={
           `overflow-hidden border-t border-[#B7C0D8]/10 bg-[#050816]/95 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
-            open ? "max-h-[42rem] opacity-100" : "max-h-0 opacity-0"
+            open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`
         }
         aria-hidden={!open}
@@ -814,44 +754,7 @@ function Navbar({ currentPage, setPage }) {
               opacity: open ? 1 : 0,
             }}
           >
-            <button
-              onClick={() => goTo("Home")}
-              className={currentPage === "Home" ? "text-left text-sm font-black text-[#F4F7FB]" : "text-left text-sm font-semibold text-[#B7C0D8]"}
-            >
-              Home
-            </button>
-            <button
-              type="button"
-              onClick={() => setSolutionsOpen((value) => !value)}
-              className={currentPage === "Explore" ? "flex items-center justify-between text-left text-sm font-black text-[#F4F7FB]" : "flex items-center justify-between text-left text-sm font-semibold text-[#B7C0D8]"}
-              aria-expanded={solutionsOpen}
-              aria-controls="financial-solutions-menu-mobile"
-            >
-              Financial Solutions
-              <span aria-hidden="true">{solutionsOpen ? "−" : "+"}</span>
-            </button>
-            {solutionsOpen && (
-              <div id="financial-solutions-menu-mobile" className="ml-3 flex flex-col gap-3 border-l border-[#B7C0D8]/20 pl-4">
-                <button
-                  type="button"
-                  onClick={() => goToSolution("financial-solutions", "start")}
-                  className="text-left text-sm font-black text-[#F4F7FB]"
-                >
-                  All Solutions
-                </button>
-                {financialSolutions.map((solution) => (
-                  <button
-                    key={solution.id}
-                    type="button"
-                    onClick={() => goToSolution(solution.id)}
-                    className="text-left text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"
-                  >
-                    {solution.title}
-                  </button>
-                ))}
-              </div>
-            )}
-            {links.slice(1).map((label, index) => (
+            {links.map((label, index) => (
               <button
                 key={label}
                 onClick={() => goTo(label)}
@@ -1616,6 +1519,107 @@ function AboutPage() {
   );
 }
 
+function WhyPartnerSection() {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(reducedMotionQuery.matches);
+    if (reducedMotionQuery.matches) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
+
+  function revealStyle(delayMs, translateY = 30) {
+    if (reduceMotion) {
+      return { opacity: 1, transform: "none" };
+    }
+
+    return {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? "translateY(0)" : `translateY(${translateY}px)`,
+      transition: `opacity 0.6s ease-out ${delayMs}ms, transform 0.6s ease-out ${delayMs}ms`,
+    };
+  }
+
+  function fadeStyle(delayMs) {
+    if (reduceMotion) {
+      return { opacity: 1 };
+    }
+
+    return {
+      opacity: isVisible ? 1 : 0,
+      transition: `opacity 0.6s ease-out ${delayMs}ms`,
+    };
+  }
+
+  return (
+    <section
+      ref={sectionRef}
+      id="client-excellence"
+      className="relative overflow-hidden px-5 py-24 text-[#F4F7FB] sm:py-28 lg:py-32"
+      style={{
+        background: "transparent",
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translateY(0)" : "translateY(16px)",
+        transition: reduceMotion ? "none" : "opacity 0.8s ease-out, transform 0.8s ease-out",
+      }}
+    >
+      <div className="relative mx-auto w-full max-w-[min(1400px,94vw)]">
+        <div style={revealStyle(0, 24)}>
+          <p className="text-xs font-black uppercase tracking-[0.4em] text-[#9B7CFF]" style={fadeStyle(0)}>
+            WHY PARTNER WITH CALO CAPITAL
+          </p>
+          <div className="mt-3 h-px w-28 bg-[#9B7CFF]/70" />
+        </div>
+
+        <h2 className="cc-slow-fade mt-10 max-w-[12ch] text-[clamp(2.3rem,7vw,4rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] sm:max-w-none" style={revealStyle(150, 30)}>
+          Markets move. <span className="text-[#9B7CFF]">Sound strategy</span> endures.
+        </h2>
+
+        <div className="mt-16" style={revealStyle(300, 24)}>
+          <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
+            OUR PRINCIPLES
+          </h3>
+          <p className="mt-7 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(380)}>
+            At Calo Capital, we help you understand what you are getting into before you commit. We are open to answer questions and do not shy away from explaining why something may not work in your favor.
+          </p>
+          <p className="mt-8 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(460)}>
+            Honesty and transparency is better than taking your money and giving you a package deal that does not do what you need it to do.
+          </p>
+          <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(520)}>
+            We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
+          </p>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CryptoCandlestickSection() {
   const cryptoSymbols = [
     { label: "BTC/USD", marketSymbol: "BTCUSDT" },
@@ -1921,565 +1925,63 @@ function CryptoCandlestickSection() {
 
 const financialSolutions = [
   {
-    id: "working-capital",
     title: "Working Capital",
     description: "Explore flexible financing options for short-term business cash flow needs.",
-    details: "Working capital may help with short-term business cash flow. Lenders may review revenue, expenses, current debt payments, time in business, and how funds will be used. Requirements vary by lender.",
   },
   {
-    id: "sba-loans",
     title: "SBA Loans",
     description: "Learn about government-backed financing programs for eligible businesses.",
-    details: "SBA-backed financing is offered through participating lenders. Programs, eligibility, documentation, and terms vary, so review current requirements with a lender.",
   },
   {
-    id: "real-estate-financing",
     title: "Real Estate Financing",
     description: "Explore financing options for commercial property purchases and projects.",
-    details: "Commercial property financing may support purchases or projects. Lenders may consider property details, project costs, the repayment plan, and business qualifications. Terms vary.",
   },
   {
-    id: "credit-card-processing",
     title: "Credit Card Processing",
     description: "Review payment processing options for accepting customer card payments.",
-    details: "When comparing processors, review transaction fees, payout timing, hardware or software needs, contract terms, and chargeback support.",
   },
   {
-    id: "equipment-financing",
     title: "Equipment Financing",
     description: "Explore financing options for essential business equipment.",
-    details: "Equipment financing may help purchase business-use equipment. Compare fees, any down payment, repayment terms, and ownership terms before choosing an offer.",
   },
   {
-    id: "credit-repair",
     title: "Credit Repair",
     description: "Learn about services intended to help businesses improve their credit profiles.",
-    details: "Credit services may help review reports and address inaccurate information. Accurate negative information cannot be guaranteed removed, and results vary.",
-  },
-];
-
-const sbaLoanPrograms = [
-  {
-    title: "SBA 7(a) Loans",
-    description: "The SBA's primary business loan program, offered through participating lenders.",
-    facts: [
-      "Maximum loan amount: up to $5 million",
-      "May support working capital, equipment, real estate, or ownership changes",
-      "Repayment terms and rates depend on loan use and lender",
-    ],
-    href: "https://www.sba.gov/funding-programs/loans/7a-loans",
-  },
-  {
-    title: "SBA 504 Loans",
-    description: "Long-term, fixed-rate financing for major fixed assets that support business growth.",
-    facts: [
-      "Maximum SBA loan amount: up to $5.5 million",
-      "Common uses include commercial property and long-term equipment",
-      "10-, 20-, and 25-year maturities are available",
-    ],
-    href: "https://www.sba.gov/funding-programs/loans/504-loans",
-  },
-  {
-    title: "SBA Express Loans",
-    description: "A streamlined 7(a) option for eligible small-business financing needs.",
-    facts: [
-      "Maximum loan amount: up to $500,000",
-      "May be structured as a term loan or revolving line of credit",
-      "The 36-hour target is SBA's response to the lender, not a promise of borrower approval",
-    ],
-    href: "https://www.sba.gov/funding-programs/loans/7a-loans",
-  },
-  {
-    title: "SBA Microloans",
-    description: "Smaller loans made through nonprofit intermediary lenders for startups and small businesses.",
-    facts: [
-      "Loan amounts: up to $50,000",
-      "Maximum repayment term: up to 7 years",
-      "May support working capital, inventory, supplies, or equipment; not real estate or existing debt",
-    ],
-    href: "https://www.sba.gov/funding-programs/loans/microloans",
   },
 ];
 
 function FinancialSolutionsSection() {
-  const [calculatorOpen, setCalculatorOpen] = useState(false);
-  const [sbaProgramsOpen, setSbaProgramsOpen] = useState(false);
-  const [expandedSolutionId, setExpandedSolutionId] = useState(null);
-  const [monthlyRevenue, setMonthlyRevenue] = useState("");
-  const [monthlyExpenses, setMonthlyExpenses] = useState("");
-  const [monthlyDebtPayments, setMonthlyDebtPayments] = useState("");
-  const [fundingRequest, setFundingRequest] = useState("");
-  const [timeInBusiness, setTimeInBusiness] = useState("");
-  const [fundingUse, setFundingUse] = useState("");
-  const calculatorTriggerRef = useRef(null);
-  const calculatorDialogRef = useRef(null);
-  const calculatorCloseRef = useRef(null);
-  const sbaTriggerRef = useRef(null);
-  const sbaDialogRef = useRef(null);
-  const sbaCloseRef = useRef(null);
-  const revenueValue = Number(monthlyRevenue);
-  const expensesValue = Number(monthlyExpenses);
-  const debtPaymentsValue = Number(monthlyDebtPayments);
-  const fundingValue = Number(fundingRequest);
-  const monthlyProfit = monthlyRevenue !== "" && monthlyExpenses !== ""
-    && Number.isFinite(revenueValue) && Number.isFinite(expensesValue) && revenueValue > 0 && expensesValue >= 0
-    ? revenueValue - expensesValue
-    : null;
-  const monthlyCashAfterDebt = monthlyDebtPayments !== "" && monthlyProfit !== null
-    && Number.isFinite(debtPaymentsValue) && debtPaymentsValue >= 0
-    ? monthlyProfit - debtPaymentsValue
-    : null;
-  const cashFlowMonths = monthlyCashAfterDebt !== null && monthlyCashAfterDebt > 0 && Number.isFinite(fundingValue) && fundingValue > 0
-    ? fundingValue / monthlyCashAfterDebt
-    : null;
-
-  useEffect(() => {
-    const dialog = calculatorDialogRef.current;
-    if (!calculatorOpen || !dialog) return;
-
-    dialog.showModal();
-    calculatorCloseRef.current?.focus();
-    function handleEscape(event) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setCalculatorOpen(false);
-      }
-    }
-
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      if (dialog.open) dialog.close();
-    };
-  }, [calculatorOpen]);
-
-  useEffect(() => {
-    const dialog = sbaDialogRef.current;
-    if (!sbaProgramsOpen || !dialog) return;
-
-    dialog.showModal();
-    sbaCloseRef.current?.focus();
-    function handleEscape(event) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setSbaProgramsOpen(false);
-      }
-    }
-
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      if (dialog.open) dialog.close();
-    };
-  }, [sbaProgramsOpen]);
 
   return (
-    <>
-      <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
-        <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-          <header className="text-center">
-            <h2 className="text-[clamp(2rem,4vw,3rem)] font-black leading-tight text-[#9B7CFF]">
-              Our Financial Solutions
-            </h2>
-            <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
-              Explore small-business financing options with Calo Capital.
-            </p>
-          </header>
+    <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
+      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
+        <header className="text-center">
+          <h2 className="text-[clamp(2rem,4vw,3rem)] font-black leading-tight text-[#9B7CFF]">
+            Our Financial Solutions
+          </h2>
+          <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
+            Explore small-business financing options on CapNow.
+          </p>
+        </header>
 
-          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-            {financialSolutions.map((solution) => {
-              const isWorkingCapital = solution.id === "working-capital";
-              const isSbaLoan = solution.id === "sba-loans";
-              const isExpanded = expandedSolutionId === solution.id;
-
-              return (
-                <article
-                  id={solution.id}
-                  key={solution.title}
-                  className="financial-galactic-card scroll-mt-8 flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]"
-                >
-                  <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
-                    {solution.title}
-                  </span>
-                  <span className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">
-                    {solution.description}
-                  </span>
-                  <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
-                  <button
-                    type="button"
-                    ref={isSbaLoan ? sbaTriggerRef : undefined}
-                    onClick={() => {
-                      if (isSbaLoan) {
-                        setSbaProgramsOpen(true);
-                      } else {
-                        setExpandedSolutionId((current) => current === solution.id ? null : solution.id);
-                      }
-                    }}
-                    aria-expanded={isSbaLoan ? undefined : isExpanded}
-                    aria-haspopup={isSbaLoan ? "dialog" : undefined}
-                    aria-controls={isSbaLoan ? "sba-loan-programs" : `details-${solution.id}`}
-                    className="mt-4 border-b border-[#9B7CFF]/60 pb-1 text-sm font-bold text-[#C6B8FF] transition hover:border-[#C6B8FF] hover:text-[#F4F7FB] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6B8FF]"
-                  >
-                    {!isSbaLoan && isExpanded ? "Show less" : "Click to learn more"}
-                  </button>
-                  <div id={`details-${solution.id}`} hidden={!isExpanded || isSbaLoan} className="mt-4 max-w-[22rem] border-t border-[#B7C0D8]/20 pt-4 text-sm leading-6 text-[#B7C0D8]">
-                    <p>{solution.details}</p>
-                    {isWorkingCapital && (
-                      <button
-                        ref={calculatorTriggerRef}
-                        type="button"
-                        onClick={() => setCalculatorOpen(true)}
-                        aria-haspopup="dialog"
-                        aria-controls="working-capital-calculator"
-                        className="mt-4 border border-[#9B7CFF]/50 px-4 py-2 font-bold text-[#F4F7FB] transition hover:bg-[#9B7CFF]/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C6B8FF]"
-                      >
-                        Open funding calculator
-                      </button>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {financialSolutions.map((solution) => (
+            <article
+              key={solution.title}
+              className="financial-galactic-card flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]"
+            >
+              <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
+                {solution.title}
+              </span>
+              <span className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">
+                {solution.description}
+              </span>
+              <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
+            </article>
+          ))}
         </div>
-      </section>
-
-      {sbaProgramsOpen && (
-        <dialog
-          ref={sbaDialogRef}
-          id="sba-loan-programs"
-          aria-labelledby="sba-loan-programs-title"
-          className="m-auto max-h-[90dvh] w-[min(1040px,calc(100vw-2rem))] max-w-none border-0 bg-transparent p-0 text-left text-[#F4F7FB]"
-          onClose={() => setSbaProgramsOpen(false)}
-          onCancel={() => setSbaProgramsOpen(false)}
-          onClick={(event) => {
-            if (event.target === event.currentTarget) setSbaProgramsOpen(false);
-          }}
-        >
-          <style>{`
-            dialog#sba-loan-programs::backdrop {
-              background: rgba(5, 8, 22, 0.84);
-              backdrop-filter: blur(6px);
-            }
-            .sba-programs-header {
-              position: relative;
-              isolation: isolate;
-              overflow: hidden;
-              background: linear-gradient(130deg, #1A2340, #10172F 60%, #050816);
-            }
-            .sba-programs-header::before {
-              position: absolute;
-              z-index: -1;
-              inset: -35%;
-              background: radial-gradient(ellipse at 72% 52%, rgba(109, 94, 245, 0.34), transparent 48%);
-              content: "";
-              animation: sba-programs-glow 24s ease-in-out infinite alternate;
-            }
-            @keyframes sba-programs-glow {
-              from { transform: translate3d(-2%, 1%, 0) scale(1); }
-              to { transform: translate3d(2%, -1%, 0) scale(1.12); }
-            }
-            @media (prefers-reduced-motion: reduce) {
-              .sba-programs-header::before { animation: none; }
-            }
-          `}</style>
-          <div className="max-h-[90dvh] overflow-y-auto rounded-lg border border-[#C6B8FF]/25 bg-[#050816] shadow-[0_28px_90px_rgba(5,8,22,0.7),0_0_40px_rgba(109,94,245,0.18)]">
-            <header className="sba-programs-header px-6 py-8 pr-16 sm:px-9 sm:py-9">
-              <button
-                ref={sbaCloseRef}
-                type="button"
-                onClick={() => setSbaProgramsOpen(false)}
-                aria-label="Close SBA loan programs"
-                className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center border border-[#B7C0D8]/25 bg-[#050816]/60 text-2xl text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C6B8FF]"
-              >
-                ×
-              </button>
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#C6B8FF]">Calo Capital · Small Business Financing</p>
-              <h2 id="sba-loan-programs-title" className="mt-3 text-3xl font-black text-[#F4F7FB] sm:text-4xl">SBA Loan Programs</h2>
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-[#B7C0D8] sm:text-base">
-                Compare common SBA-backed options. Program limits are not guaranteed offers; eligibility, rates, fees, and approval depend on program rules and the participating lender.
-              </p>
-            </header>
-
-            <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
-              {sbaLoanPrograms.map((program) => (
-                <article key={program.title} className="rounded-md border border-[#B7C0D8]/20 bg-[#1A2340]/70 p-5 sm:p-6">
-                  <h3 className="text-lg font-black text-[#F4F7FB] sm:text-xl">{program.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-[#B7C0D8]">{program.description}</p>
-                  <ul className="mt-4 space-y-3">
-                    {program.facts.map((fact) => (
-                      <li key={fact} className="flex gap-3 text-sm leading-5 text-[#F4F7FB]">
-                        <span aria-hidden="true" className="shrink-0 text-[#9B7CFF]">✓</span>
-                        <span>{fact}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href={program.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-5 inline-flex text-sm font-bold text-[#C6B8FF] underline decoration-[#9B7CFF]/60 underline-offset-4 transition hover:text-[#F4F7FB]"
-                  >
-                    Official SBA program details
-                  </a>
-                </article>
-              ))}
-            </div>
-
-            <p className="border-t border-[#B7C0D8]/15 px-5 py-4 text-xs leading-5 text-[#B7C0D8] sm:px-8">
-              This overview is for general education and is not a loan offer. Confirm current requirements and terms with an SBA-approved lender.
-            </p>
-          </div>
-        </dialog>
-      )}
-
-      {calculatorOpen && (
-        <dialog
-          ref={calculatorDialogRef}
-          id="working-capital-calculator"
-          aria-labelledby="working-capital-calculator-title"
-          className="m-auto max-h-[90dvh] w-[min(960px,calc(100vw-2rem))] max-w-none border-0 bg-transparent p-0 text-left text-[#F4F7FB]"
-          onClose={() => setCalculatorOpen(false)}
-          onCancel={() => setCalculatorOpen(false)}
-          onClick={(event) => {
-            if (event.target === event.currentTarget) setCalculatorOpen(false);
-          }}
-        >
-          <style>{`
-            dialog#working-capital-calculator::backdrop {
-              background: rgba(5, 8, 22, 0.84);
-              backdrop-filter: blur(6px);
-            }
-            .funding-calculator-atmosphere {
-              position: relative;
-              isolation: isolate;
-              overflow: hidden;
-              background:
-                radial-gradient(ellipse at 82% 76%, rgba(109, 94, 245, 0.22), transparent 42%),
-                radial-gradient(ellipse at 12% 18%, rgba(155, 124, 255, 0.2), transparent 40%),
-                linear-gradient(145deg, #050816, #1A2340 64%, #050816);
-            }
-            .funding-calculator-atmosphere::before,
-            .funding-calculator-atmosphere::after {
-              position: absolute;
-              z-index: -1;
-              content: "";
-              pointer-events: none;
-            }
-            .funding-calculator-atmosphere::before {
-              inset: -22%;
-              background:
-                radial-gradient(ellipse at 38% 48%, rgba(109, 94, 245, 0.3), transparent 35%),
-                radial-gradient(ellipse at 74% 66%, rgba(198, 184, 255, 0.16), transparent 30%);
-              animation: funding-nebula-drift 28s ease-in-out infinite alternate;
-            }
-            .funding-calculator-atmosphere::after {
-              inset: 0;
-              background-image:
-                radial-gradient(circle at 12% 18%, rgba(244, 247, 251, 0.85) 0 1px, transparent 1.5px),
-                radial-gradient(circle at 29% 72%, rgba(198, 184, 255, 0.75) 0 1px, transparent 1.5px),
-                radial-gradient(circle at 48% 28%, rgba(244, 247, 251, 0.78) 0 1px, transparent 1.5px),
-                radial-gradient(circle at 67% 84%, rgba(183, 192, 216, 0.8) 0 1px, transparent 1.5px),
-                radial-gradient(circle at 84% 34%, rgba(244, 247, 251, 0.82) 0 1px, transparent 1.5px);
-              opacity: 0.62;
-              animation: funding-star-drift 36s ease-in-out infinite alternate;
-            }
-            .funding-calculator-atmosphere > * {
-              position: relative;
-              z-index: 1;
-            }
-            @keyframes funding-nebula-drift {
-              from { transform: scale(1.04) translate3d(-2%, 1%, 0); }
-              to { transform: scale(1.18) translate3d(2%, -1%, 0); }
-            }
-            @keyframes funding-star-drift {
-              from { transform: translate3d(-1%, 1%, 0); opacity: 0.4; }
-              to { transform: translate3d(1%, -1%, 0); opacity: 0.85; }
-            }
-            @media (prefers-reduced-motion: reduce) {
-              .funding-calculator-atmosphere::before,
-              .funding-calculator-atmosphere::after {
-                animation: none;
-              }
-            }
-          `}</style>
-          <div className="relative grid max-h-[90dvh] overflow-y-auto rounded-lg bg-[#050816] shadow-[0_28px_90px_rgba(5,8,22,0.7),0_0_40px_rgba(109,94,245,0.18)] md:grid-cols-2">
-            <button
-              ref={calculatorCloseRef}
-              type="button"
-              onClick={() => setCalculatorOpen(false)}
-              aria-label="Close funding calculator"
-              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center border border-[#1A2340]/15 bg-[#F4F7FB] text-2xl text-[#050816] transition hover:bg-[#C6B8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6D5EF5]"
-            >
-              ×
-            </button>
-
-            <section className="funding-calculator-atmosphere flex flex-col justify-center px-7 py-10 sm:px-10 md:py-12">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#C6B8FF]">Calo Capital · Working Capital</p>
-              <h2 id="working-capital-calculator-title" className="mt-5 max-w-sm text-3xl font-black leading-tight text-[#F4F7FB] sm:text-4xl">
-                Quick Funding Calculator
-              </h2>
-              <p className="mt-5 max-w-md text-base leading-7 text-[#B7C0D8]">
-                Add your monthly sales, operating costs, existing debt payments, and funding details to review your business cash flow.
-              </p>
-              <p className="mt-6 max-w-md text-sm leading-6 text-[#B7C0D8]">
-                <span className="font-bold text-[#F4F7FB]">Direct lenders commonly review:</span> recent business bank statements, time in business, credit history, cash flow, current obligations, and how funds will be used. Requirements differ by lender.
-              </p>
-            </section>
-
-            <form
-              onSubmit={(event) => event.preventDefault()}
-              className="flex flex-col justify-center gap-5 bg-[#F4F7FB] px-6 py-8 text-[#050816] sm:px-9 sm:py-10"
-            >
-              <h3 className="text-center text-2xl font-black text-[#050816]">Business cash flow</h3>
-              <label htmlFor="working-capital-monthly-revenue" className="block text-sm font-bold">
-                Monthly revenue
-                <span className="relative mt-2 block">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
-                  <input
-                    id="working-capital-monthly-revenue"
-                    type="number"
-                    min="1"
-                    step="any"
-                    inputMode="decimal"
-                    required
-                    value={monthlyRevenue}
-                    onChange={(event) => setMonthlyRevenue(event.target.value)}
-                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
-                  />
-                </span>
-              </label>
-              <label htmlFor="working-capital-monthly-expenses" className="block text-sm font-bold">
-                Monthly operating expenses
-                <span className="relative mt-2 block">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
-                  <input
-                    id="working-capital-monthly-expenses"
-                    type="number"
-                    min="0"
-                    step="any"
-                    inputMode="decimal"
-                    required
-                    value={monthlyExpenses}
-                    onChange={(event) => setMonthlyExpenses(event.target.value)}
-                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
-                  />
-                </span>
-              </label>
-              <label htmlFor="working-capital-monthly-debt" className="block text-sm font-bold">
-                Existing monthly debt payments
-                <span className="relative mt-2 block">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
-                  <input
-                    id="working-capital-monthly-debt"
-                    type="number"
-                    min="0"
-                    step="any"
-                    inputMode="decimal"
-                    required
-                    value={monthlyDebtPayments}
-                    onChange={(event) => setMonthlyDebtPayments(event.target.value)}
-                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
-                  />
-                </span>
-              </label>
-              <label htmlFor="working-capital-time-in-business" className="block text-sm font-bold">
-                Time in business
-                <select
-                  id="working-capital-time-in-business"
-                  required
-                  value={timeInBusiness}
-                  onChange={(event) => setTimeInBusiness(event.target.value)}
-                  className="mt-2 h-14 w-full border border-[#B7C0D8] bg-white px-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
-                >
-                  <option value="" disabled>Select a range</option>
-                  <option value="Under 6 months">Under 6 months</option>
-                  <option value="6-12 months">6-12 months</option>
-                  <option value="1-2 years">1-2 years</option>
-                  <option value="2-5 years">2-5 years</option>
-                  <option value="Over 5 years">Over 5 years</option>
-                </select>
-              </label>
-              <label htmlFor="working-capital-funding-request" className="block text-sm font-bold">
-                Funding amount requested
-                <span className="relative mt-2 block">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#1A2340]" aria-hidden="true">$</span>
-                  <input
-                    id="working-capital-funding-request"
-                    type="number"
-                    min="1"
-                    step="any"
-                    inputMode="decimal"
-                    required
-                    value={fundingRequest}
-                    onChange={(event) => setFundingRequest(event.target.value)}
-                    className="h-14 w-full border border-[#B7C0D8] bg-white pl-9 pr-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
-                  />
-                </span>
-              </label>
-              <label htmlFor="working-capital-use" className="block text-sm font-bold">
-                Planned use of funds
-                <select
-                  id="working-capital-use"
-                  required
-                  value={fundingUse}
-                  onChange={(event) => setFundingUse(event.target.value)}
-                  className="mt-2 h-14 w-full border border-[#B7C0D8] bg-white px-4 text-base font-semibold text-[#050816] outline-none transition focus:border-[#6D5EF5] focus:ring-2 focus:ring-[#6D5EF5]/20"
-                >
-                  <option value="" disabled>Select a use</option>
-                  <option value="Working capital">Working capital</option>
-                  <option value="Inventory">Inventory</option>
-                  <option value="Equipment">Equipment</option>
-                  <option value="Payroll">Payroll</option>
-                  <option value="Marketing or expansion">Marketing or expansion</option>
-                  <option value="Refinancing existing debt">Refinancing existing debt</option>
-                  <option value="Other business need">Other business need</option>
-                </select>
-              </label>
-              <div aria-live="polite" className="space-y-4 border border-[#B7C0D8] bg-white p-4">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#1A2340]">Estimated monthly profit before debt payments</p>
-                  <p className="mt-2 text-xl font-black text-[#6D5EF5]">
-                    {monthlyProfit === null
-                      ? "Enter revenue and expenses"
-                      : new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(monthlyProfit)}
-                  </p>
-                </div>
-                <div className="border-t border-[#B7C0D8]/60 pt-3">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#1A2340]">Cash remaining after listed debt payments</p>
-                  <p className="mt-2 text-xl font-black text-[#6D5EF5]">
-                    {monthlyCashAfterDebt === null
-                      ? "Enter monthly debt payments"
-                      : new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(monthlyCashAfterDebt)}
-                  </p>
-                </div>
-                <div className="border-t border-[#B7C0D8]/60 pt-3">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#1A2340]">Request compared with available cash flow</p>
-                  <p className="mt-2 text-base font-bold text-[#6D5EF5]">
-                    {monthlyCashAfterDebt === null
-                      ? "Complete cash-flow fields to compare"
-                      : cashFlowMonths === null
-                        ? "No positive cash flow entered"
-                        : `${cashFlowMonths.toFixed(1)} months of current cash flow`}
-                  </p>
-                    </div>
-              </div>
-              <a
-                href={SCHEDULE_CALL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-12 items-center justify-center bg-[#9B7CFF] px-5 py-3 text-center text-sm font-black text-[#050816] transition hover:bg-[#C6B8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6D5EF5]"
-              >
-                Schedule a Calo consultation
-              </a>
-              <p className="text-xs leading-5 text-[#1A2340]">
-                This snapshot is informational only. It does not predict a maximum offer or approval. Lenders may also request bank statements and review business and personal credit.
-              </p>
-            </form>
-          </div>
-        </dialog>
-      )}
-    </>
+      </div>
+    </section>
   );
 }
 
@@ -2572,7 +2074,8 @@ function FinancialTopicsSection() {
     >
       <div className="mx-auto max-w-[1400px]">
         <div className="mb-6 text-center sm:mb-8">
-            <h2 className="text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-[#F4F7FB]">Explore Topics</h2>
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Explore</p>
+          <h2 className="mt-3 text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-[#F4F7FB]">Financial Topics</h2>
         </div>
         <style>{`
           @keyframes financialSlideIn {
@@ -2955,7 +2458,6 @@ function FourCsPage() {
           .four-cs-panels {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            align-items: start;
             min-height: 0;
             gap: 1px;
             overflow: hidden;
@@ -2970,55 +2472,15 @@ function FourCsPage() {
             overflow: hidden;
             color: #f4f7fb;
             background-color: #050816;
+            background-image: linear-gradient(180deg, rgba(5, 8, 22, 0.52), rgba(5, 8, 22, 0.9)), var(--four-cs-cover);
+            background-position: center;
+            background-size: cover;
             transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
-          }
-          .four-cs-panel::before {
-            position: absolute;
-            z-index: 0;
-            inset: -14%;
-            background-image:
-              radial-gradient(ellipse at 28% 38%, rgba(91, 78, 190, 0.58), rgba(44, 48, 108, 0.18) 30%, transparent 52%),
-              radial-gradient(ellipse at 72% 64%, rgba(20, 137, 161, 0.34), rgba(18, 78, 111, 0.12) 28%, transparent 50%),
-              radial-gradient(ellipse at 62% 20%, rgba(203, 112, 195, 0.22), transparent 40%),
-              linear-gradient(135deg, #060919, #0b1028 54%, #050816);
-            content: "";
-            animation: four-cs-galaxy-drift 24s ease-in-out infinite alternate;
-            pointer-events: none;
-          }
-          .four-cs-panel::after {
-            position: absolute;
-            z-index: 0;
-            inset: 0;
-            background-image:
-              radial-gradient(circle at 12% 21%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.5px),
-              radial-gradient(circle at 27% 74%, rgba(183, 219, 255, 0.8) 0 1px, transparent 1.5px),
-              radial-gradient(circle at 43% 18%, rgba(255, 255, 255, 0.78) 0 1px, transparent 1.5px),
-              radial-gradient(circle at 59% 48%, rgba(206, 193, 255, 0.85) 0 1px, transparent 1.5px),
-              radial-gradient(circle at 76% 29%, rgba(255, 255, 255, 0.82) 0 1px, transparent 1.5px),
-              radial-gradient(circle at 89% 78%, rgba(183, 219, 255, 0.78) 0 1px, transparent 1.5px);
-            content: "";
-            opacity: 0.72;
-            animation: four-cs-star-drift 38s ease-in-out infinite alternate, four-cs-star-twinkle 5s ease-in-out infinite alternate;
-            pointer-events: none;
           }
           .four-cs-panel.is-active {
             min-height: 520px;
+            background-image: linear-gradient(140deg, rgba(109, 94, 245, 0.44), rgba(5, 8, 22, 0.82) 72%), var(--four-cs-cover);
             box-shadow: inset 0 0 0 1px rgba(198, 184, 255, 0.2);
-          }
-          .four-cs-panel.is-active::before {
-            filter: brightness(1.18) saturate(1.12);
-          }
-          @keyframes four-cs-galaxy-drift {
-            from { transform: scale(1.08) translate3d(-4%, 2%, 0) rotate(-2deg); }
-            to { transform: scale(1.28) translate3d(4%, -2%, 0) rotate(2deg); }
-          }
-          @keyframes four-cs-star-drift {
-            from { transform: scale(1.06) translate3d(-2.5%, 1.5%, 0); }
-            to { transform: scale(1.06) translate3d(2.5%, -1.5%, 0); }
-          }
-          @keyframes four-cs-star-twinkle {
-            from { opacity: 0.42; }
-            to { opacity: 0.92; }
           }
           .four-cs-panel-button {
             position: absolute;
@@ -3151,12 +2613,6 @@ function FourCsPage() {
               transition-duration: 0.01ms;
               transition-delay: 0ms;
             }
-            .four-cs-panel::before {
-              animation: none;
-            }
-            .four-cs-panel::after {
-              animation: none;
-            }
           }
         `}</style>
         <div className="four-cs-panels mt-10" role="list">
@@ -3169,6 +2625,7 @@ function FourCsPage() {
                 id={serviceIds[index]}
                 role="listitem"
                 className={`four-cs-panel${isActive ? " is-active" : ""}`}
+                style={{ "--four-cs-cover": `url(${galaxyCoverPng})` }}
                 onMouseEnter={() => setActiveCard(index)}
                 onMouseLeave={() => setActiveCard(null)}
               >
@@ -3176,6 +2633,8 @@ function FourCsPage() {
                   type="button"
                   className="four-cs-panel-button"
                   onClick={() => toggleCard(index)}
+                  onFocus={() => setActiveCard(index)}
+                  onBlur={() => setActiveCard(null)}
                   aria-expanded={isActive}
                   aria-controls={`${serviceIds[index]}-content`}
                 >
@@ -3284,67 +2743,13 @@ function HomePage({ setPage }) {
       </div>
       <FinancialSolutionsSection />
       <AdditionalBusinessFinancingSection />
+      <WhyPartnerSection />
     </>
   );
 }
 
-const privacySections = [
-  {
-    title: "Information we collect",
-    body: "We may collect information you choose to provide, such as your name, email address, phone number, business details, and the contents of a message or consultation request. Please do not submit account credentials, payment-card details, government identification numbers, or other sensitive personal information through general website forms. When you visit the site, basic technical information such as your IP address, browser type, device information, and pages viewed may also be processed by our hosting and site-support providers.",
-  },
-  {
-    title: "How we use information",
-    body: "We use information to respond to requests, communicate about our services, operate and protect the website, maintain business records, and understand or improve how the site is used. We may also use information to meet legal obligations and prevent fraud, misuse, or security incidents. We do not use a website inquiry by itself to make a financial recommendation or determine whether you qualify for a third-party product.",
-  },
-  {
-    title: "Sharing and service providers",
-    body: "We do not sell personal information. We may provide information to service providers that help us host, secure, analyze, or operate the site and respond to inquiries. Those providers may process information on our behalf under their own privacy terms and applicable safeguards. We may also disclose information when required by law, to protect rights or safety, or in connection with a business reorganization or transfer. We do not control how an independent lender, financial provider, or other third party handles information you provide directly to them.",
-  },
-  {
-    title: "Cookies and similar technologies",
-    body: "The site or its service providers may use cookies, server logs, or similar technologies for essential site functions, security, or usage measurement. You can manage cookies through your browser settings; disabling them may affect some site features. Third-party tools embedded in or linked from the site may use their own technologies and are governed by the providers’ policies.",
-  },
-  {
-    title: "Retention and security",
-    body: "We retain information for as long as reasonably needed for the purposes described here, including responding to you, maintaining business and legal records, and resolving disputes. Retention periods depend on the type of information and the circumstances. We use reasonable administrative and technical safeguards, but no website, transmission, or storage system can be guaranteed to be completely secure.",
-  },
-  {
-    title: "Your choices and privacy requests",
-    body: "Depending on where you live, you may have rights to request access to, correction of, deletion of, or a copy of certain personal information, or to object to or limit particular processing. These rights are subject to applicable law and exceptions. To ask a question or make a request, email protection@calocapital.io. We may need to verify your identity and will respond as required by applicable law.",
-  },
-  {
-    title: "Children, external links, and policy updates",
-    body: "This site is intended for a general audience and is not directed to children under 13; please do not knowingly submit a child’s personal information. The site may link to external websites that we do not operate, and their privacy practices are their own. We may update this policy from time to time by posting a revised version here. Your continued use of the site after an update means you have had an opportunity to review the revised policy.",
-  },
-];
-
-const termsSections = [
-  {
-    title: "Acceptance and permitted use",
-    body: "These Terms of Service apply to your access to and use of the Calo Capital website. By using the site, you agree to these terms. If you do not agree, do not use the site. You may use the site for lawful, personal, and business informational purposes. You may not interfere with the site, attempt unauthorized access, introduce malicious code, scrape or harvest information in a way that burdens or abuses the service, or use the site to violate another person’s rights or the law.",
-  },
-  {
-    title: "Information is not professional advice or an offer",
-    body: "Website content is general information only. It is not investment, financial, legal, tax, accounting, or other professional advice, and it does not create an advisory, fiduciary, lender, broker, or client relationship. Content is not an offer, solicitation, or recommendation to buy or sell a security, digital asset, commodity, loan, or other product. Consider your own circumstances and consult qualified professionals before making decisions. See the Disclaimer on this page for additional information.",
-  },
-  {
-    title: "Third-party products and services",
-    body: "References to lenders, providers, products, or external websites are for general information and convenience. Third parties set their own eligibility requirements, rates, fees, terms, and privacy practices; we do not control or guarantee them. You are responsible for reviewing a provider’s current disclosures and agreements before sharing information or entering into a transaction. Any relationship or transaction with a third party is between you and that third party.",
-  },
-  {
-    title: "Content, availability, and changes",
-    body: "We make reasonable efforts to keep the site useful, but content may be incomplete, outdated, or inaccurate, and we do not promise uninterrupted availability or that the site will be error-free. We may change, suspend, or remove site content or features at any time. Unless otherwise stated, site text, design, and branding belong to Calo Capital or its licensors and may not be copied, republished, or commercially exploited without permission. You may link to publicly available pages in a lawful way that does not imply endorsement or misrepresent your relationship with us.",
-  },
-  {
-    title: "Disclaimers and limits of responsibility",
-    body: "To the extent permitted by law, the site and its content are provided “as is” and “as available,” without warranties of any kind. Calo Capital is not responsible for decisions you make based on general website content, third-party products or websites, or interruptions or errors outside our reasonable control. To the extent permitted by law, Calo Capital will not be liable for indirect, incidental, special, consequential, or punitive loss arising from your use of the site. Nothing in these terms excludes liability that cannot lawfully be excluded.",
-  },
-  {
-    title: "Updates and contact",
-    body: "We may revise these terms by posting an updated version on this page. Changes apply when posted, subject to applicable law. Continued use of the site after changes are posted indicates acceptance of the revised terms. Questions about these terms may be sent to protection@calocapital.io.",
-  },
-];
+const privacyPolicy =
+  "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
 
 const disclaimer =
   "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
@@ -3366,43 +2771,22 @@ function LegalPage() {
     <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
-        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Legal Information</h1>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Privacy &amp; Disclaimer</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
-          Privacy, website terms, and important information about the content on this site.
+          Important information about privacy, educational content, and the use of this website.
         </p>
 
         <div className="mt-14 space-y-14">
           <article id="privacy-policy" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">01</p>
             <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Privacy Policy</h2>
-            <div className="mt-7 space-y-7">
-              {privacySections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="text-xl font-bold text-[#F4F7FB]">{section.title}</h3>
-                  <p className="mt-2 text-lg leading-[1.7] text-[#B7C0D8]">{section.body}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article id="terms-of-service" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">02</p>
-            <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Terms of Service</h2>
-            <p className="mt-4 text-lg leading-[1.7] text-[#B7C0D8]">These terms govern your use of this website. They do not replace any separate written agreement you may have with Calo Capital or another provider.</p>
-            <div className="mt-7 space-y-7">
-              {termsSections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="text-xl font-bold text-[#F4F7FB]">{section.title}</h3>
-                  <p className="mt-2 text-lg leading-[1.7] text-[#B7C0D8]">{section.body}</p>
-                </div>
-              ))}
-            </div>
+            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{privacyPolicy}</p>
           </article>
 
           <article id="disclaimer" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">03</p>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">02</p>
             <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Disclaimer</h2>
-            <p className="mt-5 text-lg leading-[1.7] text-[#B7C0D8]">{disclaimer}</p>
+            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{disclaimer}</p>
           </article>
         </div>
       </div>
@@ -3447,16 +2831,6 @@ function Footer({ setPage }) {
             className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
           >
             Disclaimer
-          </a>
-          <a
-            href="/legal#terms-of-service"
-            onClick={(event) => {
-              event.preventDefault();
-              setPage("Legal", "terms-of-service");
-            }}
-            className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
-          >
-            Terms of Service
           </a>
         </div>
       </div>
