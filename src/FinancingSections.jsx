@@ -11,6 +11,7 @@ import step5 from "../assets/business-step5.jpg";
 import featureImg from "../assets/business-feature.jpg";
 import article1 from "../assets/business-article1.jpg";
 import article2 from "../assets/business-article2.jpg";
+import logoImg from "../public/Calo_purple_logo.png";
 import article3 from "../assets/business-article3.jpg";
 
 const stepImgs = JSON.stringify([step1, step2, step3, step4, step5]).replace(/"/g, "&quot;");
@@ -19,7 +20,8 @@ const sectionsWithImages = sectionsHtml
   .replace("__FEATURE_IMG__", featureImg)
   .replace(/__ARTICLE1_IMG__/g, article1)
   .replace(/__ARTICLE2_IMG__/g, article2)
-  .replace(/__ARTICLE3_IMG__/g, article3);
+  .replace(/__ARTICLE3_IMG__/g, article3)
+  .replace(/__LOGO_IMG__/g, logoImg);
 
 const heroHtml = heroRaw.replace("__ABOUT_IMG__", aboutImagePng);
 import { initFinancingSections } from "./financingSections.js";
@@ -46,6 +48,15 @@ const css = `
   .calo-fin [style*="font-size:48px"],.calo-fin [style*="font-size:44px"]{font-size:32px!important}
   .calo-fin [style*="height:620px"]{height:380px!important}
   .calo-fin [style*="grid-column:span 2"]{grid-column:auto!important}
+  .calo-fin section{padding-top:64px!important;padding-bottom:64px!important}
+  .calo-fin [style*="padding:36px"]{padding:20px!important}
+  .calo-fin [style*="padding:28px"]{padding:20px!important}
+  .calo-fin [style*="padding:18px 56px"],.calo-fin [style*="padding:16px 40px"]{padding-left:32px!important;padding-right:32px!important}
+  .calo-fin [style*="height:480px"],.calo-fin [style*="height:420px"]{height:300px!important}
+  .calo-fin [style*="gap:48px"],.calo-fin [style*="gap:40px"]{gap:28px!important}
+  .calo-fin [style*="font-size:34px"],.calo-fin [style*="font-size:32px"]{font-size:26px!important}
+  .calo-fin img,.calo-fin input,.calo-fin select,.calo-fin textarea{max-width:100%}
+  .calo-fin{overflow-x:hidden}
 }
 `;
 

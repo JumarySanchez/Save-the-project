@@ -10,7 +10,6 @@ import hikerPng from "../assets/calo.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
 import whyPartnerBgPng from "../assets/m.png";
 import semiPng from "../assets/semi.png";
-import semiWorldPng from "../assets/semi-world.png";
 import socialInstagramPng from "../assets/3.png";
 import socialFacebookPng from "../assets/4.png";
 import socialLinkedInPng from "../assets/5.png";
@@ -632,7 +631,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 
 function HeroSection() {
   return (
-    <section id="home" className="relative min-h-[70svh] overflow-hidden bg-[#050816] text-[#F4F7FB] sm:min-h-[80svh] lg:min-h-[90svh]">
+    <section id="home" className="relative aspect-video w-full overflow-hidden bg-[#050816] text-[#F4F7FB] sm:aspect-auto sm:min-h-[80svh] lg:min-h-[90svh]">
       <video
           className="absolute inset-0 h-full w-full object-cover"
         src={heroVideoMp4}
@@ -654,6 +653,20 @@ const pageRoutes = {
   Legal: "/legal",
   FAQs: "/faqs",
 };
+
+let savedHomeScroll = null;
+let restoringHomeScroll = false;
+
+function restoreHomeScroll(y) {
+  const start = Date.now();
+  restoringHomeScroll = true;
+  const attempt = () => {
+    window.scrollTo({ top: y, behavior: "instant" });
+    if (Math.abs(window.scrollY - y) > 2 && Date.now() - start < 1500) setTimeout(attempt, 60);
+    else restoringHomeScroll = false;
+  };
+  setTimeout(attempt, 0);
+}
 
 function normalizePath(pathname) {
   return pathname.replace(/\/+$/, "") || "/";
@@ -716,6 +729,7 @@ const NAV_ITEMS = [
     ],
   },
   { label: "Financial Topics", page: "Financial Topics" },
+  { label: "Contact", page: "Contact" },
 ];
 
 const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || [])]).filter((item) => item.section).map((item) => item.section);
@@ -2538,8 +2552,29 @@ const socialMediaIcons = [
 
 const FORM_ENDPOINT = "https://formsubmit.co/ajax/protection@calocapital.io";
 
+const CONTACT_TOPICS = [
+  { value: "Term Loan", message: "Hello, I'm interested in a term loan for my business. Could someone walk me through the loan amounts, rates and requirements, and let me know the next steps to get prequalified?" },
+  { value: "Line of Credit", message: "Hello, I'd like to learn more about a business line of credit. Could you explain the credit limits, how draws and repayment work, and how to get started?" },
+  { value: "Revenue-Based Financing", message: "Hello, I'm exploring revenue-based financing. Please share how funding amounts are determined and how repayment is tied to my business revenue." },
+  { value: "SBA Loan", message: "Hello, I'm interested in SBA loan options. Could you tell me which programs I may qualify for and what documents I should prepare?" },
+  { value: "Equipment Financing", message: "Hello, I'd like to finance equipment for my business. Please let me know the available terms and what information you need from me." },
+  { value: "Bitcoin-Backed Loan", message: "Hello, I'd like to learn about borrowing against my Bitcoin. Could you explain loan-to-value, collateral terms and how the process works?" },
+  { value: "Schedule a call", message: "Hello, I'd like to schedule a call with a Calo Capital specialist. My preferred days and times are: " },
+  { value: "General question", message: "Hello, I have a question about Calo Capital and your services: " },
+];
+
 function ContactForm() {
   const [status, setStatus] = useState("");
+  const [topic, setTopic] = useState("");
+  const [message, setMessage] = useState("");
+
+  function handleTopicChange(event) {
+    const value = event.target.value;
+    setTopic(value);
+    const match = CONTACT_TOPICS.find((item) => item.value === value);
+    if (match) setMessage(match.message);
+  }
+
   const [sending, setSending] = useState(false);
   const fieldClass = "mb-4 w-full rounded-xl border border-[#B7C0D8]/25 bg-[#050816]/65 px-4 py-3 text-[15px] text-[#F4F7FB] placeholder:text-[#B7C0D8]/60";
 
@@ -2557,6 +2592,8 @@ function ContactForm() {
       const data = await response.json();
       if (String(data.success) !== "true") throw new Error("Submission failed");
       form.reset();
+      setTopic("");
+      setMessage("");
       setStatus("Thank you! Your submission has been received. We will be in touch soon.");
     } catch {
       setStatus("Something went wrong. Please email protection@calocapital.io or call (650) 658-6822.");
@@ -2566,8 +2603,8 @@ function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-10 rounded-2xl border border-[#B7C0D8]/20 bg-[#1A2340]/55 p-6">
-      <h3 className="mb-4 text-2xl font-black text-[#F4F7FB]">Send us a message</h3>
+    <form onSubmit={handleSubmit} className="rounded-[20px] border border-[#B7C0D8]/15 bg-[#1A2340]/55 p-6 sm:p-8">
+      <h3 className="mb-5 font-['Cormorant_Garamond',serif] text-[30px] font-bold text-[#F4F7FB]">Send us a message</h3>
       <input type="hidden" name="_subject" value="New message from calocapital.io" />
       <input type="hidden" name="_template" value="table" />
       <input type="hidden" name="_captcha" value="false" />
@@ -2578,8 +2615,15 @@ function ContactForm() {
       <input id="contact-email" name="email" type="email" required placeholder="you@example.com" className={fieldClass} />
       <label htmlFor="contact-phone" className="mb-1 block text-sm text-[#B7C0D8]">Phone number</label>
       <input id="contact-phone" name="phone" type="tel" placeholder="(555) 555-5555" className={fieldClass} />
+      <label htmlFor="contact-topic" className="mb-1 block text-sm text-[#B7C0D8]">What can we help with?</label>
+      <select id="contact-topic" name="topic" value={topic} onChange={handleTopicChange} className={fieldClass}>
+        <option value="">Select a topic</option>
+        {CONTACT_TOPICS.map((item) => (
+          <option key={item.value} value={item.value}>{item.value}</option>
+        ))}
+      </select>
       <label htmlFor="contact-message" className="mb-1 block text-sm text-[#B7C0D8]">Message</label>
-      <textarea id="contact-message" name="message" rows={5} required placeholder="How can we help?" className={fieldClass} />
+      <textarea id="contact-message" name="message" rows={5} required placeholder="How can we help?" value={message} onChange={(event) => setMessage(event.target.value)} className={fieldClass} />
       <button
         type="submit"
         disabled={sending}
@@ -2592,59 +2636,106 @@ function ContactForm() {
   );
 }
 
+const CONTACT_SOCIALS = [
+  { label: "Facebook", href: "https://www.facebook.com/CaloCapital/", shapes: <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z" /> },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/calocapital/",
+    shapes: (
+      <>
+        <rect x="3" y="3" width="18" height="18" rx="3" />
+        <path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7" />
+      </>
+    ),
+  },
+  { label: "X", href: "https://x.com/Marc_J_Calo", shapes: <path d="M4 4l16 16M20 4L4 20" /> },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/calocapital/",
+    shapes: (
+      <>
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <path d="M17.5 6.5v.01" />
+      </>
+    ),
+  },
+];
+
 function ContactPage() {
+  const serif = "font-['Cormorant_Garamond',serif]";
+  const details = [
+    { label: "Email", value: "protection@calocapital.io", href: "mailto:protection@calocapital.io" },
+    { label: "Phone", value: "(650) 658-6822", href: "tel:+16506586822" },
+    { label: "Main office", value: "41 Peabody Street, Nashville, TN 37210" },
+    { label: "Hours", value: "Monday to Friday, 9:00 AM to 5:00 PM" },
+  ];
   return (
-    <section id="contact" className="relative overflow-hidden bg-[#1A2340] px-0 pb-0 pt-0 text-[#F4F7FB]">
-      <div className="relative min-h-[620px] w-full overflow-hidden border-y border-[#B7C0D8]/10 bg-[#1A2340] shadow-[0_0_0_1px_rgba(198, 184, 255,0.12)] lg:min-h-[calc(100svh-6rem)]">
-        <div className="absolute inset-0">
-          <img src={semiWorldPng} alt="" className="h-full w-full object-cover object-center opacity-90" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(109, 94, 245,0.42),rgba(5, 8, 22,0.7)_66%)]" />
-        </div>
+    <section
+      id="contact"
+      className="relative overflow-hidden px-5 py-16 text-[#F4F7FB] sm:px-8 sm:py-20 lg:px-12 lg:py-24"
+      style={{ background: "radial-gradient(900px 500px at 78% 0%,rgba(109,94,245,.28),transparent 70%),#050816" }}
+    >
+      <div className="mx-auto max-w-[1240px]">
+        <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.18em] text-[#C6B8FF]">Contact</p>
+        <h1 className={`${serif} mb-5 max-w-[760px] text-[44px] font-bold leading-[1.08] sm:text-[60px]`}>
+          Let&apos;s talk about your business.
+        </h1>
+        <p className="mb-12 max-w-[620px] text-[18px] leading-[1.6] text-[#B7C0D8]">
+          Tell us what you need and a Calo specialist will get back to you. No pressure, no obligation.
+        </p>
 
-        <div className="relative z-10 grid items-center gap-8 px-4 py-8 sm:gap-10 sm:px-8 sm:py-12 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-14">
-          <div className="max-w-xl min-w-0">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#C6B8FF] sm:text-xs sm:tracking-[0.28em]">Get in touch</p>
-            <h2 className="text-[34px] font-black leading-[0.96] tracking-[-0.04em] text-[#F4F7FB]">
-              We are ready to hear from you
-            </h2>
-            <p className="mt-6 max-w-full text-[22px] leading-[1.6] text-[#B7C0D8]">
-              Check out our weekly updates
-              <br />
-              on the stock market
-            </p>
+        <div className="grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+          <div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {details.map((item) => (
+                <div key={item.label} className="rounded-[20px] border border-[#B7C0D8]/15 bg-[#1A2340]/55 p-6">
+                  <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#C6B8FF]">{item.label}</p>
+                  {item.href ? (
+                    <a href={item.href} className="text-[18px] text-[#F4F7FB] underline decoration-[#9B7CFF]/50 underline-offset-4 hover:text-[#C6B8FF]">{item.value}</a>
+                  ) : (
+                    <p className="text-[18px] text-[#F4F7FB]">{item.value}</p>
+                  )}
+                </div>
+              ))}
+            </div>
 
-            <div className="mt-8 flex max-w-full flex-wrap items-center justify-center gap-3 sm:justify-start sm:gap-4">
-              {socialMediaIcons.map((item) => (
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href={SCHEDULE_CALL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-[#6D5EF5] px-7 py-3 text-[15px] font-semibold text-white transition hover:bg-[#7B6DF7]"
+              >
+                Schedule a call
+              </a>
+              <a href="/faqs" className="rounded-full border border-[#B7C0D8]/30 px-7 py-3 text-[15px] font-semibold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]">
+                Read the FAQs
+              </a>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <span className="mr-1 text-[12px] font-bold uppercase tracking-[0.16em] text-[#C6B8FF]">Follow us</span>
+              {CONTACT_SOCIALS.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={item.label}
-                  className="inline-flex items-center justify-center"
+                  title={`Calo Capital on ${item.label}`}
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#B7C0D8]/35 text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]"
                 >
-                  <img
-                    src={item.src}
-                    alt={item.label}
-                    className="social-icon h-auto w-[3.25rem] object-contain drop-shadow-[0_0_18px_rgba(155, 124, 255,0.28)] sm:w-[4.25rem]"
-                  />
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {item.shapes}
+                  </svg>
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="flex min-w-0 items-center justify-center">
-            <div className="w-full max-w-[560px]">
-              <ContactForm />
-              <div className="border-t border-[#9B7CFF]/40 pt-8">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-[#9B7CFF]">Main Office</p>
-              <div className="mt-4 space-y-2 text-[18px] leading-[1.8] text-[#F4F7FB]">
-                <p>Nashville, TN • 41 Peabody Street, 37210</p>
-                <p>Monday to Friday, 9:00 AM to 5:00 PM</p>
-                <p>Email: protection@calocapital.io</p>
-              </div>
-              </div>
-            </div>
+          <div className="min-w-0">
+            <ContactForm />
           </div>
         </div>
       </div>
@@ -3312,27 +3403,14 @@ function GlobalStyles() {
         .social-icon { width: clamp(2.6rem, 16vw, 3.6rem); }
       }
       .schedule-call-radiant {
-        background: linear-gradient(135deg, #6D5EF5 0%, #9B7CFF 42%, #C6B8FF 100%);
-        box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.4), 0 0 18px rgba(109, 94, 245, 0.55), 0 0 36px rgba(155, 124, 255, 0.35);
-        animation: scheduleCallRadiance 2.8s ease-in-out infinite;
+        background: #6D5EF5;
       }
       .schedule-call-radiant:hover {
-        background: linear-gradient(135deg, #6D5EF5 0%, #9B7CFF 46%, #C6B8FF 100%);
+        background: #7B6DF7;
       }
       .schedule-call-radiant:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(198, 184, 255, 0.6), 0 0 0 5px rgba(5, 8, 22, 0.95), 0 0 24px rgba(155, 124, 255, 0.55);
-      }
-      @keyframes scheduleCallRadiance {
-        0% {
-          box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.4), 0 0 14px rgba(109, 94, 245, 0.42), 0 0 28px rgba(155, 124, 255, 0.28);
-        }
-        50% {
-          box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.5), 0 0 24px rgba(109, 94, 245, 0.62), 0 0 46px rgba(155, 124, 255, 0.42);
-        }
-        100% {
-          box-shadow: 0 0 0 1px rgba(198, 184, 255, 0.4), 0 0 14px rgba(109, 94, 245, 0.42), 0 0 28px rgba(155, 124, 255, 0.28);
-        }
+        outline: 2px solid #C6B8FF;
+        outline-offset: 2px;
       }
       @keyframes marquee {
         0% { transform: translateX(0); }
@@ -3683,6 +3761,11 @@ export default function App() {
     function handleLocationChange() {
       setInfoPath(normalizePath(window.location.pathname));
       startPageTransition(getPageFromLocation());
+      if (normalizePath(window.location.pathname) === "/" && savedHomeScroll !== null) {
+        const y = savedHomeScroll;
+        savedHomeScroll = null;
+        restoreHomeScroll(y);
+      }
     }
 
     window.addEventListener("popstate", handleLocationChange);
@@ -3716,6 +3799,7 @@ export default function App() {
     if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") return;
 
     requestAnimationFrame(() => {
+      if (restoringHomeScroll) return;
       scrollToHomeSection(renderedPage === "Home" ? currentPage : renderedPage);
     });
   }, [currentPage, renderedPage]);
@@ -3799,6 +3883,10 @@ export default function App() {
   }
 
   function navigate(href) {
+    const targetPath = normalizePath(href.split("#")[0] || "/");
+    if (renderedPage === "Home" && targetPath !== "/" && !href.startsWith("#")) {
+      savedHomeScroll = window.scrollY;
+    }
     if (href.startsWith("#")) {
       goToSection(href.slice(1));
       return;
@@ -3810,7 +3898,10 @@ export default function App() {
     if (path === "/faqs") return setPage("FAQs");
     if (path === "/legal") return setPage("Legal", hash);
     if (path === "/financial-topics") return setPage("Financial Topics");
-    if (path === "/") return goToSection("home");
+    if (path === "/") {
+      if (renderedPage !== "Home" && savedHomeScroll !== null) return returnHome();
+      return goToSection("home");
+    }
 
     if (INFO_PAGES[path]) {
       window.history.pushState({}, "", path);
@@ -3824,6 +3915,17 @@ export default function App() {
     }
 
     window.location.assign(href);
+  }
+
+  function returnHome() {
+    const y = savedHomeScroll;
+    savedHomeScroll = null;
+    window.history.pushState({}, "", "/");
+    setCurrentPage("Home");
+    setRenderedPage("Home");
+    setTransitionPhase("idle");
+    setPendingPage(null);
+    restoreHomeScroll(y);
   }
 
   function goToSection(id) {
