@@ -99,6 +99,7 @@ export function initFinancingSections(root) {
     {d:'Choose the offer that fits, then upload your documents from any device.',p:'[PHOTO: owner uploading documents on a phone]'},
     {d:'Review and sign. Your lender sends the funds, and we are here if you have questions.',p:'[PHOTO: owner opening their business for the day]'}
   ];
+  var photoList=[];try{photoList=JSON.parse((photo&&photo.getAttribute('data-photos'))||'[]')}catch(e){}
   var cur=0, box=title.parentNode.parentNode;
   title.parentNode.setAttribute('aria-live','polite');
   function paint(){
@@ -112,7 +113,7 @@ export function initFinancingSections(root) {
     num.textContent=String(cur+1);
     title.textContent='Step '+(cur+1);
     desc.textContent=STEPS[cur].d;
-    if(photo) photo.textContent=STEPS[cur].p;
+    if(photo&&photoList[cur]) photo.style.backgroundImage='url('+photoList[cur]+')';
     prev.disabled=cur===0; next.disabled=cur===STEPS.length-1;
     prev.style.opacity=prev.disabled?'.3':'1'; next.style.opacity=next.disabled?'.3':'1';
     prev.style.cursor=prev.disabled?'default':'pointer'; next.style.cursor=next.disabled?'default':'pointer';

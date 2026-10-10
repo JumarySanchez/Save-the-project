@@ -3,6 +3,24 @@ import sectionsHtml from "./financingSections.html?raw";
 import heroRaw from "./financingHero.html?raw";
 import aboutImagePng from "../assets/p.png";
 
+import step1 from "../assets/business-step1.jpg";
+import step2 from "../assets/business-step2.jpg";
+import step3 from "../assets/business-step3.jpg";
+import step4 from "../assets/business-step4.jpg";
+import step5 from "../assets/business-step5.jpg";
+import featureImg from "../assets/business-feature.jpg";
+import article1 from "../assets/business-article1.jpg";
+import article2 from "../assets/business-article2.jpg";
+import article3 from "../assets/business-article3.jpg";
+
+const stepImgs = JSON.stringify([step1, step2, step3, step4, step5]).replace(/"/g, "&quot;");
+const sectionsWithImages = sectionsHtml
+  .replace("__STEP_IMGS__", stepImgs)
+  .replace("__FEATURE_IMG__", featureImg)
+  .replace(/__ARTICLE1_IMG__/g, article1)
+  .replace(/__ARTICLE2_IMG__/g, article2)
+  .replace(/__ARTICLE3_IMG__/g, article3);
+
 const heroHtml = heroRaw.replace("__ABOUT_IMG__", aboutImagePng);
 import { initFinancingSections } from "./financingSections.js";
 
@@ -31,7 +49,7 @@ const css = `
 }
 `;
 
-export default function FinancingSections({ hero = false }) {
+export default function FinancingSections({ hero = false, onNavigate }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -56,10 +74,36 @@ export default function FinancingSections({ hero = false }) {
     return () => observer.disconnect();
   }, []);
 
+  function handleClick(event) {
+    const anchor = event.target.closest && event.target.closest("a");
+    if (!anchor || !ref.current?.contains(anchor)) return;
+
+    const share = anchor.dataset.share;
+    if (share) {
+      event.preventDefault();
+      const url = encodeURIComponent(window.location.href);
+      const targets = {
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        x: `https://twitter.com/intent/tweet?url=${url}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+      };
+      if (share === "copy") navigator.clipboard?.writeText(window.location.href);
+      else window.open(targets[share], "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    const href = anchor.getAttribute("href") || "";
+    const isInternal = href.startsWith("#") || (href.startsWith("/") && !href.startsWith("//"));
+    if (!isInternal || !onNavigate || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    event.preventDefault();
+    onNavigate(href);
+  }
+
   return (
     <>
       <style>{css}</style>
-      <div className="calo-fin" ref={ref} dangerouslySetInnerHTML={{ __html: hero ? heroHtml : sectionsHtml }} />
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+      <div className="calo-fin" ref={ref} onClick={handleClick} dangerouslySetInnerHTML={{ __html: hero ? heroHtml : sectionsWithImages }} />
     </>
   );
 }

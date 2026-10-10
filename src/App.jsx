@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CandlestickSeries, createChart } from "lightweight-charts";
+import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
 import FinancingSections from "./FinancingSections.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
 import { faqGroups } from "./faqContent.js";
@@ -665,6 +666,7 @@ function getPageFromLocation() {
   if (normalizedPath === "/contact") return "Contact";
   if (normalizedPath === "/legal") return "Legal";
   if (normalizedPath === "/faqs") return "FAQs";
+  if (INFO_PAGES[normalizedPath]) return "Info";
   return "Home";
 }
 
@@ -722,7 +724,7 @@ const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || 
 function Navbar({ currentPage, setPage, goToSection }) {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const onHome = !["Financial Topics", "Four C's", "Contact", "FAQs", "Legal"].includes(currentPage);
+  const onHome = !["Financial Topics", "Four C's", "Contact", "FAQs", "Legal", "Info"].includes(currentPage);
 
   useEffect(() => {
     if (!onHome) return undefined;
@@ -2651,11 +2653,11 @@ function ContactPage() {
   );
 }
 
-function HomePage({ setPage }) {
+function HomePage({ setPage, navigate }) {
   return (
     <>
       <HeroSection />
-      <FinancingSections hero />
+      <FinancingSections hero onNavigate={navigate} />
       <div
         className="relative grid items-stretch"
         style={{
@@ -2664,7 +2666,7 @@ function HomePage({ setPage }) {
       >
         <CryptoCandlestickSection />
       </div>
-      <FinancingSections />
+      <FinancingSections onNavigate={navigate} />
     </>
   );
 }
@@ -2764,6 +2766,72 @@ function LegalPage() {
             <p className="mt-5 text-[17px] leading-[1.7] text-[#B7C0D8]">{disclaimer}</p>
           </LegalDocument>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function InfoPage({ path, navigate }) {
+  const page = INFO_PAGES[path];
+  const linkClass = "text-[#C6B8FF] underline underline-offset-4 hover:text-[#F4F7FB]";
+
+  function open(event, href) {
+    event.preventDefault();
+    navigate(href);
+  }
+
+  if (!page) return null;
+
+  return (
+    <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
+      <div className="mx-auto w-full max-w-[min(900px,94vw)]">
+        <a href="/" onClick={(event) => open(event, "/")} className={`text-sm font-semibold ${linkClass}`}>
+          ← Back to home
+        </a>
+        <p className="mt-8 text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{page.eyebrow}</p>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98]">{page.title}</h1>
+        <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">{page.intro}</p>
+
+        <div className="mt-14 space-y-10">
+          {page.sections.map((section) => (
+            <div key={section.heading}>
+              <h2 className="border-t border-[#C6B8FF66] pt-7 text-2xl font-black">{section.heading}</h2>
+              {section.body && section.body.map((text) => <p key={text} className="mt-4 text-[17px] leading-[1.7] text-[#B7C0D8]">{text}</p>)}
+              {section.list && (
+                <ul className="mt-4 list-disc space-y-2 pl-6 text-[17px] leading-[1.7] text-[#B7C0D8]">
+                  {section.list.map((text) => <li key={text}>{text}</li>)}
+                </ul>
+              )}
+              {section.links && (
+                <ul className="mt-4 space-y-2 text-[17px]">
+                  {section.links.map(([label, href]) => (
+                    <li key={href}>
+                      <a href={href} onClick={(event) => open(event, href)} className={linkClass}>{label}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-14 rounded-2xl border border-[#9B7CFF]/50 bg-[#6D5EF5]/15 p-6">
+          <h2 className="text-2xl font-black">Talk with our team</h2>
+          <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">
+            Call <a className={linkClass} href="tel:+16506586822">(650) 658-6822</a> or email{" "}
+            <a className={linkClass} href="mailto:protection@calocapital.io">protection@calocapital.io</a>.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
+            {(page.related || []).map((href) => (
+              <a key={href} href={href} onClick={(event) => open(event, href)} className={linkClass}>
+                {INFO_RELATED_LABELS[href] || href}
+              </a>
+            ))}
+          </div>
+        </div>
+        <p className="mt-8 text-sm leading-[1.6] text-[#B7C0D8]/80">
+          Information on this page is general and educational. It is not an offer, approval, or financial, tax or legal advice. Terms vary by lender and borrower.
+        </p>
       </div>
     </section>
   );
@@ -3579,6 +3647,7 @@ export default function App() {
   const { coins, live } = useMarketData();
   const [currentPage, setCurrentPage] = useState(getPageFromLocation());
   const [renderedPage, setRenderedPage] = useState(getPageFromLocation());
+  const [infoPath, setInfoPath] = useState(normalizePath(window.location.pathname));
   const [transitionPhase, setTransitionPhase] = useState("idle");
   const [pendingPage, setPendingPage] = useState(null);
   const transitionTimerRef = useRef(null);
@@ -3613,6 +3682,7 @@ export default function App() {
 
   useEffect(() => {
     function handleLocationChange() {
+      setInfoPath(normalizePath(window.location.pathname));
       startPageTransition(getPageFromLocation());
     }
 
@@ -3644,7 +3714,7 @@ export default function App() {
   }, [clearTransitionTimer]);
 
   useEffect(() => {
-    if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs") return;
+    if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") return;
 
     requestAnimationFrame(() => {
       scrollToHomeSection(renderedPage === "Home" ? currentPage : renderedPage);
@@ -3703,7 +3773,7 @@ export default function App() {
       return;
     }
 
-    if (renderedPage === "Contact" || renderedPage === "Financial Topics" || renderedPage === "Legal" || renderedPage === "FAQs") {
+    if (renderedPage === "Contact" || renderedPage === "Financial Topics" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") {
       window.history.pushState({}, "", "/");
     }
 
@@ -3727,6 +3797,34 @@ export default function App() {
     setRenderedPage("Home");
     setTransitionPhase("idle");
     setPendingPage(null);
+  }
+
+  function navigate(href) {
+    if (href.startsWith("#")) {
+      goToSection(href.slice(1));
+      return;
+    }
+
+    const [rawPath, hash = ""] = href.split("#");
+    const path = normalizePath(rawPath);
+    if (path === "/contact") return setPage("Contact");
+    if (path === "/faqs") return setPage("FAQs");
+    if (path === "/legal") return setPage("Legal", hash);
+    if (path === "/financial-topics") return setPage("Financial Topics");
+    if (path === "/") return goToSection("home");
+
+    if (INFO_PAGES[path]) {
+      window.history.pushState({}, "", path);
+      setInfoPath(path);
+      setCurrentPage("Info");
+      setRenderedPage("Info");
+      setTransitionPhase("idle");
+      setPendingPage(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    window.location.assign(href);
   }
 
   function goToSection(id) {
@@ -3761,7 +3859,7 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} />}
+        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} navigate={navigate} />}
       </div>
       <Footer setPage={setPage} />
     </main>
