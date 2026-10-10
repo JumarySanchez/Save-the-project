@@ -716,7 +716,6 @@ const NAV_ITEMS = [
     ],
   },
   { label: "Financial Topics", page: "Financial Topics" },
-  { label: "Contact", page: "Contact" },
 ];
 
 const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || [])]).filter((item) => item.section).map((item) => item.section);
