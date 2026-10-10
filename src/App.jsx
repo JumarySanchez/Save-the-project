@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CandlestickSeries, createChart } from "lightweight-charts";
+import FinancingSections from "./FinancingSections.jsx";
+import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
+import { faqGroups } from "./faqContent.js";
 import logoPng from "../public/Calo_purple_logo.png";
 import galaxyCoverPng from "./assets/purple-galaxy.png";
 import hikerPng from "../assets/calo.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
-import aboutImagePng from "../assets/p.png";
 import whyPartnerBgPng from "../assets/m.png";
 import semiPng from "../assets/semi.png";
 import semiWorldPng from "../assets/semi-world.png";
@@ -17,6 +19,7 @@ import trustDesignPng from "../assets/Trust-design.png";
 import investmentDesignPng from "../assets/Investment-design.png";
 import cryptoDesignPng from "../assets/Currency-design.png";
 import marketChartDesignPng from "../assets/marketchart-design.png";
+import fourCsPieChartPng from "../assets/piechart.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -648,6 +651,7 @@ const pageRoutes = {
   Contact: "/",
   "Financial Topics": FINANCIAL_TOPICS_ROUTE,
   Legal: "/legal",
+  FAQs: "/faqs",
 };
 
 function normalizePath(pathname) {
@@ -660,6 +664,7 @@ function getPageFromLocation() {
   if (normalizedPath === "/why-invest") return "Explore";
   if (normalizedPath === "/contact") return "Contact";
   if (normalizedPath === "/legal") return "Legal";
+  if (normalizedPath === "/faqs") return "FAQs";
   return "Home";
 }
 
@@ -673,7 +678,7 @@ function scrollToFinancialTopicsLocation() {
 }
 
 function getHomeSectionFromPage(page) {
-  if (page === "Explore" || page === "Why invest") return "financial-solutions";
+  if (page === "Explore" || page === "Why invest") return "crypto-candlestick";
   if (page === "Contact") return "contact";
   return "";
 }
@@ -693,84 +698,146 @@ function scrollToHomeSection(page) {
   }
 }
 
-function Navbar({ currentPage, setPage }) {
-  const [open, setOpen] = useState(false);
-  const links = ["Home", "Explore", "Four C's", "Financial Topics", "Contact"];
+const NAV_ITEMS = [
+  { label: "Home", section: "home" },
+  { label: "Approach", section: "approach" },
+  { label: "How It Works", section: "how" },
+  { label: "Qualify", section: "qualify" },
+  {
+    label: "Financing",
+    section: "financing",
+    children: [
+      { label: "Industries", section: "industries" },
+      { label: "Market", section: "crypto-candlestick" },
+      { label: "Resources", section: "resources" },
+      { label: "FAQs", page: "FAQs" },
+    ],
+  },
+  { label: "Financial Topics", page: "Financial Topics" },
+  { label: "Contact", page: "Contact" },
+];
 
-  function goTo(page) {
-    setPage(page);
+const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || [])]).filter((item) => item.section).map((item) => item.section);
+
+function Navbar({ currentPage, setPage, goToSection }) {
+  const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const onHome = !["Financial Topics", "Four C's", "Contact", "FAQs", "Legal"].includes(currentPage);
+
+  useEffect(() => {
+    if (!onHome) return undefined;
+    const sections = NAV_SECTION_IDS;
+    function update() {
+      let active = "home";
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 140) active = id;
+      });
+      setActiveSection(active);
+    }
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [onHome, currentPage]);
+
+  function isActive(item) {
+    if (item.children) return item.children.some(isActive) || (onHome && activeSection === item.section);
+    if (item.section) return onHome && activeSection === item.section;
+    if (item.page === "Financial Topics") return currentPage === "Financial Topics" || currentPage === "Four C's";
+    return currentPage === item.page;
+  }
+
+  function handleClick(item) {
     setOpen(false);
+    if (item.section) goToSection(item.section);
+    else setPage(item.page);
   }
 
   return (
-    <header className="z-50 bg-[#050816]/40">
-      <div className="mx-auto flex w-full max-w-[min(94vw,1400px)] items-center justify-between px-4 py-4 sm:px-5">
-        <button onClick={() => goTo("Home")} aria-label="Calo Capital home" className="max-w-full text-left">
+    <header className="sticky top-0 z-50 border-b border-[#B7C0D8]/10 bg-[#050816]/90 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[min(96vw,1500px)] items-center justify-between gap-4 px-4 py-3 sm:px-5">
+        <button onClick={() => handleClick({ section: "home" })} aria-label="Calo Capital home" className="shrink-0 text-left">
           <Logo />
         </button>
 
-        <nav className="hidden flex-1 items-center justify-center gap-6 px-4 lg:flex lg:max-w-4xl xl:max-w-5xl xl:gap-12 xl:px-16">
-          {links.map((label) => (
-            <button
-              key={label}
-              onClick={() => goTo(label)}
-              className={currentPage === label ? "px-1 text-sm font-black text-[#F4F7FB]" : "px-1 text-sm font-semibold text-[#B7C0D8] transition hover:text-[#F4F7FB]"}
-            >
-              {label}
-            </button>
-          ))}
+        <nav aria-label="Main" className="hidden min-w-0 flex-1 items-center justify-center gap-x-4 xl:flex 2xl:gap-x-6">
+          {NAV_ITEMS.map((item) => {
+            const button = (
+              <button
+                onClick={() => handleClick(item)}
+                aria-current={isActive(item) ? "page" : undefined}
+                aria-haspopup={item.children ? "menu" : undefined}
+                className={`whitespace-nowrap border-b-2 px-1 py-1 text-[13px] transition ${
+                  isActive(item)
+                    ? "border-[#9B7CFF] font-black text-[#F4F7FB]"
+                    : "border-transparent font-semibold text-[#B7C0D8] hover:text-[#F4F7FB]"
+                }`}
+              >
+                {item.label}
+                {item.children ? " ▾" : ""}
+              </button>
+            );
+            if (!item.children) return <div key={item.label}>{button}</div>;
+            return (
+              <div key={item.label} className="group relative">
+                {button}
+                <div className="invisible absolute left-1/2 top-full z-50 min-w-[180px] -translate-x-1/2 pt-2 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                  <div role="menu" className="rounded-xl border border-[#B7C0D8]/15 bg-[#050816] py-2 shadow-[0_14px_40px_rgba(0,0,0,0.5)]">
+                    {item.children.map((child) => (
+                      <button
+                        key={child.label}
+                        role="menuitem"
+                        onClick={() => handleClick(child)}
+                        className={`block w-full px-4 py-2 text-left text-[13px] transition hover:bg-[#1A2340] hover:text-[#F4F7FB] ${
+                          isActive(child) ? "font-black text-[#F4F7FB]" : "font-semibold text-[#B7C0D8]"
+                        }`}
+                      >
+                        {child.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </nav>
         <a
           href={SCHEDULE_CALL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="schedule-call-radiant hidden rounded-none px-4 py-2 text-sm font-black text-[#F4F7FB] transition lg:inline-block"
+          className="schedule-call-radiant hidden shrink-0 rounded-none px-4 py-2 text-sm font-black text-[#F4F7FB] transition xl:inline-block"
         >
           Schedule a Call
         </a>
 
         <button
           onClick={() => setOpen((value) => !value)}
-          className="rounded-xl border border-[#B7C0D8]/15 px-3 py-2 text-[#F4F7FB] lg:hidden"
+          className="rounded-xl border border-[#B7C0D8]/15 px-3 py-2 text-[#F4F7FB] xl:hidden"
           aria-label="Toggle menu"
+          aria-expanded={open}
         >
           {open ? "✕" : "☰"}
         </button>
       </div>
 
-      <div
-        className={
-          `overflow-hidden border-t border-[#B7C0D8]/10 bg-[#050816]/95 shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur-sm transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
-            open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          }`
-        }
-        aria-hidden={!open}
-      >
-        <div className="px-5 py-4">
-          <div
-            className="flex flex-col gap-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-            style={{
-              transform: open ? "translateY(0) scale(1)" : "translateY(-18px) scale(0.98)",
-              opacity: open ? 1 : 0,
-            }}
-          >
-            {links.map((label, index) => (
+      {open && (
+        <div className="max-h-[75vh] overflow-y-auto border-t border-[#B7C0D8]/10 bg-[#050816] px-5 py-4 xl:hidden">
+          <div className="flex flex-col gap-4">
+            {NAV_ITEMS.flatMap((item) => [item, ...(item.children || []).map((child) => ({ ...child, indent: true }))]).map((item) => (
               <button
-                key={label}
-                onClick={() => goTo(label)}
-                className={currentPage === label ? "text-left text-sm font-black text-[#F4F7FB]" : "text-left text-sm font-semibold text-[#B7C0D8]"}
-                style={{
-                  opacity: open ? 1 : 0,
-                  transform: open ? "translateX(0)" : "translateX(-18px)",
-                  transition: `opacity 0.45s ease ${index * 0.08 + 0.12}s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.08 + 0.12}s`,
-                }}
+                key={`${item.indent ? "child-" : ""}${item.label}`}
+                onClick={() => handleClick(item)}
+                className={`${item.indent ? "pl-4 " : ""}${isActive(item) ? "text-left text-sm font-black text-[#F4F7FB]" : "text-left text-sm font-semibold text-[#B7C0D8]"}`}
               >
-                {label}
+                {item.label}
               </button>
             ))}
+            <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="schedule-call-radiant rounded-none px-4 py-2 text-center text-sm font-black text-[#F4F7FB]">
+              Schedule a Call
+            </a>
           </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }
@@ -1519,107 +1586,6 @@ function AboutPage() {
   );
 }
 
-function WhyPartnerSection() {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(reducedMotionQuery.matches);
-    if (reducedMotionQuery.matches) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(node);
-
-    return () => observer.disconnect();
-  }, []);
-
-  function revealStyle(delayMs, translateY = 30) {
-    if (reduceMotion) {
-      return { opacity: 1, transform: "none" };
-    }
-
-    return {
-      opacity: isVisible ? 1 : 0,
-      transform: isVisible ? "translateY(0)" : `translateY(${translateY}px)`,
-      transition: `opacity 0.6s ease-out ${delayMs}ms, transform 0.6s ease-out ${delayMs}ms`,
-    };
-  }
-
-  function fadeStyle(delayMs) {
-    if (reduceMotion) {
-      return { opacity: 1 };
-    }
-
-    return {
-      opacity: isVisible ? 1 : 0,
-      transition: `opacity 0.6s ease-out ${delayMs}ms`,
-    };
-  }
-
-  return (
-    <section
-      ref={sectionRef}
-      id="client-excellence"
-      className="relative overflow-hidden px-5 py-24 text-[#F4F7FB] sm:py-28 lg:py-32"
-      style={{
-        background: "transparent",
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translateY(0)" : "translateY(16px)",
-        transition: reduceMotion ? "none" : "opacity 0.8s ease-out, transform 0.8s ease-out",
-      }}
-    >
-      <div className="relative mx-auto w-full max-w-[min(1400px,94vw)]">
-        <div style={revealStyle(0, 24)}>
-          <p className="text-xs font-black uppercase tracking-[0.4em] text-[#9B7CFF]" style={fadeStyle(0)}>
-            WHY PARTNER WITH CALO CAPITAL
-          </p>
-          <div className="mt-3 h-px w-28 bg-[#9B7CFF]/70" />
-        </div>
-
-        <h2 className="cc-slow-fade mt-10 max-w-[12ch] text-[clamp(2.3rem,7vw,4rem)] font-black leading-[0.9] tracking-[-0.03em] text-[#F4F7FB] sm:max-w-none" style={revealStyle(150, 30)}>
-          Markets move. <span className="text-[#9B7CFF]">Sound strategy</span> endures.
-        </h2>
-
-        <div className="mt-16" style={revealStyle(300, 24)}>
-          <h3 className="text-sm font-black uppercase tracking-[0.28em] text-[#F4F7FB]" style={fadeStyle(300)}>
-            OUR PRINCIPLES
-          </h3>
-          <p className="mt-7 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(380)}>
-            At Calo Capital, we help you understand what you are getting into before you commit. We are open to answer questions and do not shy away from explaining why something may not work in your favor.
-          </p>
-          <p className="mt-8 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(460)}>
-            Honesty and transparency is better than taking your money and giving you a package deal that does not do what you need it to do.
-          </p>
-          <p className="mt-10 max-w-3xl text-[22px] leading-[1.6] text-[#F4F7FB]" style={fadeStyle(520)}>
-            We help with different types of insurance, financial growth, trust, IRAs, retirement, and crypto. No matter your budget, we care about how you will enjoy your own growth in the future. We are here to help.
-          </p>
-
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CryptoCandlestickSection() {
   const cryptoSymbols = [
     { label: "BTC/USD", marketSymbol: "BTCUSDT" },
@@ -1923,111 +1889,11 @@ function CryptoCandlestickSection() {
 }
 
 
-const financialSolutions = [
-  {
-    title: "Working Capital",
-    description: "Explore flexible financing options for short-term business cash flow needs.",
-  },
-  {
-    title: "SBA Loans",
-    description: "Learn about government-backed financing programs for eligible businesses.",
-  },
-  {
-    title: "Real Estate Financing",
-    description: "Explore financing options for commercial property purchases and projects.",
-  },
-  {
-    title: "Credit Card Processing",
-    description: "Review payment processing options for accepting customer card payments.",
-  },
-  {
-    title: "Equipment Financing",
-    description: "Explore financing options for essential business equipment.",
-  },
-  {
-    title: "Credit Repair",
-    description: "Learn about services intended to help businesses improve their credit profiles.",
-  },
-];
-
-function FinancialSolutionsSection() {
-
+function GalaxyBackground({ shootingStars = false }) {
   return (
-    <section id="financial-solutions" className="bg-[#050816] px-5 py-16 text-[#F4F7FB] sm:py-20">
-      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-        <header className="text-center">
-          <h2 className="text-[clamp(2rem,4vw,3rem)] font-black leading-tight text-[#9B7CFF]">
-            Our Financial Solutions
-          </h2>
-          <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
-            Explore small-business financing options on CapNow.
-          </p>
-        </header>
-
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {financialSolutions.map((solution) => (
-            <article
-              key={solution.title}
-              className="financial-galactic-card flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#1A2340] px-6 py-7 text-center shadow-[0_8px_24px_rgba(155,124,255,0.08)]"
-            >
-              <span className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">
-                {solution.title}
-              </span>
-              <span className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">
-                {solution.description}
-              </span>
-              <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const additionalBusinessFinancing = [
-  {
-    title: "Business Term Loans",
-    description: "Review financing with a defined repayment schedule for planned business expenses and growth projects.",
-  },
-  {
-    title: "Business Lines of Credit",
-    description: "Explore flexible access to funds for recurring or unexpected business expenses, subject to provider terms.",
-  },
-  {
-    title: "Invoice Factoring",
-    description: "Learn how eligible unpaid invoices may be used to access working capital, with fees and terms set by the provider.",
-  },
-];
-
-function AdditionalBusinessFinancingSection() {
-  return (
-    <section id="business-financing-options" className="border-t border-[#B7C0D8]/20 bg-[#1A2340] px-5 pb-16 pt-8 text-[#F4F7FB] sm:pb-20 sm:pt-10">
-      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-        <header className="max-w-3xl">
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Business Financing</p>
-          <h2 className="mt-3 text-[clamp(1.8rem,3vw,2.5rem)] font-black leading-tight text-[#F4F7FB]">
-            More ways to support your next move
-          </h2>
-          <p className="mt-3 text-base leading-7 text-[#B7C0D8] sm:text-lg">
-            Explore additional financing structures for business needs, with eligibility and terms determined by the funding provider.
-          </p>
-        </header>
-
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {additionalBusinessFinancing.map((solution) => (
-            <article
-              key={solution.title}
-              className="financial-galactic-card flex min-h-[190px] flex-col items-center justify-center rounded-xl border border-[#B7C0D8]/15 bg-[#050816] px-6 py-7 text-center shadow-[0_8px_24px_rgba(109,94,245,0.1)]"
-            >
-              <h3 className="mt-4 text-lg font-bold leading-snug text-[#F4F7FB]">{solution.title}</h3>
-              <p className="mt-2 max-w-[19rem] text-sm leading-6 text-[#B7C0D8]">{solution.description}</p>
-              <span className="financial-galactic-rule mt-4 h-0.5 w-8 bg-[#6D5EF5]" aria-hidden="true" />
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+    <div className="calo-after-chart-sky" aria-hidden="true">
+      {shootingStars && <><i /><i /><i /></>}
+    </div>
   );
 }
 
@@ -2669,6 +2535,62 @@ const socialMediaIcons = [
   { label: "LinkedIn", src: socialLinkedInPng, href: "https://www.linkedin.com/company/calocapital/posts/?feedView=all" },
 ];
 
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/protection@calocapital.io";
+
+function ContactForm() {
+  const [status, setStatus] = useState("");
+  const [sending, setSending] = useState(false);
+  const fieldClass = "mb-4 w-full rounded-xl border border-[#B7C0D8]/25 bg-[#050816]/65 px-4 py-3 text-[15px] text-[#F4F7FB] placeholder:text-[#B7C0D8]/60";
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    setSending(true);
+    setStatus("Sending...");
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+      const data = await response.json();
+      if (String(data.success) !== "true") throw new Error("Submission failed");
+      form.reset();
+      setStatus("Thank you! Your submission has been received. We will be in touch soon.");
+    } catch {
+      setStatus("Something went wrong. Please email protection@calocapital.io or call (650) 658-6822.");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mb-10 rounded-2xl border border-[#B7C0D8]/20 bg-[#1A2340]/55 p-6">
+      <h3 className="mb-4 text-2xl font-black text-[#F4F7FB]">Send us a message</h3>
+      <input type="hidden" name="_subject" value="New message from calocapital.io" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+      <label htmlFor="contact-name" className="mb-1 block text-sm text-[#B7C0D8]">Name</label>
+      <input id="contact-name" name="name" type="text" placeholder="Your name" className={fieldClass} />
+      <label htmlFor="contact-email" className="mb-1 block text-sm text-[#B7C0D8]">Email address</label>
+      <input id="contact-email" name="email" type="email" required placeholder="you@example.com" className={fieldClass} />
+      <label htmlFor="contact-phone" className="mb-1 block text-sm text-[#B7C0D8]">Phone number</label>
+      <input id="contact-phone" name="phone" type="tel" placeholder="(555) 555-5555" className={fieldClass} />
+      <label htmlFor="contact-message" className="mb-1 block text-sm text-[#B7C0D8]">Message</label>
+      <textarea id="contact-message" name="message" rows={5} required placeholder="How can we help?" className={fieldClass} />
+      <button
+        type="submit"
+        disabled={sending}
+        className="min-h-12 w-full rounded-full bg-gradient-to-br from-[#6D5EF5] to-[#9B7CFF] px-6 py-3 text-base font-semibold text-white disabled:opacity-60"
+      >
+        Send message
+      </button>
+      <p role="status" aria-live="polite" className="mt-3 text-sm text-[#B7C0D8]">{status}</p>
+    </form>
+  );
+}
+
 function ContactPage() {
   return (
     <section id="contact" className="relative overflow-hidden bg-[#1A2340] px-0 pb-0 pt-0 text-[#F4F7FB]">
@@ -2711,12 +2633,15 @@ function ContactPage() {
           </div>
 
           <div className="flex min-w-0 items-center justify-center">
-            <div className="w-full max-w-[560px] border-t border-[#9B7CFF]/40 pt-8">
+            <div className="w-full max-w-[560px]">
+              <ContactForm />
+              <div className="border-t border-[#9B7CFF]/40 pt-8">
               <p className="text-xs font-black uppercase tracking-[0.28em] text-[#9B7CFF]">Main Office</p>
               <div className="mt-4 space-y-2 text-[18px] leading-[1.8] text-[#F4F7FB]">
                 <p>Nashville, TN • 41 Peabody Street, 37210</p>
                 <p>Monday to Friday, 9:00 AM to 5:00 PM</p>
                 <p>Email: protection@calocapital.io</p>
+              </div>
               </div>
             </div>
           </div>
@@ -2730,31 +2655,66 @@ function HomePage({ setPage }) {
   return (
     <>
       <HeroSection />
+      <FinancingSections hero />
       <div
-        className="relative grid items-stretch lg:grid-cols-[0.9fr_1.1fr]"
+        className="relative grid items-stretch"
         style={{
-          backgroundImage: `linear-gradient(rgba(5, 8, 22, 0.32), rgba(5, 8, 22, 0.62)), url(${aboutImagePng})`,
-          backgroundPosition: "center",
-          backgroundSize: "cover",
+          background: "radial-gradient(900px 500px at 78% 10%,rgba(109,94,245,.28),transparent 70%),#050816",
         }}
       >
-        <AboutPage />
         <CryptoCandlestickSection />
       </div>
-      <FinancialSolutionsSection />
-      <AdditionalBusinessFinancingSection />
-      <WhyPartnerSection />
+      <FinancingSections />
     </>
   );
 }
 
-const privacyPolicy =
-  "Calo Capital respects your privacy. We may collect information you provide through contact forms, consultation requests, or other website interactions to respond to your inquiry, provide services, and improve the experience on our site. We do not sell personal information. We may share information only with trusted service providers who support our business operations and are required to protect it, or when required by law. If you contact us, you understand that your information may be retained for business or legal records. If you have questions about how your information is used, please contact Calo Capital directly.";
-
 const disclaimer =
   "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
 
-function LegalPage() {
+function linkifyText(text) {
+  return text.split(/(protection@calocapital\.io|\(650\) 658-6822)/g).map((part, index) => {
+    if (part === "protection@calocapital.io") return <a key={index} className="text-[#C6B8FF] underline" href={`mailto:${part}`}>{part}</a>;
+    if (part === "(650) 658-6822") return <a key={index} className="text-[#C6B8FF] underline" href="tel:+16506586822">{part}</a>;
+    return part;
+  });
+}
+
+function LegalDocument({ id, number, title, intro, sections, children }) {
+  return (
+    <article id={id} className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
+      <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">{number}</p>
+      <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">{title}</h2>
+      {sections && <p className="mt-2 text-sm text-[#B7C0D8]">Last updated: {LEGAL_UPDATED}</p>}
+      {intro && <p className="mt-5 text-[20px] leading-[1.6] text-[#B7C0D8]">{intro}</p>}
+      {children}
+      {sections && (
+        <div className="mt-8 space-y-8">
+          {sections.map((section, sectionIndex) => (
+            <div key={section.t}>
+              <h3 className="text-xl font-bold text-[#F4F7FB]">{sectionIndex + 1}. {section.t}</h3>
+              <div className="mt-3 space-y-3 text-[17px] leading-[1.7] text-[#B7C0D8]">
+                {section.b.map((block, blockIndex) => {
+                  if (typeof block === "string") return <p key={blockIndex}>{linkifyText(block)}</p>;
+                  return (
+                    <div key={blockIndex}>
+                      {block.lead && <p className="mb-2">{block.lead}</p>}
+                      <ul className="list-disc space-y-2 pl-6">
+                        {block.list.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function useScrollToHash() {
   useEffect(() => {
     const targetId = window.location.hash.slice(1);
     if (!targetId) {
@@ -2766,28 +2726,86 @@ function LegalPage() {
       document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, []);
+}
+
+function LegalPage() {
+  useScrollToHash();
+
+  const jumpLinks = [
+    ["privacy-policy", "Privacy Policy"],
+    ["terms", "Terms & Conditions"],
+    ["disclaimer", "Disclaimer"],
+  ];
 
   return (
     <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
-        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Privacy &amp; Disclaimer</h1>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Legal</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
-          Important information about privacy, educational content, and the use of this website.
+          Our Privacy Policy, Terms and Conditions, and Disclaimer.
         </p>
+        <nav className="mt-8 flex flex-wrap gap-3" aria-label="Legal sections">
+          {jumpLinks.map(([id, label]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className="rounded-full border border-[#C6B8FF66] px-5 py-2 text-sm font-semibold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
 
         <div className="mt-14 space-y-14">
-          <article id="privacy-policy" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">01</p>
-            <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Privacy Policy</h2>
-            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{privacyPolicy}</p>
-          </article>
+          <LegalDocument id="privacy-policy" number="01" title="Privacy Policy" intro={privacyIntro} sections={privacySections} />
+          <LegalDocument id="terms" number="02" title="Terms and Conditions" intro={termsIntro} sections={termsSections} />
+          <LegalDocument id="disclaimer" number="03" title="Disclaimer">
+            <p className="mt-5 text-[17px] leading-[1.7] text-[#B7C0D8]">{disclaimer}</p>
+          </LegalDocument>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-          <article id="disclaimer" className="scroll-mt-28 border-t border-[#C6B8FF66] pt-7">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">02</p>
-            <h2 className="mt-3 text-3xl font-black text-[#F4F7FB]">Disclaimer</h2>
-            <p className="mt-5 text-[22px] leading-[1.6] text-[#B7C0D8]">{disclaimer}</p>
-          </article>
+function FaqsPage() {
+  useScrollToHash();
+
+  return (
+    <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
+      <div className="mx-auto w-full max-w-[min(900px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
+        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Frequently Asked Questions</h1>
+        <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
+          Straight answers about Calo Capital, how financing works, and how we protect your information.
+        </p>
+
+        <div className="mt-14 space-y-12">
+          {faqGroups.map((group) => (
+            <div key={group.title}>
+              <h2 className="border-t border-[#C6B8FF66] pt-7 text-2xl font-black text-[#F4F7FB]">{group.title}</h2>
+              <div className="mt-5 space-y-3">
+                {group.items.map(([question, answer]) => (
+                  <details key={question} className="group rounded-2xl border border-[#B7C0D8]/20 bg-[#1A2340]/55 px-6 py-4">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold text-[#F4F7FB] [&::-webkit-details-marker]:hidden">
+                      {question}
+                      <span aria-hidden="true" className="text-2xl text-[#C6B8FF] transition group-open:rotate-45">+</span>
+                    </summary>
+                    <p className="mt-3 text-[17px] leading-[1.7] text-[#B7C0D8]">{linkifyText(answer)}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-14 rounded-2xl border border-[#9B7CFF]/50 bg-[#6D5EF5]/15 p-6">
+          <h2 className="text-2xl font-black">Still have a question?</h2>
+          <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">
+            Call <a className="text-[#C6B8FF] underline" href="tel:+16506586822">(650) 658-6822</a> or email{" "}
+            <a className="text-[#C6B8FF] underline" href="mailto:protection@calocapital.io">protection@calocapital.io</a>.
+          </p>
         </div>
       </div>
     </section>
@@ -2809,32 +2827,7 @@ function Footer({ setPage }) {
   }, []);
 
   return (
-    <footer className="relative overflow-hidden border-t border-[#B7C0D8]/10 bg-[#050816] px-5 py-8 text-[#F4F7FB]">
-      <div className="relative z-10 mx-auto w-full max-w-[94vw]">
-        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[11px] leading-6 text-[#B7C0D8]">
-          <a
-            href="/legal#privacy-policy"
-            onClick={(event) => {
-              event.preventDefault();
-              setPage("Legal", "privacy-policy");
-            }}
-            className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="/legal#disclaimer"
-            onClick={(event) => {
-              event.preventDefault();
-              setPage("Legal", "disclaimer");
-            }}
-            className="font-black uppercase tracking-[0.18em] text-[#9B7CFF] transition hover:text-[#F4F7FB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C6B8FF]"
-          >
-            Disclaimer
-          </a>
-        </div>
-      </div>
-    </footer>
+    <></>
   );
 }
 
@@ -2844,6 +2837,385 @@ function GlobalStyles() {
       html { scroll-behavior: smooth; overflow-x: hidden; }
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
+      .calo-after-chart {
+        --cac-navy: #050816;
+        --cac-purple: #9B7CFF;
+        --cac-indigo: #6D5EF5;
+        --cac-slate: #1A2340;
+        --cac-white: #F4F7FB;
+        --cac-mist: #B7C0D8;
+        --cac-aurora: #C6B8FF;
+        color: var(--cac-white);
+        line-height: 1.7;
+      }
+      .calo-after-chart-section {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(4rem, 9vw, 7rem) 1.25rem;
+      }
+      .calo-after-chart-wrap {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+      .calo-after-chart h2 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.4rem, 5vw, 3.8rem);
+        font-weight: 700;
+        line-height: 1.05;
+      }
+      .calo-after-chart h3,
+      .calo-after-chart p {
+        margin-top: 0;
+      }
+      .calo-after-chart-solutions {
+        text-align: center;
+        background:
+          radial-gradient(1px 1px at 8% 22%,rgba(244,247,251,.7),transparent),
+          radial-gradient(1px 1px at 22% 68%,rgba(244,247,251,.5),transparent),
+          radial-gradient(1.5px 1.5px at 35% 12%,rgba(198,184,255,.7),transparent),
+          radial-gradient(1px 1px at 48% 82%,rgba(244,247,251,.5),transparent),
+          radial-gradient(1px 1px at 61% 30%,rgba(244,247,251,.6),transparent),
+          radial-gradient(1.5px 1.5px at 74% 74%,rgba(198,184,255,.6),transparent),
+          radial-gradient(1px 1px at 86% 16%,rgba(244,247,251,.6),transparent),
+          radial-gradient(1px 1px at 93% 58%,rgba(244,247,251,.5),transparent),
+          radial-gradient(60% 45% at 50% 0%,rgba(109,94,245,.25),transparent),
+          var(--cac-navy);
+      }
+      .calo-after-chart-solutions h2,
+      .calo-after-chart-contact h2 span {
+        color: var(--cac-aurora);
+        text-shadow: 0 0 22px rgba(155,124,255,.35);
+      }
+      .calo-after-chart-subtitle {
+        max-width: 44ch;
+        margin: 1.1rem auto 0;
+        color: var(--cac-mist);
+        font-size: 1.1rem;
+      }
+      .calo-after-chart-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 3.25rem;
+      }
+      .calo-after-chart-card,
+      .calo-after-chart-work-card {
+        border: 1px solid rgba(183,192,216,.2);
+        border-radius: 16px;
+        background: rgba(26,35,64,.55);
+        box-shadow: inset 0 1px 0 rgba(198,184,255,.14);
+        backdrop-filter: blur(14px);
+      }
+      .calo-after-chart-card {
+        padding: 2.4rem 1.25rem;
+        color: inherit;
+        transition: transform .2s, border-color .2s, box-shadow .2s;
+      }
+      .calo-after-chart-card:hover,
+      .calo-after-chart-card.is-expanded {
+        transform: translateY(-3px);
+        border-color: rgba(198,184,255,.6);
+        box-shadow: 0 0 30px rgba(155,124,255,.18);
+      }
+      .calo-after-chart-card-trigger {
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        text-align: center;
+      }
+      .calo-after-chart-card-trigger:focus-visible {
+        outline: 2px solid var(--cac-aurora);
+        outline-offset: 4px;
+      }
+      .calo-after-chart-card h3 {
+        margin-bottom: .4rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+      .calo-after-chart-card p {
+        margin-bottom: 0;
+        color: var(--cac-mist);
+        font-size: .92rem;
+        line-height: 1.5;
+      }
+      .calo-after-chart-card-details {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height .28s ease, margin-top .28s ease, padding-top .28s ease, opacity .2s ease;
+      }
+      .calo-after-chart-card-details.is-visible {
+        max-height: 260px;
+        margin-top: 1.1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(183,192,216,.2);
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .calo-after-chart-card-details p {
+        font-size: .86rem;
+      }
+      .calo-after-chart-band {
+        border-top: 1px solid rgba(183,192,216,.16);
+        background: radial-gradient(50% 70% at 85% 8%,rgba(155,124,255,.24),transparent),linear-gradient(120deg,#050816 0%,#15123C 55%,#2A1F6B 100%);
+      }
+      .calo-after-chart-two {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+        gap: clamp(2rem, 5vw, 4rem);
+      }
+      .calo-after-chart-pill {
+        display: inline-block;
+        margin-bottom: 1.4rem;
+        padding: .4rem .9rem;
+        border: 1px solid rgba(198,184,255,.4);
+        border-radius: 999px;
+        background: rgba(155,124,255,.12);
+        color: var(--cac-aurora);
+        font-size: .75rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+      .calo-after-chart-band h2 { margin-bottom: 1.1rem; }
+      .calo-after-chart-lede { margin-bottom: .9rem; font-size: 1.2rem; font-weight: 600; }
+      .calo-after-chart-body { max-width: 50ch; margin-bottom: 0; color: var(--cac-mist); }
+      .calo-after-chart-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
+      .calo-after-chart-button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .55rem;
+        overflow: hidden;
+        padding: .9rem 1.5rem;
+        border: 1.5px solid var(--cac-purple);
+        border-radius: 10px;
+        background: var(--cac-purple);
+        color: var(--cac-navy);
+        font: inherit;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background .2s, box-shadow .2s, border-color .2s;
+      }
+      .calo-after-chart-button:hover {
+        border-color: var(--cac-aurora);
+        background: var(--cac-aurora);
+        box-shadow: 0 0 26px rgba(155,124,255,.45);
+      }
+      .calo-after-chart-button-ghost {
+        border-color: rgba(183,192,216,.5);
+        background: transparent;
+        color: var(--cac-white);
+      }
+      .calo-after-chart-button-ghost:hover { border-color: var(--cac-aurora); background: rgba(198,184,255,.1); box-shadow: none; }
+      .calo-after-chart-work-card { padding: 1.75rem; }
+      .calo-after-chart-work-card > h3 {
+        margin-bottom: 1.25rem;
+        text-align: center;
+        font-size: 1.15rem;
+      }
+      .calo-after-chart-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+      .calo-after-chart-panel {
+        padding: 1rem;
+        border: 1px solid rgba(183,192,216,.14);
+        border-radius: 12px;
+        background: rgba(5,8,22,.5);
+      }
+      .calo-after-chart-panel strong { display: block; margin-bottom: .9rem; font-size: .85rem; font-weight: 600; }
+      .calo-after-chart-bars { display: flex; height: 130px; align-items: flex-end; gap: .5rem; }
+      .calo-after-chart-bar-column { display: flex; height: 100%; flex: 1; flex-direction: column; justify-content: flex-end; }
+      .calo-after-chart-bar { position: relative; width: 100%; border-radius: 5px 5px 0 0; }
+      .calo-after-chart-bitcoin { height: 100%; background: var(--cac-purple); }
+      .calo-after-chart-bitcoin span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 62%;
+        border: 2px dashed var(--cac-purple);
+        border-bottom: 0;
+        border-radius: 5px 5px 0 0;
+      }
+      .calo-after-chart-loan { height: 66%; background: rgba(183,192,216,.5); }
+      .calo-after-chart-covered { background: var(--cac-aurora); }
+      .calo-after-chart-policy { height: 66%; background: var(--cac-indigo); }
+      .calo-after-chart-bar-column > span { margin-top: .4rem; color: var(--cac-mist); text-align: center; font-size: .75rem; }
+      .calo-after-chart-panel p { margin: .9rem 0 0; color: var(--cac-white); font-size: .85rem; line-height: 1.5; }
+      .calo-after-chart-fine { margin: 1rem 0 0; color: var(--cac-mist); text-align: center; font-size: .8rem; font-weight: 300; }
+      .calo-after-chart-contact {
+        border-top: 1px solid rgba(183,192,216,.16);
+        background: linear-gradient(90deg,#050816 50%,#10172E 50%);
+      }
+      .calo-after-chart-contact-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+        align-items: center;
+        gap: clamp(2rem, 5vw, 4rem);
+      }
+      .calo-after-chart-contact h2 { margin-bottom: 1.25rem; }
+      .calo-after-chart-contact-copy { max-width: 760px; }
+      .calo-after-chart-reason { margin-top: 1.6rem; }
+      .calo-after-chart-reason h3 { margin-bottom: .2rem; font-size: 1.05rem; }
+      .calo-after-chart-reason p { margin: 0; color: var(--cac-mist); font-size: .95rem; line-height: 1.55; }
+      .calo-after-chart-four-cs {
+        width: 100%;
+        min-width: 0;
+      }
+      .calo-after-chart-four-cs > h3 { margin: 0; text-align: center; font-size: 1.4rem; }
+      .calo-after-chart-four-cs-intro { margin: .35rem 0 1rem; color: var(--cac-mist); text-align: center; font-size: .9rem; }
+      .calo-after-chart-pie-wrap {
+        position: relative;
+        width: 100%;
+        max-width: 460px;
+        aspect-ratio: 1;
+        margin: 0 auto;
+      }
+      .calo-after-chart-four-cs-image {
+        width: 100%;
+        height: auto;
+        filter: grayscale(1);
+      }
+      .calo-after-chart-hotspots { position: absolute; inset: 0; }
+      .calo-after-chart-hotspot {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        transition: filter .2s ease;
+      }
+      .calo-after-chart-hotspot::before {
+        position: absolute;
+        inset: 0;
+        background: rgba(155,124,255,.72);
+        content: "";
+        opacity: 0;
+        transition: opacity .16s ease;
+      }
+      .calo-after-chart-hotspot:hover,
+      .calo-after-chart-hotspot:focus-visible { z-index: 2; }
+      .calo-after-chart-hotspot:hover::before,
+      .calo-after-chart-hotspot:focus-visible::before { opacity: .9; }
+      .calo-after-chart-hotspot:focus-visible { outline: 2px solid var(--cac-white); outline-offset: 2px; }
+      .calo-after-chart-hotspot-cash-alternatives {
+        clip-path: polygon(7% 51%, 42% 51%, 47% 47%, 51% 52%, 55% 48%, 55% 97%, 48% 96%, 40% 94%, 32% 91%, 24% 87%, 17% 81%, 11% 74%, 6% 65%, 4% 57%);
+      }
+      .calo-after-chart-hotspot-commodities {
+        clip-path: polygon(51% 3%, 43% 4%, 35% 7%, 27% 11%, 20% 17%, 14% 23%, 9% 31%, 5% 39%, 3% 47%, 45% 48%, 48% 46%, 43% 42%, 49% 36%, 49% 3%);
+      }
+      .calo-after-chart-hotspot-crypto {
+        clip-path: polygon(52% 3%, 60% 4%, 68% 7%, 76% 11%, 83% 17%, 89% 23%, 94% 31%, 97% 39%, 99% 47%, 84% 48%, 79% 54%, 73% 48%, 55% 48%, 55% 46%, 61% 42%, 55% 36%, 55% 3%);
+      }
+      .calo-after-chart-hotspot-companies {
+        clip-path: polygon(55% 52%, 69% 52%, 74% 58%, 79% 52%, 97% 52%, 96% 61%, 93% 70%, 89% 78%, 83% 85%, 76% 91%, 68% 95%, 59% 97%, 56% 96%, 56% 60%, 52% 55%);
+      }
+      .calo-after-chart-four-cs-detail {
+        max-width: 460px;
+        margin: 1rem auto 0;
+        padding: 1.2rem 1.35rem;
+        border: 1px solid rgba(183,192,216,.2);
+        border-radius: 12px;
+        background: rgba(26,35,64,.72);
+        box-shadow: inset 0 1px 0 rgba(198,184,255,.12);
+        transition: border-color .2s ease, box-shadow .2s ease;
+      }
+      .calo-after-chart-four-cs-detail h4 { margin: 0; color: var(--cac-aurora); font-size: 1.05rem; }
+      .calo-after-chart-four-cs-detail p { margin: .4rem 0 0; color: var(--cac-mist); font-size: .86rem; line-height: 1.5; }
+      .calo-after-chart-four-cs-detail ul { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0; padding: 0; list-style: none; }
+      .calo-after-chart-four-cs-detail li { padding: .24rem .55rem; border: 1px solid rgba(198,184,255,.2); border-radius: 999px; color: var(--cac-white); font-size: .72rem; line-height: 1.4; }
+      .calo-after-chart-four-cs-detail a { color: var(--cac-aurora); font-size: .82rem; font-weight: 600; text-underline-offset: 3px; }
+      .calo-after-chart-quote {
+        max-width: 30em;
+        margin: 2.25rem 0 0;
+        padding-left: 1.25rem;
+        border-left: 2px solid var(--cac-purple);
+        color: var(--cac-aurora);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.55rem;
+        font-style: italic;
+        font-weight: 500;
+        line-height: 1.3;
+      }
+      .calo-after-chart-sky {
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: linear-gradient(118deg,transparent 34%,rgba(109,94,245,.09) 46%,rgba(198,184,255,.06) 52%,transparent 66%);
+      }
+      .calo-after-chart-sky::before,
+      .calo-after-chart-sky::after {
+        position: absolute;
+        inset: 0;
+        background-repeat: no-repeat;
+        content: "";
+      }
+      .calo-after-chart-sky::before {
+        background-image: radial-gradient(2px 2px at 61% 60%,rgba(198,184,255,.9),transparent),radial-gradient(1px 1px at 67% 63%,rgba(244,247,251,.95),transparent),radial-gradient(1px 1px at 59% 41%,rgba(244,247,251,.95),transparent),radial-gradient(1px 1px at 70% 91%,rgba(244,247,251,.95),transparent),radial-gradient(1px 1px at 52% 60%,rgba(198,184,255,.9),transparent),radial-gradient(1px 1px at 3% 70%,rgba(198,184,255,.9),transparent),radial-gradient(1px 1px at 6% 27%,rgba(244,247,251,.95),transparent),radial-gradient(1px 1px at 5% 62%,rgba(198,184,255,.9),transparent),radial-gradient(1.5px 1.5px at 77% 28%,rgba(244,247,251,.95),transparent),radial-gradient(1px 1px at 39% 66%,rgba(198,184,255,.9),transparent),radial-gradient(1px 1px at 12% 61%,rgba(198,184,255,.9),transparent),radial-gradient(1.5px 1.5px at 72% 13%,rgba(244,247,251,.95),transparent);
+        animation: caloAfterChartTwinkle 6s ease-in-out infinite alternate;
+      }
+      .calo-after-chart-sky::after {
+        background-image: radial-gradient(1px 1px at 28% 9%,rgba(244,247,251,.95),transparent),radial-gradient(2px 2px at 92% 53%,rgba(198,184,255,.9),transparent),radial-gradient(2px 2px at 74% 83%,rgba(244,247,251,.95),transparent),radial-gradient(1.5px 1.5px at 36% 46%,rgba(155,124,255,.85),transparent),radial-gradient(1px 1px at 44% 4%,rgba(198,184,255,.9),transparent),radial-gradient(2px 2px at 19% 34%,rgba(244,247,251,.95),transparent),radial-gradient(1px 1px at 9% 62%,rgba(244,247,251,.95),transparent),radial-gradient(2px 2px at 89% 74%,rgba(244,247,251,.95),transparent);
+        animation: caloAfterChartTwinkle 9s ease-in-out -3s infinite alternate;
+      }
+      .calo-after-chart-sky > i {
+        position: absolute;
+        top: 7%;
+        left: 64%;
+        width: var(--cac-star-length, 180px);
+        height: 1.5px;
+        border-radius: 2px;
+        background: linear-gradient(90deg,#fff 0%,rgba(198,184,255,.6) 30%,rgba(155,124,255,0) 100%);
+        filter: drop-shadow(0 0 5px rgba(198,184,255,.85));
+        opacity: 0;
+        transform: rotate(-35deg);
+        animation: caloAfterChartShoot var(--cac-star-duration, 12s) linear var(--cac-star-delay, 0s) infinite;
+      }
+      .calo-after-chart-sky > i:nth-child(2) { top: 24%; left: 93%; --cac-star-length: 120px; --cac-star-duration: 14s; --cac-star-delay: 5.5s; }
+      .calo-after-chart-sky > i:nth-child(3) { top: 3%; left: 36%; --cac-star-length: 210px; --cac-star-duration: 19s; --cac-star-delay: 10s; }
+      @keyframes caloAfterChartTwinkle { from { opacity: .25; } to { opacity: 1; } }
+      @keyframes caloAfterChartShoot {
+        0% { opacity: 0; transform: rotate(-35deg) translateX(0); }
+        2%, 10% { opacity: 1; }
+        13%, 100% { opacity: 0; transform: rotate(-35deg) translateX(-860px); }
+      }
+      @media (max-width: 860px) {
+        .calo-after-chart-two { grid-template-columns: 1fr; }
+        .calo-after-chart-contact { background: var(--cac-navy); }
+        .calo-after-chart-contact-layout { grid-template-columns: 1fr; }
+        .calo-after-chart-contact-copy { max-width: 700px; }
+        .calo-after-chart-four-cs { max-width: 700px; justify-self: center; }
+      }
+      @media (max-width: 520px) {
+        .calo-after-chart-grid,
+        .calo-after-chart-comparison { grid-template-columns: 1fr; }
+        .calo-after-chart-sky > i:nth-child(3) { display: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .calo-after-chart-card { transition: none; }
+        .calo-after-chart-hotspot,
+        .calo-after-chart-hotspot::before,
+        .calo-after-chart-four-cs-detail { transition: none; }
+        .calo-after-chart-sky > i { display: none; }
+        .calo-after-chart-sky::before,
+        .calo-after-chart-sky::after { animation: none; opacity: .8; }
+      }
       .cc-slow-fade {
         animation: ccSlowFade 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
       }
@@ -3272,7 +3644,7 @@ export default function App() {
   }, [clearTransitionTimer]);
 
   useEffect(() => {
-    if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal") return;
+    if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs") return;
 
     requestAnimationFrame(() => {
       scrollToHomeSection(renderedPage === "Home" ? currentPage : renderedPage);
@@ -3305,6 +3677,16 @@ export default function App() {
       return;
     }
 
+    if (page === "FAQs") {
+      window.history.pushState({}, "", "/faqs");
+      setCurrentPage(page);
+      setRenderedPage(page);
+      setTransitionPhase("idle");
+      setPendingPage(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     if (page === "Legal") {
       window.history.pushState({}, "", `/legal${hash ? `#${hash}` : ""}`);
       setCurrentPage(page);
@@ -3321,14 +3703,14 @@ export default function App() {
       return;
     }
 
-    if (renderedPage === "Contact" || renderedPage === "Financial Topics") {
+    if (renderedPage === "Contact" || renderedPage === "Financial Topics" || renderedPage === "Legal" || renderedPage === "FAQs") {
       window.history.pushState({}, "", "/");
     }
 
     const sectionMap = {
       Home: "",
-      Explore: "financial-solutions",
-      "Why invest": "financial-solutions",
+      Explore: "crypto-candlestick",
+      "Why invest": "crypto-candlestick",
     };
 
     const targetSectionId = sectionMap[page];
@@ -3347,6 +3729,23 @@ export default function App() {
     setPendingPage(null);
   }
 
+  function goToSection(id) {
+    const scroll = () => {
+      if (id === "home") window.scrollTo({ top: 0, behavior: "smooth" });
+      else document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    if (renderedPage !== "Home") {
+      window.history.pushState({}, "", "/");
+      setCurrentPage("Home");
+      setRenderedPage("Home");
+      setTransitionPhase("idle");
+      setPendingPage(null);
+      setTimeout(scroll, 150);
+    } else {
+      scroll();
+    }
+  }
+
   const isFinancialTopicsPage = renderedPage === "Financial Topics";
   const pageTransitionStateClass = transitionPhase === "out" ? "opacity-0 translate-y-1 scale-[0.998]" : "opacity-100 translate-y-0 scale-100";
   const pageTransitionStyle = {
@@ -3357,12 +3756,12 @@ export default function App() {
     <main className="min-h-screen bg-[#050816] font-body">
       <GlobalStyles />
       <MarketTicker coins={coins} live={live} />
-      <Navbar currentPage={currentPage} setPage={setPage} />
+      <Navbar currentPage={currentPage} setPage={setPage} goToSection={goToSection} />
       <div
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} />}
+        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} />}
       </div>
       <Footer setPage={setPage} />
     </main>
