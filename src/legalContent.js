@@ -5,7 +5,7 @@ export const privacySections=[
  {
   "t": "Who we are and what this policy covers",
   "b": [
-   "This Privacy Policy explains how Calo Capital (“Calo Capital,” “we,” “us”) collects, uses, shares and protects information when you visit calocapital.io, contact us, or use our services. Our services help businesses learn about financing options and connect with lenders and partners. We are a marketplace and guide, not a lender.",
+   "This Privacy Policy explains how CaloCapital (“CaloCapital,” “we,” “us”) collects, uses, shares and protects information when you visit calocapital.io, contact us, or use our services. Our services help businesses learn about financing options and connect with lenders and partners. We are a marketplace and guide, not a lender.",
    "Words we use: “personal information” means information that identifies you or can reasonably be linked to you, including details about you as a business owner or representative."
   ]
  },
@@ -106,7 +106,7 @@ export const privacySections=[
  {
   "t": "Contact us",
   "b": [
-   "Questions or requests about privacy? Calo Capital, 41 Peabody St, Nashville, TN 37210. Email protection@calocapital.io. Phone (650) 658-6822."
+   "Questions or requests about privacy? CaloCapital, 159 4th Avenue North, Suite 200, Nashville, TN 37219. Email marc@calocapital.io. Phone 917-400-9543."
   ]
  }
 ];
@@ -115,13 +115,13 @@ export const termsSections=[
  {
   "t": "Accepting these terms",
   "b": [
-   "These Terms and Conditions (“Terms”) are an agreement between you and Calo Capital (“Calo Capital,” “we,” “us”). By using calocapital.io or any of our services, you agree to these Terms and to our Privacy Policy. If you do not agree, please do not use the website."
+   "These Terms and Conditions (“Terms”) are an agreement between you and CaloCapital (“CaloCapital,” “we,” “us”). By using calocapital.io or any of our services, you agree to these Terms and to our Privacy Policy. If you do not agree, please do not use the website."
   ]
  },
  {
-  "t": "What Calo Capital does",
+  "t": "What CaloCapital does",
   "b": [
-   "Calo Capital is a financing marketplace and guide. We help businesses learn about options and connect with lenders and partners. We are not a lender, we do not make credit decisions, and we do not guarantee that you will be approved or receive any offer. Lenders set their own rates, fees and terms."
+   "CaloCapital is an independent insurance agency. Insurance products are offered through Marc J. Calo, Licensed Insurance Agent, NPN 17700283. We also help businesses learn about financing options and connect with lenders and partners. We are not a lender, we do not make credit decisions, and we do not guarantee that you will be approved or receive any offer. Lenders set their own rates, fees and terms."
   ]
  },
  {
@@ -175,7 +175,7 @@ export const termsSections=[
  {
   "t": "Our content and your use of the website",
   "b": [
-   "The website, its design, text, logos and other material belong to Calo Capital or our licensors and are protected by law. You may view and use the site for your own business purposes. You may not copy, scrape, resell or modify our content, interfere with the site or its security, try to access it without permission, or use it for anything unlawful or misleading."
+   "The website, its design, text, logos and other material belong to CaloCapital or our licensors and are protected by law. You may view and use the site for your own business purposes. You may not copy, scrape, resell or modify our content, interfere with the site or its security, try to access it without permission, or use it for anything unlawful or misleading."
   ]
  },
  {
@@ -187,13 +187,13 @@ export const termsSections=[
  {
   "t": "Limits on our responsibility",
   "b": [
-   "To the fullest extent the law allows, Calo Capital and its owners, employees and partners are not liable for indirect, incidental, special, consequential or punitive damages, or for lost profits, revenue or data, arising from your use of the website or services. Our total liability for any claim is limited to the maximum extent permitted by law. Some places do not allow these limits, so they may not apply to you."
+   "To the fullest extent the law allows, CaloCapital and its owners, employees and partners are not liable for indirect, incidental, special, consequential or punitive damages, or for lost profits, revenue or data, arising from your use of the website or services. Our total liability for any claim is limited to the maximum extent permitted by law. Some places do not allow these limits, so they may not apply to you."
   ]
  },
  {
   "t": "Your responsibility to us",
   "b": [
-   "You agree to defend and reimburse Calo Capital for claims, losses and costs that come from your misuse of the website, your breach of these Terms, or information you provide that is false or violates someone’s rights."
+   "You agree to defend and reimburse CaloCapital for claims, losses and costs that come from your misuse of the website, your breach of these Terms, or information you provide that is false or violates someone’s rights."
   ]
  },
  {
@@ -211,7 +211,7 @@ export const termsSections=[
  {
   "t": "Contact us",
   "b": [
-   "Questions about these Terms? Calo Capital, 41 Peabody St, Nashville, TN 37210. Email protection@calocapital.io. Phone (650) 658-6822."
+   "Questions about these Terms? CaloCapital, 159 4th Avenue North, Suite 200, Nashville, TN 37219. Email marc@calocapital.io. Phone 917-400-9543."
   ]
  }
 ];

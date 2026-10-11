@@ -1,25 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CandlestickSeries, createChart } from "lightweight-charts";
 import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
 import FinancingSections from "./FinancingSections.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
 import { faqGroups } from "./faqContent.js";
+import { DISCLOSURE, SITE_NAME, SITE_DESCRIPTION, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
 import logoPng from "../public/Calo_purple_logo.png";
-import galaxyCoverPng from "./assets/purple-galaxy.png";
-import hikerPng from "../assets/calo.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
-import whyPartnerBgPng from "../assets/m.png";
-import semiPng from "../assets/semi.png";
-import socialInstagramPng from "../assets/3.png";
-import socialFacebookPng from "../assets/4.png";
-import socialLinkedInPng from "../assets/5.png";
 import lifeDesignPng from "../assets/life-design.png";
 import iraDesignPng from "../assets/IRA-design.png";
 import trustDesignPng from "../assets/Trust-design.png";
 import investmentDesignPng from "../assets/Investment-design.png";
 import cryptoDesignPng from "../assets/Currency-design.png";
 import marketChartDesignPng from "../assets/marketchart-design.png";
-import fourCsPieChartPng from "../assets/piechart.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -29,115 +21,6 @@ const FALLBACK_COINS = [
   { symbol: "XRP", name: "XRP", price: 0.5821, change: 1.12 },
   { symbol: "ADA", name: "Cardano", price: 0.4432, change: -1.03 },
 ];
-
-const CHART_ASSETS = [
-  { group: "Crypto", label: "BTCUSD", display: "BTC/USD", tvSymbol: "COINBASE:BTCUSD", price: 97430, change: 2.14 },
-  { group: "Crypto", label: "ETHUSD", display: "ETH/USD", tvSymbol: "COINBASE:ETHUSD", price: 3812, change: 1.87 },
-  { group: "Crypto", label: "SOLUSD", display: "SOL/USD", tvSymbol: "COINBASE:SOLUSD", price: 172, change: 3.21 },
-  { group: "Crypto", label: "XRPUSD", display: "XRP/USD", tvSymbol: "BITSTAMP:XRPUSD", price: 0.5821, change: 1.12 },
-  { group: "Crypto", label: "ADAUSD", display: "ADA/USD", tvSymbol: "COINBASE:ADAUSD", price: 0.4432, change: -1.03 },
-  { group: "Crypto", label: "DOGEUSD", display: "DOGE/USD", tvSymbol: "COINBASE:DOGEUSD", price: 0.1587, change: 2.42 },
-  { group: "Crypto", label: "AVAXUSD", display: "AVAX/USD", tvSymbol: "COINBASE:AVAXUSD", price: 36.14, change: 1.65 },
-  { group: "Crypto", label: "LINKUSD", display: "LINK/USD", tvSymbol: "COINBASE:LINKUSD", price: 16.88, change: 0.94 },
-  { group: "Stocks", label: "AAPL", display: "AAPL", tvSymbol: "NASDAQ:AAPL", price: 214.32, change: 0.78 },
-  { group: "Stocks", label: "TSLA", display: "TSLA", tvSymbol: "NASDAQ:TSLA", price: 356.41, change: 1.24 },
-  { group: "Stocks", label: "NVDA", display: "NVDA", tvSymbol: "NASDAQ:NVDA", price: 142.11, change: 1.57 },
-  { group: "Stocks", label: "MSFT", display: "MSFT", tvSymbol: "NASDAQ:MSFT", price: 467.23, change: 0.61 },
-  { group: "Stocks", label: "GOOGL", display: "GOOGL", tvSymbol: "NASDAQ:GOOGL", price: 176.48, change: 0.52 },
-  { group: "Commodities", label: "GOLD", display: "Gold", tvSymbol: "OANDA:XAUUSD", price: 3395, change: 1.4 },
-  { group: "Indexes", label: "SPX", display: "S&P 500", tvSymbol: "SP:SPX", price: 6042, change: 0.42 },
-  { group: "ETFs", label: "SPY", display: "SPY", tvSymbol: "AMEX:SPY", price: 590.12, change: 0.39 },
-  { group: "ETFs", label: "QQQ", display: "QQQ", tvSymbol: "NASDAQ:QQQ", price: 521.77, change: 0.55 },
-];
-
-const services = [
-  {
-    title: "Cash Alternatives",
-    description:
-      "Strategic guidance on liquidity planning, cash management, and income-focused approaches designed to support capital preservation.",
-    features: ["Liquidity Planning", "Cash Management", "Income-Focused Strategies", "Capital Preservation"],
-  },
-  {
-    title: "Crypto",
-    description:
-      "Market insight on digital assets, including Bitcoin, Ethereum, and blockchain trends, with a focus on disciplined cryptocurrency strategy.",
-    features: ["Bitcoin and Ethereum Insight", "Cryptocurrency Market Analysis", "Blockchain Trends", "Digital Asset Strategy"],
-  },
-  {
-    title: "Commodities",
-    description:
-      "Perspective on precious metals and energy markets to support portfolio diversification and inflation-aware financial planning.",
-    features: ["Precious Metals Perspective", "Energy Market Analysis", "Diversification Strategy", "Inflation Considerations"],
-  },
-  {
-    title: "Companies",
-    description:
-      "Research-driven analysis of public markets and private opportunities focused on innovation, business quality, and long-term value creation.",
-    features: ["Public Market Opportunities", "Private Opportunity Review", "Innovation Themes", "Long-Term Value Focus"],
-  },
-];
-
-const serviceIds = services.map((service) => service.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
-const serviceMarks = services.map((_, index) => String(index + 1).padStart(2, "0"));
-const serviceTextures = [
-  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Cash Layer" },
-  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Digital Layer" },
-  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Real Asset Layer" },
-  { panel: "bg-[linear-gradient(180deg,rgba(26, 35, 64,0.9)_0%,rgba(5, 8, 22,0.96)_100%)]", accent: "Business Layer" },
-];
-
-const socialLinks = [
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/calocapital/",
-    ariaLabel: "Open Calo Capital Instagram in a new tab",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" strokeWidth="1.75" />
-        <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="1.75" />
-        <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" />
-      </svg>
-    ),
-  },
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/CaloCapital/",
-    ariaLabel: "Open Calo Capital Facebook in a new tab",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
-        <path d="M14 8.5V7.1c0-.9.6-1.6 1.5-1.6H17V2.5h-1.9C12.5 2.5 11 4.1 11 6.6v1.9H8.9v3.1H11V21h3.1v-9.4h2.5l.4-3.1H14Z" fill="currentColor" />
-      </svg>
-    ),
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/calocapital/posts/?feedView=all",
-    ariaLabel: "Open Calo Capital LinkedIn in a new tab",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="4" stroke="currentColor" strokeWidth="1.75" />
-        <g transform="translate(0.7 0.6) scale(0.92)">
-          <path d="M8.1 10.2h2.7V17H8.1v-6.8ZM9.45 8.9c-.85 0-1.44-.58-1.44-1.32s.59-1.31 1.44-1.31 1.44.58 1.44 1.31c0 .74-.59 1.32-1.44 1.32ZM12.8 10.2h2.6v1c.36-.7 1.15-1.2 2.28-1.2 1.88 0 3.02 1.18 3.02 3.43V17h-2.7v-3c0-1.01-.38-1.66-1.28-1.66-.86 0-1.45.57-1.45 1.58V17h-2.47v-6.8Z" fill="currentColor" />
-        </g>
-      </svg>
-    ),
-  },
-];
-
-function SocialLink({ item }) {
-  return (
-    <a
-      href={item.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={item.ariaLabel}
-        className="inline-flex items-center gap-2 rounded-full border border-[#B7C0D8]/10 bg-white/[0.03] px-4 py-2 text-sm font-semibold text-[#B7C0D8] transition hover:border-[#C6B8FF]/35 hover:bg-[#6D5EF5]/10 hover:text-[#F4F7FB]"
-    >
-      {item.icon}
-      <span>{item.label}</span>
-    </a>
-  );
-}
 
 const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
 const FINANCIAL_TOPICS_ROUTE = "/financial-topics";
@@ -458,20 +341,6 @@ async function sendInquiryEmail(templateId, templateParams) {
   return emailjs.send(EMAILJS_SERVICE_ID, templateId, templateParams);
 }
 
-function readStoredList(storageKey) {
-  try {
-    return JSON.parse(localStorage.getItem(storageKey) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function storeInquiry(storageKey, entry) {
-  const existing = readStoredList(storageKey);
-  localStorage.setItem(storageKey, JSON.stringify([entry, ...existing]));
-  return existing.length + 1;
-}
-
 function formatPrice(price) {
   if (price >= 1000) return `$${price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
   if (price >= 1) return `$${price.toFixed(2)}`;
@@ -499,12 +368,10 @@ function buildTickerItems(coins) {
 
   return [
     ...cryptoItems,
-    { symbol: "AAPL", name: "Apple", price: 214.32, change: 0.78 },
-    { symbol: "TSLA", name: "Tesla", price: 356.41, change: 1.24 },
-    { symbol: "NVDA", name: "NVIDIA", price: 142.11, change: 1.57 },
-    { symbol: "MSFT", name: "Microsoft", price: 467.23, change: 0.61 },
-    { symbol: "SPY", name: "S&P 500 ETF", price: 590.12, change: 0.39 },
-    { symbol: "QQQ", name: "Nasdaq 100 ETF", price: 521.77, change: 0.55 },
+    { symbol: "S&P 500", name: "S&P 500", price: 5900.0, change: 0.39, kind: "index" },
+    { symbol: "Nasdaq Composite", name: "Nasdaq Composite", price: 18900.0, change: 0.55, kind: "index" },
+    { symbol: "Dow Jones", name: "Dow Jones", price: 43500.0, change: 0.21, kind: "index" },
+    { symbol: "10-Year Treasury", name: "10-year Treasury yield", price: 4.25, change: 0.02, kind: "yield" },
   ];
 }
 
@@ -594,12 +461,17 @@ function MarketTicker({ coins, live }) {
         <span className="rounded-full border border-[#6D5EF5]/25 bg-[#6D5EF5]/10 px-2 py-1 text-[#9B7CFF]">
           {live ? "Live" : "Fallback"}
         </span>
+        <span className="hidden whitespace-nowrap text-[10px] font-semibold normal-case tracking-normal text-[#B7C0D8] lg:inline">
+          Market data for information only, may be delayed.
+        </span>
         <div className="min-w-0 flex-1 overflow-hidden">
           <div className="ticker-track flex w-max items-center gap-3 whitespace-nowrap sm:gap-6">
             {items.map((item, index) => (
               <div key={`${item.symbol}-${index}`} className="flex items-center gap-2 whitespace-nowrap text-[#B7C0D8]">
                 <span className="text-[#B7C0D8]">{item.symbol}</span>
-                <span className="font-body text-[#F4F7FB]">{formatPrice(item.price)}</span>
+                <span className="font-body text-[#F4F7FB]">
+                  {item.kind === "yield" ? `${item.price.toFixed(2)}%` : item.kind === "index" ? item.price.toLocaleString(undefined, { maximumFractionDigits: 0 }) : formatPrice(item.price)}
+                </span>
                 <span className={item.change >= 0 ? "text-[#9B7CFF]" : "text-[#C6B8FF]"}>
                   {item.change >= 0 ? "+" : ""}{item.change.toFixed(2)}%
                 </span>
@@ -617,12 +489,12 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
     <div className="flex min-w-0 items-center gap-2.5">
       <img
         src={logoPng}
-        alt="Calo Capital Logo"
+        alt="CaloCapital Logo"
         className={`${logoSizeClass} w-auto shrink-0 self-center object-contain`}
         style={{ background: 'transparent' }}
       />
       <div className="min-w-0 text-left leading-tight">
-        <p className={`${textSizeClass} font-black tracking-wide text-[#F4F7FB]`}>Calo Capital</p>
+        <p className={`${textSizeClass} font-black tracking-wide text-[#F4F7FB]`}>CaloCapital</p>
         <p className={`${taglineClass} whitespace-normal`}>Where Strategy Meets Legacy</p>
       </div>
     </div>
@@ -693,8 +565,7 @@ function scrollToFinancialTopicsLocation() {
 }
 
 function getHomeSectionFromPage(page) {
-  if (page === "Explore" || page === "Why invest") return "crypto-candlestick";
-  if (page === "Contact") return "contact";
+    if (page === "Contact") return "contact";
   return "";
 }
 
@@ -723,7 +594,6 @@ const NAV_ITEMS = [
     section: "financing",
     children: [
       { label: "Industries", section: "industries" },
-      { label: "Market", section: "crypto-candlestick" },
       { label: "Resources", section: "resources" },
       { label: "FAQs", page: "FAQs" },
     ],
@@ -771,7 +641,7 @@ function Navbar({ currentPage, setPage, goToSection }) {
   return (
     <header className="sticky top-0 z-50 border-b border-[#B7C0D8]/10 bg-[#050816]/90 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-[min(96vw,1500px)] items-center justify-between gap-4 px-4 py-3 sm:px-5">
-        <button onClick={() => handleClick({ section: "home" })} aria-label="Calo Capital home" className="shrink-0 text-left">
+        <button onClick={() => handleClick({ section: "home" })} aria-label="CaloCapital home" className="shrink-0 text-left">
           <Logo />
         </button>
 
@@ -854,1061 +724,6 @@ function Navbar({ currentPage, setPage, goToSection }) {
         </div>
       )}
     </header>
-  );
-}
-
-function FloatingStars() {
-  const stars = useMemo(
-    () =>
-      Array.from({ length: 26 }, (_, index) => ({
-        id: index,
-        left: `${(index * 37) % 100}%`,
-        top: `${(index * 19) % 100}%`,
-        delay: `${(index % 7) * 0.6}s`,
-        duration: `${3 + (index % 5)}s`,
-      })),
-    []
-  );
-
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {stars.map((star) => (
-        <span
-          key={star.id}
-          className="absolute h-1 w-1 animate-pulse rounded-full bg-white/70 shadow-[0_0_18px_rgba(255,255,255,0.9)]"
-          style={{ left: star.left, top: star.top, animationDelay: star.delay, animationDuration: star.duration }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function MovingClouds() {
-  return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-48 overflow-hidden">
-      <div className="cloud-layer cloud-layer-one absolute bottom-[-52px] left-0 h-36 w-[220%] opacity-70" />
-      <div className="cloud-layer cloud-layer-two absolute bottom-[-68px] left-0 h-44 w-[240%] opacity-55" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050816] via-[#050816]/75 to-transparent" />
-    </div>
-  );
-}
-
-function TradingViewChart({ symbol }) {
-  const containerRef = useRef(null);
-  const widgetRef = useRef(null);
-
-  useEffect(() => {
-    if (!containerRef.current || !widgetRef.current) return;
-
-    const resolvedSymbol = String(symbol || "").includes(":")
-      ? String(symbol).toUpperCase()
-      : `BITSTAMP:${String(symbol || "BTCUSD").toUpperCase()}`;
-
-    widgetRef.current.innerHTML = "";
-    containerRef.current.querySelectorAll("script[data-tv-widget='advanced-chart']").forEach((node) => node.remove());
-
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.async = true;
-    script.dataset.tvWidget = "advanced-chart";
-    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-    // Free TradingView Advanced Chart widget does not expose direct toolbar/timeframe selected-state color overrides.
-    // Use the closest supported settings via `overrides`, `studies_overrides`, and widget-level palette options.
-    script.text = JSON.stringify({
-      autosize: true,
-      symbol: resolvedSymbol,
-      interval: "240",
-      timezone: "Etc/UTC",
-      theme: "dark",
-      style: "1",
-      locale: "en",
-      allow_symbol_change: false,
-      withdateranges: true,
-      details: true,
-      studies: [],
-      hide_side_toolbar: false,
-      hide_top_toolbar: false,
-      save_image: true,
-      calendar: false,
-      toolbar_bg: "#050816",
-      watchlist: [
-        "BITSTAMP:BTCUSD",
-        "COINBASE:ETHUSD",
-        "NASDAQ:AAPL",
-        "NASDAQ:TSLA",
-        "NASDAQ:NVDA",
-        "TVC:GOLD",
-        "SP:SPX",
-      ],
-      overrides: {
-        "paneProperties.background": "#050816",
-        "paneProperties.vertGridProperties.color": "#1A2340",
-        "paneProperties.horzGridProperties.color": "#1A2340",
-        "paneProperties.crossHairProperties.color": "#C6B8FF",
-        "paneProperties.crossHairProperties.style": 2,
-        "scalesProperties.textColor": "#B7C0D8",
-        "scalesProperties.lineColor": "#1A2340",
-        "mainSeriesProperties.candleStyle.upColor": "#6D5EF5",
-        "mainSeriesProperties.candleStyle.downColor": "#F4F7FB",
-        "mainSeriesProperties.candleStyle.borderUpColor": "#6D5EF5",
-        "mainSeriesProperties.candleStyle.borderDownColor": "#F4F7FB",
-        "mainSeriesProperties.candleStyle.wickUpColor": "#6D5EF5",
-        "mainSeriesProperties.candleStyle.wickDownColor": "#F4F7FB",
-        "symbolWatermarkProperties.color": "#1A2340",
-      },
-      studies_overrides: {
-        "volume.volume.color.0": "#F4F7FB",
-        "volume.volume.color.1": "#6D5EF5",
-      },
-    });
-
-    containerRef.current.appendChild(script);
-
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.querySelectorAll("script[data-tv-widget='advanced-chart']").forEach((node) => node.remove());
-      }
-      if (widgetRef.current) widgetRef.current.innerHTML = "";
-    };
-  }, [symbol]);
-
-  return (
-    <div className="tradingview-widget-container w-full h-full">
-      <div
-        ref={containerRef}
-        className="w-full h-full"
-      >
-        <div
-          ref={widgetRef}
-        className="tradingview-widget-container__widget w-full h-full"
-        />
-      </div>
-    </div>
-  );
-}
-
-function StockChart({ coins }) {
-  const [selectedSymbol, setSelectedSymbol] = useState("BTCUSD");
-  const selectedAsset = CHART_ASSETS.find((asset) => asset.label === selectedSymbol) || CHART_ASSETS[0];
-
-  return (
-    <div className="relative overflow-hidden rounded-3xl border border-[#C6B8FF]/20 bg-[#050816]/85 p-4 shadow-2xl shadow-[#050816]/35 backdrop-blur-md sm:p-5">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.32em] text-[#B7C0D8]">Asset Selector</p>
-          <p className="mt-1 text-xs text-[#B7C0D8]">Switch between crypto, stocks, and ETFs</p>
-        </div>
-        <label className="flex flex-col gap-2 text-xs font-black uppercase tracking-[0.28em] text-[#B7C0D8] sm:flex-row sm:items-center sm:gap-3">
-          <span className="whitespace-nowrap">Asset</span>
-          <select
-            value={selectedSymbol}
-            onChange={(event) => setSelectedSymbol(event.target.value)}
-            className="w-full min-w-0 rounded-xl border border-[#B7C0D8]/10 bg-[#050816] px-3 py-2 font-body text-xs font-black tracking-[0.18em] text-[#F4F7FB] outline-none transition focus:border-[#C6B8FF]/40 sm:min-w-[180px] sm:w-auto"
-          >
-            <optgroup label="Crypto">
-              {CHART_ASSETS.filter((asset) => asset.group === "Crypto").map((asset) => (
-                <option key={asset.label} value={asset.label}>
-                  {asset.label}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="Stocks">
-              {CHART_ASSETS.filter((asset) => asset.group === "Stocks").map((asset) => (
-                <option key={asset.label} value={asset.label}>
-                  {asset.label}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="ETFs">
-              {CHART_ASSETS.filter((asset) => asset.group === "ETFs").map((asset) => (
-                <option key={asset.label} value={asset.label}>
-                  {asset.label}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-        </label>
-      </div>
-
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-body text-xs font-black text-[#B7C0D8]">{selectedAsset.display}</span>
-            <span className="rounded bg-[#6D5EF5]/10 px-2 py-0.5 text-xs font-bold text-[#9B7CFF]">INTERACTIVE</span>
-          </div>
-          <p className="mt-1 font-body text-2xl font-black text-[#F4F7FB] sm:text-3xl">{formatPrice(selectedAsset.price)}</p>
-        </div>
-        <div className="text-left sm:text-right">
-          <p className={selectedAsset.change >= 0 ? "font-body text-lg font-black text-[#9B7CFF] sm:text-xl" : "font-body text-lg font-black text-[#C6B8FF] sm:text-xl"}>{selectedAsset.change >= 0 ? "+" : ""}{selectedAsset.change.toFixed(2)}%</p>
-          <p className="text-xs text-[#B7C0D8]">24h Performance</p>
-        </div>
-      </div>
-      <div className="relative overflow-visible rounded-2xl border border-[#C6B8FF]/20 bg-[#050816] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="pointer-events-none absolute left-3 top-3 rounded-full border border-[#C6B8FF]/25 bg-[#050816]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#9B7CFF]">
-          Momentum
-        </div>
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-[#C6B8FF]/25 bg-[#050816]/65 px-2 py-0.5 font-body text-[10px] font-black uppercase tracking-[0.16em] text-[#9B7CFF]">
-          Trend
-        </div>
-        <div className="relative z-20 h-[320px] w-full sm:h-[420px] lg:h-[500px]">
-          <TradingViewChart symbol={selectedAsset.tvSymbol} />
-        </div>
-      </div>
-
-    </div>
-  );
-}
-
-function ServicesSection() {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(reducedMotionQuery.matches);
-
-    if (reducedMotionQuery.matches) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  function revealStyle(delayMs) {
-    if (reduceMotion) {
-      return { opacity: 1, transform: "none" };
-    }
-
-    return {
-      opacity: isVisible ? 1 : 0,
-      transform: isVisible ? "translateY(0)" : "translateY(20px)",
-      transition: `opacity 620ms ease-out ${delayMs}ms, transform 620ms ease-out ${delayMs}ms`,
-    };
-  }
-
-  function dividerStyle(delayMs) {
-    if (reduceMotion) {
-      return { opacity: 1, transform: "scaleX(1)" };
-    }
-
-    return {
-      opacity: isVisible ? 1 : 0,
-      transform: isVisible ? "scaleX(1)" : "scaleX(0)",
-      transformOrigin: "left center",
-      transition: `opacity 520ms ease-out ${delayMs}ms, transform 520ms ease-out ${delayMs}ms`,
-    };
-  }
-
-  return (
-    <section ref={sectionRef} id="services" className="cc-guidance-section px-5 pb-20 pt-12 text-[#F4F7FB] sm:pb-24 sm:pt-16">
-      <style>{`
-        .cc-guidance-section {
-          background-color: #050816;
-        }
-        .cc-guidance-inner {
-          margin: 0 auto;
-          width: 100%;
-          max-width: 94vw;
-        }
-        .cc-guidance-intro {
-          width: 100%;
-          max-width: min(68%, 980px);
-        }
-        .cc-guidance-eyebrow {
-          color: #9B7CFF;
-          font-family: var(--font-body);
-          font-size: 0.75rem;
-          font-weight: 700;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-        }
-        .cc-guidance-eyebrow-line {
-          margin-top: 0.7rem;
-          height: 1px;
-          width: 70px;
-          background: #9B7CFF;
-        }
-        .cc-guidance-title {
-          margin-top: 1.6rem;
-          color: #F4F7FB;
-          font-family: var(--font-display);
-          font-size: clamp(2.05rem, 5.6vw, 4.2rem);
-          font-weight: 700;
-          letter-spacing: -0.02em;
-          line-height: 1.08;
-          text-wrap: balance;
-        }
-        .cc-guidance-title-accent {
-          color: #9B7CFF;
-        }
-        .cc-guidance-body {
-          margin-top: 1.7rem;
-          max-width: 48rem;
-          color: #b7c0d8;
-          font-size: clamp(1rem, 1.4vw, 1.125rem);
-          line-height: 1.68;
-        }
-        .cc-guidance-divider {
-          margin-top: 2.6rem;
-          border-top: 1px solid #1A2340;
-        }
-        .cc-guidance-grid {
-          margin-top: 2.25rem;
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 0;
-        }
-        .cc-guidance-col {
-          padding: 0 1.35rem;
-        }
-        .cc-guidance-col + .cc-guidance-col {
-          border-left: 1px solid #1A2340;
-        }
-        .cc-guidance-col-title {
-          color: #F4F7FB;
-          font-family: var(--font-display);
-          font-size: clamp(1.65rem, 2.2vw, 2.15rem);
-          font-weight: 600;
-          letter-spacing: -0.02em;
-          line-height: 1.1;
-        }
-        .cc-guidance-col-line {
-          margin-top: 0.8rem;
-          height: 1px;
-          width: 40px;
-          background: #9B7CFF;
-        }
-        .cc-guidance-col-body {
-          margin-top: 1rem;
-          color: #b7c0d8;
-          font-size: 0.98rem;
-          line-height: 1.75;
-        }
-        .cc-guidance-list {
-          margin-top: 1rem;
-          padding-left: 1.1rem;
-          color: #b7c0d8;
-          font-size: 0.9rem;
-          line-height: 1.78;
-        }
-        .cc-guidance-list li::marker {
-          color: #9B7CFF;
-        }
-
-        @media (max-width: 1279px) {
-          .cc-guidance-intro {
-            max-width: 80%;
-          }
-          .cc-guidance-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-          .cc-guidance-col {
-            padding: 1.35rem 1.1rem;
-          }
-          .cc-guidance-col + .cc-guidance-col {
-            border-left: none;
-          }
-          .cc-guidance-col:nth-child(2n) {
-            border-left: 1px solid #1A2340;
-          }
-          .cc-guidance-col:nth-child(n + 3) {
-            border-top: 1px solid #1A2340;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .cc-guidance-intro {
-            max-width: 100%;
-          }
-          .cc-guidance-title {
-            font-size: clamp(1.85rem, 9.2vw, 2.65rem);
-            line-height: 1.1;
-          }
-          .cc-guidance-body {
-            margin-top: 1.45rem;
-            line-height: 1.65;
-          }
-          .cc-guidance-divider {
-            margin-top: 2.1rem;
-          }
-          .cc-guidance-grid {
-            margin-top: 1.8rem;
-          }
-          .cc-guidance-grid {
-            grid-template-columns: 1fr;
-          }
-          .cc-guidance-col {
-            padding: 1.15rem 0;
-          }
-          .cc-guidance-col:nth-child(2n),
-          .cc-guidance-col + .cc-guidance-col {
-            border-left: none;
-          }
-          .cc-guidance-col + .cc-guidance-col {
-            border-top: 1px solid #1A2340;
-          }
-          .cc-guidance-col:nth-child(n + 3) {
-            border-top: 1px solid #1A2340;
-          }
-        }
-      `}</style>
-
-      <div className="cc-guidance-inner">
-        <div className="cc-guidance-intro">
-          <p className="cc-guidance-eyebrow" style={revealStyle(0)}>Strategic Financial Guidance</p>
-          <div className="cc-guidance-eyebrow-line" style={revealStyle(70)} />
-
-          <h2 className="cc-guidance-title" style={revealStyle(140)}>
-            Financial Consulting for
-            <br />
-            Long-Term Wealth <span className="cc-guidance-title-accent">Planning</span>
-          </h2>
-
-          <p className="cc-guidance-body" style={revealStyle(230)}>
-            Calo Capital serves individuals, families, and business owners with personalized financial guidance, market insights, and investment strategy. Our four pillars support financial planning, portfolio diversification, and a long-term wealth strategy across changing economic trends.
-          </p>
-        </div>
-
-        <div className="cc-guidance-divider" style={dividerStyle(320)} />
-
-        <div className="cc-guidance-grid">
-          {services.map((service, index) => (
-            <article id={serviceIds[index]} key={service.title} className="cc-guidance-col" style={revealStyle(390 + index * 90)}>
-              <h3 className="cc-guidance-col-title">{service.title}</h3>
-              <div className="cc-guidance-col-line" />
-              <p className="cc-guidance-col-body">{service.description}</p>
-              <ul className="cc-guidance-list">
-                {service.features.map((feature) => (
-                  <li key={`${service.title}-${feature}`}>{feature}</li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PageHeader({ eyebrow, title, description }) {
-  return (
-    <section className="relative overflow-hidden bg-[#050816] px-5 py-20 text-[#F4F7FB]">
-      <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: `url(${hikerPng})` }} />
-      <div className="relative mx-auto w-full max-w-[94vw]">
-        <Logo />
-        <p className="mt-10 text-sm font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{eyebrow}</p>
-        <h1 className="mt-4 max-w-4xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">{title}</h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-[#B7C0D8]">{description}</p>
-      </div>
-    </section>
-  );
-}
-
-function AboutPage() {
-  const sectionRef = useRef(null);
-  const [hasJs, setHasJs] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const headingWords = [
-    { text: "Personalized", accent: false },
-    { text: "Financial", accent: false },
-    { text: "Guidance.", accent: false },
-    { text: "Built", accent: true },
-    { text: "Around", accent: true },
-    { text: "Your", accent: true },
-    { text: "Goals.", accent: true },
-  ];
-  const paragraphWords = [
-    "Calo",
-    "Capital",
-    "provides",
-    "financial",
-    "consulting",
-    "and",
-    "strategic",
-    "advisory",
-    "services",
-    "for",
-    "individuals,",
-    "families,",
-    "and",
-    "business",
-    "owners",
-    "seeking",
-    "clear",
-    "direction",
-    "in",
-    "today's",
-    "financial",
-    "landscape.",
-  ];
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const root = document.documentElement;
-    if (!root.classList.contains("cc-about-js")) {
-      root.classList.add("cc-about-js");
-    }
-
-    setHasJs(true);
-
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const motionReduced = reducedMotionQuery.matches;
-    setReduceMotion(motionReduced);
-
-    if (motionReduced) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <>
-      <section
-        ref={sectionRef}
-        id="about"
-        className={`cc-about-section relative overflow-hidden px-5 py-10 text-[#F4F7FB] sm:py-14 lg:py-8 ${hasJs ? "cc-about-js" : ""} ${isVisible ? "cc-about-animated" : ""} ${reduceMotion ? "cc-about-reduced-motion" : ""}`}
-      >
-        <style>{`
-          .cc-about-section {
-            position: relative;
-            overflow: hidden;
-            isolation: isolate;
-            background: transparent;
-          }
-          .cc-about-inner {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            width: min(100%, 1400px);
-            height: 100%;
-            margin-inline: auto;
-            padding-inline: clamp(1.25rem, 5vw, 5rem);
-          }
-          .cc-about-copy {
-            width: min(100%, 56rem);
-            max-width: 56rem;
-          }
-          .cc-about-eyebrow {
-            display: inline-block;
-            transition-property: opacity, transform, filter;
-            transition-duration: 760ms;
-            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-          }
-          .cc-about-heading {
-            max-width: 14ch;
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 4.6vw, 5rem);
-            font-weight: 700;
-            line-height: 1.01;
-            letter-spacing: -0.03em;
-            overflow-wrap: normal;
-            word-break: normal;
-            text-wrap: pretty;
-          }
-          .cc-about-heading-word {
-            display: inline-block;
-            margin-right: 0.3em;
-            will-change: transform, opacity, filter, letter-spacing;
-            transition-property: opacity, transform, filter, letter-spacing;
-            transition-duration: 920ms;
-            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-          }
-          .cc-about-heading-word:last-child {
-            margin-right: 0;
-          }
-          .cc-about-paragraph {
-            display: block;
-            max-width: 700px;
-            font-size: 18px;
-            transition-property: opacity, transform, filter;
-            transition-duration: 900ms;
-            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-          }
-          .cc-about-underline {
-            display: block;
-            transform-origin: left;
-            transition-property: transform;
-            transition-duration: 900ms;
-            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-          }
-          .cc-about-js .cc-about-animate {
-            opacity: 0;
-          }
-          .cc-about-js .cc-about-eyebrow {
-            transform: translateY(10px);
-            filter: blur(3px);
-          }
-          .cc-about-js .cc-about-heading-word {
-            transform: translateY(18px) scale(0.985);
-            filter: blur(5px);
-            letter-spacing: 0.025em;
-          }
-          .cc-about-js .cc-about-paragraph {
-            transform: translateY(16px);
-            filter: blur(3px);
-          }
-          .cc-about-js .cc-about-underline {
-            transform: scaleX(0);
-          }
-          .cc-about-animated .cc-about-animate,
-          .cc-about-reduced-motion .cc-about-animate {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            filter: blur(0);
-            letter-spacing: 0;
-          }
-          .cc-about-animated .cc-about-underline,
-          .cc-about-reduced-motion .cc-about-underline {
-            transform: scaleX(1);
-          }
-          @media (min-width: 1024px) {
-            .cc-about-copy {
-              width: min(100%, 56rem);
-            }
-          }
-          @media (max-width: 1023px) {
-            .cc-about-copy {
-              width: min(100%, 48rem);
-            }
-          }
-          @media (max-width: 767px) {
-            .cc-about-inner {
-              padding-inline: 1.25rem;
-            }
-            .cc-about-copy {
-              width: 100%;
-              max-width: 100%;
-            }
-            .cc-about-crypto-art-inner {
-              top: auto;
-              right: -8vw;
-              bottom: -9rem;
-              width: min(62vw, 280px);
-              transform: translateX(32px) scale(0.985);
-            }
-            .cc-about-animated .cc-about-crypto-art-inner,
-            .cc-about-reduced-motion .cc-about-crypto-art-inner {
-              transform: translateX(0) scale(1);
-            }
-            .cc-about-heading {
-              max-width: 14ch;
-              font-size: clamp(2.4rem, 9vw, 3.6rem);
-              line-height: 1.03;
-            }
-            .cc-about-paragraph {
-              font-size: 17px;
-            }
-            .cc-about-heading-word {
-              margin-right: 0.22em;
-            }
-            .cc-about-paragraph-word {
-              margin-right: 0.18em;
-            }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .cc-about-eyebrow,
-            .cc-about-heading-word,
-            .cc-about-paragraph-word {
-              opacity: 1 !important;
-              transform: none !important;
-              filter: none !important;
-              letter-spacing: 0 !important;
-              transition: none !important;
-            }
-            .cc-about-crypto-art-inner {
-              opacity: 1 !important;
-              transform: translateY(-50%) !important;
-              filter: none !important;
-              transition: none !important;
-            }
-          }
-        `}</style>
-
-        <div className="cc-about-inner relative">
-          <div className="cc-about-copy">
-            <p className="cc-about-eyebrow cc-about-animate text-xs font-black uppercase tracking-[0.42em] text-[#9B7CFF]" style={reduceMotion ? undefined : { transitionDelay: "0ms" }}>
-              About Calo Capital
-            </p>
-            <h1 className="cc-about-heading mt-6 text-[#F4F7FB]" data-cc-about-split="true">
-              {headingWords.map((word, index) => {
-                const label = word.text;
-                const isAccent = word.accent;
-
-                return (
-                  <span
-                    key={`${label}-${index}`}
-                    className={`cc-about-heading-word cc-about-animate${isAccent ? " text-[#9B7CFF]" : ""}`}
-                    style={
-                      reduceMotion
-                        ? undefined
-                        : {
-                            transitionDelay: `${260 + index * 95}ms`,
-                          }
-                    }
-                  >
-                    {label}
-                  </span>
-                );
-              })}
-            </h1>
-            <p className="cc-about-paragraph cc-about-animate mt-6 text-[22px] leading-[1.6] text-[#F4F7FB]" style={reduceMotion ? undefined : { transitionDelay: "1180ms" }}>
-              {paragraphWords.join(" ")}
-            </p>
-            <div className="cc-about-underline cc-about-animate mt-8 h-px w-12 bg-[#9B7CFF]" style={reduceMotion ? undefined : { transitionDelay: "1550ms" }} />
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
-function CryptoCandlestickSection() {
-  const cryptoSymbols = [
-    { label: "BTC/USD", marketSymbol: "BTCUSDT" },
-    { label: "ETH/USD", marketSymbol: "ETHUSDT" },
-    { label: "SOL/USD", marketSymbol: "SOLUSDT" },
-    { label: "XRP/USD", marketSymbol: "XRPUSDT" },
-    { label: "ADA/USD", marketSymbol: "ADAUSDT" },
-    { label: "DOGE/USD", marketSymbol: "DOGEUSDT" },
-    { label: "AVAX/USD", marketSymbol: "AVAXUSDT" },
-    { label: "LINK/USD", marketSymbol: "LINKUSDT" },
-  ];
-  const [selectedSymbol, setSelectedSymbol] = useState(cryptoSymbols[0].marketSymbol);
-  const [chartStatus, setChartStatus] = useState("Connecting to live market feed...");
-  const chartContainerRef = useRef(null);
-  const chartRef = useRef(null);
-  const seriesRef = useRef(null);
-
-  useEffect(() => {
-    if (!chartContainerRef.current || chartRef.current) return;
-
-    const container = chartContainerRef.current;
-    const chart = createChart(container, {
-      width: container.clientWidth,
-      height: container.clientHeight,
-      layout: {
-        background: { color: "#050816" },
-        textColor: "#B7C0D8",
-      },
-      grid: {
-        vertLines: { color: "#1A2340" },
-        horzLines: { color: "#1A2340" },
-      },
-      crosshair: {
-        vertLine: { color: "#C6B8FF" },
-        horzLine: { color: "#C6B8FF" },
-      },
-      rightPriceScale: {
-        borderColor: "#1A2340",
-      },
-      timeScale: {
-        borderColor: "#1A2340",
-        timeVisible: true,
-      },
-    });
-
-    const series = chart.addSeries(CandlestickSeries, {
-      upColor: "#6D5EF5",
-      downColor: "#F4F7FB",
-      borderUpColor: "#6D5EF5",
-      borderDownColor: "#F4F7FB",
-      wickUpColor: "#6D5EF5",
-      wickDownColor: "#F4F7FB",
-    });
-
-    chartRef.current = chart;
-    seriesRef.current = series;
-
-    const resizeObserver = new ResizeObserver(() => {
-      chart.applyOptions({
-        width: container.clientWidth,
-        height: container.clientHeight,
-      });
-    });
-
-    resizeObserver.observe(container);
-
-    return () => {
-      resizeObserver.disconnect();
-      chart.remove();
-      chartRef.current = null;
-      seriesRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    setChartStatus(`Loading ${selectedSymbol.replace("USDT", "/USD")} market data...`);
-
-    function buildFallbackCandles(basePrice) {
-      const nowSeconds = Math.floor(Date.now() / 1000);
-      const fourHours = 60 * 60 * 4;
-      let current = basePrice;
-
-      return Array.from({ length: 120 }, (_, index) => {
-        const drift = (Math.sin(index / 7) * 0.007 + (Math.random() - 0.5) * 0.01) * current;
-        const open = current;
-        const close = Math.max(0.0001, current + drift);
-        const high = Math.max(open, close) + Math.abs(drift) * 0.45;
-        const low = Math.min(open, close) - Math.abs(drift) * 0.45;
-        current = close;
-
-        return {
-          time: nowSeconds - (120 - index) * fourHours,
-          open,
-          high,
-          low,
-          close,
-        };
-      });
-    }
-
-    async function loadData() {
-      if (!seriesRef.current || !chartRef.current) return;
-
-      const coinbaseProductBySymbol = {
-        BTCUSDT: "BTC-USD",
-        ETHUSDT: "ETH-USD",
-        SOLUSDT: "SOL-USD",
-        XRPUSDT: "XRP-USD",
-        ADAUSDT: "ADA-USD",
-        DOGEUSDT: "DOGE-USD",
-        AVAXUSDT: "AVAX-USD",
-        LINKUSDT: "LINK-USD",
-      };
-      const coinGeckoCoinBySymbol = {
-        BTCUSDT: "bitcoin",
-        ETHUSDT: "ethereum",
-        SOLUSDT: "solana",
-        XRPUSDT: "ripple",
-        ADAUSDT: "cardano",
-        DOGEUSDT: "dogecoin",
-        AVAXUSDT: "avalanche-2",
-        LINKUSDT: "chainlink",
-      };
-      const fallbackPriceBySymbol = {
-        BTCUSDT: 64000,
-        ETHUSDT: 3100,
-        SOLUSDT: 160,
-        XRPUSDT: 0.62,
-        ADAUSDT: 0.45,
-        DOGEUSDT: 0.16,
-        AVAXUSDT: 34,
-        LINKUSDT: 16,
-      };
-
-      function normalizeCandles(candles) {
-        const chartData = candles
-          .map((candle) => ({
-            time: Number(candle.time),
-            low: Number(candle.low),
-            high: Number(candle.high),
-            open: Number(candle.open),
-            close: Number(candle.close),
-          }))
-          .filter((candle) => Number.isFinite(candle.time) && Number.isFinite(candle.low) && Number.isFinite(candle.high) && Number.isFinite(candle.open) && Number.isFinite(candle.close))
-          .sort((a, b) => a.time - b.time);
-
-        if (chartData.length === 0) {
-          throw new Error("No market candle data available");
-        }
-
-        return chartData;
-      }
-
-      async function fetchCoinbaseCandles(product) {
-        // Coinbase candles are [time, low, high, open, close, volume] in reverse-chronological order.
-        const response = await fetch(
-          `https://api.exchange.coinbase.com/products/${product}/candles?granularity=14400`,
-          { headers: { Accept: "application/json" } }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Coinbase request failed: ${response.status}`);
-        }
-
-        const raw = await response.json();
-        if (!Array.isArray(raw) || raw.length === 0) {
-          throw new Error("Coinbase returned no candles");
-        }
-
-        return normalizeCandles(
-          raw.map((candle) => ({
-            time: candle[0],
-            low: candle[1],
-            high: candle[2],
-            open: candle[3],
-            close: candle[4],
-          }))
-        );
-      }
-
-      async function fetchCoinGeckoCandles(coinId) {
-        // CoinGecko OHLC is [timestamp_ms, open, high, low, close].
-        const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=30`,
-          { headers: { Accept: "application/json" } }
-        );
-
-        if (!response.ok) {
-          throw new Error(`CoinGecko request failed: ${response.status}`);
-        }
-
-        const raw = await response.json();
-        if (!Array.isArray(raw) || raw.length === 0) {
-          throw new Error("CoinGecko returned no candles");
-        }
-
-        return normalizeCandles(
-          raw.map((candle) => ({
-            time: Math.floor(Number(candle[0]) / 1000),
-            open: candle[1],
-            high: candle[2],
-            low: candle[3],
-            close: candle[4],
-          }))
-        );
-      }
-
-      try {
-        const product = coinbaseProductBySymbol[selectedSymbol] || "BTC-USD";
-        const coinId = coinGeckoCoinBySymbol[selectedSymbol] || "bitcoin";
-
-        let chartData;
-        try {
-          chartData = await fetchCoinbaseCandles(product);
-        } catch {
-          chartData = await fetchCoinGeckoCandles(coinId);
-        }
-
-        if (cancelled) return;
-
-        seriesRef.current.setData(chartData);
-        chartRef.current.timeScale().fitContent();
-        setChartStatus("Live market feed connected.");
-      } catch {
-        if (cancelled) return;
-        const fallbackBase = fallbackPriceBySymbol[selectedSymbol] || 500;
-        seriesRef.current.setData(buildFallbackCandles(fallbackBase));
-        chartRef.current.timeScale().fitContent();
-        setChartStatus("Live feed temporarily unavailable. Showing fallback candles for visual reference.");
-      }
-    }
-
-    loadData();
-    const refreshIntervalId = window.setInterval(loadData, 3_000);
-
-    return () => {
-      cancelled = true;
-      window.clearInterval(refreshIntervalId);
-    };
-  }, [selectedSymbol]);
-
-  return (
-    <section
-      id="crypto-candlestick"
-      className="relative min-w-0 overflow-hidden bg-transparent px-5 py-8 text-[#F4F7FB] sm:py-10 lg:py-8"
-    >
-      <div className="mx-auto w-full max-w-[min(1400px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Live Crypto Candlestick Chart</p>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {cryptoSymbols.map((item) => (
-            <button
-              key={item.marketSymbol}
-              onClick={() => setSelectedSymbol(item.marketSymbol)}
-              className={selectedSymbol === item.marketSymbol
-                ? "rounded-none border border-[#C6B8FF] bg-[#C6B8FF]/15 px-3 py-1.5 text-xs font-black text-[#F4F7FB]"
-                : "rounded-none border border-[#B7C0D8]/20 bg-transparent px-3 py-1.5 text-xs font-black text-[#9B7CFF] transition hover:border-[#C6B8FF] hover:text-[#F4F7FB]"}
-              aria-pressed={selectedSymbol === item.marketSymbol}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-4 overflow-hidden border border-[#B7C0D8]/15 bg-[#050816]">
-          <div
-            ref={chartContainerRef}
-            role="img"
-            aria-label={`${selectedSymbol.replace("USDT", "/USD")} candlestick chart showing historical four-hour open, high, low, and close prices.`}
-            className="h-[280px] w-full sm:h-[340px] lg:h-[240px]"
-          />
-          <div
-            role="status"
-            aria-live="polite"
-            className={`flex h-[72px] items-center border-t border-[#B7C0D8]/15 px-4 py-3 text-sm leading-5 ${chartStatus.startsWith("Live feed temporarily unavailable") ? "text-[#B7C0D8]" : chartStatus.startsWith("Live market feed connected") ? "text-[#9B7CFF]" : "text-[#B7C0D8]"}`}
-          >
-            {chartStatus}
-          </div>
-          <div className="border-t border-[#B7C0D8]/10 px-4 py-3 text-xs leading-6 text-[#9B7CFF]">
-            Powered by TradingView Lightweight Charts with market data feed for educational chart visualization.
-          </div>
-        </div>
-
-        <div className="mt-4 bg-white/[0.02] p-4">
-          <div>
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Understanding Market Charts</p>
-              <h3 className="mt-1 text-lg font-black text-[#F4F7FB] sm:text-xl">
-                Candlesticks show price movement, <span className="text-[#9B7CFF]">not certainty.</span>
-              </h3>
-              <p className="mt-1 text-sm leading-5 text-[#F4F7FB]">
-                Each candle shows the opening, closing, highest, and lowest prices for a time period. Green or purple candles usually mean prices moved up, while lighter candles can signal a move down.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-function GalaxyBackground({ shootingStars = false }) {
-  return (
-    <div className="calo-after-chart-sky" aria-hidden="true">
-      {shootingStars && <><i /><i /><i /></>}
-    </div>
   );
 }
 
@@ -2277,280 +1092,89 @@ function FinancialTopicsSection() {
   );
 }
 
-function FinancialTopicsPage() {
+const FOUR_CS = [
+  ["Cash", "the money you need to stay reachable and stable. We look at where guarantees can help, such as cash value life insurance and fixed annuities."],
+  ["Crypto", "digital assets you already hold. We look at how they're kept secure and how your family would access them if something happened to you."],
+  ["Commodities", "real and tangible assets you own. We look at how they'd be valued and settled for your heirs, and whether there's enough liquidity to do it without a forced sale."],
+  ["Companies", "the business you own or lead. We look at what happens to it if a key person dies or a partner leaves, through key person coverage, buy-sell funding and succession planning."],
+];
+
+function AgencyIntro({ navigate }) {
+  const go = (event, href) => {
+    event.preventDefault();
+    navigate(href);
+  };
   return (
-    <>
-      <FourCsPage />
-      <FinancialTopicsSection />
-    </>
-  );
-}
-
-function FourCsPage() {
-  const [activeCard, setActiveCard] = useState(null);
-  const [pinnedCard, setPinnedCard] = useState(null);
-  const fourCsCards = services.map((service, index) => {
-    const cardMeaning =
-      index === 0
-        ? "Cash alternatives are the more liquid or income-oriented places money may be held when the goal is to preserve capital and keep funds accessible."
-        : index === 1
-          ? "Crypto represents digital assets and blockchain exposure, where volatility, custody, and security matter just as much as opportunity."
-          : index === 2
-            ? "Commodities focus on tangible assets like metals and energy that may behave differently from cash or equity markets."
-            : "Companies refers to investing in businesses, where fundamentals, innovation, and long-term value creation drive the conversation.";
-
-    const cardExample =
-      index === 0
-        ? "Examples: money market funds, treasury-style holdings, or other liquid approaches used to manage cash efficiently."
-        : index === 1
-          ? "Examples: Bitcoin, Ethereum, and other digital assets considered alongside wallet security and exchange risk."
-          : index === 2
-            ? "Examples: gold, silver, energy exposure, and other real-asset themes used for diversification."
-            : "Examples: public-market research, private opportunity review, and long-term business quality analysis.";
-
-    const questionText = index === 1 ? `What is ${service.title}?` : `What are ${service.title}?`;
-
-    return {
-      ...service,
-      mark: serviceMarks[index],
-      texture: serviceTextures[index],
-      question: questionText,
-      meaning: cardMeaning,
-      example: cardExample,
-    };
-  });
-
-  function toggleCard(index) {
-    setPinnedCard((current) => (current === index ? null : index));
-  }
-
-  return (
-    <section id="four-cs" className="cc-slow-fade bg-[#050816] px-5 pb-12 pt-16 text-[#F4F7FB] sm:pb-16 sm:pt-20">
-      <div className="mx-auto w-full max-w-[min(1200px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Our Four C&apos;s</p>
-        <h1 className="mt-4 max-w-4xl text-[34px] font-black leading-[1.05] tracking-[-0.02em] text-[#F4F7FB]">
-          The four pillars behind our approach to wealth planning.
-        </h1>
-        <p className="mt-5 max-w-3xl text-[22px] leading-[1.6] text-[#B7C0D8]">
-          Calo Capital uses these four focus areas to guide conversations around liquidity, digital assets, real assets, and business opportunities.
-        </p>
-
-        <style>{`
-          .four-cs-panels {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            min-height: 0;
-            gap: 1px;
-            overflow: hidden;
-            border: 1px solid rgba(198, 184, 255, 0.28);
-            background: rgba(198, 184, 255, 0.28);
-          }
-          .four-cs-panel {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            min-height: 360px;
-            overflow: hidden;
-            color: #f4f7fb;
-            background-color: #050816;
-            background-image: linear-gradient(180deg, rgba(5, 8, 22, 0.52), rgba(5, 8, 22, 0.9)), var(--four-cs-cover);
-            background-position: center;
-            background-size: cover;
-            transition: min-height 600ms cubic-bezier(0.22, 1, 0.36, 1), background 600ms ease, box-shadow 600ms ease;
-          }
-          .four-cs-panel.is-active {
-            min-height: 520px;
-            background-image: linear-gradient(140deg, rgba(109, 94, 245, 0.44), rgba(5, 8, 22, 0.82) 72%), var(--four-cs-cover);
-            box-shadow: inset 0 0 0 1px rgba(198, 184, 255, 0.2);
-          }
-          .four-cs-panel-button {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            border: 0;
-            background: transparent;
-            color: inherit;
-            text-align: left;
-          }
-          .four-cs-panel-button:focus-visible {
-            outline: 2px solid #C6B8FF;
-            outline-offset: -5px;
-          }
-          .four-cs-panel-rail {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 24px 22px 18px;
-            pointer-events: none;
-          }
-          .four-cs-panel-number {
-            color: #9B7CFF;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-          }
-          .four-cs-panel-title {
-            color: #B7C0D8;
-            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.05;
-          }
-          .four-cs-panel-content {
-            position: relative;
-            z-index: 1;
-            min-width: 0;
-            max-height: 0;
-            overflow: hidden;
-            padding: 0 22px;
-            opacity: 0;
-            transform: translateY(16px);
-            transition: max-height 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease 80ms, transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 40ms, padding 600ms ease;
-            pointer-events: none;
-          }
-          .four-cs-panel.is-active .four-cs-panel-content {
-            display: block;
-            max-height: 560px;
-            padding: 0 22px 22px;
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-          }
-          .four-cs-panel-content h2,
-          .four-cs-panel-content p {
-            max-width: 31rem;
-          }
-          .four-cs-illustration {
-            display: none !important;
-          }
-          @media (min-width: 768px) {
-            .four-cs-panels {
-              gap: 16px;
-              border: 0;
-              background: transparent;
-              overflow: visible;
-            }
-            .four-cs-panel {
-              border: 1px solid rgba(198, 184, 255, 0.28);
-            }
-          }
-          @media (max-width: 767px) {
-            .four-cs-panels {
-              display: block;
-              min-height: 0;
-            }
-            .four-cs-panel {
-              display: block;
-              min-height: 74px;
-              border-bottom: 1px solid rgba(198, 184, 255, 0.2);
-              transition: min-height 560ms cubic-bezier(0.22, 1, 0.36, 1), background 560ms ease;
-            }
-            .four-cs-panel:last-child {
-              border-bottom: 0;
-            }
-            .four-cs-panel.is-active {
-              min-height: 0;
-            }
-            .four-cs-panel-rail {
-              width: 100%;
-              height: 74px;
-              flex-direction: row;
-              align-items: center;
-              padding: 18px 20px;
-            }
-            .four-cs-panel-title {
-              writing-mode: horizontal-tb;
-              transform: none;
-              font-size: 1rem;
-            }
-            .four-cs-panel-content {
-              display: block;
-              max-height: 0;
-              padding: 0 20px;
-              transform: translateY(10px);
-            }
-            .four-cs-panel.is-active .four-cs-panel-content {
-              display: block;
-              grid-template-columns: none;
-              max-height: 700px;
-              padding: 8px 20px 24px;
-            }
-            .four-cs-illustration {
-              min-height: 120px;
-              margin-top: 22px;
-            }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .four-cs-panel,
-            .four-cs-panel-content,
-            .four-cs-illustration {
-              transition-duration: 0.01ms;
-              transition-delay: 0ms;
-            }
-          }
-        `}</style>
-        <div className="four-cs-panels mt-10" role="list">
-          {fourCsCards.map((service, index) => {
-            const isActive = pinnedCard === null ? activeCard === index : pinnedCard === index;
-
-            return (
-              <article
-                key={service.title}
-                id={serviceIds[index]}
-                role="listitem"
-                className={`four-cs-panel${isActive ? " is-active" : ""}`}
-                style={{ "--four-cs-cover": `url(${galaxyCoverPng})` }}
-                onMouseEnter={() => setActiveCard(index)}
-                onMouseLeave={() => setActiveCard(null)}
-              >
-                <button
-                  type="button"
-                  className="four-cs-panel-button"
-                  onClick={() => toggleCard(index)}
-                  onFocus={() => setActiveCard(index)}
-                  onBlur={() => setActiveCard(null)}
-                  aria-expanded={isActive}
-                  aria-controls={`${serviceIds[index]}-content`}
-                >
-                  <span className="sr-only">{isActive ? "Collapse" : "Expand"} {service.title}</span>
-                </button>
-                <div className="four-cs-panel-rail" aria-hidden="true">
-                  <span className="four-cs-panel-number">{service.mark}</span>
-                  <span className="four-cs-panel-title">{service.title}</span>
-                </div>
-                <div id={`${serviceIds[index]}-content`} className="four-cs-panel-content">
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-[#9B7CFF]">{service.texture.accent}</p>
-                  <h2 className="mt-4 text-[clamp(1.65rem,3vw,2.5rem)] font-black leading-[1.03] text-[#F4F7FB]">{service.question}</h2>
-                  <div className="mt-5 space-y-4 text-sm leading-7 text-[#B7C0D8] sm:text-base">
-                    <p>{service.meaning}</p>
-                    <p>{service.example}</p>
-                  </div>
-                  <div className="four-cs-illustration" aria-hidden="true" />
-                </div>
-              </article>
-            );
-          })}
+    <section id="agency" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
+      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME}</p>
+        <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Independent insurance agency in Nashville, Tennessee</h2>
+        <p className="mt-6 max-w-3xl text-[20px] leading-[1.6] text-[#B7C0D8]">{SITE_DESCRIPTION}</p>
+        <div className="mt-10 grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))" }}>
+          {[
+            ["Life Insurance", "/life-insurance", "Coverage for families and business owners, including cash value life insurance."],
+            ["Fixed Annuities", "/fixed-annuities", "Guarantees and retirement income."],
+            ["Business Owner Coverage", "/business-owner-coverage", "Key person coverage, buy-sell funding and succession planning."],
+            ["Digital Asset Services", "/digital-asset-services", "Hold, use and pass on digital assets with institutional-grade infrastructure."],
+          ].map(([title, href, text]) => (
+            <a key={href} href={href} onClick={(event) => go(event, href)} className="rounded-2xl border border-[#B7C0D8]/20 bg-white/5 p-6 transition hover:border-[#C6B8FF]">
+              <h3 className="text-xl font-black">{title}</h3>
+              <p className="mt-3 text-[15px] leading-[1.6] text-[#B7C0D8]">{text}</p>
+            </a>
+          ))}
         </div>
-
+        <a href="/contact" onClick={(event) => go(event, "/contact")} className="mt-10 inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
+          Book a call
+        </a>
       </div>
     </section>
   );
 }
 
-const socialMediaIcons = [
-  { label: "Instagram", src: socialInstagramPng, href: "https://www.instagram.com/calocapital/" },
-  { label: "Facebook", src: socialFacebookPng, href: "https://www.facebook.com/CaloCapital/" },
-  { label: "LinkedIn", src: socialLinkedInPng, href: "https://www.linkedin.com/company/calocapital/posts/?feedView=all" },
-];
+function FourCs() {
+  return (
+    <section id="four-cs" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
+      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
+        <h2 className="text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">The Four C's: how we look at the whole picture</h2>
+        <p className="mt-6 max-w-3xl text-[20px] leading-[1.6] text-[#B7C0D8]">
+          Before we recommend any insurance, we look at what a family or business already has, in four areas, and ask how each one is protected and passed on.
+        </p>
+        <div className="mt-10 grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))" }}>
+          {FOUR_CS.map(([name, text]) => (
+            <div key={name} className="rounded-2xl border border-[#B7C0D8]/20 bg-white/5 p-6">
+              <p className="text-[16px] leading-[1.6] text-[#B7C0D8]"><strong className="text-[#C6B8FF]">{name}:</strong> {text}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-8 max-w-3xl text-[15px] italic leading-[1.6] text-[#B7C0D8]">
+          The Four C's is an educational framework for planning conversations. CaloCapital does not provide investment advice or recommend any security, digital asset or commodity.
+        </p>
+      </div>
+    </section>
+  );
+}
 
-const FORM_ENDPOINT = "https://formsubmit.co/ajax/protection@calocapital.io";
+function SiteDisclosure() {
+  return (
+    <aside className="border-t border-[#B7C0D8]/15 bg-[#050816] px-5 py-8 text-center text-[13px] leading-[1.6] text-[#B7C0D8]">
+      <p className="mx-auto max-w-4xl">{DISCLOSURE}</p>
+      <p className="mx-auto mt-3 max-w-4xl">
+        {SITE_NAME} · {SITE_ADDRESS} · {SITE_PHONE} · {SITE_EMAIL}
+      </p>
+    </aside>
+  );
+}
+
+function FinancialTopicsPage() {
+  return (
+    <>
+      <FourCs />
+      <FinancialTopicsSection />
+    </>
+  );
+}
+
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/marc@calocapital.io";
 
 const CONTACT_TOPICS = [
   { value: "Term Loan", message: "Hello, I'm interested in a term loan for my business. Could someone walk me through the loan amounts, rates and requirements, and let me know the next steps to get prequalified?" },
@@ -2559,14 +1183,18 @@ const CONTACT_TOPICS = [
   { value: "SBA Loan", message: "Hello, I'm interested in SBA loan options. Could you tell me which programs I may qualify for and what documents I should prepare?" },
   { value: "Equipment Financing", message: "Hello, I'd like to finance equipment for my business. Please let me know the available terms and what information you need from me." },
   { value: "Bitcoin-Backed Loan", message: "Hello, I'd like to learn about borrowing against my Bitcoin. Could you explain loan-to-value, collateral terms and how the process works?" },
-  { value: "Schedule a call", message: "Hello, I'd like to schedule a call with a Calo Capital specialist. My preferred days and times are: " },
-  { value: "General question", message: "Hello, I have a question about Calo Capital and your services: " },
+  { value: "Digital Asset Services waitlist", message: "Hello, please add me to the Digital Asset Services waitlist. I am interested in: " },
+  { value: "Schedule a call", message: "Hello, I'd like to schedule a call with a CaloCapital specialist. My preferred days and times are: " },
+  { value: "General question", message: "Hello, I have a question about CaloCapital and your services: " },
 ];
+
+let pendingContactTopic = "";
 
 function ContactForm() {
   const [status, setStatus] = useState("");
-  const [topic, setTopic] = useState("");
-  const [message, setMessage] = useState("");
+  const initialTopic = CONTACT_TOPICS.find((item) => item.value === pendingContactTopic);
+  const [topic, setTopic] = useState(initialTopic ? initialTopic.value : "");
+  const [message, setMessage] = useState(initialTopic ? initialTopic.message : "");
 
   function handleTopicChange(event) {
     const value = event.target.value;
@@ -2596,7 +1224,7 @@ function ContactForm() {
       setMessage("");
       setStatus("Thank you! Your submission has been received. We will be in touch soon.");
     } catch {
-      setStatus("Something went wrong. Please email protection@calocapital.io or call (650) 658-6822.");
+      setStatus("Something went wrong. Please email marc@calocapital.io or call 917-400-9543.");
     } finally {
       setSending(false);
     }
@@ -2665,9 +1293,9 @@ const CONTACT_SOCIALS = [
 function ContactPage() {
   const serif = "font-['Cormorant_Garamond',serif]";
   const details = [
-    { label: "Email", value: "protection@calocapital.io", href: "mailto:protection@calocapital.io" },
-    { label: "Phone", value: "(650) 658-6822", href: "tel:+16506586822" },
-    { label: "Main office", value: "41 Peabody Street, Nashville, TN 37210" },
+    { label: "Email", value: "marc@calocapital.io", href: "mailto:marc@calocapital.io" },
+    { label: "Phone", value: "917-400-9543", href: "tel:+19174009543" },
+    { label: "Main office", value: "159 4th Avenue North, Suite 200, Nashville, TN 37219" },
     { label: "Hours", value: "Monday to Friday, 9:00 AM to 5:00 PM" },
   ];
   return (
@@ -2723,7 +1351,7 @@ function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={item.label}
-                  title={`Calo Capital on ${item.label}`}
+                  title={`CaloCapital on ${item.label}`}
                   className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#B7C0D8]/35 text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]"
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -2738,6 +1366,11 @@ function ContactPage() {
             <ContactForm />
           </div>
         </div>
+        <div className="mt-12 rounded-[20px] border border-[#B7C0D8]/15 bg-[#1A2340]/55 p-6 sm:p-8">
+          <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-[#C6B8FF]">Licensing</p>
+          <p className="mt-3 text-[15px] text-[#F4F7FB]">Marc J. Calo, Licensed Insurance Agent, NPN 17700283</p>
+          <p className="mt-3 text-[14px] text-[#B7C0D8]">Licensed in 21 states: Alabama, Connecticut, Florida, Georgia, Idaho, Kentucky, Maryland, Nebraska, Nevada, New Jersey, New York (resident), North Carolina, Ohio, Pennsylvania, South Carolina, Tennessee, Texas, Utah, Virginia, Washington, Wyoming.</p>
+        </div>
       </div>
     </section>
   );
@@ -2747,27 +1380,21 @@ function HomePage({ setPage, navigate }) {
   return (
     <>
       <HeroSection />
+      <AgencyIntro navigate={navigate} />
+      <FourCs />
       <FinancingSections hero onNavigate={navigate} />
-      <div
-        className="relative grid items-stretch"
-        style={{
-          background: "radial-gradient(900px 500px at 78% 10%,rgba(109,94,245,.28),transparent 70%),#050816",
-        }}
-      >
-        <CryptoCandlestickSection />
-      </div>
       <FinancingSections onNavigate={navigate} />
     </>
   );
 }
 
 const disclaimer =
-  "Investing involves risk, including the possible loss of principal. Past performance does not guarantee future results. The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax, accounting, or financial advice. Visitors should consult qualified professionals before making financial decisions. Calo Capital is not currently a registered investment advisor, broker-dealer, or fiduciary. Any references to digital assets, commodities, businesses, or market opportunities are general discussions only and should not be considered a recommendation or guarantee of results. Users should do their own diligence before acting on any information provided here.";
+  `The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax or accounting advice. ${DISCLOSURE} Any references to digital assets, commodities, businesses or market opportunities are general discussions only and are not a recommendation. Insurance product guarantees depend on the claims-paying ability of the issuing insurer.`;
 
 function linkifyText(text) {
-  return text.split(/(protection@calocapital\.io|\(650\) 658-6822)/g).map((part, index) => {
-    if (part === "protection@calocapital.io") return <a key={index} className="text-[#C6B8FF] underline" href={`mailto:${part}`}>{part}</a>;
-    if (part === "(650) 658-6822") return <a key={index} className="text-[#C6B8FF] underline" href="tel:+16506586822">{part}</a>;
+  return text.split(/(marc@calocapital\.io|917-400-9543)/g).map((part, index) => {
+    if (part === "marc@calocapital.io") return <a key={index} className="text-[#C6B8FF] underline" href={`mailto:${part}`}>{part}</a>;
+    if (part === "917-400-9543") return <a key={index} className="text-[#C6B8FF] underline" href="tel:+19174009543">{part}</a>;
     return part;
   });
 }
@@ -2832,7 +1459,7 @@ function LegalPage() {
   return (
     <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">CaloCapital</p>
         <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Legal</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
           Our Privacy Policy, Terms and Conditions, and Disclaimer.
@@ -2881,6 +1508,14 @@ function InfoPage({ path, navigate }) {
         <p className="mt-8 text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{page.eyebrow}</p>
         <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98]">{page.title}</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">{page.intro}</p>
+        {page.author && (
+          <p className="mt-4 text-sm text-[#B7C0D8]">Author: {page.author} · Last reviewed: {page.reviewed}</p>
+        )}
+        {page.cta && (
+          <a href={page.cta.href} onClick={(event) => open(event, page.cta.href)} className="mt-8 inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
+            {page.cta.label}
+          </a>
+        )}
 
         <div className="mt-14 space-y-10">
           {page.sections.map((section) => (
@@ -2905,11 +1540,13 @@ function InfoPage({ path, navigate }) {
           ))}
         </div>
 
+        {page.note && <p className="mt-10 text-[15px] italic leading-[1.7] text-[#B7C0D8]">{page.note}</p>}
+
         <div className="mt-14 rounded-2xl border border-[#9B7CFF]/50 bg-[#6D5EF5]/15 p-6">
           <h2 className="text-2xl font-black">Talk with our team</h2>
           <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">
-            Call <a className={linkClass} href="tel:+16506586822">(650) 658-6822</a> or email{" "}
-            <a className={linkClass} href="mailto:protection@calocapital.io">protection@calocapital.io</a>.
+            Call <a className={linkClass} href="tel:+19174009543">917-400-9543</a> or email{" "}
+            <a className={linkClass} href="mailto:marc@calocapital.io">marc@calocapital.io</a>.
           </p>
           <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
             {(page.related || []).map((href) => (
@@ -2933,10 +1570,10 @@ function FaqsPage() {
   return (
     <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
       <div className="mx-auto w-full max-w-[min(900px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Calo Capital</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">CaloCapital</p>
         <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98] text-[#F4F7FB]">Frequently Asked Questions</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">
-          Straight answers about Calo Capital, how financing works, and how we protect your information.
+          Straight answers about CaloCapital, how financing works, and how we protect your information.
         </p>
 
         <div className="mt-14 space-y-12">
@@ -2961,8 +1598,8 @@ function FaqsPage() {
         <div className="mt-14 rounded-2xl border border-[#9B7CFF]/50 bg-[#6D5EF5]/15 p-6">
           <h2 className="text-2xl font-black">Still have a question?</h2>
           <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">
-            Call <a className="text-[#C6B8FF] underline" href="tel:+16506586822">(650) 658-6822</a> or email{" "}
-            <a className="text-[#C6B8FF] underline" href="mailto:protection@calocapital.io">protection@calocapital.io</a>.
+            Call <a className="text-[#C6B8FF] underline" href="tel:+19174009543">917-400-9543</a> or email{" "}
+            <a className="text-[#C6B8FF] underline" href="mailto:marc@calocapital.io">marc@calocapital.io</a>.
           </p>
         </div>
       </div>
@@ -3729,6 +2366,13 @@ export default function App() {
   const [pendingPage, setPendingPage] = useState(null);
   const transitionTimerRef = useRef(null);
 
+  useEffect(() => {
+    const path = renderedPage === "Info" ? infoPath : renderedPage === "Contact" ? "/contact" : renderedPage === "Legal" ? "/legal" : renderedPage === "FAQs" ? "/faqs" : renderedPage === "Financial Topics" ? "/financial-topics" : "/";
+    const meta = getRouteMeta(path);
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
+  }, [renderedPage, infoPath]);
+
   const TRANSITION_OUT_MS = 160;
   const TRANSITION_IN_MS = 280;
 
@@ -3862,8 +2506,6 @@ export default function App() {
 
     const sectionMap = {
       Home: "",
-      Explore: "crypto-candlestick",
-      "Why invest": "crypto-candlestick",
     };
 
     const targetSectionId = sectionMap[page];
@@ -3894,6 +2536,7 @@ export default function App() {
 
     const [rawPath, hash = ""] = href.split("#");
     const path = normalizePath(rawPath);
+    pendingContactTopic = path === "/contact" && hash === "waitlist" ? "Digital Asset Services waitlist" : "";
     if (path === "/contact") return setPage("Contact");
     if (path === "/faqs") return setPage("FAQs");
     if (path === "/legal") return setPage("Legal", hash);
@@ -3962,6 +2605,7 @@ export default function App() {
       >
         {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} navigate={navigate} />}
       </div>
+      <SiteDisclosure />
       <Footer setPage={setPage} />
     </main>
   );

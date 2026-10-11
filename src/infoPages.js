@@ -31,7 +31,104 @@ const productLinks = {
   btc: ["Bitcoin-Backed Loans", "/financing/bitcoin-backed-loans"],
 };
 
+const REVIEWED = "October 11, 2026";
+const AUTHOR = "Marc J. Calo, Licensed Insurance Agent, NPN 17700283";
+
+const DIGITAL_ASSET_DISCLOSURE =
+  "Digital assets are volatile and can lose value. Digital assets held in custody are not FDIC- or SIPC-insured. Borrowing against digital assets carries liquidation risk. CaloCapital does not provide investment advice or recommend any digital asset, and is not a broker-dealer or registered investment adviser. Services are subject to eligibility, identity verification and state availability.";
+
 export const INFO_PAGES = {
+  "/life-insurance": {
+    eyebrow: "Insurance",
+    title: "Life Insurance",
+    intro: "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping families and business owners with life insurance.",
+    author: AUTHOR,
+    reviewed: REVIEWED,
+    sections: [
+      {
+        heading: "How we approach life insurance",
+        body: ["Before we recommend any insurance, we look at what a family or business already has, in four areas, and ask how each one is protected and passed on."],
+      },
+      {
+        heading: "Where life insurance can fit",
+        list: [
+          "Cash value life insurance, where guarantees can help with the money you need to stay reachable and stable",
+          "Coverage that gives your heirs or your lender cash, so a bitcoin-backed loan or estate costs don't force a sale at the wrong time",
+          "Key person coverage and buy-sell funding for business owners",
+        ],
+      },
+    ],
+    related: ["/fixed-annuities", "/business-owner-coverage", "/contact"],
+  },
+  "/fixed-annuities": {
+    eyebrow: "Insurance",
+    title: "Fixed Annuities",
+    intro: "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping families and business owners with fixed annuities and retirement income.",
+    author: AUTHOR,
+    reviewed: REVIEWED,
+    sections: [
+      {
+        heading: "How we approach fixed annuities",
+        body: ["Before we recommend any insurance, we look at what a family or business already has, in four areas, and ask how each one is protected and passed on."],
+      },
+      {
+        heading: "Where fixed annuities can fit",
+        body: ["For the money you need to stay reachable and stable, we look at where guarantees can help, such as cash value life insurance and fixed annuities."],
+      },
+    ],
+    related: ["/life-insurance", "/business-owner-coverage", "/contact"],
+  },
+  "/business-owner-coverage": {
+    eyebrow: "Insurance",
+    title: "Business Owner Coverage",
+    intro: "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping business owners protect the company they own or lead.",
+    author: AUTHOR,
+    reviewed: REVIEWED,
+    sections: [
+      {
+        heading: "What we look at",
+        body: ["We look at what happens to your business if a key person dies or a partner leaves."],
+      },
+      {
+        heading: "Coverage and planning",
+        list: ["Key person coverage", "Buy-sell funding", "Succession planning"],
+      },
+    ],
+    related: ["/life-insurance", "/fixed-annuities", "/contact"],
+  },
+  "/digital-asset-services": {
+    eyebrow: "Digital assets",
+    title: "Digital Asset Services",
+    intro: "CaloCapital helps individuals, families and business owners hold, use and pass on digital assets with institutional-grade infrastructure, without the seed-phrase risk of self-custody.",
+    author: AUTHOR,
+    reviewed: REVIEWED,
+    cta: { label: "Join the waitlist", href: "/contact#waitlist" },
+    sections: [
+      { heading: "Institutional custody", body: ["Your assets are held with a qualified custodian in a dedicated account under CaloCapital's institutional platform, with multi-approval security controls and recoverable access."] },
+      { heading: "Funding and transfers", body: ["Fund your account by wire, ACH or a linked bank account, and move assets in or out from existing wallets and exchanges."] },
+      { heading: "Buy and sell", body: ["Purchase or sell bitcoin and ether, including scheduled recurring purchases, executed through institutional trading access. CaloCapital executes your instructions and does not recommend what or when to buy."] },
+      { heading: "Staking access", body: ["Stake eligible assets through the platform. Rewards vary by network, are not guaranteed, and can involve lock-up periods."] },
+      { heading: "Borrowing against your bitcoin", body: ["Access cash without selling your holdings, through a loan secured by your digital assets. Rates, loan-to-value limits and terms are set by the lender, and a drop in value can trigger a margin call or liquidation."] },
+      { heading: "Inheritance and access planning", body: ["Make sure your family can reach your digital assets if something happens to you. We coordinate account access, beneficiary instructions and your estate attorney."] },
+      { heading: "Life insurance for digital asset holders", body: ["Coverage that gives your heirs or your lender cash, so a bitcoin-backed loan or estate costs don't force a sale at the wrong time."] },
+      { heading: "For businesses: treasury custody infrastructure", body: ["Institutional custody for company-held digital assets, with approval workflows, user permissions and account reporting for owners and finance teams."] },
+    ],
+    note: DIGITAL_ASSET_DISCLOSURE,
+    related: ["/life-insurance", "/contact"],
+  },
+  "/about": {
+    eyebrow: "About",
+    title: "About CaloCapital",
+    intro: "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping families and business owners with life insurance, fixed annuities and retirement income.",
+    author: AUTHOR,
+    reviewed: REVIEWED,
+    sections: [
+      { heading: "Founder", body: ["Marc J. Calo, Licensed Insurance Agent, NPN 17700283."] },
+      { heading: "Licensed states", body: ["Alabama, Connecticut, Florida, Georgia, Idaho, Kentucky, Maryland, Nebraska, Nevada, New Jersey, New York (resident), North Carolina, Ohio, Pennsylvania, South Carolina, Tennessee, Texas, Utah, Virginia, Washington, Wyoming."] },
+      { heading: "Office", body: ["159 4th Avenue North, Suite 200, Nashville, TN 37219. Phone 917-400-9543. Email marc@calocapital.io."] },
+    ],
+    related: ["/life-insurance", "/fixed-annuities", "/contact"],
+  },
   "/financing": {
     eyebrow: "Financing",
     title: "Financing types",
@@ -168,7 +265,7 @@ export const INFO_PAGES = {
     [productLinks.btc, productLinks.term, productLinks.loc]
   ),
   "/accessibility": {
-    eyebrow: "Calo Capital",
+    eyebrow: "CaloCapital",
     title: "Accessibility",
     intro: "We want everyone to be able to use this website.",
     sections: [
@@ -181,19 +278,19 @@ export const INFO_PAGES = {
       },
       {
         heading: "Contact us",
-        body: ["Email protection@calocapital.io or call (650) 658-6822 and tell us which page you were using and what difficulty you ran into."],
+        body: ["Email marc@calocapital.io or call 917-400-9543 and tell us which page you were using and what difficulty you ran into."],
       },
     ],
     related: ["/contact", "/faqs"],
   },
   "/sitemap": {
-    eyebrow: "Calo Capital",
+    eyebrow: "CaloCapital",
     title: "Sitemap",
     intro: "Every page of the site in one place.",
     sections: [
       {
         heading: "Main pages",
-        links: [["Home", "/"], ["Financial Topics", "/financial-topics"], ["FAQs", "/faqs"], ["Contact", "/contact"]],
+        links: [["Home", "/"], ["About", "/about"], ["Life Insurance", "/life-insurance"], ["Fixed Annuities", "/fixed-annuities"], ["Business Owner Coverage", "/business-owner-coverage"], ["Digital Asset Services", "/digital-asset-services"], ["Financial Topics", "/financial-topics"], ["FAQs", "/faqs"], ["Contact", "/contact"]],
       },
       { heading: "Financing", links: [["All financing types", "/financing"], ...Object.values(productLinks)] },
       {
@@ -217,4 +314,7 @@ export const INFO_RELATED_LABELS = {
   "/financing": "All financing types",
   "/faqs": "FAQs",
   "/contact": "Contact us",
+  "/life-insurance": "Life insurance",
+  "/fixed-annuities": "Fixed annuities",
+  "/business-owner-coverage": "Business owner coverage",
 };

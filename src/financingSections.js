@@ -7,7 +7,7 @@ export function initFinancingSections(root) {
       fetch(f.action.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
         .then(function(r){return r.json()})
         .then(function(d){if(String(d.success)!=='true')throw new Error('fail'); f.reset(); if(st)st.textContent='Thank you! Your submission has been received. We will be in touch soon.'})
-        .catch(function(){if(st)st.textContent='Something went wrong. Please email protection@calocapital.io or call (650) 658-6822.'});
+        .catch(function(){if(st)st.textContent='Something went wrong. Please email marc@calocapital.io or call 917-400-9543.'});
     });
   });
 (function(){
@@ -54,7 +54,7 @@ export function initFinancingSections(root) {
     if(ind.selectedIndex===0){show('<strong>Please select your industry.</strong>');return}
     var months=[0,6,12,36][picked(groups[0])];
     var crypto=ind.value.indexOf('Crypto')===0;
-    // Typical market benchmarks, not Calo Capital or lender-specific criteria.
+    // Typical market benchmarks, not CaloCapital or lender-specific criteria.
     var P=[
       {n:'SBA 7(a) loan',s:680,m:24,r:10000,lo:2,hi:6,note:'Lowest rates and longest terms, slowest to fund.'},
       {n:'Term loan',s:620,m:12,r:10000,lo:1,hi:4,note:'Fixed payments over 1 to 5 years.'},
