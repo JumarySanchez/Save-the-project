@@ -1131,6 +1131,171 @@ function AgencyIntro({ navigate }) {
   );
 }
 
+function RetirementCalculator({ navigate }) {
+  const [v, setV] = useState({ age: 40, retireAge: 65, savings: 150000, monthly: 1000, income: 6000 });
+  const set = (key) => (event) => setV((prev) => ({ ...prev, [key]: Number(event.target.value) || 0 }));
+
+  const RETURN = 0.06;
+  const INFLATION = 0.025;
+  const END_AGE = 90;
+  const years = Math.max(v.retireAge - v.age, 0);
+  const months = years * 12;
+  const mr = Math.pow(1 + RETURN, 1 / 12) - 1;
+  const projected = v.savings * Math.pow(1 + RETURN, years) + (mr > 0 ? v.monthly * ((Math.pow(1 + mr, months) - 1) / mr) : v.monthly * months);
+  const realRate = (1 + RETURN) / (1 + INFLATION) - 1;
+  const retireYears = Math.max(END_AGE - v.retireAge, 1);
+  const annualIncomeFuture = v.income * 12 * Math.pow(1 + INFLATION, years);
+  const needed = annualIncomeFuture * ((1 - Math.pow(1 + realRate, -retireYears)) / realRate) * (1 + realRate);
+  const ratio = needed > 0 ? projected / needed : 0;
+  const pct = Math.min(Math.round(ratio * 100), 100);
+  const gap = Math.max(needed - projected, 0);
+  const money = (n) => `$${Math.round(n).toLocaleString()}`;
+  const label = ratio >= 1 ? "On track" : ratio >= 0.75 ? "Close" : "Needs attention";
+
+  const fields = [
+    ["age", "Current age", 18, 80],
+    ["retireAge", "Retirement age", 50, 80],
+    ["savings", "Current retirement savings ($)", 0, 100000000],
+    ["monthly", "Monthly contribution ($)", 0, 1000000],
+    ["income", "Desired monthly income in retirement, in today's dollars ($)", 0, 1000000],
+  ];
+
+  return (
+    <section id="retirement-calculator" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
+      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Retirement</p>
+        <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Retirement readiness calculator</h2>
+        <div className="mt-10 grid overflow-hidden rounded-3xl border border-[#B7C0D8]/20 bg-white/5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(340px,100%),1fr))" }}>
+          <form onSubmit={(event) => event.preventDefault()} className="p-6 sm:p-8">
+            <h3 className="text-xl font-black">Your numbers</h3>
+            {fields.map(([key, text, min, max]) => (
+              <label key={key} className="mt-4 block text-sm font-semibold text-[#B7C0D8]">
+                {text}
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={min}
+                  max={max}
+                  value={v[key]}
+                  onChange={set(key)}
+                  className="mt-2 w-full rounded-xl border border-[#B7C0D8]/25 bg-[#050816]/65 px-4 py-3 text-[15px] text-[#F4F7FB]"
+                />
+              </label>
+            ))}
+          </form>
+          <div className="flex flex-col justify-center bg-[#6D5EF5]/15 p-6 sm:p-8" aria-live="polite">
+            <h3 className="text-xl font-black">Your estimate</h3>
+            <p className="mt-4 text-[clamp(3rem,8vw,4.5rem)] font-black leading-none text-[#C6B8FF]">{pct}%</p>
+            <p className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-[#9B7CFF]">{label}</p>
+            <div className="mt-5 h-3 w-full overflow-hidden rounded-full bg-[#050816]/70">
+              <div className="h-full rounded-full bg-[#9B7CFF]" style={{ width: `${pct}%` }} />
+            </div>
+            <dl className="mt-6 space-y-3 text-[15px] text-[#B7C0D8]">
+              <div className="flex justify-between gap-4"><dt>Projected savings at {v.retireAge}</dt><dd className="font-black text-[#F4F7FB]">{money(projected)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Estimated amount needed</dt><dd className="font-black text-[#F4F7FB]">{money(needed)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Estimated shortfall</dt><dd className="font-black text-[#F4F7FB]">{money(gap)}</dd></div>
+            </dl>
+            <a
+              href="/contact"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate("/contact");
+              }}
+              className="mt-8 inline-block self-start rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white"
+            >
+              Talk with Marc about your results
+            </a>
+          </div>
+        </div>
+        <p className="mt-6 max-w-3xl text-[13px] italic leading-[1.6] text-[#B7C0D8]">
+          For illustration only. Assumes a 6% annual return, 2.5% inflation and income through age 90. It is not a projection of actual results, and it is not investment, tax or legal advice or an offer of any product.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function LifeInsuranceCalculator({ navigate }) {
+  const [v, setV] = useState({ income: 80000, years: 10, debts: 30000, mortgage: 250000, kids: 2, education: 40000, final: 15000, assets: 100000, coverage: 100000 });
+  const set = (key) => (event) => setV((prev) => ({ ...prev, [key]: Number(event.target.value) || 0 }));
+
+  const incomeNeed = v.income * v.years;
+  const educationNeed = v.kids * v.education;
+  const total = incomeNeed + v.debts + v.mortgage + educationNeed + v.final;
+  const need = Math.max(total - v.assets, 0);
+  const gap = Math.max(need - v.coverage, 0);
+  const pct = need > 0 ? Math.min(Math.round((v.coverage / need) * 100), 100) : 100;
+  const money = (n) => `$${Math.round(n).toLocaleString()}`;
+  const label = gap === 0 ? "Covered" : pct >= 75 ? "Close" : "Gap found";
+
+  const fields = [
+    ["income", "Annual income to replace ($)"],
+    ["years", "Years your family would need that income"],
+    ["debts", "Debts, excluding mortgage ($)"],
+    ["mortgage", "Mortgage balance ($)"],
+    ["kids", "Number of children"],
+    ["education", "Education cost per child ($)"],
+    ["final", "Final expenses ($)"],
+    ["assets", "Savings and investments available ($)"],
+    ["coverage", "Existing life insurance ($)"],
+  ];
+
+  return (
+    <section id="life-insurance-calculator" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
+      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Life insurance</p>
+        <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Life insurance needs calculator</h2>
+        <div className="mt-10 grid overflow-hidden rounded-3xl border border-[#B7C0D8]/20 bg-white/5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(340px,100%),1fr))" }}>
+          <form onSubmit={(event) => event.preventDefault()} className="p-6 sm:p-8">
+            <h3 className="text-xl font-black">Your numbers</h3>
+            {fields.map(([key, text]) => (
+              <label key={key} className="mt-4 block text-sm font-semibold text-[#B7C0D8]">
+                {text}
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  value={v[key]}
+                  onChange={set(key)}
+                  className="mt-2 w-full rounded-xl border border-[#B7C0D8]/25 bg-[#050816]/65 px-4 py-3 text-[15px] text-[#F4F7FB]"
+                />
+              </label>
+            ))}
+          </form>
+          <div className="flex flex-col justify-center bg-[#6D5EF5]/15 p-6 sm:p-8" aria-live="polite">
+            <h3 className="text-xl font-black">Your estimate</h3>
+            <p className="mt-4 text-[clamp(2.4rem,7vw,4rem)] font-black leading-none text-[#C6B8FF]">{money(need)}</p>
+            <p className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-[#9B7CFF]">Estimated coverage need · {label}</p>
+            <div className="mt-5 h-3 w-full overflow-hidden rounded-full bg-[#050816]/70">
+              <div className="h-full rounded-full bg-[#9B7CFF]" style={{ width: `${pct}%` }} />
+            </div>
+            <dl className="mt-6 space-y-3 text-[15px] text-[#B7C0D8]">
+              <div className="flex justify-between gap-4"><dt>Income replacement</dt><dd className="font-black text-[#F4F7FB]">{money(incomeNeed)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Debts and mortgage</dt><dd className="font-black text-[#F4F7FB]">{money(v.debts + v.mortgage)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Education and final expenses</dt><dd className="font-black text-[#F4F7FB]">{money(educationNeed + v.final)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Less savings available</dt><dd className="font-black text-[#F4F7FB]">-{money(Math.min(v.assets, total))}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Coverage gap after existing insurance</dt><dd className="font-black text-[#F4F7FB]">{money(gap)}</dd></div>
+            </dl>
+            <a
+              href="/contact"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate("/contact");
+              }}
+              className="mt-8 inline-block self-start rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white"
+            >
+              Talk with Marc about your results
+            </a>
+          </div>
+        </div>
+        <p className="mt-6 max-w-3xl text-[13px] italic leading-[1.6] text-[#B7C0D8]">
+          For illustration only. This is a simple needs estimate that does not account for taxes, inflation or investment returns. It is not insurance, investment, tax or legal advice, and it is not an offer of coverage.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function FourCs() {
   return (
     <section id="four-cs" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
@@ -1381,6 +1546,8 @@ function HomePage({ setPage, navigate }) {
     <>
       <HeroSection />
       <AgencyIntro navigate={navigate} />
+      <RetirementCalculator navigate={navigate} />
+      <LifeInsuranceCalculator navigate={navigate} />
       <FourCs />
       <FinancingSections hero onNavigate={navigate} />
       <FinancingSections onNavigate={navigate} />
