@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
-import FinancingSections from "./FinancingSections.jsx";
+import FinancingSections, { AGENCY_BG } from "./FinancingSections.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
 import { faqGroups } from "./faqContent.js";
 import { DISCLOSURE, SITE_NAME, SITE_DESCRIPTION, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
@@ -1099,33 +1099,91 @@ const FOUR_CS = [
   ["Companies", "the business you own or lead. We look at what happens to it if a key person dies or a partner leaves, through key person coverage, buy-sell funding and succession planning."],
 ];
 
+const SERVICE_TABS = [
+  {
+    id: "life",
+    title: "Life Insurance",
+    href: "https://www.investopedia.com/terms/l/lifeinsurance.asp",
+    text: "Coverage for families and business owners, including cash value life insurance. Use the needs calculator to see how much protection your family may need.",
+    points: ["Income replacement and final expenses", "Mortgage, debts and education costs", "Cash value life insurance, where guarantees can help"],
+  },
+  {
+    id: "annuities",
+    title: "Fixed Annuities",
+    href: "https://www.investor.gov/introduction-investing/investing-basics/investment-products/annuities",
+    text: "Guarantees and retirement income. Use the readiness calculator to see how your savings may support the retirement you want.",
+    points: ["Retirement income planning", "Where guarantees can help", "Money you need to stay reachable and stable"],
+  },
+  {
+    id: "business",
+    title: "Business Owner Coverage",
+    href: "https://www.investopedia.com/terms/k/keypersoninsurance.asp",
+    text: "Key person coverage, buy-sell funding and succession planning for the business you own or lead.",
+    points: ["What happens if a key person dies", "What happens if a partner leaves", "Funding a buy-sell agreement"],
+  },
+  {
+    id: "digital",
+    title: "Digital Asset Services",
+    href: "https://www.forbes.com/sites/georgiiverbitskii/2025/07/22/bitcoin-backed-loans-are-reshaping-traditional-lending/",
+    text: "Hold, use and pass on digital assets with institutional-grade infrastructure, without the seed-phrase risk of self-custody.",
+    points: ["Institutional custody", "Inheritance and access planning", "Life insurance for digital asset holders"],
+  },
+];
+
 function AgencyIntro({ navigate }) {
+  const [active, setActive] = useState("life");
+  const tab = SERVICE_TABS.find((item) => item.id === active);
   const go = (event, href) => {
     event.preventDefault();
     navigate(href);
   };
   return (
-    <section id="agency" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
+    <section id="agency" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ background: `linear-gradient(rgba(5,8,22,.32),rgba(5,8,22,.62)), url(${AGENCY_BG}) center/cover` }}>
       <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME}</p>
         <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Independent insurance agency in Nashville, Tennessee</h2>
         <p className="mt-6 max-w-3xl text-[20px] leading-[1.6] text-[#B7C0D8]">{SITE_DESCRIPTION}</p>
-        <div className="mt-10 grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))" }}>
-          {[
-            ["Life Insurance", "/life-insurance", "Coverage for families and business owners, including cash value life insurance."],
-            ["Fixed Annuities", "/fixed-annuities", "Guarantees and retirement income."],
-            ["Business Owner Coverage", "/business-owner-coverage", "Key person coverage, buy-sell funding and succession planning."],
-            ["Digital Asset Services", "/digital-asset-services", "Hold, use and pass on digital assets with institutional-grade infrastructure."],
-          ].map(([title, href, text]) => (
-            <a key={href} href={href} onClick={(event) => go(event, href)} className="rounded-2xl border border-[#B7C0D8]/20 bg-white/5 p-6 transition hover:border-[#C6B8FF]">
-              <h3 className="text-xl font-black">{title}</h3>
-              <p className="mt-3 text-[15px] leading-[1.6] text-[#B7C0D8]">{text}</p>
-            </a>
+        <div role="tablist" aria-label="Services" className="mt-10 flex flex-wrap gap-3">
+          {SERVICE_TABS.map((item) => (
+            <button
+              key={item.id}
+              role="tab"
+              aria-selected={active === item.id}
+              onClick={() => setActive(item.id)}
+              className={`rounded-full border px-5 py-3 text-sm font-black transition ${active === item.id ? "border-[#6D5EF5] bg-[#6D5EF5] text-white" : "border-[#B7C0D8]/30 text-[#B7C0D8] hover:border-[#C6B8FF]"}`}
+            >
+              {item.title}
+            </button>
           ))}
         </div>
-        <a href="/contact" onClick={(event) => go(event, "/contact")} className="mt-10 inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
-          Book a call
-        </a>
+        <div role="tabpanel" className="mt-8">
+          <div className="grid gap-6 rounded-3xl border border-[#B7C0D8]/20 bg-white/5 p-6 sm:p-8" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))" }}>
+            <div>
+              <h3 className="text-2xl font-black">{tab.title}</h3>
+              <p className="mt-3 text-[17px] leading-[1.7] text-[#B7C0D8]">{tab.text}</p>
+              <a href={tab.href} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-sm font-semibold text-[#C6B8FF] underline underline-offset-4">
+                Read more about {tab.title.toLowerCase()}
+              </a>
+            </div>
+            <ul className="list-disc space-y-2 pl-6 text-[16px] leading-[1.6] text-[#B7C0D8]">
+              {tab.points.map((point) => <li key={point}>{point}</li>)}
+            </ul>
+          </div>
+          <div className="mt-6">
+            {active === "life" && <LifeInsuranceCalculator navigate={navigate} />}
+            {active === "annuities" && <RetirementCalculator navigate={navigate} />}
+            {active === "business" && (
+              <a href="/contact" onClick={(event) => go(event, "/contact")} className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
+                Book a call about business coverage
+              </a>
+            )}
+            {active === "digital" && (
+              <a href="/contact#waitlist" onClick={(event) => go(event, "/contact#waitlist")} className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
+                Join the waitlist
+              </a>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1161,11 +1219,8 @@ function RetirementCalculator({ navigate }) {
   ];
 
   return (
-    <section id="retirement-calculator" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
-      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Retirement</p>
-        <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Retirement readiness calculator</h2>
-        <div className="mt-10 grid overflow-hidden rounded-3xl border border-[#B7C0D8]/20 bg-white/5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(340px,100%),1fr))" }}>
+    <div id="retirement-calculator">
+        <div className="grid overflow-hidden rounded-3xl border border-[#B7C0D8]/20 bg-white/5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(340px,100%),1fr))" }}>
           <form onSubmit={(event) => event.preventDefault()} className="p-6 sm:p-8">
             <h3 className="text-xl font-black">Your numbers</h3>
             {fields.map(([key, text, min, max]) => (
@@ -1210,8 +1265,7 @@ function RetirementCalculator({ navigate }) {
         <p className="mt-6 max-w-3xl text-[13px] italic leading-[1.6] text-[#B7C0D8]">
           For illustration only. Assumes a 6% annual return, 2.5% inflation and income through age 90. It is not a projection of actual results, and it is not investment, tax or legal advice or an offer of any product.
         </p>
-      </div>
-    </section>
+    </div>
   );
 }
 
@@ -1241,11 +1295,8 @@ function LifeInsuranceCalculator({ navigate }) {
   ];
 
   return (
-    <section id="life-insurance-calculator" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
-      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Life insurance</p>
-        <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Life insurance needs calculator</h2>
-        <div className="mt-10 grid overflow-hidden rounded-3xl border border-[#B7C0D8]/20 bg-white/5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(340px,100%),1fr))" }}>
+    <div id="life-insurance-calculator">
+        <div className="grid overflow-hidden rounded-3xl border border-[#B7C0D8]/20 bg-white/5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(340px,100%),1fr))" }}>
           <form onSubmit={(event) => event.preventDefault()} className="p-6 sm:p-8">
             <h3 className="text-xl font-black">Your numbers</h3>
             {fields.map(([key, text]) => (
@@ -1291,8 +1342,7 @@ function LifeInsuranceCalculator({ navigate }) {
         <p className="mt-6 max-w-3xl text-[13px] italic leading-[1.6] text-[#B7C0D8]">
           For illustration only. This is a simple needs estimate that does not account for taxes, inflation or investment returns. It is not insurance, investment, tax or legal advice, and it is not an offer of coverage.
         </p>
-      </div>
-    </section>
+    </div>
   );
 }
 
@@ -1546,8 +1596,6 @@ function HomePage({ setPage, navigate }) {
     <>
       <HeroSection />
       <AgencyIntro navigate={navigate} />
-      <RetirementCalculator navigate={navigate} />
-      <LifeInsuranceCalculator navigate={navigate} />
       <FourCs />
       <FinancingSections hero onNavigate={navigate} />
       <FinancingSections onNavigate={navigate} />

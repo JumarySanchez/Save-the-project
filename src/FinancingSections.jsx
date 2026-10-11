@@ -23,7 +23,8 @@ const sectionsWithImages = sectionsHtml
   .replace(/__ARTICLE3_IMG__/g, article3)
   .replace(/__LOGO_IMG__/g, logoImg);
 
-const heroHtml = heroRaw.replace("__ABOUT_IMG__", aboutImagePng);
+const heroHtml = heroRaw;
+export const AGENCY_BG = aboutImagePng;
 import { initFinancingSections } from "./financingSections.js";
 
 const css = `
