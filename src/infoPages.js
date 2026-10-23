@@ -290,7 +290,7 @@ export const INFO_PAGES = {
     sections: [
       {
         heading: "Main pages",
-        links: [["Home", "/"], ["About", "/about"], ["Life Insurance", "/life-insurance"], ["Fixed Annuities", "/fixed-annuities"], ["Business Owner Coverage", "/business-owner-coverage"], ["Digital Asset Services", "/digital-asset-services"], ["Financial Topics", "/financial-topics"], ["FAQs", "/faqs"], ["Contact", "/contact"]],
+        links: [["Home", "/"], ["About", "/about"], ["Life Insurance", "/life-insurance"], ["Fixed Annuities", "/fixed-annuities"], ["Business Owner Coverage", "/business-owner-coverage"], ["Digital Asset Services", "/digital-asset-services"], ["FAQs", "/faqs"], ["Contact", "/contact"]],
       },
       { heading: "Financing", links: [["All financing types", "/financing"], ...Object.values(productLinks)] },
       {

@@ -31,7 +31,6 @@ const BASE_ROUTES = {
   "/contact": { title: "Contact CaloCapital | Nashville, Tennessee", description: `Contact CaloCapital at ${SITE_ADDRESS}. Call ${SITE_PHONE} or email ${SITE_EMAIL}.` },
   "/faqs": { title: "Frequently Asked Questions | CaloCapital", description: "Answers to common questions about CaloCapital, insurance, financing and how we work." },
   "/legal": { title: "Legal and Disclosures | CaloCapital", description: "CaloCapital privacy policy, terms and conditions, and disclosures." },
-  "/financial-topics": { title: "The Four C's and Financial Topics | CaloCapital", description: "How CaloCapital looks at the whole picture: cash, crypto, commodities and companies, before recommending any insurance." },
 };
 
 export function getRoutePaths() {

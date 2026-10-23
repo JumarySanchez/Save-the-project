@@ -90,30 +90,42 @@ export function initFinancingSections(root) {
   var tabs=[].slice.call(root.querySelectorAll('[role=tab][data-step]'));
   var num=root.querySelector('#'+'step-num'),title=root.querySelector('#'+'step-title'),
       desc=root.querySelector('#'+'step-desc'),photo=root.querySelector('#'+'step-photo'),
+      cta=root.querySelector('#'+'step-cta'),
       prev=root.querySelector('#'+'step-prev'),next=root.querySelector('#'+'step-next');
   if(tabs.length<2||!num||!title||!desc) return;
   var STEPS=[
-    {d:'Tell us about your business and get prequalified',p:'[PHOTO: calm, cinematic image of a business owner at work]'},
-    {d:'Complete one short application. Tell us about your business once, and we share it with our lender network.',p:'[PHOTO: owner completing the application on a laptop]'},
-    {d:'Compare your offers. A Calo specialist walks you through each one, side by side, in plain words.',p:'[PHOTO: owner reviewing offers with a specialist]'},
-    {d:'Choose the offer that fits, then upload your documents from any device.',p:'[PHOTO: owner uploading documents on a phone]'},
-    {d:'Review and sign. Your lender sends the funds, and we are here if you have questions.',p:'[PHOTO: owner opening their business for the day]'}
+    {title:'Calo Compass',d:'A guided look across Cash, Crypto, Commodities and Companies to help organize your financial picture. Educational only; not investment advice.',cta:'Explore Calo Compass',href:'#four-cs'},
+    {title:'Protection',d:'Explore life insurance and business-owner coverage, including key-person coverage, buy-sell funding and succession planning. Coverage, eligibility and terms vary.',cta:'Explore protection',href:'/life-insurance'},
+    {title:'Mortgage',d:'Have a mortgage question? Contact our team to discuss your needs and possible next steps. CaloCapital does not make mortgage credit decisions.',cta:'Ask about mortgages',href:'/contact'},
+    {title:'Get a quote',d:'Tell us what coverage you are looking for. We can discuss your needs and explain next steps; availability, eligibility and terms vary.',cta:'Request a quote',href:'/contact'},
+    {title:'Retirement income',d:'Retirement income services are coming soon. For current information, explore fixed annuities, whose guarantees depend on the issuing insurer’s claims-paying ability and contract terms.',cta:'Explore fixed annuities',href:'/fixed-annuities'},
+    {title:'Credit',d:'Credit services are coming soon. Contact us if you would like to hear when this option becomes available.',cta:'Ask about updates',href:'/contact'},
+    {title:'Healthcare',d:'Healthcare services are coming soon. Contact us if you would like to hear when this option becomes available.',cta:'Ask about updates',href:'/contact'},
+    {title:'Business',d:'Business services are coming soon. For current information about business-owner protection, explore key-person coverage, buy-sell funding and succession planning.',cta:'Explore business coverage',href:'/business-owner-coverage'},
+    {title:'Commercial lending',d:'Commercial lending services are coming soon. Contact us if you would like to hear when this option becomes available.',cta:'Ask about updates',href:'/contact'},
+    {title:'Learn',d:'The Learn hub is coming soon. You can explore current financial topics for general educational information, not personalized advice.',cta:'Explore the Four C\'s',href:'#four-cs'}
   ];
-  var photoList=[];try{photoList=JSON.parse((photo&&photo.getAttribute('data-photos'))||'[]')}catch(e){}
+  var photoList=JSON.parse((photo&&photo.getAttribute('data-photos'))||'[]');
+  if(STEPS.length!==tabs.length) throw new Error('CaloCapital service tabs and slide content must match.');
   var cur=0, box=title.parentNode.parentNode;
   title.parentNode.setAttribute('aria-live','polite');
   function paint(){
     tabs.forEach(function(t,i){
       var on=i===cur;
+      t.textContent=STEPS[i].title;
       t.setAttribute('aria-selected',on?'true':'false');
       t.tabIndex=on?0:-1;
       t.style.color=on?'#fff':'#B7C0D8';
       t.style.borderBottomColor=on?'#9b7cff':'transparent';
     });
     num.textContent=String(cur+1);
-    title.textContent='Step '+(cur+1);
+    title.textContent=STEPS[cur].title;
     desc.textContent=STEPS[cur].d;
-    if(photo&&photoList[cur]) photo.style.backgroundImage='url('+photoList[cur]+')';
+    if(photo&&photoList.length){
+      photo.style.backgroundImage='url('+photoList[cur%photoList.length]+')';
+      photo.setAttribute('aria-label','Illustrative image for '+STEPS[cur].title);
+    }
+    if(cta){cta.textContent=STEPS[cur].cta;cta.href=STEPS[cur].href}
     prev.disabled=cur===0; next.disabled=cur===STEPS.length-1;
     prev.style.opacity=prev.disabled?'.3':'1'; next.style.opacity=next.disabled?'.3':'1';
     prev.style.cursor=prev.disabled?'default':'pointer'; next.style.cursor=next.disabled?'default':'pointer';

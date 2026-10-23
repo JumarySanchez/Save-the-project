@@ -6,6 +6,16 @@
   directory = "netlify/functions"
 
 [[redirects]]
+  from = "/financial-topics"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/four-cs"
+  to = "/#four-cs"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

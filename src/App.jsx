@@ -3,15 +3,9 @@ import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
 import FinancingSections, { AGENCY_BG } from "./FinancingSections.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
 import { faqGroups } from "./faqContent.js";
-import { DISCLOSURE, SITE_NAME, SITE_DESCRIPTION, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
+import { DISCLOSURE, SITE_NAME, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
 import logoPng from "../public/Calo_purple_logo.png";
 import heroVideoMp4 from "../assets/new.mp4";
-import lifeDesignPng from "../assets/life-design.png";
-import iraDesignPng from "../assets/IRA-design.png";
-import trustDesignPng from "../assets/Trust-design.png";
-import investmentDesignPng from "../assets/Investment-design.png";
-import cryptoDesignPng from "../assets/Currency-design.png";
-import marketChartDesignPng from "../assets/marketchart-design.png";
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -23,7 +17,6 @@ const FALLBACK_COINS = [
 ];
 
 const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
-const FINANCIAL_TOPICS_ROUTE = "/financial-topics";
 
 const HOMEPAGE_TOPICS_DISCLAIMER =
   "This information is provided for general informational purposes only and should not be considered financial, investment, insurance, legal, or tax advice. Financial decisions should be discussed with appropriately qualified professionals.";
@@ -491,7 +484,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
         src={logoPng}
         alt="CaloCapital Logo"
         className={`${logoSizeClass} w-auto shrink-0 self-center object-contain`}
-        style={{ background: 'transparent' }}
+        style={{ background: "transparent", height: "clamp(48px, 4.66vw, 64px)", width: "auto" }}
       />
       <div className="min-w-0 text-left leading-tight">
         <p className={`${textSizeClass} font-black tracking-wide text-[#F4F7FB]`}>CaloCapital</p>
@@ -503,9 +496,10 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 
 function HeroSection() {
   return (
-    <section id="home" className="relative aspect-video w-full overflow-hidden bg-[#050816] text-[#F4F7FB] sm:aspect-auto sm:min-h-[80svh] lg:min-h-[90svh]">
+    <section id="home" className="relative aspect-video w-full overflow-hidden bg-[#050816] text-[#F4F7FB]">
       <video
-          className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 w-full object-cover"
+        style={{ height: "100%" }}
         src={heroVideoMp4}
         autoPlay
         muted
@@ -519,9 +513,7 @@ function HeroSection() {
 const pageRoutes = {
   Home: "/",
   Explore: "/",
-  "Four C's": "/financial-topics#four-cs",
   Contact: "/",
-  "Financial Topics": FINANCIAL_TOPICS_ROUTE,
   Legal: "/legal",
   FAQs: "/faqs",
 };
@@ -546,22 +538,12 @@ function normalizePath(pathname) {
 
 function getPageFromLocation() {
   const normalizedPath = normalizePath(window.location.pathname);
-  if (normalizedPath === FINANCIAL_TOPICS_ROUTE || normalizedPath === "/four-cs") return "Financial Topics";
   if (normalizedPath === "/why-invest") return "Explore";
   if (normalizedPath === "/contact") return "Contact";
   if (normalizedPath === "/legal") return "Legal";
   if (normalizedPath === "/faqs") return "FAQs";
   if (INFO_PAGES[normalizedPath]) return "Info";
   return "Home";
-}
-
-function scrollToFinancialTopicsLocation() {
-  const targetId = window.location.hash.slice(1) || (normalizePath(window.location.pathname) === "/four-cs" ? "four-cs" : "");
-  if (targetId) {
-    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
 }
 
 function getHomeSectionFromPage(page) {
@@ -586,7 +568,6 @@ function scrollToHomeSection(page) {
 
 const NAV_ITEMS = [
   { label: "Home", section: "home" },
-  { label: "Approach", section: "approach" },
   { label: "How It Works", section: "how" },
   { label: "Qualify", section: "qualify" },
   {
@@ -598,7 +579,6 @@ const NAV_ITEMS = [
       { label: "FAQs", page: "FAQs" },
     ],
   },
-  { label: "Financial Topics", page: "Financial Topics" },
   { label: "Contact", page: "Contact" },
 ];
 
@@ -607,7 +587,7 @@ const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || 
 function Navbar({ currentPage, setPage, goToSection }) {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const onHome = !["Financial Topics", "Four C's", "Contact", "FAQs", "Legal", "Info"].includes(currentPage);
+  const onHome = !["Contact", "FAQs", "Legal", "Info"].includes(currentPage);
 
   useEffect(() => {
     if (!onHome) return undefined;
@@ -628,7 +608,6 @@ function Navbar({ currentPage, setPage, goToSection }) {
   function isActive(item) {
     if (item.children) return item.children.some(isActive) || (onHome && activeSection === item.section);
     if (item.section) return onHome && activeSection === item.section;
-    if (item.page === "Financial Topics") return currentPage === "Financial Topics" || currentPage === "Four C's";
     return currentPage === item.page;
   }
 
@@ -727,371 +706,6 @@ function Navbar({ currentPage, setPage, goToSection }) {
   );
 }
 
-function FinancialTopicsSection() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const slideCount = 6;
-
-  const goToSlide = (index) => {
-    setActiveSlide(index);
-    setIsPaused(true);
-  };
-
-  const goToPreviousSlide = () => {
-    setActiveSlide((current) => (current - 1 + slideCount) % slideCount);
-    setIsPaused(true);
-  };
-
-  const goToNextSlide = () => {
-    setActiveSlide((current) => (current + 1) % slideCount);
-    setIsPaused(true);
-  };
-
-  useEffect(() => {
-    if (isPaused) return undefined;
-
-    const intervalId = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % slideCount);
-    }, 5000);
-
-    return () => window.clearInterval(intervalId);
-  }, [isPaused, slideCount]);
-
-  return (
-    <section
-      id="financial-priorities"
-      className="relative overflow-hidden bg-[#050816] px-4 py-10 sm:py-16"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false);
-      }}
-    >
-      <div className="mx-auto max-w-[1400px]">
-        <div className="mb-6 text-center sm:mb-8">
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Explore</p>
-          <h2 className="mt-3 text-[clamp(2.1rem,4vw,4rem)] font-black leading-[1.05] text-[#F4F7FB]">Financial Topics</h2>
-        </div>
-        <style>{`
-          @keyframes financialSlideIn {
-            from { opacity: 0; transform: translateX(18px); }
-            to { opacity: 1; transform: translateX(0); }
-          }
-          .financial-carousel-slide {
-            animation: financialSlideIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
-          }
-        `}</style>
-        <article className="financial-carousel-slide life-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 0 ? "block" : "none" }}>
-          <style>{`
-            .life-insurance-slide {
-              position: relative;
-              aspect-ratio: 2034 / 912;
-              border: 1px solid rgba(198, 184, 255, 0.14);
-            }
-            .life-insurance-art {
-              position: absolute;
-              inset: 0;
-              background: center / cover no-repeat url(${lifeDesignPng});
-            }
-            .life-insurance-copy {
-              position: relative;
-              z-index: 1;
-              width: min(57%, 760px);
-              padding: clamp(2rem, 5vw, 5.5rem) clamp(1.25rem, 5vw, 5.75rem);
-            }
-            .life-insurance-title {
-              margin: 0;
-              color: #F4F7FB;
-              font-family: var(--font-display);
-              font-size: clamp(2rem, 4.3vw, 5rem);
-              font-weight: 700;
-              letter-spacing: -0.03em;
-              line-height: 0.98;
-            }
-            .life-insurance-title span,
-            .life-insurance-why strong {
-              color: #9B7CFF;
-            }
-            .life-insurance-hook {
-              margin: 1rem 0 0;
-              color: #F4F7FB;
-              font-size: clamp(0.95rem, 1.45vw, 1.45rem);
-              font-weight: 700;
-              line-height: 1.35;
-            }
-            .life-insurance-body,
-            .life-insurance-why,
-            .life-insurance-disclaimer {
-              color: #B7C0D8;
-              font-size: clamp(0.82rem, 1.25vw, 1.18rem);
-              line-height: 1.55;
-            }
-            .life-insurance-body {
-              margin: clamp(1.5rem, 3vw, 3rem) 0 0;
-            }
-            .life-insurance-why {
-              margin: clamp(1rem, 2vw, 2rem) 0 0;
-            }
-            .life-insurance-why strong {
-              font-weight: 700;
-            }
-            .life-insurance-disclaimer {
-              margin: 0.8rem 0 0;
-              color: #B7C0D8;
-              font-size: clamp(0.72rem, 1vw, 0.98rem);
-            }
-            @media (max-width: 767px) {
-              .life-insurance-slide {
-                aspect-ratio: auto;
-              }
-              .life-insurance-art {
-                position: relative;
-                aspect-ratio: 2034 / 912;
-                background-size: contain;
-                background-position: center top;
-              }
-              .life-insurance-copy {
-                width: 100%;
-                padding: 1.5rem 1.25rem 2rem;
-              }
-              .life-insurance-title {
-                font-size: clamp(2.2rem, 11vw, 3.6rem);
-              }
-              .life-insurance-hook {
-                margin-top: 0.8rem;
-                font-size: 1rem;
-              }
-              .life-insurance-body,
-              .life-insurance-why {
-                font-size: 1rem;
-                line-height: 1.55;
-              }
-              .life-insurance-disclaimer {
-                font-size: 0.82rem;
-              }
-            }
-          `}</style>
-          <div className="life-insurance-art" aria-hidden="true" />
-          <div className="life-insurance-copy">
-            <h2 className="life-insurance-title">
-              Protect Your <span>family</span>
-            </h2>
-            <p className="life-insurance-hook">Protection starts with clarity before urgency.</p>
-            <p className="life-insurance-body">
-              Explore general life insurance concepts and the questions people may consider when preparing for unexpected events and protecting those who depend on them. Common options include term life for set periods and permanent policies for longer term coverage.
-            </p>
-            <p className="life-insurance-why">
-              <strong>Why it matters:</strong> A clear life insurance plan can help reduce financial stress, preserve household goals, and give families a framework for dealing with unexpected losses.
-            </p>
-            <p className="life-insurance-disclaimer">
-              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-            </p>
-          </div>
-        </article>
-
-        <article className="financial-carousel-slide life-insurance-slide ira-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 1 ? "block" : "none" }}>
-          <style>{`
-            .ira-insurance-art {
-              background-image: url(${iraDesignPng});
-              background-position: right center;
-              background-size: 45% auto;
-            }
-            @media (max-width: 767px) {
-              .ira-insurance-art {
-                background-position: center top;
-                background-size: contain;
-              }
-            }
-          `}</style>
-          <div className="life-insurance-art ira-insurance-art" aria-hidden="true" />
-          <div className="life-insurance-copy">
-            <h2 className="life-insurance-title">
-              Retirement and <span>IRAs</span>
-            </h2>
-            <p className="life-insurance-hook">A stronger retirement plan begins with better questions today.</p>
-            <p className="life-insurance-body">
-              Understand common retirement priorities, the general role of IRAs, and the factors people may consider while preparing for their future. IRAs can be part of that conversation, with traditional and Roth accounts often used for different tax and planning goals, and the reason it matters is that the decisions made early can shape how comfortable and prepared someone feels in retirement.
-            </p>
-            <p className="life-insurance-why">
-              <strong>Why it matters:</strong> The structure of retirement accounts and timing can materially affect long-term flexibility, tax efficiency, and peace of mind later in life.
-            </p>
-            <p className="life-insurance-disclaimer">
-              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-            </p>
-          </div>
-        </article>
-
-        <article className="financial-carousel-slide life-insurance-slide trust-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 2 ? "block" : "none" }}>
-          <style>{`
-            .trust-insurance-art {
-              background-image: url(${trustDesignPng});
-              background-position: right center;
-              background-size: 43% auto;
-            }
-            @media (max-width: 767px) {
-              .trust-insurance-art {
-                background-position: center top;
-                background-size: contain;
-              }
-            }
-          `}</style>
-          <div className="life-insurance-art trust-insurance-art" aria-hidden="true" />
-          <div className="life-insurance-copy">
-            <h2 className="life-insurance-title">
-              Trusts and <span>Legacy Planning</span>
-            </h2>
-            <p className="life-insurance-hook">A thoughtful legacy plan begins with better questions today.</p>
-            <p className="life-insurance-body">
-              Learn how wills, trusts, beneficiaries, and organized financial documents may contribute to a thoughtful legacy plan. Trusts and legacy planning help organize how assets, responsibilities, and personal wishes are handled over time. These tools may be used to support family transitions, reduce confusion, and preserve long-term intentions, while common approaches include wills, revocable trusts, and beneficiary designations that need to align with a broader estate plan.
-            </p>
-            <p className="life-insurance-why">
-              <strong>Why it matters:</strong> Thoughtful legacy planning can help avoid confusion, preserve intentions, and make future transitions easier for family members and beneficiaries.
-            </p>
-            <p className="life-insurance-disclaimer">
-              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-            </p>
-          </div>
-        </article>
-
-        <article className="financial-carousel-slide life-insurance-slide investment-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 3 ? "block" : "none" }}>
-          <style>{`
-            .investment-insurance-art {
-              background-image: url(${investmentDesignPng});
-              background-position: right center;
-              background-size: auto 96%;
-            }
-            @media (max-width: 767px) {
-              .investment-insurance-art {
-                background-position: center top;
-                background-size: contain;
-              }
-            }
-          `}</style>
-          <div className="life-insurance-art investment-insurance-art" aria-hidden="true" />
-          <div className="life-insurance-copy">
-            <h2 className="life-insurance-title">
-              Investments and <span>Wealth Building</span>
-            </h2>
-            <p className="life-insurance-hook">Long-term growth decisions work best when risk is understood first.</p>
-            <p className="life-insurance-body">
-              Explore foundational investment concepts, including time horizon, diversification, personal goals, and the relationship between potential opportunity and risk. Investing is about matching long-term financial goals with the right balance of risk, time horizon, and liquidity. It matters because markets can rise and fall, so diversification, costs, and discipline often matter as much as the investment itself, and common options include stocks, bonds, mutual funds, and diversified portfolios.
-            </p>
-            <p className="life-insurance-why">
-              <strong>Why it matters:</strong> The right investment approach depends on goals, time horizon, and risk tolerance, which is why understanding the basics helps people make more informed decisions.
-            </p>
-            <p className="life-insurance-disclaimer">
-              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-            </p>
-          </div>
-        </article>
-
-        <article className="financial-carousel-slide life-insurance-slide crypto-insurance-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 4 ? "block" : "none" }}>
-          <style>{`
-            .crypto-insurance-art {
-              background-image: url(${cryptoDesignPng});
-              background-position: right center;
-              background-size: auto 86%;
-            }
-            @media (max-width: 767px) {
-              .crypto-insurance-art {
-                background-position: center top;
-                background-size: contain;
-              }
-            }
-          `}</style>
-          <div className="life-insurance-art crypto-insurance-art" aria-hidden="true" />
-          <div className="life-insurance-copy">
-            <h2 className="life-insurance-title">
-              <span>Cryptocurrency</span> and Digital Assets
-            </h2>
-            <p className="life-insurance-hook">Digital assets require security discipline as much as market awareness.</p>
-            <p className="life-insurance-body">
-              Build a clearer understanding of cryptocurrency, market volatility, digital security, and the risks to consider before making financial decisions. Cryptocurrency and digital assets are a newer category of financial exposure that can move quickly and carry meaningful technology, custody, and security risks. The importance of understanding them is that they are not just price charts; they also involve wallets, private keys, platform risk, fraud exposure, and the possibility of permanent loss, with common approaches including holding crypto directly, using exchanges, and storing assets in self-custody or custodial accounts.
-            </p>
-            <p className="life-insurance-why">
-              <strong>Why it matters:</strong> Because the market moves quickly and security mistakes can be costly, it is important to understand both the opportunity and the risk before getting involved.
-            </p>
-            <p className="life-insurance-disclaimer">
-              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-            </p>
-          </div>
-        </article>
-
-        <article className="financial-carousel-slide life-insurance-slide market-chart-slide mt-12 overflow-hidden rounded-[26px] bg-[#050816] text-[#F4F7FB]" style={{ display: activeSlide === 5 ? "block" : "none" }}>
-          <style>{`
-            .market-chart-art {
-              background-image: url(${marketChartDesignPng});
-              background-position: right center;
-              background-size: auto 108%;
-            }
-            @media (max-width: 767px) {
-              .market-chart-art {
-                background-position: center top;
-                background-size: contain;
-                aspect-ratio: 1 / 1;
-              }
-            }
-          `}</style>
-          <div className="life-insurance-art market-chart-art" aria-hidden="true" />
-          <div className="life-insurance-copy">
-            <h2 className="life-insurance-title">
-              Understanding <span>Market Charts</span>
-            </h2>
-            <p className="life-insurance-hook">Charts can describe what happened, not promise what happens next.</p>
-            <p className="life-insurance-body">
-              Learn the basic parts of a candlestick chart, including open, close, high, and low, and understand what market charts can and cannot communicate. Market charts can help explain how prices have moved over time, but they do not predict the future and should be used as context rather than certainty. They matter because trends, volume, and price action may help people ask better questions about risk and timing, while common chart types include candlesticks, line charts, and moving averages that describe history differently.
-            </p>
-            <p className="life-insurance-why">
-              <strong>Why it matters:</strong> Charts are most useful when they are treated as information tools, not promises, which helps people keep perspective on risk, timing, and market uncertainty.
-            </p>
-            <p className="life-insurance-disclaimer">
-              Professional roles, qualifications, and legal responsibilities can vary by jurisdiction and service type. Always confirm credentials and scope before acting.
-            </p>
-          </div>
-        </article>
-
-        <div className="mt-5 flex flex-col items-center justify-center gap-4">
-          <div className="flex items-center justify-center gap-3" aria-label="Financial slide navigation">
-            <button
-              type="button"
-              aria-label="Previous financial topic slide"
-              onClick={goToPreviousSlide}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B7C0D8]/30 bg-white/5 text-xl font-bold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:bg-[#C6B8FF]/10"
-            >
-              ←
-            </button>
-
-            <div className="flex items-center justify-center gap-3" aria-label="Financial topic slides">
-              {Array.from({ length: slideCount }, (_, index) => (
-                <button
-                  key={`financial-slide-${index}`}
-                  type="button"
-                  aria-label={`Show financial topic slide ${index + 1}`}
-                  aria-current={activeSlide === index ? "true" : undefined}
-                  onClick={() => goToSlide(index)}
-                  className={`h-3 w-3 rounded-full border border-[#B7C0D8]/30 transition-all duration-300 ${
-                    activeSlide === index ? "w-8 bg-[#9B7CFF]" : "bg-white/20"
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              type="button"
-              aria-label="Next financial topic slide"
-              onClick={goToNextSlide}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B7C0D8]/30 bg-white/5 text-xl font-bold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:bg-[#C6B8FF]/10"
-            >
-              →
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 const FOUR_CS = [
   ["Cash", "the money you need to stay reachable and stable. We look at where guarantees can help, such as cash value life insurance and fixed annuities."],
   ["Crypto", "digital assets you already hold. We look at how they're kept secure and how your family would access them if something happened to you."],
@@ -1106,6 +720,14 @@ const SERVICE_TABS = [
     href: "https://www.investopedia.com/terms/l/lifeinsurance.asp",
     text: "Coverage for families and business owners, including cash value life insurance. Use the needs calculator to see how much protection your family may need.",
     points: ["Income replacement and final expenses", "Mortgage, debts and education costs", "Cash value life insurance, where guarantees can help"],
+    calculator: "life insurance needs calculator",
+    facts: [
+      ["You can use it while you're alive.", "Permanent policies build cash value that you may borrow against or withdraw. Many policies also offer living-benefit riders that can pay out early for a terminal, chronic or critical illness."],
+      ["It usually skips probate.", "The death benefit goes straight to the beneficiary you name, so an outdated beneficiary, like an ex-spouse, can override what your will says."],
+      ["Death benefits are generally income-tax-free.", "Beneficiaries generally do not pay federal income tax on the death benefit, though estate and other taxes can still apply."],
+      ["Waiting costs more.", "Premiums are based on your age and health. Many term policies can be converted to permanent coverage later without a new medical exam, but terms vary."],
+      ["A lapsed policy pays nothing.", "Missed premiums can end coverage after a short grace period, so check that yours is still active."],
+    ],
   },
   {
     id: "annuities",
@@ -1113,6 +735,14 @@ const SERVICE_TABS = [
     href: "https://www.investor.gov/introduction-investing/investing-basics/investment-products/annuities",
     text: "Guarantees and retirement income. Use the readiness calculator to see how your savings may support the retirement you want.",
     points: ["Retirement income planning", "Where guarantees can help", "Money you need to stay reachable and stable"],
+    calculator: "retirement readiness calculator",
+    facts: [
+      ["Income you can't outlive.", "A fixed annuity can be turned into a stream of payments that lasts as long as you live, no matter how long that is."],
+      ["No stock market losses.", "Fixed annuities credit a declared interest rate instead of following the market. That rate may not keep pace with inflation."],
+      ["Growth is tax-deferred.", "You generally owe tax when you take money out, and withdrawals before age 59½ may add a 10% federal tax penalty."],
+      ["Early withdrawals can cost you.", "Most contracts have surrender charges for a number of years, though many allow a free withdrawal each year."],
+      ["Guarantees depend on the insurer.", "They rest on the issuing company's claims-paying ability. Annuities are not FDIC insured, and state guaranty associations offer limited backup."],
+    ],
   },
   {
     id: "business",
@@ -1120,6 +750,13 @@ const SERVICE_TABS = [
     href: "https://www.investopedia.com/terms/k/keypersoninsurance.asp",
     text: "Key person coverage, buy-sell funding and succession planning for the business you own or lead.",
     points: ["What happens if a key person dies", "What happens if a partner leaves", "Funding a buy-sell agreement"],
+    facts: [
+      ["Your business can own the policy.", "With key person coverage, the company is the beneficiary on a leader or top earner, giving it cash to hire, recover or repay debt after a loss."],
+      ["Without a buy-sell, heirs inherit a business role.", "A funded buy-sell agreement sets who buys a departing owner's share and gives them the cash to do it."],
+      ["It covers more than death.", "Buy-sell agreements can also be triggered by disability, retirement or an owner leaving."],
+      ["Lenders may ask for it.", "Some lenders require key person coverage as a condition of a business loan."],
+      ["Tax treatment varies.", "Premiums are generally not deductible, and proceeds are generally received income-tax-free. Confirm your situation with a tax professional."],
+    ],
   },
   {
     id: "digital",
@@ -1127,60 +764,101 @@ const SERVICE_TABS = [
     href: "https://www.forbes.com/sites/georgiiverbitskii/2025/07/22/bitcoin-backed-loans-are-reshaping-traditional-lending/",
     text: "Hold, use and pass on digital assets with institutional-grade infrastructure, without the seed-phrase risk of self-custody.",
     points: ["Institutional custody", "Inheritance and access planning", "Life insurance for digital asset holders"],
+    facts: [
+      ["Lost keys can't be recovered.", "Self-custody has no help desk. Chainalysis estimated in 2020 that roughly 20% of all bitcoin may be lost or inaccessible."],
+      ["Your heirs may not be able to get in.", "If no one else knows how to access your wallet, your digital assets can be locked away for good."],
+      ["The IRS treats crypto as property.", "That means sales and trades can be taxable events, and assets passed at death generally receive a stepped-up cost basis."],
+      ["It isn't FDIC insured.", "Digital assets are not bank deposits, so protection depends on how they are held and by whom."],
+      ["Planning can include insurance.", "Life insurance can give heirs cash so they aren't forced to sell volatile assets to cover taxes or expenses."],
+    ],
   },
 ];
 
 function AgencyIntro({ navigate }) {
   const [active, setActive] = useState("life");
+  const [showCalc, setShowCalc] = useState(false);
   const tab = SERVICE_TABS.find((item) => item.id === active);
+  const hasCalc = active === "life" || active === "annuities";
   const go = (event, href) => {
     event.preventDefault();
     navigate(href);
   };
+  const selectTab = (id) => {
+    setActive(id);
+    setShowCalc(false);
+  };
+  const cta = active === "digital" ? { href: "/contact#waitlist", label: "Join the waitlist" } : { href: "/contact", label: active === "business" ? "Book a call about business coverage" : "Talk with Marc" };
   return (
-    <section id="agency" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ background: `linear-gradient(rgba(5,8,22,.32),rgba(5,8,22,.62)), url(${AGENCY_BG}) center/cover` }}>
+    <section id="agency" className="agency-intro bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ "--agency-bg-image": `url(${AGENCY_BG})` }}>
       <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME}</p>
-        <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">Independent insurance agency in Nashville, Tennessee</h2>
-        <p className="mt-6 max-w-3xl text-[20px] leading-[1.6] text-[#B7C0D8]">{SITE_DESCRIPTION}</p>
-        <div role="tablist" aria-label="Services" className="mt-10 flex flex-wrap gap-3">
-          {SERVICE_TABS.map((item) => (
-            <button
-              key={item.id}
-              role="tab"
-              aria-selected={active === item.id}
-              onClick={() => setActive(item.id)}
-              className={`rounded-full border px-5 py-3 text-sm font-black transition ${active === item.id ? "border-[#6D5EF5] bg-[#6D5EF5] text-white" : "border-[#B7C0D8]/30 text-[#B7C0D8] hover:border-[#C6B8FF]"}`}
-            >
-              {item.title}
-            </button>
-          ))}
-        </div>
-        <div role="tabpanel" className="mt-8">
-          <div className="grid gap-6 rounded-3xl border border-[#B7C0D8]/20 bg-white/5 p-6 sm:p-8" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))" }}>
-            <div>
-              <h3 className="text-2xl font-black">{tab.title}</h3>
-              <p className="mt-3 text-[17px] leading-[1.7] text-[#B7C0D8]">{tab.text}</p>
-              <a href={tab.href} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-sm font-semibold text-[#C6B8FF] underline underline-offset-4">
-                Read more about {tab.title.toLowerCase()}
-              </a>
-            </div>
-            <ul className="list-disc space-y-2 pl-6 text-[16px] leading-[1.6] text-[#B7C0D8]">
-              {tab.points.map((point) => <li key={point}>{point}</li>)}
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME} · Nashville, Tennessee</p>
+        <div className="mt-8 grid items-start gap-10 lg:gap-14" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(460px,100%),1fr))" }}>
+          <div className="py-2">
+            <h2 id="agency-topic-heading" className="text-[clamp(2.5rem,5vw,4rem)] font-black leading-[1.05]">{tab.title}</h2>
+            <p className="mt-6 max-w-xl text-[18px] leading-[1.7] text-[#B7C0D8]">{tab.text}</p>
+            <a href={tab.href} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-[#C6B8FF] underline underline-offset-4">
+              Read more about {tab.title.toLowerCase()}
+            </a>
+            <ul className="mt-8 space-y-3 text-[15px] leading-[1.6] text-[#B7C0D8]">
+              {tab.points.map((point) => (
+                <li key={point} className="flex items-start gap-3">
+                  <span aria-hidden="true" className="font-black text-[#C6B8FF]">✓</span>
+                  <span>{point}</span>
+                </li>
+              ))}
             </ul>
+            <div role="tablist" aria-label="Services" className="mt-9 flex flex-wrap gap-3">
+              {SERVICE_TABS.map((item) => (
+                <button
+                  key={item.id}
+                  id={`service-tab-${item.id}`}
+                  type="button"
+                  role="tab"
+                  aria-controls="agency-service-panel"
+                  aria-selected={active === item.id}
+                  onClick={() => selectTab(item.id)}
+                  className={`rounded-full border px-4 py-2.5 text-sm font-black transition ${active === item.id ? "border-[#6D5EF5] bg-[#6D5EF5] text-white" : "border-[#B7C0D8]/30 text-[#B7C0D8] hover:border-[#C6B8FF]"}`}
+                >
+                  {item.title}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="mt-6">
-            {active === "life" && <LifeInsuranceCalculator navigate={navigate} />}
-            {active === "annuities" && <RetirementCalculator navigate={navigate} />}
-            {active === "business" && (
-              <a href="/contact" onClick={(event) => go(event, "/contact")} className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
-                Book a call about business coverage
-              </a>
-            )}
-            {active === "digital" && (
-              <a href="/contact#waitlist" onClick={(event) => go(event, "/contact#waitlist")} className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
-                Join the waitlist
-              </a>
+          <div id="agency-service-panel" role="tabpanel" aria-labelledby={`service-tab-${active}`} className="min-w-0">
+            {hasCalc && showCalc ? (
+              <>
+                <button type="button" onClick={() => setShowCalc(false)} className="mb-4 text-sm font-black text-[#C6B8FF] underline underline-offset-4">
+                  ← Back to {tab.title.toLowerCase()} facts
+                </button>
+                {active === "life" ? <LifeInsuranceCalculator navigate={navigate} /> : <RetirementCalculator navigate={navigate} />}
+              </>
+            ) : (
+              <div className="rounded-3xl border border-[#B7C0D8]/20 bg-[#111a31]/90 p-6 sm:p-8">
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-[#C6B8FF]">Did you know?</p>
+                <ul className="mt-5 flex flex-col" style={{ gap: "1.25rem" }}>
+                  {tab.facts.map(([headline, detail]) => (
+                    <li key={headline}>
+                      <p className="text-[17px] font-black text-[#F4F7FB]">{headline}</p>
+                      <p className="mt-1 text-[15px] text-[#B7C0D8]" style={{ lineHeight: 1.6 }}>{detail}</p>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  {hasCalc && (
+                    <button type="button" onClick={() => setShowCalc(true)} className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
+                      Try the {tab.calculator}
+                    </button>
+                  )}
+                  <a
+                    href={cta.href}
+                    onClick={(event) => go(event, cta.href)}
+                    className={hasCalc ? "rounded-full border border-[#B7C0D8]/30 px-7 py-3 font-black text-[#F4F7FB] transition hover:border-[#C6B8FF]" : "rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]"}
+                  >
+                    {cta.label}
+                  </a>
+                </div>
+                <p className="mt-6 text-[12px] italic leading-[1.6] text-[#B7C0D8]">General education only, not insurance, investment, tax or legal advice. Details vary by policy, issuer and state.</p>
+              </div>
             )}
           </div>
         </div>
@@ -1270,27 +948,17 @@ function RetirementCalculator({ navigate }) {
 }
 
 function LifeInsuranceCalculator({ navigate }) {
-  const [v, setV] = useState({ income: 80000, years: 10, debts: 30000, mortgage: 250000, kids: 2, education: 40000, final: 15000, assets: 100000, coverage: 100000 });
+  const [v, setV] = useState({ income: 80000, years: 10, debts: 280000, coverage: 100000 });
   const set = (key) => (event) => setV((prev) => ({ ...prev, [key]: Number(event.target.value) || 0 }));
 
   const incomeNeed = v.income * v.years;
-  const educationNeed = v.kids * v.education;
-  const total = incomeNeed + v.debts + v.mortgage + educationNeed + v.final;
-  const need = Math.max(total - v.assets, 0);
-  const gap = Math.max(need - v.coverage, 0);
-  const pct = need > 0 ? Math.min(Math.round((v.coverage / need) * 100), 100) : 100;
+  const need = Math.max(incomeNeed + v.debts - v.coverage, 0);
   const money = (n) => `$${Math.round(n).toLocaleString()}`;
-  const label = gap === 0 ? "Covered" : pct >= 75 ? "Close" : "Gap found";
 
   const fields = [
     ["income", "Annual income to replace ($)"],
-    ["years", "Years your family would need that income"],
-    ["debts", "Debts, excluding mortgage ($)"],
-    ["mortgage", "Mortgage balance ($)"],
-    ["kids", "Number of children"],
-    ["education", "Education cost per child ($)"],
-    ["final", "Final expenses ($)"],
-    ["assets", "Savings and investments available ($)"],
+    ["years", "Years to replace income"],
+    ["debts", "Debts, mortgage and final expenses ($)"],
     ["coverage", "Existing life insurance ($)"],
   ];
 
@@ -1306,6 +974,7 @@ function LifeInsuranceCalculator({ navigate }) {
                   type="number"
                   inputMode="numeric"
                   min={0}
+                  step={key === "years" ? 1 : 1000}
                   value={v[key]}
                   onChange={set(key)}
                   className="mt-2 w-full rounded-xl border border-[#B7C0D8]/25 bg-[#050816]/65 px-4 py-3 text-[15px] text-[#F4F7FB]"
@@ -1314,18 +983,12 @@ function LifeInsuranceCalculator({ navigate }) {
             ))}
           </form>
           <div className="flex flex-col justify-center bg-[#6D5EF5]/15 p-6 sm:p-8" aria-live="polite">
-            <h3 className="text-xl font-black">Your estimate</h3>
+            <h3 className="text-xl font-black">Estimated additional coverage</h3>
             <p className="mt-4 text-[clamp(2.4rem,7vw,4rem)] font-black leading-none text-[#C6B8FF]">{money(need)}</p>
-            <p className="mt-2 text-sm font-black uppercase tracking-[0.2em] text-[#9B7CFF]">Estimated coverage need · {label}</p>
-            <div className="mt-5 h-3 w-full overflow-hidden rounded-full bg-[#050816]/70">
-              <div className="h-full rounded-full bg-[#9B7CFF]" style={{ width: `${pct}%` }} />
-            </div>
-            <dl className="mt-6 space-y-3 text-[15px] text-[#B7C0D8]">
+            <dl className="mt-6 space-y-3 text-[15px] text-[#B7C0D8]" aria-label="Estimate breakdown">
               <div className="flex justify-between gap-4"><dt>Income replacement</dt><dd className="font-black text-[#F4F7FB]">{money(incomeNeed)}</dd></div>
-              <div className="flex justify-between gap-4"><dt>Debts and mortgage</dt><dd className="font-black text-[#F4F7FB]">{money(v.debts + v.mortgage)}</dd></div>
-              <div className="flex justify-between gap-4"><dt>Education and final expenses</dt><dd className="font-black text-[#F4F7FB]">{money(educationNeed + v.final)}</dd></div>
-              <div className="flex justify-between gap-4"><dt>Less savings available</dt><dd className="font-black text-[#F4F7FB]">-{money(Math.min(v.assets, total))}</dd></div>
-              <div className="flex justify-between gap-4"><dt>Coverage gap after existing insurance</dt><dd className="font-black text-[#F4F7FB]">{money(gap)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Debts, mortgage and final expenses</dt><dd className="font-black text-[#F4F7FB]">{money(v.debts)}</dd></div>
+              <div className="flex justify-between gap-4"><dt>Existing life insurance</dt><dd className="font-black text-[#F4F7FB]">-{money(Math.min(v.coverage, incomeNeed + v.debts))}</dd></div>
             </dl>
             <a
               href="/contact"
@@ -1340,7 +1003,7 @@ function LifeInsuranceCalculator({ navigate }) {
           </div>
         </div>
         <p className="mt-6 max-w-3xl text-[13px] italic leading-[1.6] text-[#B7C0D8]">
-          For illustration only. This is a simple needs estimate that does not account for taxes, inflation or investment returns. It is not insurance, investment, tax or legal advice, and it is not an offer of coverage.
+          For illustration only. This simplified estimate does not account for education costs, savings, taxes, inflation or investment returns. It is not insurance, investment, tax or legal advice, and it is not an offer of coverage.
         </p>
     </div>
   );
@@ -1380,102 +1043,24 @@ function SiteDisclosure() {
   );
 }
 
-function FinancialTopicsPage() {
+const CALENDAR_EMBED_URL = `${SCHEDULE_CALL_URL.replace("/calendar/u/0/", "/calendar/")}?gv=true`;
+
+function ContactCalendar() {
   return (
-    <>
-      <FourCs />
-      <FinancialTopicsSection />
-    </>
-  );
-}
-
-const FORM_ENDPOINT = "https://formsubmit.co/ajax/marc@calocapital.io";
-
-const CONTACT_TOPICS = [
-  { value: "Term Loan", message: "Hello, I'm interested in a term loan for my business. Could someone walk me through the loan amounts, rates and requirements, and let me know the next steps to get prequalified?" },
-  { value: "Line of Credit", message: "Hello, I'd like to learn more about a business line of credit. Could you explain the credit limits, how draws and repayment work, and how to get started?" },
-  { value: "Revenue-Based Financing", message: "Hello, I'm exploring revenue-based financing. Please share how funding amounts are determined and how repayment is tied to my business revenue." },
-  { value: "SBA Loan", message: "Hello, I'm interested in SBA loan options. Could you tell me which programs I may qualify for and what documents I should prepare?" },
-  { value: "Equipment Financing", message: "Hello, I'd like to finance equipment for my business. Please let me know the available terms and what information you need from me." },
-  { value: "Bitcoin-Backed Loan", message: "Hello, I'd like to learn about borrowing against my Bitcoin. Could you explain loan-to-value, collateral terms and how the process works?" },
-  { value: "Digital Asset Services waitlist", message: "Hello, please add me to the Digital Asset Services waitlist. I am interested in: " },
-  { value: "Schedule a call", message: "Hello, I'd like to schedule a call with a CaloCapital specialist. My preferred days and times are: " },
-  { value: "General question", message: "Hello, I have a question about CaloCapital and your services: " },
-];
-
-let pendingContactTopic = "";
-
-function ContactForm() {
-  const [status, setStatus] = useState("");
-  const initialTopic = CONTACT_TOPICS.find((item) => item.value === pendingContactTopic);
-  const [topic, setTopic] = useState(initialTopic ? initialTopic.value : "");
-  const [message, setMessage] = useState(initialTopic ? initialTopic.message : "");
-
-  function handleTopicChange(event) {
-    const value = event.target.value;
-    setTopic(value);
-    const match = CONTACT_TOPICS.find((item) => item.value === value);
-    if (match) setMessage(match.message);
-  }
-
-  const [sending, setSending] = useState(false);
-  const fieldClass = "mb-4 w-full rounded-xl border border-[#B7C0D8]/25 bg-[#050816]/65 px-4 py-3 text-[15px] text-[#F4F7FB] placeholder:text-[#B7C0D8]/60";
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    setSending(true);
-    setStatus("Sending...");
-    try {
-      const response = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" },
-      });
-      const data = await response.json();
-      if (String(data.success) !== "true") throw new Error("Submission failed");
-      form.reset();
-      setTopic("");
-      setMessage("");
-      setStatus("Thank you! Your submission has been received. We will be in touch soon.");
-    } catch {
-      setStatus("Something went wrong. Please email marc@calocapital.io or call 917-400-9543.");
-    } finally {
-      setSending(false);
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="rounded-[20px] border border-[#B7C0D8]/15 bg-[#1A2340]/55 p-6 sm:p-8">
-      <h3 className="mb-5 font-['Cormorant_Garamond',serif] text-[30px] font-bold text-[#F4F7FB]">Send us a message</h3>
-      <input type="hidden" name="_subject" value="New message from calocapital.io" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
-      <label htmlFor="contact-name" className="mb-1 block text-sm text-[#B7C0D8]">Name</label>
-      <input id="contact-name" name="name" type="text" placeholder="Your name" className={fieldClass} />
-      <label htmlFor="contact-email" className="mb-1 block text-sm text-[#B7C0D8]">Email address</label>
-      <input id="contact-email" name="email" type="email" required placeholder="you@example.com" className={fieldClass} />
-      <label htmlFor="contact-phone" className="mb-1 block text-sm text-[#B7C0D8]">Phone number</label>
-      <input id="contact-phone" name="phone" type="tel" placeholder="(555) 555-5555" className={fieldClass} />
-      <label htmlFor="contact-topic" className="mb-1 block text-sm text-[#B7C0D8]">What can we help with?</label>
-      <select id="contact-topic" name="topic" value={topic} onChange={handleTopicChange} className={fieldClass}>
-        <option value="">Select a topic</option>
-        {CONTACT_TOPICS.map((item) => (
-          <option key={item.value} value={item.value}>{item.value}</option>
-        ))}
-      </select>
-      <label htmlFor="contact-message" className="mb-1 block text-sm text-[#B7C0D8]">Message</label>
-      <textarea id="contact-message" name="message" rows={5} required placeholder="How can we help?" value={message} onChange={(event) => setMessage(event.target.value)} className={fieldClass} />
-      <button
-        type="submit"
-        disabled={sending}
-        className="min-h-12 w-full rounded-full bg-gradient-to-br from-[#6D5EF5] to-[#9B7CFF] px-6 py-3 text-base font-semibold text-white disabled:opacity-60"
-      >
-        Send message
-      </button>
-      <p role="status" aria-live="polite" className="mt-3 text-sm text-[#B7C0D8]">{status}</p>
-    </form>
+    <div className="contact-cal rounded-[20px] border border-transparent p-6 sm:p-8" style={{background:"transparent"}}>
+      <p className="mb-5 text-[15px] text-[#B7C0D8]">Pick a time that works for you. You will get a calendar invite with the video link.</p>
+      <iframe
+        title="Book a Google Meet with CaloCapital"
+        src={CALENDAR_EMBED_URL}
+        loading="lazy"
+        className="contact-cal-frame w-full rounded-xl border-0 bg-white"
+      />
+      <p className="mt-4 text-sm text-[#B7C0D8]">
+        Calendar not loading?{" "}
+        <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Open it in a new tab</a>
+        {" "}or email <a href="mailto:marc@calocapital.io" className="text-[#C6B8FF] underline underline-offset-4">marc@calocapital.io</a>.
+      </p>
+    </div>
   );
 }
 
@@ -1521,18 +1106,15 @@ function ContactPage() {
     >
       <div className="mx-auto max-w-[1240px]">
         <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.18em] text-[#C6B8FF]">Contact</p>
-        <h1 className={`${serif} mb-5 max-w-[760px] text-[44px] font-bold leading-[1.08] sm:text-[60px]`}>
-          Let&apos;s talk about your business.
+        <h1 className={`${serif} mb-12 max-w-[760px] text-[44px] font-bold leading-[1.08] sm:text-[60px]`}>
+          Book a Google Meet with Marc
         </h1>
-        <p className="mb-12 max-w-[620px] text-[18px] leading-[1.6] text-[#B7C0D8]">
-          Tell us what you need and a Calo specialist will get back to you. No pressure, no obligation.
-        </p>
 
-        <div className="grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+        <div className="grid items-stretch gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
           <div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
               {details.map((item) => (
-                <div key={item.label} className="rounded-[20px] border border-[#B7C0D8]/15 bg-[#1A2340]/55 p-6">
+                <div key={item.label} className="rounded-[20px] border border-transparent p-6" style={{ background: "transparent" }}>
                   <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#C6B8FF]">{item.label}</p>
                   {item.href ? (
                     <a href={item.href} className="text-[18px] text-[#F4F7FB] underline decoration-[#9B7CFF]/50 underline-offset-4 hover:text-[#C6B8FF]">{item.value}</a>
@@ -1544,14 +1126,6 @@ function ContactPage() {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={SCHEDULE_CALL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-[#6D5EF5] px-7 py-3 text-[15px] font-semibold text-white transition hover:bg-[#7B6DF7]"
-              >
-                Schedule a call
-              </a>
               <a href="/faqs" className="rounded-full border border-[#B7C0D8]/30 px-7 py-3 text-[15px] font-semibold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]">
                 Read the FAQs
               </a>
@@ -1577,14 +1151,9 @@ function ContactPage() {
             </div>
           </div>
 
-          <div className="min-w-0">
-            <ContactForm />
+          <div className="min-w-0 flex flex-col">
+            <ContactCalendar />
           </div>
-        </div>
-        <div className="mt-12 rounded-[20px] border border-[#B7C0D8]/15 bg-[#1A2340]/55 p-6 sm:p-8">
-          <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-[#C6B8FF]">Licensing</p>
-          <p className="mt-3 text-[15px] text-[#F4F7FB]">Marc J. Calo, Licensed Insurance Agent, NPN 17700283</p>
-          <p className="mt-3 text-[14px] text-[#B7C0D8]">Licensed in 21 states: Alabama, Connecticut, Florida, Georgia, Idaho, Kentucky, Maryland, Nebraska, Nevada, New Jersey, New York (resident), North Carolina, Ohio, Pennsylvania, South Carolina, Tennessee, Texas, Utah, Virginia, Washington, Wyoming.</p>
         </div>
       </div>
     </section>
@@ -1847,6 +1416,38 @@ function GlobalStyles() {
       html { scroll-behavior: smooth; overflow-x: hidden; }
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
+      .contact-cal-frame { height: min(720px, 85vh); min-height: 560px; }
+      @media (min-width: 1024px) {
+        .contact-cal { display: flex; flex: 1 1 auto; flex-direction: column; }
+        .contact-cal-frame { flex: 1 1 0; height: auto; min-height: 420px; }
+      }
+      .agency-intro {
+        position: relative;
+        isolation: isolate;
+        background-color: #15021a;
+      }
+      .agency-intro::before,
+      .agency-intro::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .agency-intro::before {
+        top: 0;
+        aspect-ratio: 2561 / 1440;
+        max-height: 100%;
+        background: var(--agency-bg-image) center top / 100% auto no-repeat;
+        -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+      }
+      .agency-intro::after {
+        top: 0;
+        height: 100%;
+        background: linear-gradient(rgba(5,8,22,.32),rgba(5,8,22,.62));
+      }
       .calo-after-chart {
         --cac-navy: #050816;
         --cac-purple: #9B7CFF;
@@ -2582,7 +2183,7 @@ export default function App() {
   const transitionTimerRef = useRef(null);
 
   useEffect(() => {
-    const path = renderedPage === "Info" ? infoPath : renderedPage === "Contact" ? "/contact" : renderedPage === "Legal" ? "/legal" : renderedPage === "FAQs" ? "/faqs" : renderedPage === "Financial Topics" ? "/financial-topics" : "/";
+    const path = renderedPage === "Info" ? infoPath : renderedPage === "Contact" ? "/contact" : renderedPage === "Legal" ? "/legal" : renderedPage === "FAQs" ? "/faqs" : "/";
     const meta = getRouteMeta(path);
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
@@ -2602,9 +2203,6 @@ export default function App() {
     (nextPage) => {
       if (nextPage === renderedPage) {
         setCurrentPage(nextPage);
-        if (nextPage === "Financial Topics") {
-          requestAnimationFrame(scrollToFinancialTopicsLocation);
-        }
         return;
       }
 
@@ -2655,7 +2253,7 @@ export default function App() {
   }, [clearTransitionTimer]);
 
   useEffect(() => {
-    if (renderedPage === "Financial Topics" || renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") return;
+    if (renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") return;
 
     requestAnimationFrame(() => {
       if (restoringHomeScroll) return;
@@ -2663,23 +2261,7 @@ export default function App() {
     });
   }, [currentPage, renderedPage]);
 
-  useEffect(() => {
-    if (renderedPage !== "Financial Topics") return;
-    requestAnimationFrame(scrollToFinancialTopicsLocation);
-  }, [renderedPage]);
-
-  function setPage(page, hash = "") {
-    if (page === "Financial Topics" || page === "Four C's") {
-      window.history.pushState({}, "", pageRoutes[page]);
-      setCurrentPage(page);
-      setRenderedPage("Financial Topics");
-      setTransitionPhase("idle");
-      setPendingPage(null);
-      requestAnimationFrame(scrollToFinancialTopicsLocation);
-      return;
-    }
-
-    if (page === "Contact") {
+  function setPage(page, hash = "") {    if (page === "Contact") {
       window.history.pushState({}, "", "/contact");
       setCurrentPage(page);
       setRenderedPage("Contact");
@@ -2715,7 +2297,7 @@ export default function App() {
       return;
     }
 
-    if (renderedPage === "Contact" || renderedPage === "Financial Topics" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") {
+    if (renderedPage === "Contact" || renderedPage === "Legal" || renderedPage === "FAQs" || renderedPage === "Info") {
       window.history.pushState({}, "", "/");
     }
 
@@ -2751,11 +2333,9 @@ export default function App() {
 
     const [rawPath, hash = ""] = href.split("#");
     const path = normalizePath(rawPath);
-    pendingContactTopic = path === "/contact" && hash === "waitlist" ? "Digital Asset Services waitlist" : "";
     if (path === "/contact") return setPage("Contact");
     if (path === "/faqs") return setPage("FAQs");
     if (path === "/legal") return setPage("Legal", hash);
-    if (path === "/financial-topics") return setPage("Financial Topics");
     if (path === "/") {
       if (renderedPage !== "Home" && savedHomeScroll !== null) return returnHome();
       return goToSection("home");
@@ -2803,7 +2383,6 @@ export default function App() {
     }
   }
 
-  const isFinancialTopicsPage = renderedPage === "Financial Topics";
   const pageTransitionStateClass = transitionPhase === "out" ? "opacity-0 translate-y-1 scale-[0.998]" : "opacity-100 translate-y-0 scale-100";
   const pageTransitionStyle = {
     filter: transitionPhase === "out" ? "blur(1.2px)" : "blur(0px)",
@@ -2818,7 +2397,7 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : isFinancialTopicsPage ? <FinancialTopicsPage /> : <HomePage setPage={setPage} navigate={navigate} />}
+        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
       </div>
       <SiteDisclosure />
       <Footer setPage={setPage} />
