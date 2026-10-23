@@ -787,7 +787,8 @@ function AgencyIntro({ navigate }) {
     setActive(id);
     setShowCalc(false);
   };
-  const cta = active === "digital" ? { href: "/contact#waitlist", label: "Join the waitlist" } : { href: "/contact", label: active === "business" ? "Book a call about business coverage" : "Talk with Marc" };
+  const APP_CTA = { href: "https://app.calocapital.io", label: "Visit the Calo Capital app for a free quote", external: true };
+  const cta = active === "digital" ? { href: "/contact#waitlist", label: "Join the waitlist" } : active === "business" ? { href: "/contact", label: "Book a call about business coverage" } : APP_CTA;
   return (
     <section id="agency" className="agency-intro bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ "--agency-bg-image": `url(${AGENCY_BG})` }}>
       <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
@@ -817,6 +818,7 @@ function AgencyIntro({ navigate }) {
                   aria-controls="agency-service-panel"
                   aria-selected={active === item.id}
                   onClick={() => selectTab(item.id)}
+                  onPointerEnter={(event) => { if (event.pointerType === "mouse" && active !== item.id) selectTab(item.id); }}
                   className={`rounded-full border px-4 py-2.5 text-sm font-black transition ${active === item.id ? "border-[#6D5EF5] bg-[#6D5EF5] text-white" : "border-[#B7C0D8]/30 text-[#B7C0D8] hover:border-[#C6B8FF]"}`}
                 >
                   {item.title}
@@ -851,7 +853,7 @@ function AgencyIntro({ navigate }) {
                   )}
                   <a
                     href={cta.href}
-                    onClick={(event) => go(event, cta.href)}
+                    {...(cta.external ? { target: "_blank", rel: "noopener noreferrer" } : { onClick: (event) => go(event, cta.href) })}
                     className={hasCalc ? "rounded-full border border-[#B7C0D8]/30 px-7 py-3 font-black text-[#F4F7FB] transition hover:border-[#C6B8FF]" : "rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]"}
                   >
                     {cta.label}
@@ -1422,7 +1424,7 @@ function GlobalStyles() {
       * { box-sizing: border-box; }
       .fourcs-sky { position: relative; background: #050816; }
       .fourcs-sky-bg { position: absolute; inset: 0; pointer-events: none; }
-      .fourcs-sky-bg > .calo-fin, .fourcs-sky-bg > .calo-fin > section { height: 100%; min-height: 0 !important; }
+      .fourcs-sky-bg > .calo-fin, .fourcs-sky-bg > .calo-fin > section, .fourcs-sky-bg .calo-fin > section[style] { height: 100% !important; min-height: 0 !important; }
       .fourcs-sky > #four-cs { position: relative; background: transparent; }
       .contact-cal-frame { height: min(720px, 85vh); min-height: 560px; }
       @media (min-width: 1024px) {
