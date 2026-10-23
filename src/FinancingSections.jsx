@@ -54,7 +54,15 @@ const css = `
   .calo-fin section{padding-left:20px!important;padding-right:20px!important}
   .calo-fin [style*="font-size:60px"],.calo-fin [style*="font-size:56px"],.calo-fin [style*="font-size:72px"],.calo-fin [style*="font-size:52px"]{font-size:36px!important}
   .calo-fin [style*="font-size:48px"],.calo-fin [style*="font-size:44px"]{font-size:32px!important}
-  .calo-fin [style*="height:620px"]{height:380px!important}
+  .calo-fin [style*="height:620px"]{height:260px!important;border-radius:72px 0 56px 0!important}
+  .calo-fin [role="tablist"]{flex-wrap:nowrap!important;overflow-x:auto;margin-bottom:24px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .calo-fin [role="tablist"]::-webkit-scrollbar{display:none}
+  .calo-fin [role="tablist"] button{flex:none;white-space:nowrap;padding:12px 14px!important}
+  .calo-fin #step-photo{height:240px!important;border-radius:64px 0 48px 0!important}
+  .calo-fin #step-num{width:48px!important;height:48px!important;font-size:20px!important}
+  .calo-fin [style*="margin-bottom:36px"]{margin-bottom:24px!important}
+  .calo-fin #qualify{margin-top:56px!important;padding-top:48px!important}
+  .calo-fin [style*="gap:72px"]{gap:28px!important}
   .calo-fin [style*="grid-column:span 2"]{grid-column:auto!important}
   .calo-fin section{padding-top:64px!important;padding-bottom:64px!important}
   .calo-fin [style*="padding:36px"]{padding:20px!important}

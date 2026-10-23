@@ -717,59 +717,55 @@ const SERVICE_TABS = [
   {
     id: "life",
     title: "Life Insurance",
+    heading: "If you weren't here tomorrow, would your family be protected?",
     href: "https://www.investopedia.com/terms/l/lifeinsurance.asp",
     text: "Coverage for families and business owners, including cash value life insurance. Use the needs calculator to see how much protection your family may need.",
-    points: ["Income replacement and final expenses", "Mortgage, debts and education costs", "Cash value life insurance, where guarantees can help"],
+    points: [],
     calculator: "life insurance needs calculator",
     facts: [
-      ["You can use it while you're alive.", "Permanent policies build cash value that you may borrow against or withdraw. Many policies also offer living-benefit riders that can pay out early for a terminal, chronic or critical illness."],
-      ["It usually skips probate.", "The death benefit goes straight to the beneficiary you name, so an outdated beneficiary, like an ex-spouse, can override what your will says."],
-      ["Death benefits are generally income-tax-free.", "Beneficiaries generally do not pay federal income tax on the death benefit, though estate and other taxes can still apply."],
-      ["Waiting costs more.", "Premiums are based on your age and health. Many term policies can be converted to permanent coverage later without a new medical exam, but terms vary."],
-      ["A lapsed policy pays nothing.", "Missed premiums can end coverage after a short grace period, so check that yours is still active."],
+      ["Work coverage usually ends with the job.", "Group life insurance through an employer typically stops when you leave, and it may be less than your family needs. Find out what you own personally."],
+      ["Your family's bills don't stop.", "Income, the mortgage, debts, education and final expenses add up quickly. The calculator shows what your family would need to stay on track."],
+      ["The wrong beneficiary can override your will.", "The death benefit goes straight to the person you name, so an outdated beneficiary, like an ex-spouse, can override what your will says."],
     ],
   },
   {
     id: "annuities",
     title: "Fixed Annuities",
+    heading: "What will you be able to count on, every month?",
     href: "https://www.investor.gov/introduction-investing/investing-basics/investment-products/annuities",
     text: "Guarantees and retirement income. Use the readiness calculator to see how your savings may support the retirement you want.",
     points: ["Retirement income planning", "Where guarantees can help", "Money you need to stay reachable and stable"],
     calculator: "retirement readiness calculator",
     facts: [
       ["Income you can't outlive.", "A fixed annuity can be turned into a stream of payments that lasts as long as you live, no matter how long that is."],
-      ["No stock market losses.", "Fixed annuities credit a declared interest rate instead of following the market. That rate may not keep pace with inflation."],
-      ["Growth is tax-deferred.", "You generally owe tax when you take money out, and withdrawals before age 59½ may add a 10% federal tax penalty."],
       ["Early withdrawals can cost you.", "Most contracts have surrender charges for a number of years, though many allow a free withdrawal each year."],
       ["Guarantees depend on the insurer.", "They rest on the issuing company's claims-paying ability. Annuities are not FDIC insured, and state guaranty associations offer limited backup."],
     ],
   },
   {
     id: "business",
-    title: "Business Owner Coverage",
-    href: "https://www.investopedia.com/terms/k/keypersoninsurance.asp",
-    text: "Key person coverage, buy-sell funding and succession planning for the business you own or lead.",
-    points: ["What happens if a key person dies", "What happens if a partner leaves", "Funding a buy-sell agreement"],
+    title: "Debt Payoff",
+    heading: "Which debt is really holding you back?",
+    href: "https://app.calocapital.io/#/debt",
+    text: "See two proven ways to pay debt down, side by side, and find the order that fits your budget and keeps you motivated.",
+    points: [],
     facts: [
-      ["Your business can own the policy.", "With key person coverage, the company is the beneficiary on a leader or top earner, giving it cash to hire, recover or repay debt after a loss."],
-      ["Without a buy-sell, heirs inherit a business role.", "A funded buy-sell agreement sets who buys a departing owner's share and gives them the cash to do it."],
-      ["It covers more than death.", "Buy-sell agreements can also be triggered by disability, retirement or an owner leaving."],
-      ["Lenders may ask for it.", "Some lenders require key person coverage as a condition of a business loan."],
-      ["Tax treatment varies.", "Premiums are generally not deductible, and proceeds are generally received income-tax-free. Confirm your situation with a tax professional."],
+      ["Two proven strategies.", "The snowball pays the smallest balance first for quick wins. The avalanche pays the highest rate first and usually costs less interest."],
+      ["Every payoff frees up cash.", "Pay minimums on everything, then roll each paid-off debt's payment into the next one so your momentum grows."],
+      ["The best plan is the one you keep.", "The avalanche can save more interest, but the quick wins from the snowball keep many people going. Compare both before you choose."],
     ],
   },
   {
     id: "digital",
-    title: "Digital Asset Services",
-    href: "https://www.forbes.com/sites/georgiiverbitskii/2025/07/22/bitcoin-backed-loans-are-reshaping-traditional-lending/",
-    text: "Hold, use and pass on digital assets with institutional-grade infrastructure, without the seed-phrase risk of self-custody.",
-    points: ["Institutional custody", "Inheritance and access planning", "Life insurance for digital asset holders"],
+    title: "Inflation",
+    heading: "Is inflation quietly shrinking your savings?",
+    href: "https://app.calocapital.io/#/inflation",
+    text: "See what rising prices could do to the money you've set aside, and how much your savings would need to grow just to keep up.",
+    points: [],
     facts: [
-      ["Lost keys can't be recovered.", "Self-custody has no help desk. Chainalysis estimated in 2020 that roughly 20% of all bitcoin may be lost or inaccessible."],
-      ["Your heirs may not be able to get in.", "If no one else knows how to access your wallet, your digital assets can be locked away for good."],
-      ["The IRS treats crypto as property.", "That means sales and trades can be taxable events, and assets passed at death generally receive a stepped-up cost basis."],
-      ["It isn't FDIC insured.", "Digital assets are not bank deposits, so protection depends on how they are held and by whom."],
-      ["Planning can include insurance.", "Life insurance can give heirs cash so they aren't forced to sell volatile assets to cover taxes or expenses."],
+      ["Small increases add up.", "At 3% inflation, prices roughly double in about 24 years. What costs $100 today could cost around $200 then."],
+      ["Cash can lose ground.", "If your savings earn less than the rate of inflation, your money buys less each year even though the balance looks the same."],
+      ["Retirement makes it matter more.", "Retirees spend for decades, so income that never rises can feel smaller every year. Planning for growth in income is part of the picture."],
     ],
   },
 ];
@@ -787,46 +783,30 @@ function AgencyIntro({ navigate }) {
     setActive(id);
     setShowCalc(false);
   };
-  const APP_CTA = { href: "https://app.calocapital.io", label: "Visit the Calo Capital app for a free quote", external: true };
-  const cta = active === "digital" ? { href: "/contact#waitlist", label: "Join the waitlist" } : active === "business" ? { href: "/contact", label: "Book a call about business coverage" } : APP_CTA;
+  const step = (delta) => selectTab(SERVICE_TABS[(SERVICE_TABS.indexOf(tab) + delta + SERVICE_TABS.length) % SERVICE_TABS.length].id);
+  const APP_CTA = { href: "https://app.calocapital.io/#/quote", label: "Visit the Calo Capital app for a free quote", external: true };
+  const cta = active === "digital" ? { href: "https://app.calocapital.io/#/inflation", label: "See what inflation could do to your savings", external: true } : active === "business" ? { href: "https://app.calocapital.io/#/debt", label: "Try the debt payoff calculator", external: true } : APP_CTA;
   return (
     <section id="agency" className="agency-intro bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ "--agency-bg-image": `url(${AGENCY_BG})` }}>
       <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME} · Nashville, Tennessee</p>
-        <div className="mt-8 grid items-start gap-10 lg:gap-14" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(460px,100%),1fr))" }}>
+        <div key={active} className="agency-slide mt-8 grid items-start gap-10 lg:gap-14" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(460px,100%),1fr))" }}>
           <div className="py-2">
-            <h2 id="agency-topic-heading" className="text-[clamp(2.5rem,5vw,4rem)] font-black leading-[1.05]">{tab.title}</h2>
+            <h2 id="agency-topic-heading" className="text-[clamp(2.5rem,5vw,4rem)] font-black leading-[1.05]">{tab.heading || tab.title}</h2>
             <p className="mt-6 max-w-xl text-[18px] leading-[1.7] text-[#B7C0D8]">{tab.text}</p>
-            <a href={tab.href} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-[#C6B8FF] underline underline-offset-4">
-              Read more about {tab.title.toLowerCase()}
+            <a href={active === "life" ? "https://app.calocapital.io/#/life" : active === "business" ? "https://app.calocapital.io/#/debt" : active === "digital" ? "https://app.calocapital.io/#/inflation" : APP_CTA.href} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-[#C6B8FF] underline underline-offset-4">
+              {active === "life" ? "Five types of coverage" : active === "business" ? "Open the debt payoff tool" : active === "digital" ? "Open the inflation tool" : `Read more about ${tab.title.toLowerCase()}`}
             </a>
-            <ul className="mt-8 space-y-3 text-[15px] leading-[1.6] text-[#B7C0D8]">
+            {tab.points.length > 0 && <ul className="mt-8 space-y-3 text-[15px] leading-[1.6] text-[#B7C0D8]">
               {tab.points.map((point) => (
                 <li key={point} className="flex items-start gap-3">
                   <span aria-hidden="true" className="font-black text-[#C6B8FF]">✓</span>
                   <span>{point}</span>
                 </li>
               ))}
-            </ul>
-            <div role="tablist" aria-label="Services" className="mt-9 flex flex-wrap gap-3">
-              {SERVICE_TABS.map((item) => (
-                <button
-                  key={item.id}
-                  id={`service-tab-${item.id}`}
-                  type="button"
-                  role="tab"
-                  aria-controls="agency-service-panel"
-                  aria-selected={active === item.id}
-                  onClick={() => selectTab(item.id)}
-                  onPointerEnter={(event) => { if (event.pointerType === "mouse" && active !== item.id) selectTab(item.id); }}
-                  className={`rounded-full border px-4 py-2.5 text-sm font-black transition ${active === item.id ? "border-[#6D5EF5] bg-[#6D5EF5] text-white" : "border-[#B7C0D8]/30 text-[#B7C0D8] hover:border-[#C6B8FF]"}`}
-                >
-                  {item.title}
-                </button>
-              ))}
-            </div>
+            </ul>}
           </div>
-          <div id="agency-service-panel" role="tabpanel" aria-labelledby={`service-tab-${active}`} className="min-w-0">
+          <div id="agency-service-panel" role="group" aria-roledescription="slide" aria-label={`${tab.title}: slide ${SERVICE_TABS.indexOf(tab) + 1} of ${SERVICE_TABS.length}`} className="min-w-0">
             {hasCalc && showCalc ? (
               <>
                 <button type="button" onClick={() => setShowCalc(false)} className="mb-4 text-sm font-black text-[#C6B8FF] underline underline-offset-4">
@@ -846,23 +826,50 @@ function AgencyIntro({ navigate }) {
                   ))}
                 </ul>
                 <div className="mt-8 flex flex-wrap items-center gap-3">
-                  {hasCalc && (
+                  {hasCalc && (active === "annuities" ? (
+                    <a href="https://app.calocapital.io/#/retire" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
+                      Try the {tab.calculator}
+                    </a>
+                  ) : (
                     <button type="button" onClick={() => setShowCalc(true)} className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
                       Try the {tab.calculator}
                     </button>
+                  ))}
+                  {cta !== APP_CTA && (
+                    <a
+                      href={cta.href}
+                      {...(cta.external ? { target: "_blank", rel: "noopener noreferrer" } : { onClick: (event) => go(event, cta.href) })}
+                      className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]"
+                    >
+                      {cta.label}
+                    </a>
                   )}
-                  <a
-                    href={cta.href}
-                    {...(cta.external ? { target: "_blank", rel: "noopener noreferrer" } : { onClick: (event) => go(event, cta.href) })}
-                    className={hasCalc ? "rounded-full border border-[#B7C0D8]/30 px-7 py-3 font-black text-[#F4F7FB] transition hover:border-[#C6B8FF]" : "rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]"}
-                  >
-                    {cta.label}
-                  </a>
                 </div>
                 <p className="mt-6 text-[12px] italic leading-[1.6] text-[#B7C0D8]">General education only, not insurance, investment, tax or legal advice. Details vary by policy, issuer and state.</p>
               </div>
             )}
           </div>
+        </div>
+        <div className="mt-10 flex items-center justify-center gap-5" role="group" aria-label="Services slideshow controls">
+          <button type="button" aria-label="Previous slide" onClick={() => step(-1)} className="flex h-12 w-12 items-center justify-center rounded-full border border-[#B7C0D8]/30 text-[#C6B8FF] transition hover:border-[#C6B8FF]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+          <div className="flex items-center gap-2" role="tablist" aria-label="Choose slide">
+            {SERVICE_TABS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={active === item.id}
+                aria-label={item.title}
+                onClick={() => selectTab(item.id)}
+                className={`agency-dot ${active === item.id ? "is-active" : ""}`}
+              />
+            ))}
+          </div>
+          <button type="button" aria-label="Next slide" onClick={() => step(1)} className="flex h-12 w-12 items-center justify-center rounded-full border border-[#B7C0D8]/30 text-[#C6B8FF] transition hover:border-[#C6B8FF]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
         </div>
       </div>
     </section>
@@ -1422,6 +1429,12 @@ function GlobalStyles() {
       html { scroll-behavior: smooth; overflow-x: hidden; }
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
+      .agency-dot { height: 10px; width: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(183,192,216,.4); cursor: pointer; transition: width .25s, background-color .25s; }
+      .agency-dot:hover { background: #C6B8FF; }
+      .agency-dot.is-active { width: 28px; background: #6D5EF5; }
+      .agency-slide { animation: agencySlideIn .35s ease both; }
+      @keyframes agencySlideIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+      @media (prefers-reduced-motion: reduce) { .agency-slide { animation: none; } }
       .fourcs-sky { position: relative; background: #050816; }
       .fourcs-sky-bg { position: absolute; inset: 0; pointer-events: none; }
       .fourcs-sky-bg > .calo-fin, .fourcs-sky-bg > .calo-fin > section, .fourcs-sky-bg .calo-fin > section[style] { height: 100% !important; min-height: 0 !important; }
