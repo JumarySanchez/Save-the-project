@@ -39,6 +39,13 @@ const css = `
 .calo-fin .c-sky i{position:absolute;display:block;height:1.5px;width:170px;opacity:0;border-radius:2px;background:linear-gradient(90deg,#fff,rgba(198,184,255,.55) 30%,rgba(155,124,255,0));transform:rotate(-35deg);animation:caloFinSh 12s linear infinite}
 .calo-fin .c-sky i:nth-child(1){top:8%;left:62%;animation-delay:1s;animation-duration:9s}
 .calo-fin .c-sky i:nth-child(2){top:26%;left:92%;width:120px;animation-delay:5s;animation-duration:14s}
+.calo-fin .c-sky i:nth-child(3){top:44%;left:78%;width:150px;animation-delay:3s;animation-duration:8s}
+.calo-fin .c-sky i:nth-child(4){top:14%;left:35%;width:140px;animation-delay:7s;animation-duration:10s}
+.calo-fin .c-sky i:nth-child(5){top:58%;left:96%;width:130px;animation-delay:2s;animation-duration:11s}
+.calo-fin .c-sky i:nth-child(6){top:6%;left:88%;width:110px;animation-delay:10s;animation-duration:7s}
+.calo-fin .c-sky i:nth-child(7){top:36%;left:55%;width:160px;animation-delay:4s;animation-duration:13s}
+.calo-fin .c-sky i:nth-child(8){top:70%;left:70%;width:120px;animation-delay:8s;animation-duration:9s}
+.calo-fin .c-sky i:nth-child(9){top:20%;left:18%;width:150px;animation-delay:12s;animation-duration:12s}
 @keyframes caloFinTw{0%{opacity:.3}100%{opacity:1}}
 @keyframes caloFinSh{0%{opacity:0;transform:rotate(-35deg) translateX(0)}2%{opacity:1}10%{opacity:1}13%,100%{opacity:0;transform:rotate(-35deg) translateX(-860px)}}
 @media (prefers-reduced-motion:reduce){.calo-fin .c-sky i{display:none}.calo-fin .c-sky::before,.calo-fin .c-sky::after{animation:none}}

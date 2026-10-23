@@ -1165,8 +1165,12 @@ function HomePage({ setPage, navigate }) {
     <>
       <HeroSection />
       <AgencyIntro navigate={navigate} />
-      <FourCs />
-      <FinancingSections hero onNavigate={navigate} />
+      <div className="fourcs-sky">
+        <div className="fourcs-sky-bg" aria-hidden="true">
+          <FinancingSections hero onNavigate={navigate} />
+        </div>
+        <FourCs />
+      </div>
       <FinancingSections onNavigate={navigate} />
     </>
   );
@@ -1416,6 +1420,10 @@ function GlobalStyles() {
       html { scroll-behavior: smooth; overflow-x: hidden; }
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
+      .fourcs-sky { position: relative; background: #050816; }
+      .fourcs-sky-bg { position: absolute; inset: 0; pointer-events: none; }
+      .fourcs-sky-bg > .calo-fin, .fourcs-sky-bg > .calo-fin > section { height: 100%; min-height: 0 !important; }
+      .fourcs-sky > #four-cs { position: relative; background: transparent; }
       .contact-cal-frame { height: min(720px, 85vh); min-height: 560px; }
       @media (min-width: 1024px) {
         .contact-cal { display: flex; flex: 1 1 auto; flex-direction: column; }
