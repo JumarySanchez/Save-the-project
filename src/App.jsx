@@ -5,10 +5,10 @@ import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections
 import { faqGroups } from "./faqContent.js";
 import { DISCLOSURE, SITE_NAME, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
 import logoPng from "../public/Calo_purple_logo.png";
-import step1 from "../assets/business-step1.jpg";
-import step2 from "../assets/business-step2.jpg";
-import step3 from "../assets/business-step3.jpg";
-import step4 from "../assets/business-step4.jpg";
+import step1 from "../assets/slide-life.svg";
+import step2 from "../assets/slide-retirement.svg";
+import step3 from "../assets/slide-debt.jpg";
+import step4 from "../assets/slide-inflation.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
 
 const FALLBACK_COINS = [
@@ -800,7 +800,7 @@ function AgencyIntro({ navigate }) {
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME} · Nashville, Tennessee</p>
         <div key={active} className="agency-slide mt-8 grid items-start gap-10 lg:gap-14" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(460px,100%),1fr))" }}>
           <div className="min-w-0">
-            <div className="agency-photo" style={{ backgroundImage: `url(${tab.photo})` }} role="img" aria-label={`Illustrative image for ${tab.title}`}>
+            <div className="agency-photo" aria-hidden="true">
             </div>
             <p className="mt-4 px-2 text-[12px] italic leading-[1.6] text-[#B7C0D8]">General education only, not insurance, investment, tax or legal advice. Details vary by policy, issuer and state.</p>
           </div>
@@ -1437,8 +1437,8 @@ function GlobalStyles() {
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
       .agency-topic { font-size: clamp(1.9rem, 3.2vw, 2.6rem); font-weight: 900; line-height: 1.1; color: #F4F7FB; }
-      .agency-photo { position: relative; min-height: 560px; border-radius: 200px 0 160px 0; overflow: hidden; border: 1px solid rgba(183,192,216,.2); background: center / cover no-repeat; display: flex; align-items: flex-end; }
-      .agency-photo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(5,8,22,.2), rgba(5,8,22,.88)); }
+      .agency-photo { position: relative; min-height: 560px; border-radius: 200px 0 160px 0; overflow: hidden; border: 1px solid rgba(183,192,216,.2); background: radial-gradient(circle at 50% 40%, #6D5EF5 0%, #2A2170 55%, #0B0F24 100%); display: flex; align-items: flex-end; }
+      .agency-photo::before { content: ""; position: absolute; inset: 0; background: none; }
       .agency-photo-copy { position: relative; padding: 40px 44px 44px; }
       @media (max-width: 767px) { .agency-photo { min-height: 460px; border-radius: 96px 0 72px 0; } .agency-photo-copy { padding: 28px 24px 30px; } }
       .agency-dot { height: 10px; width: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(183,192,216,.4); cursor: pointer; transition: width .25s, background-color .25s; }
