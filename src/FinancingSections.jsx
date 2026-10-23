@@ -3,20 +3,13 @@ import sectionsHtml from "./financingSections.html?raw";
 import heroRaw from "./financingHero.html?raw";
 import aboutImagePng from "../assets/p.png";
 
-import step1 from "../assets/business-step1.jpg";
-import step2 from "../assets/business-step2.jpg";
-import step3 from "../assets/business-step3.jpg";
-import step4 from "../assets/business-step4.jpg";
-import step5 from "../assets/business-step5.jpg";
 import featureImg from "../assets/business-feature.jpg";
 import article1 from "../assets/business-article1.jpg";
 import article2 from "../assets/business-article2.jpg";
 import logoImg from "../public/Calo_purple_logo.png";
 import article3 from "../assets/business-article3.jpg";
 
-const stepImgs = JSON.stringify([step1, step2, step3, step4, step5]).replace(/"/g, "&quot;");
 const sectionsWithImages = sectionsHtml
-  .replace("__STEP_IMGS__", stepImgs)
   .replace("__FEATURE_IMG__", featureImg)
   .replace(/__ARTICLE1_IMG__/g, article1)
   .replace(/__ARTICLE2_IMG__/g, article2)
@@ -55,13 +48,7 @@ const css = `
   .calo-fin [style*="font-size:60px"],.calo-fin [style*="font-size:56px"],.calo-fin [style*="font-size:72px"],.calo-fin [style*="font-size:52px"]{font-size:36px!important}
   .calo-fin [style*="font-size:48px"],.calo-fin [style*="font-size:44px"]{font-size:32px!important}
   .calo-fin [style*="height:620px"]{height:260px!important;border-radius:72px 0 56px 0!important}
-  .calo-fin [role="tablist"]{flex-wrap:nowrap!important;overflow-x:auto;margin-bottom:24px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .calo-fin [role="tablist"]::-webkit-scrollbar{display:none}
-  .calo-fin [role="tablist"] button{flex:none;white-space:nowrap;padding:12px 14px!important}
-  .calo-fin #step-photo{height:240px!important;border-radius:64px 0 48px 0!important}
-  .calo-fin #step-num{width:48px!important;height:48px!important;font-size:20px!important}
   .calo-fin [style*="margin-bottom:36px"]{margin-bottom:24px!important}
-  .calo-fin #qualify{margin-top:56px!important;padding-top:48px!important}
   .calo-fin [style*="gap:72px"]{gap:28px!important}
   .calo-fin [style*="grid-column:span 2"]{grid-column:auto!important}
   .calo-fin section{padding-top:64px!important;padding-bottom:64px!important}

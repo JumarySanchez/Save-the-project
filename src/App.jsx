@@ -5,6 +5,10 @@ import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections
 import { faqGroups } from "./faqContent.js";
 import { DISCLOSURE, SITE_NAME, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
 import logoPng from "../public/Calo_purple_logo.png";
+import step1 from "../assets/business-step1.jpg";
+import step2 from "../assets/business-step2.jpg";
+import step3 from "../assets/business-step3.jpg";
+import step4 from "../assets/business-step4.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
 
 const FALLBACK_COINS = [
@@ -716,6 +720,7 @@ const FOUR_CS = [
 const SERVICE_TABS = [
   {
     id: "life",
+    photo: step1,
     title: "Life Insurance",
     heading: "If you weren't here tomorrow, would your family be protected?",
     href: "https://www.investopedia.com/terms/l/lifeinsurance.asp",
@@ -730,6 +735,7 @@ const SERVICE_TABS = [
   },
   {
     id: "annuities",
+    photo: step2,
     title: "Fixed Annuities",
     heading: "What will you be able to count on, every month?",
     href: "https://www.investor.gov/introduction-investing/investing-basics/investment-products/annuities",
@@ -744,6 +750,7 @@ const SERVICE_TABS = [
   },
   {
     id: "business",
+    photo: step3,
     title: "Debt Payoff",
     heading: "Which debt is really holding you back?",
     href: "https://app.calocapital.io/#/debt",
@@ -757,6 +764,7 @@ const SERVICE_TABS = [
   },
   {
     id: "digital",
+    photo: step4,
     title: "Inflation",
     heading: "Is inflation quietly shrinking your savings?",
     href: "https://app.calocapital.io/#/inflation",
@@ -785,26 +793,16 @@ function AgencyIntro({ navigate }) {
   };
   const step = (delta) => selectTab(SERVICE_TABS[(SERVICE_TABS.indexOf(tab) + delta + SERVICE_TABS.length) % SERVICE_TABS.length].id);
   const APP_CTA = { href: "https://app.calocapital.io/#/quote", label: "Visit the Calo Capital app for a free quote", external: true };
-  const cta = active === "digital" ? { href: "https://app.calocapital.io/#/inflation", label: "See what inflation could do to your savings", external: true } : active === "business" ? { href: "https://app.calocapital.io/#/debt", label: "Try the debt payoff calculator", external: true } : APP_CTA;
+  const cta = active === "digital" ? { href: "https://app.calocapital.io/#/inflation", label: "Beat inflation", external: true } : active === "business" ? { href: "https://app.calocapital.io/#/debt", label: "Crush my debt", external: true } : APP_CTA;
   return (
     <section id="agency" className="agency-intro bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ "--agency-bg-image": `url(${AGENCY_BG})` }}>
       <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
         <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME} · Nashville, Tennessee</p>
         <div key={active} className="agency-slide mt-8 grid items-start gap-10 lg:gap-14" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(460px,100%),1fr))" }}>
-          <div className="py-2">
-            <h2 id="agency-topic-heading" className="text-[clamp(2.5rem,5vw,4rem)] font-black leading-[1.05]">{tab.heading || tab.title}</h2>
-            <p className="mt-6 max-w-xl text-[18px] leading-[1.7] text-[#B7C0D8]">{tab.text}</p>
-            <a href={active === "life" ? "https://app.calocapital.io/#/life" : active === "business" ? "https://app.calocapital.io/#/debt" : active === "digital" ? "https://app.calocapital.io/#/inflation" : APP_CTA.href} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-[#C6B8FF] underline underline-offset-4">
-              {active === "life" ? "Five types of coverage" : active === "business" ? "Open the debt payoff tool" : active === "digital" ? "Open the inflation tool" : `Read more about ${tab.title.toLowerCase()}`}
-            </a>
-            {tab.points.length > 0 && <ul className="mt-8 space-y-3 text-[15px] leading-[1.6] text-[#B7C0D8]">
-              {tab.points.map((point) => (
-                <li key={point} className="flex items-start gap-3">
-                  <span aria-hidden="true" className="font-black text-[#C6B8FF]">✓</span>
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>}
+          <div className="min-w-0">
+            <div className="agency-photo" style={{ backgroundImage: `url(${tab.photo})` }} role="img" aria-label={`Illustrative image for ${tab.title}`}>
+            </div>
+            <p className="mt-4 px-2 text-[12px] italic leading-[1.6] text-[#B7C0D8]">General education only, not insurance, investment, tax or legal advice. Details vary by policy, issuer and state.</p>
           </div>
           <div id="agency-service-panel" role="group" aria-roledescription="slide" aria-label={`${tab.title}: slide ${SERVICE_TABS.indexOf(tab) + 1} of ${SERVICE_TABS.length}`} className="min-w-0">
             {hasCalc && showCalc ? (
@@ -816,11 +814,11 @@ function AgencyIntro({ navigate }) {
               </>
             ) : (
               <div className="rounded-3xl border border-[#B7C0D8]/20 bg-[#111a31]/90 p-6 sm:p-8">
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-[#C6B8FF]">Did you know?</p>
-                <ul className="mt-5 flex flex-col" style={{ gap: "1.25rem" }}>
+                <h2 id="agency-topic-heading" className="agency-topic">{tab.heading || tab.title}</h2>
+                <ul className="mt-7 flex flex-col" style={{ gap: "1.25rem" }}>
                   {tab.facts.map(([headline, detail]) => (
                     <li key={headline}>
-                      <p className="text-[17px] font-black text-[#F4F7FB]">{headline}</p>
+                      <p className="text-[16px] font-black text-[#C6B8FF]">{headline}</p>
                       <p className="mt-1 text-[15px] text-[#B7C0D8]" style={{ lineHeight: 1.6 }}>{detail}</p>
                     </li>
                   ))}
@@ -828,13 +826,23 @@ function AgencyIntro({ navigate }) {
                 <div className="mt-8 flex flex-wrap items-center gap-3">
                   {hasCalc && (active === "annuities" ? (
                     <a href="https://app.calocapital.io/#/retire" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
-                      Try the {tab.calculator}
+                      Plan my income
                     </a>
                   ) : (
                     <button type="button" onClick={() => setShowCalc(true)} className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
-                      Try the {tab.calculator}
+                      {active === "life" ? "Run my numbers" : "Plan my income"}
                     </button>
                   ))}
+                  {active === "annuities" && (
+                    <a href="https://app.calocapital.io/#/quote" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
+                      Get my quote
+                    </a>
+                  )}
+                  {active === "life" && (
+                    <a href="https://app.calocapital.io/#/life" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
+                      See 5 coverage types
+                    </a>
+                  )}
                   {cta !== APP_CTA && (
                     <a
                       href={cta.href}
@@ -845,7 +853,6 @@ function AgencyIntro({ navigate }) {
                     </a>
                   )}
                 </div>
-                <p className="mt-6 text-[12px] italic leading-[1.6] text-[#B7C0D8]">General education only, not insurance, investment, tax or legal advice. Details vary by policy, issuer and state.</p>
               </div>
             )}
           </div>
@@ -1429,6 +1436,11 @@ function GlobalStyles() {
       html { scroll-behavior: smooth; overflow-x: hidden; }
       body, #root { overflow-x: hidden; }
       * { box-sizing: border-box; }
+      .agency-topic { font-size: clamp(1.9rem, 3.2vw, 2.6rem); font-weight: 900; line-height: 1.1; color: #F4F7FB; }
+      .agency-photo { position: relative; min-height: 560px; border-radius: 200px 0 160px 0; overflow: hidden; border: 1px solid rgba(183,192,216,.2); background: center / cover no-repeat; display: flex; align-items: flex-end; }
+      .agency-photo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(5,8,22,.2), rgba(5,8,22,.88)); }
+      .agency-photo-copy { position: relative; padding: 40px 44px 44px; }
+      @media (max-width: 767px) { .agency-photo { min-height: 460px; border-radius: 96px 0 72px 0; } .agency-photo-copy { padding: 28px 24px 30px; } }
       .agency-dot { height: 10px; width: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(183,192,216,.4); cursor: pointer; transition: width .25s, background-color .25s; }
       .agency-dot:hover { background: #C6B8FF; }
       .agency-dot.is-active { width: 28px; background: #6D5EF5; }
