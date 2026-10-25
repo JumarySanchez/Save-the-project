@@ -572,23 +572,17 @@ function scrollToHomeSection(page) {
 
 const NAV_ITEMS = [
   { label: "Home", section: "home" },
-  { label: "How It Works", section: "how" },
-  { label: "Qualify", section: "qualify" },
-  {
-    label: "Financing",
-    section: "financing",
-    children: [
-      { label: "Industries", section: "industries" },
-      { label: "Resources", section: "resources" },
-      { label: "FAQs", page: "FAQs" },
-    ],
-  },
+  { label: "Coverage", section: "agency" },
+  { label: "Our Approach", section: "four-cs" },
+  { label: "Financing options", href: "/financing" },
+  { label: "Resources", section: "resources" },
   { label: "Contact", page: "Contact" },
+  { label: "FAQs", page: "FAQs" },
 ];
 
 const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || [])]).filter((item) => item.section).map((item) => item.section);
 
-function Navbar({ currentPage, setPage, goToSection }) {
+function Navbar({ currentPage, setPage, goToSection, navigate }) {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const onHome = !["Contact", "FAQs", "Legal", "Info"].includes(currentPage);
@@ -611,13 +605,15 @@ function Navbar({ currentPage, setPage, goToSection }) {
 
   function isActive(item) {
     if (item.children) return item.children.some(isActive) || (onHome && activeSection === item.section);
+    if (item.href) return window.location.pathname === item.href;
     if (item.section) return onHome && activeSection === item.section;
     return currentPage === item.page;
   }
 
   function handleClick(item) {
     setOpen(false);
-    if (item.section) goToSection(item.section);
+    if (item.href) navigate(item.href);
+    else if (item.section) goToSection(item.section);
     else setPage(item.page);
   }
 
@@ -823,7 +819,7 @@ function AgencyIntro({ navigate }) {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8 flex flex-wrap items-center gap-3">
+                <div className="agency-cta-row mt-8 flex flex-wrap items-center gap-3">
                   {hasCalc && (active === "annuities" ? (
                     <a href="https://app.calocapital.io/#/retire" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">
                       Plan my income
@@ -1035,7 +1031,7 @@ function FourCs() {
         </p>
         <div className="mt-10 grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))" }}>
           {FOUR_CS.map(([name, text]) => (
-            <div key={name} className="rounded-2xl border border-[#B7C0D8]/20 bg-white/5 p-6">
+            <div key={name} className="four-cs-card rounded-2xl border border-transparent bg-white/5 p-6">
               <p className="text-[16px] leading-[1.6] text-[#B7C0D8]"><strong className="text-[#C6B8FF]">{name}:</strong> {text}</p>
             </div>
           ))}
@@ -1444,6 +1440,47 @@ function GlobalStyles() {
       .agency-dot { height: 10px; width: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(183,192,216,.4); cursor: pointer; transition: width .25s, background-color .25s; }
       .agency-dot:hover { background: #C6B8FF; }
       .agency-dot.is-active { width: 28px; background: #6D5EF5; }
+      .four-cs-card {
+        position: relative;
+        isolation: isolate;
+        transition: box-shadow 220ms ease;
+      }
+      .four-cs-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .four-cs-card::before {
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        padding: 1px;
+        border-radius: inherit;
+        background: linear-gradient(120deg, rgba(109,94,245,.78), rgba(155,124,255,.92) 52%, rgba(198,184,255,.7));
+        content: "";
+        opacity: .85;
+        pointer-events: none;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        transition: opacity 220ms ease;
+      }
+      @media (any-hover: hover) {
+        .four-cs-card:hover {
+          box-shadow: 0 0 0 1px rgba(155,124,255,.36), 0 0 20px rgba(109,94,245,.48);
+        }
+        .four-cs-card:hover::before {
+          opacity: 1;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .four-cs-card,
+        .four-cs-card::before { transition: none; }
+      }
+      @media (max-width: 767px) {
+        .agency-cta-row { flex-wrap: nowrap; gap: 0.5rem; }
+        .agency-cta-row > * { flex: 1 1 0%; min-width: 0; padding-inline: 0.5rem; font-size: 0.875rem; line-height: 1.25; text-align: center; }
+      }
       .agency-slide { animation: agencySlideIn .35s ease both; }
       @keyframes agencySlideIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
       @media (prefers-reduced-motion: reduce) { .agency-slide { animation: none; } }
@@ -1481,7 +1518,7 @@ function GlobalStyles() {
       .agency-intro::after {
         top: 0;
         height: 100%;
-        background: linear-gradient(rgba(5,8,22,.32),rgba(5,8,22,.62));
+        background: linear-gradient(180deg, rgba(5,8,22,.46), rgba(5,8,22,.72)), linear-gradient(110deg, rgba(109,94,245,.18), rgba(23,10,50,.22) 48%, rgba(109,94,245,.12));
       }
       .calo-after-chart {
         --cac-navy: #050816;
@@ -2427,7 +2464,7 @@ export default function App() {
     <main className="min-h-screen bg-[#050816] font-body">
       <GlobalStyles />
       <MarketTicker coins={coins} live={live} />
-      <Navbar currentPage={currentPage} setPage={setPage} goToSection={goToSection} />
+      <Navbar currentPage={currentPage} setPage={setPage} goToSection={goToSection} navigate={navigate} />
       <div
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
