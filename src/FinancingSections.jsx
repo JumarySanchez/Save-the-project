@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import sectionsHtml from "./financingSections.html?raw";
 import heroRaw from "./financingHero.html?raw";
 import aboutImagePng from "../assets/p.png";
-import ceoImage from "../assets/Calo.png";
 
 import featureImg from "../assets/business-feature.jpg";
 import article1 from "../assets/business-article1.jpg";
@@ -15,7 +14,6 @@ const sectionsWithImages = sectionsHtml
   .replace(/__ARTICLE1_IMG__/g, article1)
   .replace(/__ARTICLE2_IMG__/g, article2)
   .replace(/__ARTICLE3_IMG__/g, article3)
-  .replace("__CEO_IMG__", ceoImage)
   .replace(/__LOGO_IMG__/g, logoImg);
 
 const heroHtml = heroRaw;
