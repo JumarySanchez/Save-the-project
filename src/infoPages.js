@@ -283,6 +283,54 @@ export const INFO_PAGES = {
     ],
     related: ["/contact", "/faqs"],
   },
+  "/articles/business-funding": {
+    eyebrow: "Category: Business funding",
+    title: "What Could Your Business Become With the Right Funding?",
+    intro: "Big business moves often begin with a clear idea, and the capital to help bring it to life. Whether your next step is expanding, purchasing equipment, managing cash flow, or pursuing a new opportunity, the right funding may help you move forward. Before you choose a path, take time to understand your options so your financing decision aligns with your business goals.",
+    readTime: "Estimated reading time: 3–4 minutes.",
+    sections: [
+      {
+        heading: "Understanding Your Business Funding Options",
+        body: ["One funding choice can open one door, and the right fit depends on what your business needs next. Here are common financing options to explore."],
+        items: [
+          { heading: "Business Term Loans", body: "Need a defined amount for a defined purpose? Receive a lump sum and repay it over an agreed period. These loans may help finance expansion, inventory, equipment, or major business expenses." },
+          { heading: "Business Lines of Credit", body: "Looking for flexibility? Access funds up to an approved limit as needed. A line of credit can help manage cash flow fluctuations and unexpected expenses." },
+          { heading: "SBA Loans", body: "For eligible small businesses, SBA-backed loans offered through participating lenders may support working capital, equipment, real estate, and other approved needs." },
+          { heading: "Equipment Financing", body: "When the right tools can move your business forward, equipment financing can help fund machinery, vehicles, technology, and other business equipment without necessarily paying the entire cost upfront." },
+          { heading: "Invoice Financing", body: "Waiting on customer payments? Access funds based on eligible unpaid invoices to help manage cash flow while you wait." },
+          { heading: "Working Capital Financing", body: "Keep day-to-day operations moving with financing that may help cover payroll, supplies, inventory, and other operating costs." },
+        ],
+        note: "Availability, eligibility, and terms vary by lender and financing product.",
+      },
+      {
+        heading: "How to Choose the Right Funding",
+        body: ["Ready to narrow the field? Before you pursue financing, ask these five questions:"],
+        list: [
+          ["What's your goal?", "Start with the outcome you want the funds to accomplish."],
+          ["How much do you need?", "Build a clear cost estimate and avoid borrowing more than necessary."],
+          ["How soon do you need it?", "Plan around application and funding timelines, which can vary."],
+          ["Can you manage repayment?", "Look closely at your revenue, expenses, and existing debt."],
+          ["What will it cost?", "Compare interest, fees, repayment schedules, and other conditions."],
+        ],
+        after: ["The best fit should support today's priorities without losing sight of your long-term financial plans."],
+      },
+      {
+        heading: "Turn Your Business Goals Into Action",
+        body: [
+          "Good funding decisions begin before an application. Gather your financial records, map out exactly how you'll use the funds, and set realistic expectations for growth and repayment.",
+          "Whether you're planning to expand operations, invest in equipment, or strengthen cash flow, a clear view of your options can help you move forward with greater confidence and make a more informed decision.",
+        ],
+      },
+      {
+        heading: "What could your business unlock with the right funding?",
+        body: ["Ready to explore what may fit? Visit the CaloCapital Funding Portal and take the next step toward your business goals."],
+        links: [["CaloCapital Funding Portal", "https://app.calocapital.io/#/debt"]],
+        button: true,
+      },
+    ],
+    note: "Disclaimer: This article is for informational purposes only. It does not constitute financial advice or guarantee funding approval. Financing terms and eligibility depend on the lender, financing product, and applicant qualifications.",
+    related: ["/financing", "/contact", "/faqs"],
+  },
   "/sitemap": {
     eyebrow: "CaloCapital",
     title: "Sitemap",

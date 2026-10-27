@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
 import FinancingSections, { AGENCY_BG } from "./FinancingSections.jsx";
+import Starfield from "./Starfield.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
 import { faqGroups } from "./faqContent.js";
 import { DISCLOSURE, SITE_NAME, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
@@ -1137,6 +1138,26 @@ function ContactPage() {
               ))}
             </div>
 
+            <div className="mt-6 overflow-hidden rounded-[20px] border border-[#B7C0D8]/20">
+              <iframe
+                title={`Map showing the CaloCapital office at ${SITE_ADDRESS}`}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_ADDRESS)}&output=embed`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="block h-[280px] w-full border-0"
+              />
+            </div>
+            <p className="mt-3 text-sm text-[#B7C0D8]">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_ADDRESS)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#C6B8FF] underline underline-offset-4"
+              >
+                Get directions
+              </a>
+            </p>
+
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="/faqs" className="rounded-full border border-[#B7C0D8]/30 px-7 py-3 text-[15px] font-semibold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]">
                 Read the FAQs
@@ -1308,6 +1329,7 @@ function InfoPage({ path, navigate }) {
         <p className="mt-8 text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{page.eyebrow}</p>
         <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98]">{page.title}</h1>
         <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">{page.intro}</p>
+        {page.readTime && <p className="mt-4 text-sm text-[#B7C0D8]">{page.readTime}</p>}
         {page.author && (
           <p className="mt-4 text-sm text-[#B7C0D8]">Author: {page.author} · Last reviewed: {page.reviewed}</p>
         )}
@@ -1322,12 +1344,29 @@ function InfoPage({ path, navigate }) {
             <div key={section.heading}>
               <h2 className="border-t border-[#C6B8FF66] pt-7 text-2xl font-black">{section.heading}</h2>
               {section.body && section.body.map((text) => <p key={text} className="mt-4 text-[17px] leading-[1.7] text-[#B7C0D8]">{text}</p>)}
+              {section.items && section.items.map((item) => (
+                <div key={item.heading} className="mt-6">
+                  <h3 className="text-xl font-black text-[#F4F7FB]">{item.heading}</h3>
+                  <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">{item.body}</p>
+                </div>
+              ))}
+              {section.note && <p className="mt-6 text-[15px] italic leading-[1.7] text-[#B7C0D8]">{section.note}</p>}
               {section.list && (
                 <ul className="mt-4 list-disc space-y-2 pl-6 text-[17px] leading-[1.7] text-[#B7C0D8]">
-                  {section.list.map((text) => <li key={text}>{text}</li>)}
+                  {section.list.map((text) => Array.isArray(text)
+                    ? <li key={text[0]}><strong className="text-[#F4F7FB]">{text[0]}</strong> {text[1]}</li>
+                    : <li key={text}>{text}</li>)}
                 </ul>
               )}
-              {section.links && (
+              {section.after && section.after.map((text) => <p key={text} className="mt-4 text-[17px] leading-[1.7] text-[#B7C0D8]">{text}</p>)}
+              {section.links && section.button && (
+                <div className="mt-6 flex flex-wrap gap-4">
+                  {section.links.map(([label, href]) => (
+                    <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">{label}</a>
+                  ))}
+                </div>
+              )}
+              {section.links && !section.button && (
                 <ul className="mt-4 space-y-2 text-[17px]">
                   {section.links.map(([label, href]) => (
                     <li key={href}>
@@ -1436,7 +1475,7 @@ function GlobalStyles() {
       .agency-photo { position: relative; min-height: 560px; border-radius: 200px 0 160px 0; overflow: hidden; border: 1px solid rgba(183,192,216,.2); background: radial-gradient(circle at 50% 40%, #6D5EF5 0%, #2A2170 55%, #0B0F24 100%); display: flex; align-items: flex-end; }
       .agency-photo::before { content: ""; position: absolute; inset: 0; background: none; }
       .agency-photo-copy { position: relative; padding: 40px 44px 44px; }
-      @media (max-width: 767px) { .agency-photo { min-height: 460px; border-radius: 96px 0 72px 0; } .agency-photo-copy { padding: 28px 24px 30px; } }
+      @media (max-width: 767px) { .agency-photo { min-height: 0; aspect-ratio: 16 / 10; max-height: 240px; border-radius: 56px 0 44px 0; } .agency-photo-copy { padding: 28px 24px 30px; } }
       .agency-dot { height: 10px; width: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(183,192,216,.4); cursor: pointer; transition: width .25s, background-color .25s; }
       .agency-dot:hover { background: #C6B8FF; }
       .agency-dot.is-active { width: 28px; background: #6D5EF5; }
@@ -2463,6 +2502,7 @@ export default function App() {
   return (
     <main className="min-h-screen bg-[#050816] font-body">
       <GlobalStyles />
+      <Starfield />
       <MarketTicker coins={coins} live={live} />
       <Navbar currentPage={currentPage} setPage={setPage} goToSection={goToSection} navigate={navigate} />
       <div
