@@ -1138,26 +1138,6 @@ function ContactPage() {
               ))}
             </div>
 
-            <div className="mt-6 overflow-hidden rounded-[20px] border border-[#B7C0D8]/20">
-              <iframe
-                title={`Map showing the CaloCapital office at ${SITE_ADDRESS}`}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_ADDRESS)}&output=embed`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="block h-[280px] w-full border-0"
-              />
-            </div>
-            <p className="mt-3 text-sm text-[#B7C0D8]">
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_ADDRESS)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#C6B8FF] underline underline-offset-4"
-              >
-                Get directions
-              </a>
-            </p>
-
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="/faqs" className="rounded-full border border-[#B7C0D8]/30 px-7 py-3 text-[15px] font-semibold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]">
                 Read the FAQs
@@ -1188,6 +1168,41 @@ function ContactPage() {
             <ContactCalendar />
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function ContactMap() {
+  const serif = "font-['Cormorant_Garamond',serif]";
+  return (
+    <section
+      id="location"
+      className="py-16 text-[#F4F7FB] sm:py-20"
+      style={{ background: "#070a1c", borderTop: "1px solid rgba(183,192,216,.12)" }}
+    >
+      <div className="mx-auto max-w-[1240px] px-5 sm:px-8 lg:px-12">
+        <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.18em] text-[#C6B8FF]">Location</p>
+        <h2 className={`${serif} mb-8 text-[36px] font-bold leading-[1.1] sm:text-[48px]`}>Visit our office</h2>
+      </div>
+      <iframe
+        title={`Map showing the CaloCapital office at ${SITE_ADDRESS}`}
+        src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_ADDRESS)}&output=embed`}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        className="block h-[380px] w-full border-0 sm:h-[540px]"
+      />
+      <div className="mx-auto mt-4 max-w-[1240px] px-5 sm:px-8 lg:px-12">
+        <p className="text-sm text-[#B7C0D8]">
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_ADDRESS)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#C6B8FF] underline underline-offset-4"
+          >
+            Get directions
+          </a>
+        </p>
       </div>
     </section>
   );
@@ -2509,7 +2524,7 @@ export default function App() {
         className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
         style={pageTransitionStyle}
       >
-        {renderedPage === "Contact" ? <ContactPage /> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
+        {renderedPage === "Contact" ? <><ContactPage /><ContactMap /></> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
       </div>
       <SiteDisclosure />
       <Footer setPage={setPage} />
