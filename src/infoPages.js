@@ -119,10 +119,12 @@ export const INFO_PAGES = {
   "/about": {
     eyebrow: "About",
     title: "About CaloCapital",
-    intro: "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping families and business owners with life insurance, fixed annuities and retirement income.",
+    intro: "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping individuals, families and business owners explore life insurance, retirement savings and annuity options, digital-asset services, business funding and debt consolidation.",
     author: AUTHOR,
     reviewed: REVIEWED,
     sections: [
+      { heading: "How we help", body: ["We help people understand available options and connect with providers where appropriate. Services may include life insurance, fixed annuities and retirement income planning, digital-asset services, business funding and debt-consolidation financing. Product availability, eligibility and terms vary. We are not a lender or registered investment adviser, and information on this site is educational rather than individualized investment advice."] },
+      { heading: "Your information", body: ["Some forms on this site ask for personal or business information so we can respond to your request. We do not sell your personal information. See our Privacy Policy for details about what we collect, how we use it and when information may be shared to provide a service you request."] },
       { heading: "Founder", body: ["Marc J. Calo, Licensed Insurance Agent, NPN 17700283."] },
       { heading: "Licensed states", body: ["Alabama, Connecticut, Florida, Georgia, Idaho, Kentucky, Maryland, Nebraska, Nevada, New Jersey, New York (resident), North Carolina, Ohio, Pennsylvania, South Carolina, Tennessee, Texas, Utah, Virginia, Washington, Wyoming."] },
       { heading: "Office", body: ["159 4th Avenue North, Suite 200, Nashville, TN 37219. Phone 917-400-9543. Email marc@calocapital.io."] },

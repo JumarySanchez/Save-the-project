@@ -1,11 +1,11 @@
 // Legal copy. Have a licensed attorney review before relying on it.
-export const LEGAL_UPDATED="October 10, 2026";
-export const privacyIntro="Your privacy matters to us. This policy explains, in plain words, what information we collect, why we collect it, and the choices you have.";
+export const LEGAL_UPDATED="October 31, 2026";
+export const privacyIntro="CaloCapital offers information and assistance across insurance, retirement savings, digital assets, and financing. Some site forms ask for personal or business information so we can respond to your request. We do not sell your personal information. This policy explains what we collect, how we use it, and the choices you have.";
 export const privacySections=[
  {
   "t": "Who we are and what this policy covers",
   "b": [
-   "This Privacy Policy explains how CaloCapital (“CaloCapital,” “we,” “us”) collects, uses, shares and protects information when you visit calocapital.io, contact us, or use our services. Our services help businesses learn about financing options and connect with lenders and partners. We are a marketplace and guide, not a lender.",
+   "This Privacy Policy explains how CaloCapital (“CaloCapital,” “we,” “us”) collects, uses, shares and protects information when you visit calocapital.io, contact us, or use our services. We help visitors explore life insurance, retirement savings and annuity options, digital-asset services, business funding, and debt-consolidation options. Services and availability depend on your needs, eligibility, licensing, and the providers involved. We help businesses learn about financing options and may connect them with lenders and partners; we are not a lender.",
    "Words we use: “personal information” means information that identifies you or can reasonably be linked to you, including details about you as a business owner or representative."
   ]
  },
@@ -15,13 +15,13 @@ export const privacySections=[
    {
     "lead": "Information you give us:",
     "list": [
-     "Your name, email address, phone number and message when you use our contact form, call us or email us.",
+     "Your name, email address, phone number, message, and booking details when you contact us or use our scheduling tools.",
      "Details about your business and funding needs when you ask for options, such as business name, industry, time in business, monthly revenue, the amount you need and a credit score range you share.",
      "Your name, email and any notes when you book a meeting on our calendar.",
      "Documents or identity details you choose to send us. When federal or state law, or a lender, requires us to verify identity or business ownership, we may ask for more information."
     ]
    },
-   "Information collected automatically: your IP address, browser and device type, pages viewed, the date and time of your visit, and the page that referred you. We collect this with cookies and similar tools.",
+   "Information collected automatically: your IP address, browser and device type, pages viewed, the date and time of your visit, and the page that referred you. We and embedded services may collect this through cookies and similar tools.",
    "Information from others: with your permission, lenders or partners may send us updates about a request you made. We only request credit reports when you authorize it."
   ]
  },
@@ -31,7 +31,7 @@ export const privacySections=[
    {
     "list": [
      "To respond to your questions and book meetings.",
-     "To match you with lenders and partners and to explain your options.",
+     "To respond to your questions, provide the assistance you request, and explain available options.",
      "To prepare and send information you ask for, such as offers and next steps.",
      "To improve our website, understand which pages help people, and keep our systems secure.",
      "To send helpful updates and marketing, if you agree. You can opt out at any time.",
@@ -46,19 +46,19 @@ export const privacySections=[
    {
     "lead": "We share information only as needed to run our services:",
     "list": [
-     "With lenders and partners you ask us to connect you with, so they can review your request.",
-     "With service providers that help us operate, such as website hosting, form handling, scheduling, email and analytics. They may use the information only to provide services to us.",
+     "When you submit information through this website's contact or scheduling tools, Marc J. Calo or a licensed CaloCapital professional may use it only to respond to your request. We do not sell that information or share it with lenders or unrelated parties for their own purposes. We will explain and ask for separate permission before sharing information for a referral.",
+     "With service providers that help us operate, such as website hosting and scheduling. For example, Google Calendar processes booking details to provide scheduling. Service providers may use the information only to provide services to us and may also handle it under their own privacy policies.",
      "When the law requires it, to respond to lawful requests, or to protect people, our business or our rights.",
      "In a merger, sale or other business transfer, with the new owner, who must protect it under this policy."
     ]
    },
-   "We do not sell your personal information for money."
+   "We do not sell your personal information."
   ]
  },
  {
   "t": "Cookies and analytics",
   "b": [
-   "We use cookies and similar tools to keep the website working, remember your choices and measure traffic. You can block or delete cookies in your browser settings, though parts of the site may work less well. Where required, we honor browser signals such as Global Privacy Control."
+   "This website uses first-party cookies to remember your age confirmation for the browser session and your cookie choice. Google Calendar, Google Maps, and our chat service are not embedded or loaded until you accept cookies; after that, those services may use their own cookies and similar tools under their privacy policies. You can block or delete cookies in your browser settings, though embedded tools may work less well."
   ]
  },
  {
@@ -88,7 +88,7 @@ export const privacySections=[
  {
   "t": "Children’s privacy",
   "b": [
-   "Our services are for business owners and adults. They are not meant for anyone under 18, and we do not knowingly collect information from children. If you think a child has given us information, contact us and we will delete it."
+   "Our guidance is intended for adults. A visitor under 18 may use the site or request guidance only while a parent or legal guardian is present and participating. We do not knowingly collect personal information directly from children. A parent or guardian should provide any information needed for a request on a minor's behalf."
   ]
  },
  {
@@ -127,19 +127,19 @@ export const termsSections=[
  {
   "t": "Who can use our services",
   "b": [
-   "You must be at least 18 and be using our services for business purposes. Our services are not available in every state. You agree to give us information that is true, complete and current."
+   "You must be at least 18 to use our services on your own. If you are under 18, a parent or legal guardian must be present and participating when you use the site or request guidance. Our services are not available in every state. You agree to give us information that is true, complete and current."
   ]
  },
  {
   "t": "Information you share and your permission",
   "b": [
-   "When you send us a request, you allow us to share it with lenders and partners we select to respond to you, and to contact you about it by phone, text and email as described in our Privacy Policy."
+   "When you submit information through this website's contact or scheduling tools, you agree that Marc J. Calo or a licensed CaloCapital professional may use it to respond to your request. Google Calendar processes booking details when you use the scheduling form. We will ask for separate permission before sharing your information with lenders or partners for a referral."
   ]
  },
  {
   "t": "Calls, texts and emails",
   "b": [
-   "By giving us your phone number or email, you agree we may contact you, including with automated calls or texts and marketing messages, about our services. Consent is not required to use our services. You can withdraw consent at any time by replying STOP or contacting us."
+   "If you provide a phone number or email when requesting assistance, we may use it to respond to that request. We send marketing messages only with your separate consent, which is not required to use our services. You can withdraw consent at any time by replying STOP or contacting us."
   ]
  },
  {

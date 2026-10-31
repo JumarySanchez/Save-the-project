@@ -667,9 +667,11 @@ function Navbar({ currentPage, setPage, goToSection, navigate }) {
           })}
         </nav>
         <a
-          href={SCHEDULE_CALL_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/contact"
+          onClick={(event) => {
+            event.preventDefault();
+            setPage("Contact");
+          }}
           className="schedule-call-radiant hidden shrink-0 rounded-none px-4 py-2 text-sm font-black text-[#F4F7FB] transition xl:inline-block"
         >
           Schedule a Call
@@ -697,7 +699,15 @@ function Navbar({ currentPage, setPage, goToSection, navigate }) {
                 {item.label}
               </button>
             ))}
-            <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="schedule-call-radiant rounded-none px-4 py-2 text-center text-sm font-black text-[#F4F7FB]">
+            <a
+              href="/contact"
+              onClick={(event) => {
+                event.preventDefault();
+                setOpen(false);
+                setPage("Contact");
+              }}
+              className="schedule-call-radiant rounded-none px-4 py-2 text-center text-sm font-black text-[#F4F7FB]"
+            >
               Schedule a Call
             </a>
           </div>
@@ -1057,23 +1067,129 @@ function SiteDisclosure() {
 }
 
 const CALENDAR_EMBED_URL = `${SCHEDULE_CALL_URL.replace("/calendar/u/0/", "/calendar/")}?gv=true`;
+const AGE_CONFIRMATION_COOKIE = "calocapital_age_confirmation";
+const COOKIE_CONSENT_COOKIE = "calocapital_cookie_consent";
+const COOKIE_CONSENT_MAX_AGE = 60 * 60 * 24 * 180;
 
-function ContactCalendar() {
+function hasCookieValue(name, value) {
+  return document.cookie.split(";").some((cookie) => cookie.trim() === `${name}=${value}`);
+}
+
+function ContactCalendar({ cookiesAccepted }) {
+  const [dataConsent, setDataConsent] = useState(false);
+  const canLoadCalendar = cookiesAccepted && dataConsent;
+
   return (
     <div className="contact-cal rounded-[20px] border border-transparent p-6 sm:p-8" style={{background:"transparent"}}>
       <p className="mb-5 text-[15px] text-[#B7C0D8]">Pick a time that works for you. You will get a calendar invite with the video link.</p>
-      <iframe
-        title="Book a Google Meet with CaloCapital"
-        src={CALENDAR_EMBED_URL}
-        loading="lazy"
-        className="contact-cal-frame w-full rounded-xl border-0 bg-white"
-      />
-      <p className="mt-4 text-sm text-[#B7C0D8]">
-        Calendar not loading?{" "}
-        <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Open it in a new tab</a>
-        {" "}or email <a href="mailto:marc@calocapital.io" className="text-[#C6B8FF] underline underline-offset-4">marc@calocapital.io</a>.
-      </p>
+      <label className="mb-5 flex items-start gap-3 text-sm leading-[1.6] text-[#B7C0D8]">
+        <input
+          type="checkbox"
+          checked={dataConsent}
+          onChange={(event) => setDataConsent(event.target.checked)}
+          className="mt-1 h-4 w-4 shrink-0 accent-[#9B7CFF]"
+        />
+        <span>
+          I agree to share my booking details with Marc J. Calo for assistance with this request. Google Calendar processes those details to provide scheduling.{" "}
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Google Privacy Policy</a>
+        </span>
+      </label>
+      {canLoadCalendar ? (
+        <>
+          <iframe
+            title="Book a Google Meet with CaloCapital"
+            src={CALENDAR_EMBED_URL}
+            loading="lazy"
+            className="contact-cal-frame w-full rounded-xl border-0 bg-white"
+          />
+          <p className="mt-4 text-sm text-[#B7C0D8]">
+            Calendar not loading?{" "}
+            <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Open it in a new tab</a>
+            {" "}or email <a href="mailto:marc@calocapital.io" className="text-[#C6B8FF] underline underline-offset-4">marc@calocapital.io</a>.
+          </p>
+        </>
+      ) : (
+        <p role="status" className="rounded-xl border border-[#B7C0D8]/20 bg-white/5 p-5 text-sm text-[#B7C0D8]">
+          {!cookiesAccepted
+            ? "Accept cookies to load the Google Calendar booking form. The calendar remains off until you accept."
+            : "Confirm the booking-details notice above to load the Google Calendar booking form."}
+        </p>
+      )}
     </div>
+  );
+}
+
+function AgeConfirmation({ onConfirm }) {
+  const [confirmed, setConfirmed] = useState(false);
+
+  return (
+    <section
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="age-confirmation-title"
+      style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 10000, maxHeight: "90vh", overflowY: "auto", padding: "24px 20px", background: "rgba(11,17,36,0.96)", borderTop: "1px solid rgba(155,124,255,0.5)", boxShadow: "0 -18px 50px rgba(0,0,0,0.5)", backdropFilter: "blur(10px)", color: "#F4F7FB" }}
+    >
+      <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+        <div className="max-w-3xl">
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">CaloCapital</p>
+          <h2 id="age-confirmation-title" className="mt-2 text-2xl font-black sm:text-3xl">Before you continue</h2>
+          <p className="mt-2 text-[15px] leading-[1.6] text-[#B7C0D8]">
+            Guidance on this site is intended for adults. You may continue if you are 18 or older, or if you are under 18 and your parent or legal guardian is present and participating. You do not need to provide your name, birth date, or other personal information to confirm.
+          </p>
+          <label className="mt-4 flex items-start gap-3 text-sm leading-[1.6]">
+            <input
+              type="checkbox"
+              autoFocus
+              checked={confirmed}
+              onChange={(event) => setConfirmed(event.target.checked)}
+              className="mt-1 h-4 w-4 shrink-0 accent-[#9B7CFF]"
+            />
+            <span>I confirm that I am 18 or older, or that my parent or legal guardian is present and participating.</span>
+          </label>
+        </div>
+        <div className="shrink-0">
+          <button
+            type="button"
+            disabled={!confirmed}
+            onClick={onConfirm}
+            className="rounded-full bg-[#6D5EF5] px-8 py-3 font-black text-white transition enabled:hover:bg-[#7B6DF7] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Continue
+          </button>
+          <p className="mt-3 max-w-[16rem] text-xs text-[#B7C0D8]">If neither statement applies, please leave this site.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CookieNotice({ onAccept, onContinue, accepted, error }) {
+  return (
+    <section
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cookie-notice-title"
+      className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 bg-[#0B1124]/95 px-5 py-5 text-[#F4F7FB] shadow-2xl backdrop-blur sm:px-8"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-4xl">
+          <h2 id="cookie-notice-title" className="text-xl font-black">Cookies and your choices</h2>
+          <p className="mt-1 text-sm leading-[1.6] text-[#B7C0D8]">
+            We use first-party cookies to remember this age confirmation and your cookie choice. Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies. You can block or delete cookies in your browser settings; embedded tools may then work differently. We do not sell your personal information.{" "}
+            <a href="/legal#privacy-policy" className="text-[#C6B8FF] underline underline-offset-4">Privacy Policy</a>
+          </p>
+          {error && <p role="alert" className="mt-2 text-sm text-[#C6B8FF]">{error}</p>}
+        </div>
+        <button
+          type="button"
+          autoFocus
+          onClick={accepted ? onContinue : onAccept}
+          className="mt-4 rounded-full bg-[#6D5EF5] px-6 py-3 text-sm font-black text-white transition hover:bg-[#7B6DF7]"
+        >
+          {accepted ? "Continue for this visit" : "Accept cookies"}
+        </button>
+      </div>
+    </section>
   );
 }
 
@@ -1103,7 +1219,7 @@ const CONTACT_SOCIALS = [
   },
 ];
 
-function ContactPage() {
+function ContactPage({ cookiesAccepted }) {
   const serif = "font-['Cormorant_Garamond',serif]";
   const details = [
     { label: "Email", value: "marc@calocapital.io", href: "mailto:marc@calocapital.io" },
@@ -1165,7 +1281,7 @@ function ContactPage() {
           </div>
 
           <div className="min-w-0 flex flex-col">
-            <ContactCalendar />
+            <ContactCalendar cookiesAccepted={cookiesAccepted} />
           </div>
         </div>
       </div>
@@ -1173,7 +1289,7 @@ function ContactPage() {
   );
 }
 
-function ContactMap() {
+function ContactMap({ cookiesAccepted }) {
   const serif = "font-['Cormorant_Garamond',serif]";
   return (
     <section
@@ -1185,13 +1301,28 @@ function ContactMap() {
         <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.18em] text-[#C6B8FF]">Location</p>
         <h2 className={`${serif} mb-8 text-[36px] font-bold leading-[1.1] sm:text-[48px]`}>Visit our office</h2>
       </div>
-      <iframe
-        title={`Map showing the CaloCapital office at ${SITE_ADDRESS}`}
-        src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_ADDRESS)}&output=embed`}
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        className="block h-[380px] w-full border-0 sm:h-[540px]"
-      />
+      {cookiesAccepted ? (
+        <iframe
+          title={`Map showing the CaloCapital office at ${SITE_ADDRESS}`}
+          src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_ADDRESS)}&output=embed`}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="block h-[380px] w-full border-0 sm:h-[540px]"
+        />
+      ) : (
+        <div className="mx-auto flex min-h-48 max-w-5xl items-center justify-center px-5 text-center text-sm text-[#B7C0D8]">
+          Accept cookies to load the embedded Google Map. You can still{" "}
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_ADDRESS)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-1 text-[#C6B8FF] underline underline-offset-4"
+          >
+            open directions in Google Maps
+          </a>
+          .
+        </div>
+      )}
       <div className="mx-auto mt-4 max-w-[1240px] px-5 sm:px-8 lg:px-12">
         <p className="text-sm text-[#B7C0D8]">
           <a
@@ -1461,8 +1592,10 @@ function FaqsPage() {
   );
 }
 
-function Footer({ setPage }) {
+function Footer({ cookiesAccepted }) {
   useEffect(() => {
+    if (!cookiesAccepted) return;
+
     const widgetSelector = 'script[data-widget-id="6a872b48b433348f40d6511c"]';
     if (document.querySelector(widgetSelector)) return;
 
@@ -1473,11 +1606,9 @@ function Footer({ setPage }) {
     widgetScript.dataset.widgetId = "6a872b48b433348f40d6511c";
     widgetScript.dataset.source = "WEB_USER";
     document.body.appendChild(widgetScript);
-  }, []);
+  }, [cookiesAccepted]);
 
-  return (
-    <></>
-  );
+  return null;
 }
 
 function GlobalStyles() {
@@ -2307,6 +2438,22 @@ export default function App() {
   const [transitionPhase, setTransitionPhase] = useState("idle");
   const [pendingPage, setPendingPage] = useState(null);
   const transitionTimerRef = useRef(null);
+  const [ageConfirmed, setAgeConfirmed] = useState(() => hasCookieValue(AGE_CONFIRMATION_COOKIE, "confirmed"));
+  const [cookiesAccepted, setCookiesAccepted] = useState(() => hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted"));
+  const [cookieBannerDismissed, setCookieBannerDismissed] = useState(() => hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted"));
+  const [cookiePreferenceError, setCookiePreferenceError] = useState("");
+
+  useEffect(() => {
+    if (ageConfirmed && cookieBannerDismissed) return undefined;
+    const { body, documentElement: html } = document;
+    const previous = [body.style.overflow, html.style.overflow];
+    body.style.overflow = "hidden";
+    html.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = previous[0];
+      html.style.overflow = previous[1];
+    };
+  }, [ageConfirmed, cookieBannerDismissed]);
 
   useEffect(() => {
     const path = renderedPage === "Info" ? infoPath : renderedPage === "Contact" ? "/contact" : renderedPage === "Legal" ? "/legal" : renderedPage === "FAQs" ? "/faqs" : "/";
@@ -2509,25 +2656,62 @@ export default function App() {
     }
   }
 
+  function acceptCookies() {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${COOKIE_CONSENT_COOKIE}=accepted; Max-Age=${COOKIE_CONSENT_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
+    setCookiesAccepted(true);
+    if (hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted")) {
+      setCookieBannerDismissed(true);
+      setCookiePreferenceError("");
+    } else {
+      setCookiePreferenceError("Your browser did not save this choice. Cookies are enabled for this visit only; you may be asked again after reloading.");
+    }
+  }
+
+  function confirmAge() {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${AGE_CONFIRMATION_COOKIE}=confirmed; Path=/; SameSite=Lax${secure}`;
+    setAgeConfirmed(true);
+  }
+
+  function continueAfterCookieStorageError() {
+    setCookieBannerDismissed(true);
+  }
+
   const pageTransitionStateClass = transitionPhase === "out" ? "opacity-0 translate-y-1 scale-[0.998]" : "opacity-100 translate-y-0 scale-100";
   const pageTransitionStyle = {
     filter: transitionPhase === "out" ? "blur(1.2px)" : "blur(0px)",
   };
+  const embedsAllowed = ageConfirmed && cookiesAccepted;
 
   return (
-    <main className="min-h-screen bg-[#050816] font-body">
-      <GlobalStyles />
-      <Starfield />
-      <MarketTicker coins={coins} live={live} />
-      <Navbar currentPage={currentPage} setPage={setPage} goToSection={goToSection} navigate={navigate} />
-      <div
-        className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
-        style={pageTransitionStyle}
+    <>
+      <main
+        inert={!ageConfirmed || !cookieBannerDismissed}
+        className="min-h-screen bg-[#050816] font-body"
       >
-        {renderedPage === "Contact" ? <><ContactPage /><ContactMap /></> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
-      </div>
-      <SiteDisclosure />
-      <Footer setPage={setPage} />
-    </main>
+        <GlobalStyles />
+        <Starfield />
+        <MarketTicker coins={coins} live={live} />
+        <Navbar currentPage={currentPage} setPage={setPage} goToSection={goToSection} navigate={navigate} />
+        <div
+          className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
+          style={pageTransitionStyle}
+        >
+          {renderedPage === "Contact" ? <><ContactPage cookiesAccepted={embedsAllowed} /><ContactMap cookiesAccepted={embedsAllowed} /></> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
+        </div>
+        <SiteDisclosure />
+        <Footer cookiesAccepted={embedsAllowed} />
+      </main>
+      {!ageConfirmed && <AgeConfirmation onConfirm={confirmAge} />}
+      {ageConfirmed && !cookieBannerDismissed && (
+        <CookieNotice
+          onAccept={acceptCookies}
+          onContinue={continueAfterCookieStorageError}
+          accepted={cookiesAccepted}
+          error={cookiePreferenceError}
+        />
+      )}
+    </>
   );
 }
