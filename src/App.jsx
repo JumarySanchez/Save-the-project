@@ -1121,78 +1121,48 @@ function ContactCalendar({ cookiesAccepted }) {
   );
 }
 
-function AgeConfirmation({ onConfirm }) {
-  const [confirmed, setConfirmed] = useState(false);
-
-  return (
-    <section
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="age-confirmation-title"
-      style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 10000, maxHeight: "90vh", overflowY: "auto", padding: "24px 20px", background: "rgba(11,17,36,0.96)", borderTop: "1px solid rgba(155,124,255,0.5)", boxShadow: "0 -18px 50px rgba(0,0,0,0.5)", backdropFilter: "blur(10px)", color: "#F4F7FB" }}
-    >
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-        <div className="max-w-3xl">
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">CaloCapital</p>
-          <h2 id="age-confirmation-title" className="mt-2 text-2xl font-black sm:text-3xl">Before you continue</h2>
-          <p className="mt-2 text-[15px] leading-[1.6] text-[#B7C0D8]">
-            Guidance on this site is intended for adults. You may continue if you are 18 or older, or if you are under 18 and your parent or legal guardian is present and participating. You do not need to provide your name, birth date, or other personal information to confirm.
-          </p>
-          <label className="mt-4 flex items-start gap-3 text-sm leading-[1.6]">
-            <input
-              type="checkbox"
-              autoFocus
-              checked={confirmed}
-              onChange={(event) => setConfirmed(event.target.checked)}
-              className="mt-1 h-4 w-4 shrink-0 accent-[#9B7CFF]"
-            />
-            <span>I confirm that I am 18 or older, or that my parent or legal guardian is present and participating.</span>
-          </label>
-        </div>
-        <div className="shrink-0">
-          <button
-            type="button"
-            disabled={!confirmed}
-            onClick={onConfirm}
-            className="rounded-full bg-[#6D5EF5] px-8 py-3 font-black text-white transition enabled:hover:bg-[#7B6DF7] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Continue
-          </button>
-          <p className="mt-3 max-w-[16rem] text-xs text-[#B7C0D8]">If neither statement applies, please leave this site.</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CookieNotice({ onAccept, onContinue, accepted, error }) {
+function CookieNotice({ onAccept, onContinue, error }) {
   return (
     <section
       role="dialog"
       aria-modal="true"
       aria-labelledby="cookie-notice-title"
-      className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 bg-[#0B1124]/95 px-5 py-5 text-[#F4F7FB] shadow-2xl backdrop-blur sm:px-8"
+      className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 px-5 py-5 text-[#F4F7FB] shadow-2xl backdrop-blur sm:px-8"
+      style={{ background: "rgba(11,17,36,0.3)" }}
     >
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-4xl">
-          <h2 id="cookie-notice-title" className="text-xl font-black">Cookies and your choices</h2>
-          <p className="mt-1 text-sm leading-[1.6] text-[#B7C0D8]">
-            We use first-party cookies to remember this age confirmation and your cookie choice. Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies. You can block or delete cookies in your browser settings; embedded tools may then work differently. We do not sell your personal information.{" "}
-            <a href="/legal#privacy-policy" className="text-[#C6B8FF] underline underline-offset-4">Privacy Policy</a>
-          </p>
-          {error && <p role="alert" className="mt-2 text-sm text-[#C6B8FF]">{error}</p>}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+          <div className="max-w-4xl">
+            <h2 id="cookie-notice-title" className="text-xl font-black">Cookies and your choices</h2>
+            <p className="mt-1 text-sm leading-[1.6] text-[#B7C0D8]">
+              By clicking Accept all, you confirm that you are an adult or accompanied by an adult parent or legal guardian. CaloCapital does not do business with minors. We use first-party cookies to remember your confirmation and cookie choice. Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies. You can block or delete cookies in your browser settings; embedded tools may then work differently. We do not sell your personal information.{" "}
+              <a href="/legal#privacy-policy" className="text-[#C6B8FF] underline underline-offset-4">Privacy Policy</a>
+            </p>
+            {error && <p role="alert" className="mt-2 text-sm text-[#C6B8FF]">{error}</p>}
+          </div>
+          <div className="flex flex-wrap items-center gap-3 lg:shrink-0">
+            <button
+              type="button"
+              autoFocus
+              onClick={onAccept}
+              className="rounded-full bg-[#6D5EF5] px-6 py-3 text-sm font-black text-white transition hover:bg-[#7B6DF7]"
+            >
+              Accept all
+            </button>
+            {error && (
+              <button
+                type="button"
+                onClick={onContinue}
+                className="rounded-full border border-[#B7C0D8]/40 px-6 py-3 text-sm font-black text-[#F4F7FB] transition hover:bg-white/10"
+              >
+                Continue for this visit
+              </button>
+            )}
+          </div>
         </div>
-        <button
-          type="button"
-          autoFocus
-          onClick={accepted ? onContinue : onAccept}
-          className="mt-4 rounded-full bg-[#6D5EF5] px-6 py-3 text-sm font-black text-white transition hover:bg-[#7B6DF7]"
-        >
-          {accepted ? "Continue for this visit" : "Accept cookies"}
-        </button>
       </div>
-    </section>
-  );
+      </section>
+    );
 }
 
 const CONTACT_SOCIALS = [
@@ -2445,7 +2415,9 @@ export default function App() {
   const transitionTimerRef = useRef(null);
   const [ageConfirmed, setAgeConfirmed] = useState(() => hasCookieValue(AGE_CONFIRMATION_COOKIE, "confirmed"));
   const [cookiesAccepted, setCookiesAccepted] = useState(() => hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted"));
-  const [cookieBannerDismissed, setCookieBannerDismissed] = useState(() => hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted"));
+  const [cookieBannerDismissed, setCookieBannerDismissed] = useState(
+    () => hasCookieValue(AGE_CONFIRMATION_COOKIE, "confirmed") && hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted")
+  );
   const [cookiePreferenceError, setCookiePreferenceError] = useState("");
 
   useEffect(() => {
@@ -2664,19 +2636,15 @@ export default function App() {
   function acceptCookies() {
     const secure = window.location.protocol === "https:" ? "; Secure" : "";
     document.cookie = `${COOKIE_CONSENT_COOKIE}=accepted; Max-Age=${COOKIE_CONSENT_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
+    document.cookie = `${AGE_CONFIRMATION_COOKIE}=confirmed; Path=/; SameSite=Lax${secure}`;
     setCookiesAccepted(true);
-    if (hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted")) {
+    setAgeConfirmed(true);
+    if (hasCookieValue(COOKIE_CONSENT_COOKIE, "accepted") && hasCookieValue(AGE_CONFIRMATION_COOKIE, "confirmed")) {
       setCookieBannerDismissed(true);
       setCookiePreferenceError("");
     } else {
-      setCookiePreferenceError("Your browser did not save this choice. Cookies are enabled for this visit only; you may be asked again after reloading.");
+      setCookiePreferenceError("Your browser did not save one or more choices. They apply for this visit only; you may be asked again after reloading.");
     }
-  }
-
-  function confirmAge() {
-    const secure = window.location.protocol === "https:" ? "; Secure" : "";
-    document.cookie = `${AGE_CONFIRMATION_COOKIE}=confirmed; Path=/; SameSite=Lax${secure}`;
-    setAgeConfirmed(true);
   }
 
   function continueAfterCookieStorageError() {
@@ -2708,12 +2676,10 @@ export default function App() {
         <SiteDisclosure />
         <Footer cookiesAccepted={embedsAllowed} />
       </main>
-      {!ageConfirmed && <AgeConfirmation onConfirm={confirmAge} />}
-      {ageConfirmed && !cookieBannerDismissed && (
+      {!cookieBannerDismissed && (
         <CookieNotice
           onAccept={acceptCookies}
           onContinue={continueAfterCookieStorageError}
-          accepted={cookiesAccepted}
           error={cookiePreferenceError}
         />
       )}
