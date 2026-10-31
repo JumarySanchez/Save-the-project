@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
 import FinancingSections, { AGENCY_BG } from "./FinancingSections.jsx";
 import Starfield from "./Starfield.jsx";
@@ -11,6 +11,8 @@ import step2 from "../assets/slide-retirement.svg";
 import step3 from "../assets/slide-debt.jpg";
 import step4 from "../assets/slide-inflation.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
+
+const CryptoCandlestickChart = lazy(() => import("./CryptoCandlestickChart.jsx"));
 
 const FALLBACK_COINS = [
   { symbol: "BTC", name: "Bitcoin", price: 97430, change: 2.14 },
@@ -1350,6 +1352,9 @@ function HomePage({ setPage, navigate }) {
         </div>
         <FourCs />
       </div>
+      <Suspense fallback={<section className="w-full bg-[#050816] px-4 py-14 text-[#B7C0D8] sm:px-8" aria-busy="true">Loading crypto chart…</section>}>
+        <CryptoCandlestickChart />
+      </Suspense>
       <FinancingSections onNavigate={navigate} />
     </>
   );
