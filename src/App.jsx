@@ -588,7 +588,22 @@ const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || 
 function Navbar({ currentPage, setPage, goToSection, navigate }) {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [hidden, setHidden] = useState(false);
   const onHome = !["Contact", "FAQs", "Legal", "Info"].includes(currentPage);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    function onScroll() {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      if (y < 80) setHidden(false);
+      else if (delta > 6) setHidden(true);
+      else if (delta < -6) setHidden(false);
+      if (Math.abs(delta) > 6) lastY = y;
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!onHome) return undefined;
@@ -621,7 +636,10 @@ function Navbar({ currentPage, setPage, goToSection, navigate }) {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#B7C0D8]/10 bg-[#050816]/90 backdrop-blur-md">
+    <header
+      onFocusCapture={() => setHidden(false)}
+      className={`site-header sticky top-0 z-50 border-b border-[#B7C0D8]/10 bg-[#050816]/90 backdrop-blur-md${hidden && !open ? " site-header--hidden" : ""}`}
+    >
       <div className="mx-auto flex w-full max-w-[min(96vw,1500px)] items-center justify-between gap-4 px-4 py-3 sm:px-5">
         <button onClick={() => handleClick({ section: "home" })} aria-label="CaloCapital home" className="shrink-0 text-left">
           <Logo />
@@ -1127,39 +1145,43 @@ function CookieNotice({ onAccept, onContinue, error }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="cookie-notice-title"
-      className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 p-[30px] text-[#F4F7FB] shadow-2xl backdrop-blur"
-      style={{ background: "rgba(11,17,36,0.3)" }}
+      aria-describedby="cookie-notice-summary"
+      className="cookie-notice"
     >
-      <div className="mx-auto w-full">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-          <div className="min-w-0 flex-1">
-            <h2 id="cookie-notice-title" className="text-xl font-black">Cookies and your choices</h2>
-            <p className="mt-1 text-sm leading-[1.6] text-[#B7C0D8]">
-              By clicking Accept all, you confirm that you are an adult or accompanied by an adult parent or legal guardian. CaloCapital does not do business with minors. We use first-party cookies to remember your confirmation and cookie choice. Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies. You can block or delete cookies in your browser settings; embedded tools may then work differently. We do not sell your personal information.{" "}
-              <a href="/legal#privacy-policy" className="text-[#C6B8FF] underline underline-offset-4">Privacy Policy</a>
-            </p>
-            {error && <p role="alert" className="mt-2 text-sm text-[#C6B8FF]">{error}</p>}
-          </div>
-          <div className="flex flex-wrap items-center gap-3 lg:shrink-0">
-            <button
-              type="button"
-              autoFocus
-              onClick={onAccept}
-              className="rounded-full bg-[#6D5EF5] px-6 py-3 text-sm font-black text-white transition hover:bg-[#7B6DF7]"
-            >
-              Accept all
-            </button>
-            {error && (
-              <button
-                type="button"
-                onClick={onContinue}
-                className="rounded-full border border-[#B7C0D8]/40 px-6 py-3 text-sm font-black text-[#F4F7FB] transition hover:bg-white/10"
-              >
-                Continue for this visit
-              </button>
-            )}
-          </div>
-        </div>
+      <div className="cookie-notice__body">
+        <p className="cookie-notice__eyebrow">Your privacy</p>
+        <h2 id="cookie-notice-title" className="cookie-notice__title">Cookies and your choices</h2>
+        <p id="cookie-notice-summary" className="cookie-notice__summary">
+          We use a small number of cookies to make this site work and to remember your choices. Please review how they are used before you continue.
+        </p>
+        <ul className="cookie-notice__list">
+          <li>
+            <strong>Age confirmation.</strong> By clicking Accept all, you confirm that you are an adult or accompanied by an adult parent or legal guardian. CaloCapital does not do business with minors.
+          </li>
+          <li>
+            <strong>First-party cookies.</strong> We use them only to remember your confirmation and your cookie choice.
+          </li>
+          <li>
+            <strong>Embedded tools.</strong> Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies.
+          </li>
+          <li>
+            <strong>Your control.</strong> You can block or delete cookies in your browser settings; embedded tools may then work differently. We do not sell your personal information.
+          </li>
+        </ul>
+        <p className="cookie-notice__links">
+          Learn more in our <a href="/legal#privacy-policy">Privacy Policy</a> and <a href="/legal#terms">Terms of Service</a>.
+        </p>
+        {error && <p role="alert" className="cookie-notice__error">{error}</p>}
+      </div>
+      <div className="cookie-notice__actions">
+        <button type="button" autoFocus onClick={onAccept} className="cookie-notice__accept">
+          Accept all
+        </button>
+        {error && (
+          <button type="button" onClick={onContinue} className="cookie-notice__secondary">
+            Continue for this visit
+          </button>
+        )}
       </div>
     </section>
   );
@@ -1589,8 +1611,8 @@ function Footer({ cookiesAccepted }) {
 function GlobalStyles() {
   return (
     <style>{`
-      html { scroll-behavior: smooth; overflow-x: hidden; }
-      body, #root { overflow-x: hidden; }
+      html { scroll-behavior: smooth; overflow-x: clip; }
+      body, #root { overflow-x: clip; }
       * { box-sizing: border-box; }
       .agency-topic { font-size: clamp(1.9rem, 3.2vw, 2.6rem); font-weight: 900; line-height: 1.1; color: #F4F7FB; }
       .agency-photo { position: relative; min-height: 560px; border-radius: 200px 0 160px 0; overflow: hidden; border: 1px solid rgba(183,192,216,.2); background: radial-gradient(circle at 50% 40%, #6D5EF5 0%, #2A2170 55%, #0B0F24 100%); display: flex; align-items: flex-end; }
