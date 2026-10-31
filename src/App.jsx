@@ -1130,9 +1130,9 @@ function CookieNotice({ onAccept, onContinue, error }) {
       className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 px-5 py-5 text-[#F4F7FB] shadow-2xl backdrop-blur sm:px-8"
       style={{ background: "rgba(11,17,36,0.3)" }}
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto w-full">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-          <div className="max-w-4xl">
+          <div className="min-w-0 flex-1">
             <h2 id="cookie-notice-title" className="text-xl font-black">Cookies and your choices</h2>
             <p className="mt-1 text-sm leading-[1.6] text-[#B7C0D8]">
               By clicking Accept all, you confirm that you are an adult or accompanied by an adult parent or legal guardian. CaloCapital does not do business with minors. We use first-party cookies to remember your confirmation and cookie choice. Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies. You can block or delete cookies in your browser settings; embedded tools may then work differently. We do not sell your personal information.{" "}
@@ -1161,8 +1161,8 @@ function CookieNotice({ onAccept, onContinue, error }) {
           </div>
         </div>
       </div>
-      </section>
-    );
+    </section>
+  );
 }
 
 const CONTACT_SOCIALS = [
