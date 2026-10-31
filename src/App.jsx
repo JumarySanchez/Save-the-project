@@ -5,7 +5,7 @@ import Starfield from "./Starfield.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
 import { faqGroups } from "./faqContent.js";
 import { DISCLOSURE, SITE_NAME, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
-import logoPng from "../public/Calo_purple_logo.png";
+import logoPng from "../public/Calo_purple_mark.png";
 import step1 from "../assets/slide-life.svg";
 import step2 from "../assets/slide-retirement.svg";
 import step3 from "../assets/slide-debt.jpg";
@@ -491,10 +491,10 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
         src={logoPng}
         alt="CaloCapital Logo"
         className={`${logoSizeClass} w-auto shrink-0 self-center object-contain`}
-        style={{ background: "transparent", height: "clamp(48px, 4.66vw, 64px)", width: "auto" }}
+        style={{ background: "transparent", height: "clamp(21px, calc(5.6vw - 35px), 41px)", width: "auto" }}
       />
       <div className="min-w-0 text-left leading-tight">
-        <p className={`${textSizeClass} font-black tracking-wide text-[#F4F7FB]`}>CaloCapital</p>
+        <p className={`${textSizeClass} font-black uppercase tracking-wide text-[#F4F7FB]`}>Calo Capital</p>
         <p className={`${taglineClass} whitespace-normal`}>Where Strategy Meets Legacy</p>
       </div>
     </div>
@@ -1127,7 +1127,7 @@ function CookieNotice({ onAccept, onContinue, error }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="cookie-notice-title"
-      className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 px-5 py-5 text-[#F4F7FB] shadow-2xl backdrop-blur sm:px-8"
+      className="fixed inset-x-0 bottom-0 z-[9999] max-h-[85vh] overflow-y-auto border-t border-[#9B7CFF]/50 p-[30px] text-[#F4F7FB] shadow-2xl backdrop-blur"
       style={{ background: "rgba(11,17,36,0.3)" }}
     >
       <div className="mx-auto w-full">
