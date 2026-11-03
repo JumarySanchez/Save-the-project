@@ -6,10 +6,10 @@ import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections
 import { faqGroups } from "./faqContent.js";
 import { DISCLOSURE, SITE_NAME, SITE_ADDRESS, SITE_PHONE, SITE_EMAIL, getRouteMeta, getRouteSchemas } from "./seo.js";
 import logoPng from "../public/Calo_purple_mark.png";
-import step1 from "../assets/slide-life.svg";
-import step2 from "../assets/slide-retirement.svg";
-import step3 from "../assets/slide-debt.jpg";
-import step4 from "../assets/slide-inflation.jpg";
+import agencyFamilyPhoto from "../assets/agency-family-pexels.jpg";
+import agencyRetirementPhoto from "../assets/agency-retirement-pexels.jpg";
+import agencyDebtPhoto from "../assets/agency-debt-pexels.jpg";
+import agencyInflationPhoto from "../assets/agency-inflation-pexels.jpg";
 import heroVideoMp4 from "../assets/new.mp4";
 
 const CryptoCandlestickChart = lazy(() => import("./CryptoCandlestickChart.jsx"));
@@ -747,7 +747,10 @@ const FOUR_CS = [
 const SERVICE_TABS = [
   {
     id: "life",
-    photo: step1,
+    photo: agencyFamilyPhoto,
+    photoAlt: "Parents sharing a happy moment at home with their young child",
+    photoCredit: "Kampus Production / Pexels",
+    photoCreditUrl: "https://www.pexels.com/photo/a-happy-family-smiling-together-6249951/",
     title: "Life Insurance",
     heading: "If you weren't here tomorrow, would your family be protected?",
     href: "https://www.investopedia.com/terms/l/lifeinsurance.asp",
@@ -762,7 +765,10 @@ const SERVICE_TABS = [
   },
   {
     id: "annuities",
-    photo: step2,
+    photo: agencyRetirementPhoto,
+    photoAlt: "Retired couple reviewing their household finances together",
+    photoCredit: "Vitaly Gariev / Pexels",
+    photoCreditUrl: "https://www.pexels.com/photo/senior-couple-managing-household-finances-indoors-39191075/",
     title: "Fixed Annuities",
     heading: "What will you be able to count on, every month?",
     href: "https://www.investor.gov/introduction-investing/investing-basics/investment-products/annuities",
@@ -777,7 +783,10 @@ const SERVICE_TABS = [
   },
   {
     id: "business",
-    photo: step3,
+    photo: agencyDebtPhoto,
+    photoAlt: "Woman using a calculator to manage bills and a household budget",
+    photoCredit: "Mikhail Nilov / Pexels",
+    photoCreditUrl: "https://www.pexels.com/photo/woman-budgeting-her-bills-6962992/",
     title: "Debt Payoff",
     heading: "Which debt is really holding you back?",
     href: "https://app.calocapital.io/#/debt",
@@ -791,7 +800,10 @@ const SERVICE_TABS = [
   },
   {
     id: "digital",
-    photo: step4,
+    photo: agencyInflationPhoto,
+    photoAlt: "Woman shopping for groceries in a supermarket",
+    photoCredit: "Gustavo Fring / Pexels",
+    photoCreditUrl: "https://www.pexels.com/photo/woman-grocery-shopping-in-supermarket-4971951/",
     title: "Inflation",
     heading: "Is inflation quietly shrinking your savings?",
     href: "https://app.calocapital.io/#/inflation",
@@ -824,10 +836,14 @@ function AgencyIntro({ navigate }) {
   return (
     <section id="agency" className="agency-intro bg-[#050816] px-5 py-20 text-[#F4F7FB]" style={{ "--agency-bg-image": `url(${AGENCY_BG})` }}>
       <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{SITE_NAME} · Nashville, Tennessee</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">Protection &amp; Financial Planning</p>
         <div key={active} className="agency-slide mt-8 grid items-start gap-10 lg:gap-14" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(460px,100%),1fr))" }}>
           <div className="min-w-0">
-            <div className="agency-photo" aria-hidden="true">
+            <div className="agency-photo">
+              <img className="agency-photo-image" src={tab.photo} alt={tab.photoAlt} />
+              <a className="agency-photo-credit" href={tab.photoCreditUrl} target="_blank" rel="noopener noreferrer">
+                Photo: {tab.photoCredit}
+              </a>
             </div>
             <p className="mt-4 px-2 text-[12px] italic leading-[1.6] text-[#B7C0D8]">General education only, not insurance, investment, tax or legal advice. Details vary by policy, issuer and state.</p>
           </div>
@@ -1452,9 +1468,82 @@ function LegalPage() {
   );
 }
 
+const ARTICLE_READER_CSS = `
+.article-reader { --rs: 19; --rl: 1.7; --rc: #E6E9F2; --rh: #FFFFFF; --rlink: #D9CFFF; --rbd: rgba(198,184,255,.55); --rbg: #050816; --rcolA: rgba(109,94,245,.2); --rcolB: rgba(255,255,255,.05); --rserif: Georgia, "Times New Roman", Times, serif; background: var(--rbg); }
+.article-reader[data-font="readable"] { --rserif: Verdana, Tahoma, "Trebuchet MS", sans-serif; letter-spacing: .01em; word-spacing: .08em; }
+.article-reader[data-cols="2"] .ar-article section:last-child { margin-bottom: 1.4rem; }
+.article-reader[data-spacing="wide"] { --rl: 2.05; }
+.article-reader[data-contrast="high"] { --rc: #FFFFFF; --rh: #FFFFFF; --rlink: #FFE45C; --rbd: #FFFFFF; --rbg: #000000; --rcolA: #1c1c1c; --rcolB: #000000; }
+.article-reader .ar-page { max-width: 1040px; margin-inline: auto; }
+.article-reader .ar-serif, .article-reader .ar-serif * { font-family: var(--rserif) !important; }
+.article-reader .ar-masthead { text-align: center; border-top: 4px double var(--rbd); border-bottom: 1px solid var(--rbd); padding: .85rem 0 .7rem; margin-top: 1.5rem; }
+.article-reader .ar-paper { font-size: clamp(1.4rem, 3.4vw, 2rem); font-weight: 700; letter-spacing: .04em; color: var(--rh); line-height: 1.1; }
+.article-reader .ar-dateline { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; margin-top: .6rem; padding-top: .45rem; border-top: 1px solid var(--rbd); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--rc); }
+.article-reader .ar-kicker { margin-top: 2rem; text-align: center; font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--rlink); }
+.article-reader .ar-h1 { margin-top: .6rem; text-align: center; font-size: clamp(2rem, 5.2vw, 3.6rem); line-height: 1.08; font-weight: 700; color: var(--rh); text-wrap: balance; }
+.article-reader .ar-deck { max-width: 46rem; margin: 1.1rem auto 0; text-align: center; font-size: calc((var(--rs) + 3) * 1px); line-height: 1.5; font-style: italic; color: var(--rc); }
+.article-reader .ar-byline { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem 1.25rem; margin-top: 1.4rem; padding: .6rem 0; border-top: 1px solid var(--rbd); border-bottom: 1px solid var(--rbd); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--rc); }
+.article-reader .ar-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .4rem; margin-top: .9rem; font-size: 13px; color: var(--rc); }
+.article-reader .ar-tools-label { margin-right: .35rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.article-reader .ar-btn { min-height: 32px; min-width: 32px; padding: .15rem .65rem; border: 1px solid var(--rlink); border-radius: 6px; color: var(--rh); background: transparent; font-weight: 700; font-size: 13px; cursor: pointer; }
+.article-reader .ar-btn:disabled { opacity: .45; cursor: not-allowed; }
+.article-reader .ar-btn[aria-pressed="true"] { background: var(--rlink); color: #050816; }
+.article-reader .ar-article { margin-top: 2rem; font-size: calc(var(--rs) * 1px); line-height: var(--rl); color: var(--rc); hyphens: manual; }
+.article-reader[data-cols="2"] .ar-article { column-count: 2; column-gap: 3rem; column-rule: 2px solid var(--rbd); padding: 1.4rem 1.5rem 0; border: 1px solid var(--rbd); background: linear-gradient(90deg, var(--rcolA) 50%, var(--rcolB) 50%); }
+@media (max-width: 860px) { .article-reader[data-cols="2"] .ar-article { column-count: 1; } }
+.article-reader .ar-article p { margin-top: .9rem; }
+.article-reader .ar-article section { margin-bottom: 1.6rem; }
+.article-reader .ar-article section:first-of-type > p:first-of-type { margin-top: 0; }
+.article-reader .ar-article section:first-of-type > p:first-of-type::first-letter { float: left; font-size: 3.9em; line-height: .82; font-weight: 700; padding: .06em .1em 0 0; color: var(--rh); }
+.article-reader .ar-h2 { break-after: avoid; font-size: calc((var(--rs) + 3) * 1px); line-height: 1.25; font-weight: 700; color: var(--rh); padding-top: .6rem; border-top: 3px solid var(--rbd); }
+.article-reader .ar-h3 { break-after: avoid; margin-top: 1rem; font-size: calc((var(--rs) + 1) * 1px); font-weight: 700; color: var(--rh); }
+.article-reader .ar-article ul { margin-top: .9rem; padding-left: 1.3rem; list-style: disc; }
+.article-reader .ar-article li { margin-top: .55rem; }
+.article-reader .ar-article strong { color: var(--rh); }
+.article-reader .ar-note { break-inside: avoid; margin-top: 1rem; padding: .6rem 0 .6rem 1rem; border-left: 4px solid var(--rlink); font-style: italic; font-size: .92em; }
+.article-reader .ar-link { color: var(--rlink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.article-reader .ar-link:hover { color: var(--rh); }
+.article-reader[data-contrast="high"] .ar-link { font-weight: 700; }
+.article-reader :is(a, button):focus-visible { outline: 3px solid #FFE45C; outline-offset: 2px; }
+.article-reader .ar-box { margin-top: 2.2rem; padding: 1.1rem 1.4rem 1.3rem; border: 1px solid transparent; font-size: calc((var(--rs) - 1) * 1px); line-height: 1.6; color: var(--rc); }
+.article-reader .ar-box h2 { font-size: calc((var(--rs) + 1) * 1px); font-weight: 700; color: var(--rh); text-transform: uppercase; letter-spacing: .08em; }
+.article-reader .ar-box ul { margin-top: .7rem; padding-left: 1.2rem; list-style: disc; }
+.article-reader .ar-box li { margin-top: .4rem; }
+.article-reader .ar-fine { margin-top: 1.6rem; font-size: 13px; line-height: 1.6; color: var(--rc); border-top: 1px solid var(--rbd); padding-top: .8rem; }
+.article-reader .ar-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.article-reader .ar-related { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-top: .6rem; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .article-reader * { transition: none !important; animation: none !important; } }
+`;
+
+const READER_DEFAULTS = { size: 19, font: "default", spacing: "normal", contrast: "normal", single: false };
+
+function loadReaderPrefs() {
+  try {
+    const saved = JSON.parse(window.localStorage.getItem("calo-reader-prefs") || "{}");
+    return {
+      size: Math.min(28, Math.max(16, Number(saved.size) || READER_DEFAULTS.size)),
+      font: saved.font === "readable" ? "readable" : "default",
+      spacing: saved.spacing === "wide" ? "wide" : "normal",
+      contrast: saved.contrast === "high" ? "high" : "normal",
+      single: saved.single === true,
+    };
+  } catch {
+    return READER_DEFAULTS;
+  }
+}
+
 function InfoPage({ path, navigate }) {
   const page = INFO_PAGES[path];
-  const linkClass = "text-[#C6B8FF] underline underline-offset-4 hover:text-[#F4F7FB]";
+  const linkClass = "ar-link";
+  const [prefs, setPrefs] = useState(loadReaderPrefs);
+
+  useEffect(() => {
+    try { window.localStorage.setItem("calo-reader-prefs", JSON.stringify(prefs)); } catch { /* storage unavailable */ }
+  }, [prefs]);
+
+  function update(patch) {
+    setPrefs((current) => ({ ...current, ...patch }));
+  }
 
   function open(event, href) {
     event.preventDefault();
@@ -1464,53 +1553,86 @@ function InfoPage({ path, navigate }) {
   if (!page) return null;
 
   return (
-    <section className="bg-[#050816] px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24">
-      <div className="mx-auto w-full max-w-[min(900px,94vw)]">
+    <section
+      className="article-reader px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24"
+      data-contrast={prefs.contrast}
+      data-font={prefs.font}
+      data-spacing={prefs.spacing}
+      data-cols={!prefs.single && prefs.size <= 20 && prefs.spacing === "normal" ? "2" : "1"}
+      style={{ "--rs": prefs.size }}
+    >
+      <style>{ARTICLE_READER_CSS}</style>
+      <div className="ar-page ar-serif">
         <a href="/" onClick={(event) => open(event, "/")} className={`text-sm font-semibold ${linkClass}`}>
           ← Back to home
         </a>
-        <p className="mt-8 text-xs font-black uppercase tracking-[0.3em] text-[#9B7CFF]">{page.eyebrow}</p>
-        <h1 className="mt-4 text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-[0.98]">{page.title}</h1>
-        <p className="mt-6 max-w-2xl text-[22px] leading-[1.6] text-[#B7C0D8]">{page.intro}</p>
-        {page.readTime && <p className="mt-4 text-sm text-[#B7C0D8]">{page.readTime}</p>}
-        {page.author && (
-          <p className="mt-4 text-sm text-[#B7C0D8]">Author: {page.author} · Last reviewed: {page.reviewed}</p>
-        )}
+
+        <div className="ar-masthead">
+          <p className="ar-paper">The Calo Library</p>
+          <div className="ar-dateline">
+            <span>Nashville, Tennessee</span>
+            <span>{page.reviewed ? `Reviewed ${page.reviewed}` : "Plain-language guides"}</span>
+            <span>Free to read</span>
+          </div>
+        </div>
+
+        <p className="ar-kicker">{page.eyebrow}</p>
+        <h1 className="ar-h1">{page.title}</h1>
+        <p className="ar-deck">{page.intro}</p>
+
+        <div className="ar-byline">
+          <span>By {page.author || "CaloCapital Editorial"}</span>
+          {page.readTime && <span>{page.readTime.split("·")[0].trim()}</span>}
+        </div>
+
         {page.cta && (
-          <a href={page.cta.href} onClick={(event) => open(event, page.cta.href)} className="mt-8 inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
-            {page.cta.label}
-          </a>
+          <p className="mt-6 text-center">
+            <a href={page.cta.href} onClick={(event) => open(event, page.cta.href)} className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
+              {page.cta.label}
+            </a>
+          </p>
         )}
 
-        <div className="mt-14 space-y-10">
-          {page.sections.map((section) => (
-            <div key={section.heading}>
-              <h2 className="border-t border-[#C6B8FF66] pt-7 text-2xl font-black">{section.heading}</h2>
-              {section.body && section.body.map((text) => <p key={text} className="mt-4 text-[17px] leading-[1.7] text-[#B7C0D8]">{text}</p>)}
+        <div className="ar-tools" role="group" aria-label="Reading options">
+          <span className="ar-tools-label">Reading options</span>
+          <button type="button" className="ar-btn" aria-label="Decrease text size" disabled={prefs.size <= 16} onClick={() => update({ size: prefs.size - 2 })}>A−</button>
+          <button type="button" className="ar-btn" aria-label="Increase text size" disabled={prefs.size >= 28} onClick={() => update({ size: prefs.size + 2 })}>A+</button>
+          <button type="button" className="ar-btn" aria-pressed={prefs.single} onClick={() => update({ single: !prefs.single })}>One column</button>
+          <button type="button" className="ar-btn" aria-pressed={prefs.contrast === "high"} onClick={() => update({ contrast: prefs.contrast === "high" ? "normal" : "high" })}>High contrast</button>
+          <button type="button" className="ar-btn" aria-pressed={prefs.font === "readable"} onClick={() => update({ font: prefs.font === "readable" ? "default" : "readable" })}>Easy-read font</button>
+          <button type="button" className="ar-btn" aria-pressed={prefs.spacing === "wide"} onClick={() => update({ spacing: prefs.spacing === "wide" ? "normal" : "wide" })}>Wide spacing</button>
+          <button type="button" className="ar-btn" onClick={() => setPrefs(READER_DEFAULTS)}>Reset</button>
+        </div>
+
+        <article className="ar-article">
+          {page.sections.map((section, index) => (
+            <section key={section.heading} aria-labelledby={`ar-section-${index}`}>
+              <h2 id={`ar-section-${index}`} className="ar-h2">{section.heading}</h2>
+              {section.body && section.body.map((text) => <p key={text}>{text}</p>)}
               {section.items && section.items.map((item) => (
-                <div key={item.heading} className="mt-6">
-                  <h3 className="text-xl font-black text-[#F4F7FB]">{item.heading}</h3>
-                  <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">{item.body}</p>
+                <div key={item.heading}>
+                  <h3 className="ar-h3">{item.heading}</h3>
+                  <p>{item.body}</p>
                 </div>
               ))}
-              {section.note && <p className="mt-6 text-[15px] italic leading-[1.7] text-[#B7C0D8]">{section.note}</p>}
+              {section.note && <p className="ar-note">{section.note}</p>}
               {section.list && (
-                <ul className="mt-4 list-disc space-y-2 pl-6 text-[17px] leading-[1.7] text-[#B7C0D8]">
+                <ul>
                   {section.list.map((text) => Array.isArray(text)
-                    ? <li key={text[0]}><strong className="text-[#F4F7FB]">{text[0]}</strong> {text[1]}</li>
+                    ? <li key={text[0]}><strong>{text[0]}</strong> {text[1]}</li>
                     : <li key={text}>{text}</li>)}
                 </ul>
               )}
-              {section.after && section.after.map((text) => <p key={text} className="mt-4 text-[17px] leading-[1.7] text-[#B7C0D8]">{text}</p>)}
+              {section.after && section.after.map((text) => <p key={text}>{text}</p>)}
               {section.links && section.button && (
-                <div className="mt-6 flex flex-wrap gap-4">
+                <div className="mt-4 flex flex-wrap gap-4">
                   {section.links.map(([label, href]) => (
                     <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">{label}</a>
                   ))}
                 </div>
               )}
               {section.links && !section.button && (
-                <ul className="mt-4 space-y-2 text-[17px]">
+                <ul>
                   {section.links.map(([label, href]) => (
                     <li key={href}>
                       <a href={href} onClick={(event) => open(event, href)} className={linkClass}>{label}</a>
@@ -1518,27 +1640,39 @@ function InfoPage({ path, navigate }) {
                   ))}
                 </ul>
               )}
-            </div>
+            </section>
           ))}
-        </div>
+          {page.note && <p className="ar-note">{page.note}</p>}
+        </article>
 
-        {page.note && <p className="mt-10 text-[15px] italic leading-[1.7] text-[#B7C0D8]">{page.note}</p>}
+        {page.sources?.length > 0 && (
+          <aside aria-labelledby="article-sources-heading" className="ar-box">
+            <h2 id="article-sources-heading">Sources and further reading</h2>
+            <ul>
+              {page.sources.map(([label, href]) => (
+                <li key={href}>
+                  <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>{label}<span className="ar-sr"> (opens in a new tab)</span></a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
 
-        <div className="mt-14 rounded-2xl border border-[#9B7CFF]/50 bg-[#6D5EF5]/15 p-6">
-          <h2 className="text-2xl font-black">Talk with our team</h2>
-          <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">
+        <aside className="ar-box" aria-labelledby="ar-contact-heading">
+          <h2 id="ar-contact-heading">Talk with our team</h2>
+          <p className="mt-2">
             Call <a className={linkClass} href="tel:+19174009543">917-400-9543</a> or email{" "}
             <a className={linkClass} href="mailto:marc@calocapital.io">marc@calocapital.io</a>.
           </p>
-          <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
+          <p className="ar-related">
             {(page.related || []).map((href) => (
               <a key={href} href={href} onClick={(event) => open(event, href)} className={linkClass}>
                 {INFO_RELATED_LABELS[href] || href}
               </a>
             ))}
-          </div>
-        </div>
-        <p className="mt-8 text-sm leading-[1.6] text-[#B7C0D8]/80">
+          </p>
+        </aside>
+        <p className="ar-fine">
           Information on this page is general and educational. It is not an offer, approval, or financial, tax or legal advice. Terms vary by lender and borrower.
         </p>
       </div>
@@ -1616,7 +1750,9 @@ function GlobalStyles() {
       * { box-sizing: border-box; }
       .agency-topic { font-size: clamp(1.9rem, 3.2vw, 2.6rem); font-weight: 900; line-height: 1.1; color: #F4F7FB; }
       .agency-photo { position: relative; min-height: 560px; border-radius: 200px 0 160px 0; overflow: hidden; border: 1px solid rgba(183,192,216,.2); background: radial-gradient(circle at 50% 40%, #6D5EF5 0%, #2A2170 55%, #0B0F24 100%); display: flex; align-items: flex-end; }
-      .agency-photo::before { content: ""; position: absolute; inset: 0; background: none; }
+      .agency-photo-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+      .agency-photo::before { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(180deg, rgba(109,94,245,.32), rgba(109,94,245,.4) 60%, rgba(5,8,22,.58)); pointer-events: none; }
+      .agency-photo-credit { position: absolute; z-index: 2; right: 12px; bottom: 10px; padding: 3px 7px; border-radius: 4px; background: rgba(5,8,22,.62); color: #fff; font-size: 9px; font-weight: 300; line-height: 1.4; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
       .agency-photo-copy { position: relative; padding: 40px 44px 44px; }
       @media (max-width: 767px) { .agency-photo { min-height: 0; aspect-ratio: 16 / 10; max-height: 240px; border-radius: 56px 0 44px 0; } .agency-photo-copy { padding: 28px 24px 30px; } }
       .agency-dot { height: 10px; width: 10px; padding: 0; border: 0; border-radius: 999px; background: rgba(183,192,216,.4); cursor: pointer; transition: width .25s, background-color .25s; }
