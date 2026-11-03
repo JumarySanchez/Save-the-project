@@ -5,7 +5,7 @@ export const faqGroups = [
       ["What is CaloCapital?", "CaloCapital is an independent insurance agency in Nashville, Tennessee, helping families and business owners with life insurance, fixed annuities and retirement income. We also help business owners understand their financing options."],
       ["Is CaloCapital a lender?", "No. We are an independent insurance agency and guide. We do not make credit decisions or lend money ourselves. Lenders set their own rates, fees and terms, and we do not guarantee approval or any offer."],
       ["Are you a registered investment advisor or broker-dealer?", "No. CaloCapital is not a broker-dealer or registered investment adviser. Our content and conversations are educational and are not investment, legal, tax, accounting or insurance advice."],
-      ["Where is CaloCapital located and how do I reach you?", "We are at 159 4th Avenue North, Suite 200, Nashville, TN 37219. You can call 917-400-9543 or email marc@calocapital.io, Monday to Friday, 9:00 AM to 5:00 PM."],
+      ["Where is CaloCapital located and how do I reach you?", "We are at 159 4th Avenue North, Suite 200, Nashville, TN 37219. You can call 917-400-9543 or email questions@calocapital.io, Monday to Friday, 9:00 AM to 5:00 PM."],
     ],
   },
   {

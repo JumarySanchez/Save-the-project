@@ -106,7 +106,7 @@ export const privacySections=[
  {
   "t": "Contact us",
   "b": [
-   "Questions or requests about privacy? CaloCapital, 159 4th Avenue North, Suite 200, Nashville, TN 37219. Email marc@calocapital.io. Phone 917-400-9543."
+   "Questions or requests about privacy? CaloCapital, 159 4th Avenue North, Suite 200, Nashville, TN 37219. Email questions@calocapital.io. Phone 917-400-9543."
   ]
  }
 ];
@@ -211,7 +211,7 @@ export const termsSections=[
  {
   "t": "Contact us",
   "b": [
-   "Questions about these Terms? CaloCapital, 159 4th Avenue North, Suite 200, Nashville, TN 37219. Email marc@calocapital.io. Phone 917-400-9543."
+   "Questions about these Terms? CaloCapital, 159 4th Avenue North, Suite 200, Nashville, TN 37219. Email questions@calocapital.io. Phone 917-400-9543."
   ]
  }
 ];

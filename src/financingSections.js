@@ -7,7 +7,7 @@ export function initFinancingSections(root) {
       fetch(f.action.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
         .then(function(r){return r.json()})
         .then(function(d){if(String(d.success)!=='true')throw new Error('fail'); f.reset(); if(st)st.textContent='Thank you! Your submission has been received. We will be in touch soon.'})
-        .catch(function(){if(st)st.textContent='Something went wrong. Please email marc@calocapital.io or call 917-400-9543.'});
+        .catch(function(){if(st)st.textContent='Something went wrong. Please email questions@calocapital.io or call 917-400-9543.'});
     });
   });
 (function(){

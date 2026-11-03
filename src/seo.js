@@ -7,7 +7,7 @@ export const SITE_DESCRIPTION =
   "Independent insurance agency in Nashville, Tennessee, helping families and business owners with life insurance, fixed annuities and retirement income.";
 export const SITE_ADDRESS = "159 4th Avenue North, Suite 200, Nashville, TN 37219";
 export const SITE_PHONE = "917-400-9543";
-export const SITE_EMAIL = "marc@calocapital.io";
+export const SITE_EMAIL = "questions@calocapital.io";
 export const FOUNDER = "Marc J. Calo, Licensed Insurance Agent, NPN 17700283";
 
 export const LICENSED_STATES = [

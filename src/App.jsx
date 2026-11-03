@@ -1142,7 +1142,7 @@ function ContactCalendar({ cookiesAccepted }) {
           <p className="mt-4 text-sm text-[#B7C0D8]">
             Calendar not loading?{" "}
             <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Open it in a new tab</a>
-            {" "}or email <a href="mailto:marc@calocapital.io" className="text-[#C6B8FF] underline underline-offset-4">marc@calocapital.io</a>.
+            {" "}or email <a href="mailto:questions@calocapital.io" className="text-[#C6B8FF] underline underline-offset-4">questions@calocapital.io</a>.
           </p>
         </>
       ) : (
@@ -1233,7 +1233,7 @@ const CONTACT_SOCIALS = [
 function ContactPage({ cookiesAccepted }) {
   const serif = "font-['Cormorant_Garamond',serif]";
   const details = [
-    { label: "Email", value: "marc@calocapital.io", href: "mailto:marc@calocapital.io" },
+    { label: "Email", value: "questions@calocapital.io", href: "mailto:questions@calocapital.io" },
     { label: "Phone", value: "917-400-9543", href: "tel:+19174009543" },
     { label: "Main office", value: "159 4th Avenue North, Suite 200, Nashville, TN 37219" },
     { label: "Hours", value: "Monday to Friday, 9:00 AM to 5:00 PM" },
@@ -1373,8 +1373,8 @@ const disclaimer =
   `The information on this website is for general educational purposes only and should not be interpreted as investment, legal, tax or accounting advice. ${DISCLOSURE} Any references to digital assets, commodities, businesses or market opportunities are general discussions only and are not a recommendation. Insurance product guarantees depend on the claims-paying ability of the issuing insurer.`;
 
 function linkifyText(text) {
-  return text.split(/(marc@calocapital\.io|917-400-9543)/g).map((part, index) => {
-    if (part === "marc@calocapital.io") return <a key={index} className="text-[#C6B8FF] underline" href={`mailto:${part}`}>{part}</a>;
+  return text.split(/(questions@calocapital\.io|917-400-9543)/g).map((part, index) => {
+    if (part === "questions@calocapital.io") return <a key={index} className="text-[#C6B8FF] underline" href={`mailto:${part}`}>{part}</a>;
     if (part === "917-400-9543") return <a key={index} className="text-[#C6B8FF] underline" href="tel:+19174009543">{part}</a>;
     return part;
   });
@@ -1663,7 +1663,7 @@ function InfoPage({ path, navigate }) {
           <h2 id="ar-contact-heading">Talk with our team</h2>
           <p className="mt-2">
             Call <a className={linkClass} href="tel:+19174009543">917-400-9543</a> or email{" "}
-            <a className={linkClass} href="mailto:marc@calocapital.io">marc@calocapital.io</a>.
+            <a className={linkClass} href="mailto:questions@calocapital.io">questions@calocapital.io</a>.
           </p>
           <p className="ar-related">
             {(page.related || []).map((href) => (
@@ -1716,7 +1716,7 @@ function FaqsPage() {
           <h2 className="text-2xl font-black">Still have a question?</h2>
           <p className="mt-2 text-[17px] leading-[1.7] text-[#B7C0D8]">
             Call <a className="text-[#C6B8FF] underline" href="tel:+19174009543">917-400-9543</a> or email{" "}
-            <a className="text-[#C6B8FF] underline" href="mailto:marc@calocapital.io">marc@calocapital.io</a>.
+            <a className="text-[#C6B8FF] underline" href="mailto:questions@calocapital.io">questions@calocapital.io</a>.
           </p>
         </div>
       </div>
