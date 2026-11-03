@@ -801,9 +801,9 @@ const SERVICE_TABS = [
   {
     id: "digital",
     photo: agencyInflationPhoto,
-    photoAlt: "Woman shopping for groceries in a supermarket",
-    photoCredit: "Gustavo Fring / Pexels",
-    photoCreditUrl: "https://www.pexels.com/photo/woman-grocery-shopping-in-supermarket-4971951/",
+    photoAlt: "Jar filled with coins on a wooden table, viewed from above",
+    photoCredit: "Miguel Á. Padriñán / Pexels",
+    photoCreditUrl: "https://www.pexels.com/photo/coins-inside-jar-585292/",
     title: "Inflation",
     heading: "Is inflation quietly shrinking your savings?",
     href: "https://app.calocapital.io/#/inflation",
@@ -1490,7 +1490,7 @@ const ARTICLE_READER_CSS = `
 .article-reader .ar-btn[aria-pressed="true"] { background: var(--rlink); color: #050816; }
 .article-reader .ar-article { margin-top: 2rem; font-size: calc(var(--rs) * 1px); line-height: var(--rl); color: var(--rc); hyphens: manual; }
 .article-reader[data-cols="2"] .ar-article { column-count: 2; column-gap: 3rem; column-rule: 2px solid var(--rbd); padding: 1.4rem 1.5rem 0; border: 1px solid var(--rbd); background: linear-gradient(90deg, var(--rcolA) 50%, var(--rcolB) 50%); }
-@media (max-width: 860px) { .article-reader[data-cols="2"] .ar-article { column-count: 1; } }
+@media (max-width: 860px) { .article-reader[data-cols="2"] .ar-article { column-count: 1; background: none; } }
 .article-reader .ar-article p { margin-top: .9rem; }
 .article-reader .ar-article section { margin-bottom: 1.6rem; }
 .article-reader .ar-article section:first-of-type > p:first-of-type { margin-top: 0; }
