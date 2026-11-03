@@ -578,7 +578,8 @@ const NAV_ITEMS = [
   { label: "Coverage", section: "agency" },
   { label: "Our Approach", section: "four-cs" },
   { label: "Financing options", href: "/financing" },
-  { label: "Resources", section: "resources" },
+  { label: "Crypto Markets", section: "crypto-markets" },
+  { label: "Library", section: "resources" },
   { label: "Contact", page: "Contact" },
   { label: "FAQs", page: "FAQs" },
 ];

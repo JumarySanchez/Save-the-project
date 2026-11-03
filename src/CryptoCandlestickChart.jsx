@@ -177,7 +177,7 @@ export default function CryptoCandlestickChart() {
     : new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: latestPrice < 1 ? 6 : 2 }).format(latestPrice);
 
   return (
-    <section className="w-full border-y border-[#B7C0D8]/15 bg-[#050816] px-4 py-14 text-[#F4F7FB] sm:px-8 sm:py-20">
+    <section id="crypto-markets" className="w-full scroll-mt-20 border-y border-[#B7C0D8]/15 bg-[#050816] px-4 py-14 text-[#F4F7FB] sm:px-8 sm:py-20">
       <div className="mx-auto w-full max-w-[1600px]">
         <div className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
