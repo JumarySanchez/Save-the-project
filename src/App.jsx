@@ -1505,10 +1505,10 @@ const ARTICLE_READER_CSS = `
 .article-reader .ar-link:hover { color: var(--rh); }
 .article-reader[data-contrast="high"] .ar-link { font-weight: 700; }
 .article-reader :is(a, button):focus-visible { outline: 3px solid #FFE45C; outline-offset: 2px; }
-.article-reader .ar-box { margin-top: 2.2rem; padding: 1.1rem 1.4rem 1.3rem; border: 1px solid transparent; font-size: calc((var(--rs) - 1) * 1px); line-height: 1.6; color: var(--rc); }
-.article-reader .ar-box h2 { font-size: calc((var(--rs) + 1) * 1px); font-weight: 700; color: var(--rh); text-transform: uppercase; letter-spacing: .08em; }
-.article-reader .ar-box ul { margin-top: .7rem; padding-left: 1.2rem; list-style: disc; }
-.article-reader .ar-box li { margin-top: .4rem; }
+.article-reader .ar-box { margin-top: 1.2rem; padding: .6rem .9rem .7rem; border: 1px solid transparent; font-size: 14px; line-height: 1.5; color: var(--rc); }
+.article-reader .ar-box h2 { font-size: 13px; font-weight: 700; color: var(--rh); text-transform: uppercase; letter-spacing: .08em; }
+.article-reader .ar-box ul { margin-top: .35rem; padding-left: 1.1rem; list-style: disc; }
+.article-reader .ar-box li { margin-top: .15rem; }
 .article-reader .ar-fine { margin-top: 1.6rem; font-size: 13px; line-height: 1.6; color: var(--rc); border-top: 1px solid var(--rbd); padding-top: .8rem; }
 .article-reader .ar-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .article-reader .ar-related { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-top: .6rem; font-weight: 700; }
