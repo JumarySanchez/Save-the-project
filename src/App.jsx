@@ -763,10 +763,10 @@ function Navbar({ currentPage, setPage, goToSection, navigate }) {
 }
 
 const FOUR_CS = [
-  ["Cash", "the money you need to stay reachable and stable. We look at where guarantees can help, such as cash value life insurance and fixed annuities."],
-  ["Crypto", "digital assets you already hold. We look at how they're kept secure and how your family would access them if something happened to you."],
-  ["Commodities", "real and tangible assets you own. We look at how they'd be valued and settled for your heirs, and whether there's enough liquidity to do it without a forced sale."],
-  ["Companies", "the business you own or lead. We look at what happens to it if a key person dies or a partner leaves, through key person coverage, buy-sell funding and succession planning."],
+  ["Cash", "The money you need to stay reachable and stable. We look at where guarantees can help, such as cash value life insurance and fixed annuities."],
+  ["Crypto", "Digital assets you already hold. We look at how they're kept secure and how your family would access them if something happened to you."],
+  ["Commodities", "Real and tangible assets you own. We look at how they'd be valued and settled for your heirs, and whether there's enough liquidity to do it without a forced sale."],
+  ["Companies", "The business you own or lead. We look at what happens to it if a key person dies or a partner leaves, through key person coverage, buy-sell funding and succession planning."],
 ];
 
 const SERVICE_TABS = [
@@ -1095,20 +1095,26 @@ function LifeInsuranceCalculator({ navigate }) {
 
 function FourCs() {
   return (
-    <section id="four-cs" className="bg-[#050816] px-5 py-20 text-[#F4F7FB]">
-      <div className="mx-auto w-full max-w-[min(1100px,94vw)]">
-        <h2 className="text-[clamp(2rem,4.5vw,3.6rem)] font-black leading-[1.05]">The Four C's: how we look at the whole picture</h2>
-        <p className="mt-6 max-w-3xl text-[20px] leading-[1.6] text-[#B7C0D8]">
-          Before we recommend any insurance, we look at what a family or business already has, in four areas, and ask how each one is protected and passed on.
-        </p>
-        <div className="mt-10 grid gap-5" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))" }}>
+    <section id="four-cs" aria-labelledby="four-cs-heading" className="fc-section bg-[#050816] px-5 py-20 text-[#F4F7FB]">
+      <div className="fc-wrap">
+        <div className="fc-head">
+          <h2 id="four-cs-heading" className="fc-title">The Four C's: how we look at the whole picture</h2>
+          <p className="fc-intro">
+            Before we recommend any insurance, we look at what a family or business already has, in four areas, and ask how each one is protected and passed on.
+          </p>
+        </div>
+        <div className="fc-grid">
+          <div className="fc-line" aria-hidden="true">
+            {FOUR_CS.map(([name]) => <span key={name} className="fc-dot" />)}
+          </div>
           {FOUR_CS.map(([name, text]) => (
-            <div key={name} className="four-cs-card rounded-2xl border border-transparent bg-white/5 p-6">
-              <p className="text-[16px] leading-[1.6] text-[#B7C0D8]"><strong className="text-[#C6B8FF]">{name}:</strong> {text}</p>
-            </div>
+            <article key={name} className="fc-card">
+              <h3 className="fc-card-title">{name}</h3>
+              <p className="fc-card-text">{text}</p>
+            </article>
           ))}
         </div>
-        <p className="mt-8 max-w-3xl text-[15px] italic leading-[1.6] text-[#B7C0D8]">
+        <p className="fc-disclaimer">
           The Four C's is an educational framework for planning conversations. CaloCapital does not provide investment advice or recommend any security, digital asset or commodity.
         </p>
       </div>
@@ -1827,6 +1833,30 @@ function GlobalStyles() {
       .agency-slide { animation: agencySlideIn .35s ease both; }
       @keyframes agencySlideIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
       @media (prefers-reduced-motion: reduce) { .agency-slide { animation: none; } }
+      .fc-section { --fc-accent: #9B7CFF; }
+      .fc-wrap { margin: 0 auto; width: 100%; max-width: min(1240px, 94vw); }
+      .fc-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 48px; margin-bottom: 56px; }
+      .fc-title { flex: 1 1 520px; min-width: 0; font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3.6rem); font-weight: 700; line-height: 1.05; }
+      .fc-intro { flex: 0 1 400px; min-width: 0; font-size: 17px; line-height: 1.6; color: #B7C0D8; }
+      .fc-grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+      .fc-line { grid-column: 1 / -1; position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; height: 12px; margin-bottom: -4px; }
+      .fc-line::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; border-top: 1px dashed rgba(155,124,255,.4); }
+      .fc-dot { position: relative; justify-self: start; margin-left: 22px; width: 10px; height: 10px; border-radius: 50%; background: var(--fc-accent); box-shadow: 0 0 10px 2px rgba(155,124,255,.7); }
+      .fc-card { display: flex; flex-direction: column; min-width: 0; padding: 28px 18px; border-radius: 22px; border: 1px solid rgba(155,124,255,.22); background: linear-gradient(135deg, rgba(155,124,255,.18), #050816 75%); color: inherit; text-decoration: none; transition: border-color .3s ease, box-shadow .3s ease; }
+      .fc-card:hover { color: inherit; border-color: rgba(155,124,255,.7); box-shadow: 0 0 28px rgba(155,124,255,.28); }
+      .fc-card:focus-within { border-color: rgba(155,124,255,.7); box-shadow: 0 0 28px rgba(155,124,255,.28); }
+      .fc-card-title { padding: 0 10px; font-family: var(--font-display); font-size: clamp(1.7rem, 2.4vw, 2.2rem); font-weight: 700; line-height: 1.1; color: #F4F7FB; }
+      .fc-card-text { margin-top: 10px; padding: 0 10px; font-size: 15px; line-height: 1.6; color: #B7C0D8; }
+      .fc-disclaimer { margin-top: 40px; max-width: 64ch; font-size: 14px; font-style: italic; line-height: 1.6; color: #B7C0D8; }
+      @media (max-width: 1024px) {
+        .fc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .fc-line { display: none; }
+        .fc-head { margin-bottom: 40px; }
+        .fc-title, .fc-intro { flex-basis: 100%; }
+      }
+      @media (max-width: 640px) {
+                .fc-grid { grid-template-columns: minmax(0, 1fr); }
+      }
       .fourcs-sky { position: relative; background: #050816; }
       .fourcs-sky-bg { position: absolute; inset: 0; pointer-events: none; }
       .fourcs-sky-bg > .calo-fin, .fourcs-sky-bg > .calo-fin > section, .fourcs-sky-bg .calo-fin > section[style] { height: 100% !important; min-height: 0 !important; }
