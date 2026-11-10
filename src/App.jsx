@@ -503,7 +503,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 
 function HeroSection() {
   const videoRef = useRef(null);
-  const BASE_RATE = 0.5;
+  const BASE_RATE = 0.9;
   const MIN_RATE = 0.15;
   const EASE_SECONDS = 1.2;
 

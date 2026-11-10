@@ -7,17 +7,98 @@
 
 
 <!-- TESTIMONIAL + CTA -->
-<section id="resources" style="padding:104px 48px;background:#070a1c;border-top:1px solid rgba(183,192,216,.12)">
-<div style="max-width:1240px;margin:0 auto">
-<p style="margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#c6b8ff">Tools and research</p>
-<h2 style="margin:0 0 48px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:52px;line-height:1.1;max-width:760px">Know where you stand before you apply.</h2>
-<div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;margin:0 0 24px"><h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;line-height:1.1">From the Calo Library</h3><p style="margin:0;font-size:14px;color:#B7C0D8">5 free, plain-language articles with linked sources</p></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:20px">
-<a class="four-cs-card" href="/articles/life-insurance-family-protection" style="grid-column:1/-1;display:flex;flex-wrap:wrap;gap:28px 48px;align-items:center;padding:36px;border-radius:16px;border:1px solid transparent;background:rgba(109,94,245,.16)"><div style="flex:1 1 360px;min-width:0"><span style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#C6B8FF">Start here · Life insurance</span><h4 style="margin:12px 0 12px;font-size:clamp(26px,3.4vw,38px);line-height:1.15;font-weight:900;color:#fff">What happens to my family when I pass away?</h4><p style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#B7C0D8;max-width:560px">The policy, beneficiary and coverage details most families only learn about when it is too late.</p><span style="display:inline-block;padding:14px 32px;border-radius:999px;background:#6D5EF5;color:#fff;font-weight:900;font-size:15px">Read the article</span></div><div style="flex:1 1 280px;min-width:0"><p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#C6B8FF">Inside this article</p><ul style="margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-top:1px solid rgba(198,184,255,.25);font-size:15px;line-height:1.45;color:#F4F7FB">Which bills and responsibilities would remain</li><li style="padding:12px 0;border-top:1px solid rgba(198,184,255,.25);font-size:15px;line-height:1.45;color:#F4F7FB">How term and cash-value policies differ</li><li style="padding:12px 0;border-top:1px solid rgba(198,184,255,.25);font-size:15px;line-height:1.45;color:#F4F7FB">Work coverage and beneficiary records to check</li></ul></div></a>
-<a class="four-cs-card" href="/articles/medical-costs" style="display:block;padding:28px;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.05)"><span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9B7CFF">Protecting your family</span><h4 style="margin:10px 0 14px;font-size:18px;line-height:1.35;font-weight:800;color:#F4F7FB">What if a health crisis became your family's financial crisis?</h4><span style="font-size:14px;font-weight:700;color:#C6B8FF">Read the article →</span></a>
-<a class="four-cs-card" href="/articles/emergency-fund" style="display:block;padding:28px;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.05)"><span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9B7CFF">Retirement and the future</span><h4 style="margin:10px 0 14px;font-size:18px;line-height:1.35;font-weight:800;color:#F4F7FB">Could you cover six months of life if income stopped tomorrow?</h4><span style="font-size:14px;font-weight:700;color:#C6B8FF">Read the article →</span></a>
-<a class="four-cs-card" href="/articles/home-affordability" style="display:block;padding:28px;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.05)"><span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9B7CFF">Your home</span><h4 style="margin:10px 0 14px;font-size:18px;line-height:1.35;font-weight:800;color:#F4F7FB">Can you really afford the home you're dreaming of?</h4><span style="font-size:14px;font-weight:700;color:#C6B8FF">Read the article →</span></a>
-<a class="four-cs-card" href="/articles/business-funding" style="display:block;padding:28px;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.05)"><span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9B7CFF">Business funding</span><h4 style="margin:10px 0 14px;font-size:18px;line-height:1.35;font-weight:800;color:#F4F7FB">What could your business become with the right funding?</h4><span style="font-size:14px;font-weight:700;color:#C6B8FF">Read the article →</span></a>
+<section id="resources" aria-labelledby="library-heading" style="padding:104px 48px;background:#070a1c;border-top:1px solid rgba(183,192,216,.12)">
+<style>
+#resources .lib-wrap{max-width:1240px;margin:0 auto}
+#resources .lib-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px;margin:0 0 56px}
+#resources .lib-eyebrow{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#c6b8ff}
+#resources .lib-title{margin:0;max-width:760px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:52px;line-height:1.1;color:#F4F7FB}
+#resources .lib-note{margin:0;font-size:14px;color:#B7C0D8}
+#resources .lib-media{position:absolute;inset:0;overflow:hidden;background:linear-gradient(135deg,rgba(109,94,245,.22),rgba(255,255,255,.05)),#050816}
+#resources .lib-media img{display:block;width:100%;height:100%;object-fit:cover}
+#resources .lib-lead{position:relative;display:block;width:100%;aspect-ratio:2/1;overflow:hidden;border-radius:16px;margin:0 0 72px;color:#F4F7FB}
+#resources .lib-lead .lib-media{transition:transform 1.4s cubic-bezier(.22,1,.36,1)}
+#resources .lib-lead-text{position:absolute;top:0;right:0;width:45%;padding:48px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+#resources .lib-cat{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#C6B8FF}
+#resources .lib-lead-title{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(30px,3.6vw,48px);line-height:1.1;color:#fff}
+#resources .lib-lead-copy{margin:0;font-size:16px;line-height:1.6;color:#B7C0D8;max-width:460px}
+#resources .lib-btn{display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:14px 28px;border-radius:999px;background:#6D5EF5;color:#fff;font-weight:900;font-size:15px}
+#resources .lib-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 32px;align-items:start}
+#resources .lib-tile{display:block;min-width:0;color:#F4F7FB}
+#resources .lib-tile:nth-child(even){margin-top:64px}
+#resources .lib-thumb{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:16px;margin:0 0 20px}
+#resources .lib-thumb .lib-media{transition:transform .7s cubic-bezier(.22,1,.36,1)}
+#resources .lib-tile-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+#resources .lib-tile-title{margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:22px;line-height:1.2;color:#F4F7FB}
+#resources .lib-arrow{flex:none;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(198,184,255,.55);color:#C6B8FF;font-size:16px;transition:background-color .3s ease,color .3s ease,transform .3s ease}
+#resources .lib-lead:hover,#resources .lib-tile:hover{color:inherit}
+#resources .lib-lead:focus-visible,#resources .lib-tile:focus-visible{outline:2px solid #C6B8FF;outline-offset:6px}
+@media (any-hover:hover){
+#resources .lib-lead:hover .lib-media{transform:scale(1.08)}
+#resources .lib-tile:hover .lib-media{transform:scale(1.05)}
+#resources .lib-tile:hover .lib-arrow{background:#6D5EF5;border-color:#6D5EF5;color:#fff;transform:translateX(4px)}
+}
+#resources .lib-tile:focus-visible .lib-arrow{background:#6D5EF5;border-color:#6D5EF5;color:#fff;transform:translateX(4px)}
+@media (max-width:1024px){
+#resources .lib-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+#resources .lib-head{flex-direction:column;align-items:flex-start;margin-bottom:40px}
+#resources .lib-title{font-size:clamp(32px,9vw,40px)}
+#resources .lib-lead{aspect-ratio:auto;display:flex;flex-direction:column;margin-bottom:56px}
+#resources .lib-lead-text{position:relative;width:100%;padding:28px 24px;z-index:1;background:#070a1c}
+#resources .lib-lead .lib-media{position:relative;inset:auto;order:2;aspect-ratio:4/3}
+#resources .lib-lead-title{font-size:clamp(28px,8vw,36px)}
+}
+@media (max-width:640px){
+#resources .lib-grid{grid-template-columns:minmax(0,1fr);gap:48px}
+#resources .lib-tile:nth-child(even){margin-top:0}
+#resources .lib-thumb{aspect-ratio:16/10}
+}
+@media (prefers-reduced-motion:reduce){
+#resources .lib-lead .lib-media,#resources .lib-thumb .lib-media,#resources .lib-arrow{transition:none}
+#resources .lib-lead:hover .lib-media,#resources .lib-tile:hover .lib-media,#resources .lib-tile:hover .lib-arrow,#resources .lib-tile:focus-visible .lib-arrow{transform:none}
+}
+</style>
+<div class="lib-wrap">
+<header class="lib-head">
+<div>
+<p class="lib-eyebrow">From the Calo Library</p>
+<h2 id="library-heading" class="lib-title">Know where you stand before you apply.</h2>
+</div>
+<p class="lib-note">Plain-language articles, with linked sources.</p>
+</header>
+<a class="lib-lead" href="/articles/life-insurance-family-protection">
+<!-- Image slot: replace the div below with <img src="..." alt="..."> inside .lib-media -->
+<div class="lib-media" role="img" aria-label="Image placeholder: a family at home, representing life insurance and family protection"></div>
+<div class="lib-lead-text">
+<span class="lib-cat">Start here · Life insurance</span>
+<h3 class="lib-lead-title">What happens to my family when I pass away?</h3>
+<p class="lib-lead-copy">The policy, beneficiary and coverage details most families only learn about when it is too late.</p>
+<span class="lib-btn">Read the article <span aria-hidden="true">→</span></span>
+</div>
+</a>
+<div class="lib-grid">
+<a class="lib-tile" href="/articles/medical-costs">
+<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a parent and child, representing protecting your family"></div></div>
+<span class="lib-cat">Protecting your family</span>
+<div class="lib-tile-row"><h3 class="lib-tile-title">What if a health crisis became your family's financial crisis?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
+</a>
+<a class="lib-tile" href="/articles/emergency-fund">
+<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a calm, open landscape, representing retirement and the future"></div></div>
+<span class="lib-cat">Retirement and the future</span>
+<div class="lib-tile-row"><h3 class="lib-tile-title">Could you cover six months of life if income stopped tomorrow?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
+</a>
+<a class="lib-tile" href="/articles/home-affordability">
+<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a house exterior, representing home affordability"></div></div>
+<span class="lib-cat">Your home</span>
+<div class="lib-tile-row"><h3 class="lib-tile-title">Can you really afford the home you're dreaming of?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
+</a>
+<a class="lib-tile" href="/articles/business-funding">
+<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a small business storefront, representing business funding"></div></div>
+<span class="lib-cat">Business funding</span>
+<div class="lib-tile-row"><h3 class="lib-tile-title">What could your business become with the right funding?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
+</a>
 </div>
 </div>
 </section><!-- CEO TESTIMONIAL -->
