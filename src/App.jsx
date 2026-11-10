@@ -10,7 +10,7 @@ import agencyFamilyPhoto from "../assets/agency-family-pexels.jpg";
 import agencyRetirementPhoto from "../assets/agency-retirement-pexels.jpg";
 import agencyDebtPhoto from "../assets/agency-debt-pexels.jpg";
 import agencyInflationPhoto from "../assets/agency-inflation-pexels.jpg";
-import heroVideoMp4 from "../assets/new.mp4";
+import heroVideoMp4 from "../assets/calo-vid.mp4";
 
 const CryptoCandlestickChart = lazy(() => import("./CryptoCandlestickChart.jsx"));
 
