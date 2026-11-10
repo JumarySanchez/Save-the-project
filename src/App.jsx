@@ -502,9 +502,33 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
 }
 
 function HeroSection() {
+  const videoRef = useRef(null);
+  const BASE_RATE = 0.5;
+  const MIN_RATE = 0.15;
+  const EASE_SECONDS = 1.2;
+
+  // Ease playback speed down near the end and back up after the restart.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return undefined;
+    let raf;
+    const tick = () => {
+      if (v.duration) {
+        const fromEdge = Math.min(v.currentTime, v.duration - v.currentTime);
+        const t = Math.min(fromEdge / EASE_SECONDS, 1);
+        const eased = t * t * (3 - 2 * t);
+        v.playbackRate = MIN_RATE + (BASE_RATE - MIN_RATE) * eased;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <section id="home" className="relative aspect-video w-full overflow-hidden bg-[#050816] text-[#F4F7FB]">
       <video
+        ref={videoRef}
         className="absolute inset-0 w-full object-cover"
         style={{ height: "100%" }}
         src={heroVideoMp4}
