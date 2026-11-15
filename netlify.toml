@@ -6,6 +6,11 @@
   directory = "netlify/functions"
 
 [[redirects]]
+  from = "/contact"
+  to = "https://calocapital.io/contact"
+  status = 301
+
+[[redirects]]
   from = "/financial-topics"
   to = "/"
   status = 301

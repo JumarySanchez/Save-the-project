@@ -23,7 +23,7 @@ const FALLBACK_COINS = [
   { symbol: "ADA", name: "Cardano", price: 0.4432, change: -1.03 },
 ];
 
-const SCHEDULE_CALL_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1B5aYsQO11ULfIFT4BjQaiNTGM7OpuiwePgYL8e7gd_Uu1whzy5OFY-JDIXtxnpjqocqG1IaH3";
+const CONTACT_FORM_URL = "https://calocapital.io/contact";
 
 const HOMEPAGE_TOPICS_DISCLAIMER =
   "This information is provided for general informational purposes only and should not be considered financial, investment, insurance, legal, or tax advice. Financial decisions should be discussed with appropriately qualified professionals.";
@@ -1133,57 +1133,12 @@ function SiteDisclosure() {
   );
 }
 
-const CALENDAR_EMBED_URL = `${SCHEDULE_CALL_URL.replace("/calendar/u/0/", "/calendar/")}?gv=true`;
 const AGE_CONFIRMATION_COOKIE = "calocapital_age_confirmation";
 const COOKIE_CONSENT_COOKIE = "calocapital_cookie_consent";
 const COOKIE_CONSENT_MAX_AGE = 60 * 60 * 24 * 180;
 
 function hasCookieValue(name, value) {
   return document.cookie.split(";").some((cookie) => cookie.trim() === `${name}=${value}`);
-}
-
-function ContactCalendar({ cookiesAccepted }) {
-  const [dataConsent, setDataConsent] = useState(false);
-  const canLoadCalendar = cookiesAccepted && dataConsent;
-
-  return (
-    <div className="contact-cal rounded-[20px] border border-transparent p-6 sm:p-8" style={{background:"transparent"}}>
-      <p className="mb-5 text-[15px] text-[#B7C0D8]">Pick a time that works for you. You will get a calendar invite with the video link.</p>
-      <label className="mb-5 flex items-start gap-3 text-sm leading-[1.6] text-[#B7C0D8]">
-        <input
-          type="checkbox"
-          checked={dataConsent}
-          onChange={(event) => setDataConsent(event.target.checked)}
-          className="mt-1 h-4 w-4 shrink-0 accent-[#9B7CFF]"
-        />
-        <span>
-          I agree to share my booking details with Marc J. Calo for assistance with this request. Google Calendar processes those details to provide scheduling.{" "}
-          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Google Privacy Policy</a>
-        </span>
-      </label>
-      {canLoadCalendar ? (
-        <>
-          <iframe
-            title="Book a Google Meet with CaloCapital"
-            src={CALENDAR_EMBED_URL}
-            loading="lazy"
-            className="contact-cal-frame w-full rounded-xl border-0 bg-white"
-          />
-          <p className="mt-4 text-sm text-[#B7C0D8]">
-            Calendar not loading?{" "}
-            <a href={SCHEDULE_CALL_URL} target="_blank" rel="noopener noreferrer" className="text-[#C6B8FF] underline underline-offset-4">Open it in a new tab</a>
-            {" "}or email <a href="mailto:questions@calocapital.io" className="text-[#C6B8FF] underline underline-offset-4">questions@calocapital.io</a>.
-          </p>
-        </>
-      ) : (
-        <p role="status" className="rounded-xl border border-[#B7C0D8]/20 bg-white/5 p-5 text-sm text-[#B7C0D8]">
-          {!cookiesAccepted
-            ? "Accept cookies to load the Google Calendar booking form. The calendar remains off until you accept."
-            : "Confirm the booking-details notice above to load the Google Calendar booking form."}
-        </p>
-      )}
-    </div>
-  );
 }
 
 function CookieNotice({ onAccept, onContinue, error }) {
@@ -1229,152 +1184,6 @@ function CookieNotice({ onAccept, onContinue, error }) {
             Continue for this visit
           </button>
         )}
-      </div>
-    </section>
-  );
-}
-
-const CONTACT_SOCIALS = [
-  { label: "Facebook", href: "https://www.facebook.com/CaloCapital/", shapes: <path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z" /> },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/calocapital/",
-    shapes: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="3" />
-        <path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7" />
-      </>
-    ),
-  },
-  { label: "X", href: "https://x.com/Marc_J_Calo", shapes: <path d="M4 4l16 16M20 4L4 20" /> },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/calocapital/",
-    shapes: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <path d="M17.5 6.5v.01" />
-      </>
-    ),
-  },
-];
-
-function ContactPage({ cookiesAccepted }) {
-  const serif = "font-['Cormorant_Garamond',serif]";
-  const details = [
-    { label: "Email", value: "questions@calocapital.io", href: "mailto:questions@calocapital.io" },
-    { label: "Phone", value: "917-400-9543", href: "tel:+19174009543" },
-    { label: "Main office", value: "159 4th Avenue North, Suite 200, Nashville, TN 37219" },
-    { label: "Hours", value: "Monday to Friday, 9:00 AM to 5:00 PM" },
-  ];
-  return (
-    <section
-      id="contact"
-      className="relative overflow-hidden px-5 py-16 text-[#F4F7FB] sm:px-8 sm:py-20 lg:px-12 lg:py-24"
-      style={{ background: "radial-gradient(900px 500px at 78% 0%,rgba(109,94,245,.28),transparent 70%),#050816" }}
-    >
-      <div className="mx-auto max-w-[1240px]">
-        <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.18em] text-[#C6B8FF]">Contact</p>
-        <h1 className={`${serif} mb-12 max-w-[760px] text-[44px] font-bold leading-[1.08] sm:text-[60px]`}>
-          Book a Google Meet with Marc
-        </h1>
-
-        <div className="grid items-stretch gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
-          <div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              {details.map((item) => (
-                <div key={item.label} className="rounded-[20px] border border-transparent p-6" style={{ background: "transparent" }}>
-                  <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.14em] text-[#C6B8FF]">{item.label}</p>
-                  {item.href ? (
-                    <a href={item.href} className="text-[18px] text-[#F4F7FB] underline decoration-[#9B7CFF]/50 underline-offset-4 hover:text-[#C6B8FF]">{item.value}</a>
-                  ) : (
-                    <p className="text-[18px] text-[#F4F7FB]">{item.value}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/faqs" className="rounded-full border border-[#B7C0D8]/30 px-7 py-3 text-[15px] font-semibold text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]">
-                Read the FAQs
-              </a>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <span className="mr-1 text-[12px] font-bold uppercase tracking-[0.16em] text-[#C6B8FF]">Follow us</span>
-              {CONTACT_SOCIALS.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={item.label}
-                  title={`CaloCapital on ${item.label}`}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#B7C0D8]/35 text-[#F4F7FB] transition hover:border-[#C6B8FF] hover:text-[#C6B8FF]"
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    {item.shapes}
-                  </svg>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div className="min-w-0 flex flex-col">
-            <ContactCalendar cookiesAccepted={cookiesAccepted} />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ContactMap({ cookiesAccepted }) {
-  const serif = "font-['Cormorant_Garamond',serif]";
-  return (
-    <section
-      id="location"
-      className="py-16 text-[#F4F7FB] sm:py-20"
-      style={{ background: "#070a1c", borderTop: "1px solid rgba(183,192,216,.12)" }}
-    >
-      <div className="mx-auto max-w-[1240px] px-5 sm:px-8 lg:px-12">
-        <p className="mb-3 text-[13px] font-bold uppercase tracking-[0.18em] text-[#C6B8FF]">Location</p>
-        <h2 className={`${serif} mb-8 text-[36px] font-bold leading-[1.1] sm:text-[48px]`}>Visit our office</h2>
-      </div>
-      {cookiesAccepted ? (
-        <iframe
-          title={`Map showing the CaloCapital office at ${SITE_ADDRESS}`}
-          src={`https://www.google.com/maps?q=${encodeURIComponent(SITE_ADDRESS)}&output=embed`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="block h-[380px] w-full border-0 sm:h-[540px]"
-        />
-      ) : (
-        <div className="mx-auto flex min-h-48 max-w-5xl items-center justify-center px-5 text-center text-sm text-[#B7C0D8]">
-          Accept cookies to load the embedded Google Map. You can still{" "}
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_ADDRESS)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-1 text-[#C6B8FF] underline underline-offset-4"
-          >
-            open directions in Google Maps
-          </a>
-          .
-        </div>
-      )}
-      <div className="mx-auto mt-4 max-w-[1240px] px-5 sm:px-8 lg:px-12">
-        <p className="text-sm text-[#B7C0D8]">
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_ADDRESS)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#C6B8FF] underline underline-offset-4"
-          >
-            Get directions
-          </a>
-        </p>
       </div>
     </section>
   );
@@ -1861,11 +1670,6 @@ function GlobalStyles() {
       .fourcs-sky-bg { position: absolute; inset: 0; pointer-events: none; }
       .fourcs-sky-bg > .calo-fin, .fourcs-sky-bg > .calo-fin > section, .fourcs-sky-bg .calo-fin > section[style] { height: 100% !important; min-height: 0 !important; }
       .fourcs-sky > #four-cs { position: relative; background: transparent; }
-      .contact-cal-frame { height: min(720px, 85vh); min-height: 560px; }
-      @media (min-width: 1024px) {
-        .contact-cal { display: flex; flex: 1 1 auto; flex-direction: column; }
-        .contact-cal-frame { flex: 1 1 0; height: auto; min-height: 420px; }
-      }
       .agency-intro {
         position: relative;
         isolation: isolate;
@@ -2634,6 +2438,12 @@ export default function App() {
   const [cookiePreferenceError, setCookiePreferenceError] = useState("");
 
   useEffect(() => {
+    if (normalizePath(window.location.pathname) === "/contact") {
+      window.location.replace(CONTACT_FORM_URL);
+    }
+  }, []);
+
+  useEffect(() => {
     if (ageConfirmed && cookieBannerDismissed) return undefined;
     const { body, documentElement: html } = document;
     const previous = [body.style.overflow, html.style.overflow];
@@ -2679,9 +2489,14 @@ export default function App() {
 
   useEffect(() => {
     function handleLocationChange() {
-      setInfoPath(normalizePath(window.location.pathname));
+      const path = normalizePath(window.location.pathname);
+      if (path === "/contact") {
+        window.location.replace(CONTACT_FORM_URL);
+        return;
+      }
+      setInfoPath(path);
       startPageTransition(getPageFromLocation());
-      if (normalizePath(window.location.pathname) === "/" && savedHomeScroll !== null) {
+      if (path === "/" && savedHomeScroll !== null) {
         const y = savedHomeScroll;
         savedHomeScroll = null;
         restoreHomeScroll(y);
@@ -2724,13 +2539,9 @@ export default function App() {
     });
   }, [currentPage, renderedPage]);
 
-  function setPage(page, hash = "") {    if (page === "Contact") {
-      window.history.pushState({}, "", "/contact");
-      setCurrentPage(page);
-      setRenderedPage("Contact");
-      setTransitionPhase("idle");
-      setPendingPage(null);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  function setPage(page, hash = "") {
+    if (page === "Contact") {
+      window.location.replace(CONTACT_FORM_URL);
       return;
     }
 
@@ -2884,7 +2695,7 @@ export default function App() {
           className={`transform-gpu will-change-transform transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${pageTransitionStateClass}`}
           style={pageTransitionStyle}
         >
-          {renderedPage === "Contact" ? <><ContactPage cookiesAccepted={embedsAllowed} /><ContactMap cookiesAccepted={embedsAllowed} /></> : renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
+          {renderedPage === "Legal" ? <LegalPage /> : renderedPage === "FAQs" ? <FaqsPage /> : renderedPage === "Info" ? <InfoPage path={infoPath} navigate={navigate} /> : <HomePage setPage={setPage} navigate={navigate} />}
         </div>
         <SiteDisclosure />
         <Footer cookiesAccepted={embedsAllowed} />
