@@ -605,7 +605,6 @@ const NAV_ITEMS = [
   { label: "Crypto Markets", section: "crypto-markets" },
   { label: "Library", section: "resources" },
   { label: "Contact", page: "Contact" },
-  { label: "FAQs", page: "FAQs" },
 ];
 
 const NAV_SECTION_IDS = NAV_ITEMS.flatMap((item) => [item, ...(item.children || [])]).filter((item) => item.section).map((item) => item.section);
@@ -847,15 +846,32 @@ function AgencyIntro({ navigate }) {
   const [showCalc, setShowCalc] = useState(false);
   const tab = SERVICE_TABS.find((item) => item.id === active);
   const hasCalc = active === "life" || active === "annuities";
-  const go = (event, href) => {
-    event.preventDefault();
-    navigate(href);
-  };
+
   const selectTab = (id) => {
     setActive(id);
     setShowCalc(false);
   };
-  const step = (delta) => selectTab(SERVICE_TABS[(SERVICE_TABS.indexOf(tab) + delta + SERVICE_TABS.length) % SERVICE_TABS.length].id);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const currentIndex = SERVICE_TABS.indexOf(tab);
+      const nextIndex = (currentIndex + 1 + SERVICE_TABS.length) % SERVICE_TABS.length;
+      selectTab(SERVICE_TABS[nextIndex].id);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [tab]);
+
+  const step = (delta) => {
+    const currentIndex = SERVICE_TABS.indexOf(tab);
+    const nextIndex = (currentIndex + delta + SERVICE_TABS.length) % SERVICE_TABS.length;
+    selectTab(SERVICE_TABS[nextIndex].id);
+  };
+
+  const go = (event, href) => {
+    event.preventDefault();
+    navigate(href);
+  };
   const APP_CTA = { href: "https://app.calocapital.io/#/quote", label: "Visit the Calo Capital app for a free quote", external: true };
   const cta = active === "digital" ? { href: "https://app.calocapital.io/#/inflation", label: "Beat inflation", external: true } : active === "business" ? { href: "https://app.calocapital.io/#/debt", label: "Crush my debt", external: true } : APP_CTA;
   return (
