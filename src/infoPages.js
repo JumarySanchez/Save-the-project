@@ -332,7 +332,7 @@ export const INFO_PAGES = {
       ["NAIC: Life Insurance Policy Locator", "https://content.naic.org/article/learn-how-use-naic-life-insurance-policy-locator"],
     ],
     note: "General education only, not a recommendation to buy or replace coverage. Policy terms, state rules and individual needs differ. Review the actual contract with a properly licensed insurance professional.",
-    related: ["/articles/medical-costs", "/articles/emergency-fund", "/fixed-annuities"],
+    related: ["/articles/medical-costs", "/articles/emergency-fund", "/articles/home-affordability"],
   },
   "/articles/medical-costs": {
     eyebrow: "Calo Library · Protecting your family",
