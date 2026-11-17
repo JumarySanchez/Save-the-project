@@ -19,6 +19,7 @@
 #resources .lib-lead{position:relative;display:block;width:100%;aspect-ratio:2/1;overflow:hidden;border-radius:16px;margin:0 0 72px;color:#F4F7FB}
 #resources .lib-lead .lib-media{width:60%}
 #resources .lib-lead .lib-media img{object-position:left center}
+#resources .lib-featured{display:none}
 #resources .lib-lead:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(13,5,35,0) 0%,rgba(13,5,35,.05) 24%,rgba(26,9,54,.6) 42%,rgba(16,5,34,.97) 57%,rgba(16,5,34,.99) 100%)}
 #resources .lib-lead .lib-media{transition:transform 1.4s cubic-bezier(.22,1,.36,1)}
 #resources .lib-lead-text{position:absolute;top:0;right:48px;z-index:2;width:min(560px,50%);padding:48px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
@@ -50,11 +51,12 @@
 @media (max-width:760px){
 #resources .lib-head{flex-direction:column;align-items:flex-start;margin-bottom:40px}
 #resources .lib-title{font-size:clamp(32px,9vw,40px)}
-#resources .lib-lead{aspect-ratio:auto;display:flex;flex-direction:column;margin-bottom:56px}
+#resources .lib-lead{aspect-ratio:auto;display:flex;flex-direction:column;margin-bottom:56px;border:1px solid rgba(198,184,255,.4);background:#12102a;box-shadow:0 12px 32px rgba(0,0,0,.24)}
 #resources .lib-lead:after{display:none}
-#resources .lib-lead-text{position:relative;top:auto;right:auto;width:100%;padding:28px 24px;z-index:1;background:#070a1c}
-#resources .lib-lead .lib-media{position:relative;inset:auto;order:2;width:100%;aspect-ratio:4/3}
-#resources .lib-lead .lib-media img{object-fit:contain;object-position:center}
+#resources .lib-lead-text{position:relative;top:auto;right:auto;width:100%;padding:24px;z-index:1;background:#12102a}
+#resources .lib-lead .lib-media{position:relative;inset:auto;order:-1;width:100%;aspect-ratio:4/3}
+#resources .lib-lead .lib-media img{object-fit:cover;object-position:center}
+#resources .lib-featured{position:absolute;top:16px;left:16px;display:inline-flex;padding:7px 12px;border:1px solid rgba(198,184,255,.55);border-radius:999px;background:#1a1038;color:#fff;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 #resources .lib-lead-title{font-size:clamp(28px,8vw,36px)}
 }
 @media (max-width:640px){
@@ -76,7 +78,7 @@
 <p class="lib-note">Plain-language articles, with linked sources.</p>
 </header>
 <a class="lib-lead" href="/articles/life-insurance-family-protection">
-<div class="lib-media"><img src="__LIFE_INSURANCE_ARTICLE_IMG__" alt="Life insurance policy beside a framed family portrait, representing family financial protection"></div>
+<div class="lib-media"><img src="__LIFE_INSURANCE_ARTICLE_IMG__" alt="Life insurance policy beside a framed family portrait, representing family financial protection"><span class="lib-featured">Featured article</span></div>
 <div class="lib-lead-text">
 <span class="lib-cat">Start here · Life insurance</span>
 <h3 class="lib-lead-title">What happens to my family when I pass away?</h3>
