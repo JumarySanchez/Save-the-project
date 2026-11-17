@@ -667,7 +667,7 @@ function Navbar({ currentPage, setPage, goToSection, navigate }) {
       className={`site-header sticky top-0 z-50 border-b border-[#B7C0D8]/10 bg-[#050816]/90 backdrop-blur-md${hidden && !open ? " site-header--hidden" : ""}`}
     >
       <div className="mx-auto flex w-full max-w-[min(96vw,1500px)] items-center justify-between gap-4 px-4 py-3 sm:px-5">
-        <button onClick={() => handleClick({ section: "home" })} aria-label="CaloCapital home" className="shrink-0 text-left">
+        <button onClick={() => handleClick({ section: "home" })} aria-label="CaloCapital home" className="min-w-0 text-left">
           <Logo />
         </button>
 
@@ -725,7 +725,7 @@ function Navbar({ currentPage, setPage, goToSection, navigate }) {
 
         <button
           onClick={() => setOpen((value) => !value)}
-          className="rounded-xl border border-[#B7C0D8]/15 px-3 py-2 text-[#F4F7FB] xl:hidden"
+          className="shrink-0 rounded-xl border border-[#B7C0D8]/15 px-3 py-2 text-[#F4F7FB] xl:hidden"
           aria-label="Toggle menu"
           aria-expanded={open}
         >

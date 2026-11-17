@@ -1002,7 +1002,7 @@
 }
 
 /* Touch target sizing */
-button, a {
+:where(.article-detail-wrapper) button, :where(.article-detail-wrapper) a {
   min-height: 44px;
   min-width: 44px;
   display: inline-flex;
@@ -1010,7 +1010,7 @@ button, a {
   justify-content: center;
 }
 
-a {
+:where(.article-detail-wrapper) a {
   min-height: auto;
   min-width: auto;
 }
