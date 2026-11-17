@@ -1153,7 +1153,6 @@ function SiteDisclosure() {
 
 const AGE_CONFIRMATION_COOKIE = "calocapital_age_confirmation";
 const COOKIE_CONSENT_COOKIE = "calocapital_cookie_consent";
-const COOKIE_CONSENT_MAX_AGE = 60 * 60 * 24 * 180;
 
 function hasCookieValue(name, value) {
   return document.cookie.split(";").some((cookie) => cookie.trim() === `${name}=${value}`);
@@ -1179,7 +1178,7 @@ function CookieNotice({ onAccept, onContinue, error }) {
             <strong>Age confirmation.</strong> By clicking Accept all, you confirm that you are an adult or accompanied by an adult parent or legal guardian. CaloCapital does not do business with minors.
           </li>
           <li>
-            <strong>First-party cookies.</strong> We use them only to remember your confirmation and your cookie choice.
+            <strong>First-party cookies.</strong> We use them only to remember your confirmation and your cookie choice for the browser session.
           </li>
           <li>
             <strong>Embedded tools.</strong> Google Calendar, Google Maps, and our chat service load only after you accept and may use their own cookies.
@@ -2537,7 +2536,7 @@ export default function App() {
 
   function acceptCookies() {
     const secure = window.location.protocol === "https:" ? "; Secure" : "";
-    document.cookie = `${COOKIE_CONSENT_COOKIE}=accepted; Max-Age=${COOKIE_CONSENT_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
+    document.cookie = `${COOKIE_CONSENT_COOKIE}=accepted; Path=/; SameSite=Lax${secure}`;
     document.cookie = `${AGE_CONFIRMATION_COOKIE}=confirmed; Path=/; SameSite=Lax${secure}`;
     setCookiesAccepted(true);
     setAgeConfirmed(true);

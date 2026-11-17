@@ -58,7 +58,7 @@ export const privacySections=[
  {
   "t": "Cookies and analytics",
   "b": [
-   "This website uses first-party cookies to remember your age confirmation for the browser session and your cookie choice. Google Calendar, Google Maps, and our chat service are not embedded or loaded until you accept cookies; after that, those services may use their own cookies and similar tools under their privacy policies. You can block or delete cookies in your browser settings, though embedded tools may work less well."
+   "This website uses first-party cookies to remember your age confirmation and cookie choice for the browser session. Google Calendar, Google Maps, and our chat service are not embedded or loaded until you accept cookies; after that, those services may use their own cookies and similar tools under their privacy policies. You can block or delete cookies in your browser settings, though embedded tools may work less well."
   ]
  },
  {
