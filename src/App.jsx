@@ -1,5 +1,7 @@
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { INFO_PAGES, INFO_RELATED_LABELS } from "./infoPages.js";
+import ArticleDetail from "./ArticleDetail.jsx";
+import "./ArticleDetail.css";
 import FinancingSections, { AGENCY_BG } from "./FinancingSections.jsx";
 import Starfield from "./Starfield.jsx";
 import { LEGAL_UPDATED, privacyIntro, privacySections, termsIntro, termsSections } from "./legalContent.js";
@@ -1390,150 +1392,10 @@ function loadReaderPrefs() {
 
 function InfoPage({ path, navigate }) {
   const page = INFO_PAGES[path];
-  const linkClass = "ar-link";
-  const [prefs, setPrefs] = useState(loadReaderPrefs);
-
-  useEffect(() => {
-    try { window.localStorage.setItem("calo-reader-prefs", JSON.stringify(prefs)); } catch { /* storage unavailable */ }
-  }, [prefs]);
-
-  function update(patch) {
-    setPrefs((current) => ({ ...current, ...patch }));
-  }
-
-  function open(event, href) {
-    event.preventDefault();
-    navigate(href);
-  }
 
   if (!page) return null;
 
-  return (
-    <section
-      className="article-reader px-5 pb-24 pt-16 text-[#F4F7FB] sm:pt-24"
-      data-contrast={prefs.contrast}
-      data-font={prefs.font}
-      data-spacing={prefs.spacing}
-      data-cols={!prefs.single && prefs.size <= 20 && prefs.spacing === "normal" ? "2" : "1"}
-      style={{ "--rs": prefs.size }}
-    >
-      <style>{ARTICLE_READER_CSS}</style>
-      <div className="ar-page ar-serif">
-        <a href="/" onClick={(event) => open(event, "/")} className={`text-sm font-semibold ${linkClass}`}>
-          ← Back to home
-        </a>
-
-        <div className="ar-masthead">
-          <p className="ar-paper">The Calo Library</p>
-          <div className="ar-dateline">
-            <span>Nashville, Tennessee</span>
-            <span>{page.reviewed ? `Reviewed ${page.reviewed}` : "Plain-language guides"}</span>
-            <span>Free to read</span>
-          </div>
-        </div>
-
-        <p className="ar-kicker">{page.eyebrow}</p>
-        <h1 className="ar-h1">{page.title}</h1>
-        <p className="ar-deck">{page.intro}</p>
-
-        <div className="ar-byline">
-          <span>By {page.author || "CaloCapital Editorial"}</span>
-          {page.readTime && <span>{page.readTime.split("·")[0].trim()}</span>}
-        </div>
-
-        {page.cta && (
-          <p className="mt-6 text-center">
-            <a href={page.cta.href} onClick={(event) => open(event, page.cta.href)} className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white">
-              {page.cta.label}
-            </a>
-          </p>
-        )}
-
-        <div className="ar-tools" role="group" aria-label="Reading options">
-          <span className="ar-tools-label">Reading options</span>
-          <button type="button" className="ar-btn" aria-label="Decrease text size" disabled={prefs.size <= 16} onClick={() => update({ size: prefs.size - 2 })}>A−</button>
-          <button type="button" className="ar-btn" aria-label="Increase text size" disabled={prefs.size >= 28} onClick={() => update({ size: prefs.size + 2 })}>A+</button>
-          <button type="button" className="ar-btn" aria-pressed={prefs.single} onClick={() => update({ single: !prefs.single })}>One column</button>
-          <button type="button" className="ar-btn" aria-pressed={prefs.contrast === "high"} onClick={() => update({ contrast: prefs.contrast === "high" ? "normal" : "high" })}>High contrast</button>
-          <button type="button" className="ar-btn" aria-pressed={prefs.font === "readable"} onClick={() => update({ font: prefs.font === "readable" ? "default" : "readable" })}>Easy-read font</button>
-          <button type="button" className="ar-btn" aria-pressed={prefs.spacing === "wide"} onClick={() => update({ spacing: prefs.spacing === "wide" ? "normal" : "wide" })}>Wide spacing</button>
-          <button type="button" className="ar-btn" onClick={() => setPrefs(READER_DEFAULTS)}>Reset</button>
-        </div>
-
-        <article className="ar-article">
-          {page.sections.map((section, index) => (
-            <section key={section.heading} aria-labelledby={`ar-section-${index}`}>
-              <h2 id={`ar-section-${index}`} className="ar-h2">{section.heading}</h2>
-              {section.body && section.body.map((text) => <p key={text}>{text}</p>)}
-              {section.items && section.items.map((item) => (
-                <div key={item.heading}>
-                  <h3 className="ar-h3">{item.heading}</h3>
-                  <p>{item.body}</p>
-                </div>
-              ))}
-              {section.note && <p className="ar-note">{section.note}</p>}
-              {section.list && (
-                <ul>
-                  {section.list.map((text) => Array.isArray(text)
-                    ? <li key={text[0]}><strong>{text[0]}</strong> {text[1]}</li>
-                    : <li key={text}>{text}</li>)}
-                </ul>
-              )}
-              {section.after && section.after.map((text) => <p key={text}>{text}</p>)}
-              {section.links && section.button && (
-                <div className="mt-4 flex flex-wrap gap-4">
-                  {section.links.map(([label, href]) => (
-                    <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full bg-[#6D5EF5] px-7 py-3 font-black text-white transition hover:bg-[#7B6DF7]">{label}</a>
-                  ))}
-                </div>
-              )}
-              {section.links && !section.button && (
-                <ul>
-                  {section.links.map(([label, href]) => (
-                    <li key={href}>
-                      <a href={href} onClick={(event) => open(event, href)} className={linkClass}>{label}</a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          ))}
-          {page.note && <p className="ar-note">{page.note}</p>}
-        </article>
-
-        {page.sources?.length > 0 && (
-          <aside aria-labelledby="article-sources-heading" className="ar-box">
-            <h2 id="article-sources-heading">Sources and further reading</h2>
-            <ul>
-              {page.sources.map(([label, href]) => (
-                <li key={href}>
-                  <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass}>{label}<span className="ar-sr"> (opens in a new tab)</span></a>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        )}
-
-        <aside className="ar-box" aria-labelledby="ar-contact-heading">
-          <h2 id="ar-contact-heading">Talk with our team</h2>
-          <p className="mt-2">
-            Call <a className={linkClass} href="tel:+19174009543">917-400-9543</a> or email{" "}
-            <a className={linkClass} href="mailto:questions@calocapital.io">questions@calocapital.io</a>.
-          </p>
-          <p className="ar-related">
-            {(page.related || []).map((href) => (
-              <a key={href} href={href} onClick={(event) => open(event, href)} className={linkClass}>
-                {INFO_RELATED_LABELS[href] || href}
-              </a>
-            ))}
-          </p>
-        </aside>
-        <p className="ar-fine">
-          Information on this page is general and educational. It is not an offer, approval, or financial, tax or legal advice. Terms vary by lender and borrower.
-        </p>
-      </div>
-    </section>
-  );
+  return <ArticleDetail page={page} navigate={navigate} path={path} />;
 }
 
 function FaqsPage() {
