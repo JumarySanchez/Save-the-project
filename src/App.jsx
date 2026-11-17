@@ -489,7 +489,7 @@ function Logo({ logoSizeClass = "h-12 sm:h-16", textSizeClass = "text-base sm:te
     <div className="flex min-w-0 items-center gap-2.5">
       <img
         src={logoPng}
-        alt="CaloCapital Logo"
+        alt="Calo Capital insurance and financial planning logo"
         className={`${logoSizeClass} w-auto shrink-0 self-center object-contain`}
         style={{ background: "transparent", height: "clamp(21px, calc(5.6vw - 35px), 41px)", width: "auto" }}
       />
@@ -772,7 +772,7 @@ const SERVICE_TABS = [
   {
     id: "life",
     photo: agencyFamilyPhoto,
-    photoAlt: "Parents sharing a happy moment at home with their young child",
+    photoAlt: "Parents smiling with their young child at home, representing life insurance and family financial protection",
     photoCredit: "Kampus Production / Pexels",
     photoCreditUrl: "https://www.pexels.com/photo/a-happy-family-smiling-together-6249951/",
     title: "Life Insurance",
@@ -790,7 +790,7 @@ const SERVICE_TABS = [
   {
     id: "annuities",
     photo: agencyRetirementPhoto,
-    photoAlt: "Retired couple reviewing their household finances together",
+    photoAlt: "Retired couple reviewing household finances while planning retirement income",
     photoCredit: "Vitaly Gariev / Pexels",
     photoCreditUrl: "https://www.pexels.com/photo/senior-couple-managing-household-finances-indoors-39191075/",
     title: "Fixed Annuities",
@@ -808,7 +808,7 @@ const SERVICE_TABS = [
   {
     id: "business",
     photo: agencyDebtPhoto,
-    photoAlt: "Woman using a calculator to manage bills and a household budget",
+    photoAlt: "Woman using a calculator to manage household bills and plan debt repayment",
     photoCredit: "Mikhail Nilov / Pexels",
     photoCreditUrl: "https://www.pexels.com/photo/woman-budgeting-her-bills-6962992/",
     title: "Debt Payoff",
@@ -825,7 +825,7 @@ const SERVICE_TABS = [
   {
     id: "digital",
     photo: agencyInflationPhoto,
-    photoAlt: "Jar filled with coins on a wooden table, viewed from above",
+    photoAlt: "Jar of coins on a wooden table, illustrating inflation and its impact on savings",
     photoCredit: "Miguel Á. Padriñán / Pexels",
     photoCreditUrl: "https://www.pexels.com/photo/coins-inside-jar-585292/",
     title: "Inflation",

@@ -17,8 +17,11 @@
 #resources .lib-media{position:absolute;inset:0;overflow:hidden;background:linear-gradient(135deg,rgba(109,94,245,.22),rgba(255,255,255,.05)),#050816}
 #resources .lib-media img{display:block;width:100%;height:100%;object-fit:cover}
 #resources .lib-lead{position:relative;display:block;width:100%;aspect-ratio:2/1;overflow:hidden;border-radius:16px;margin:0 0 72px;color:#F4F7FB}
+#resources .lib-lead .lib-media{width:60%}
+#resources .lib-lead .lib-media img{object-position:left center}
+#resources .lib-lead:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(13,5,35,0) 0%,rgba(13,5,35,.05) 24%,rgba(26,9,54,.6) 42%,rgba(16,5,34,.97) 57%,rgba(16,5,34,.99) 100%)}
 #resources .lib-lead .lib-media{transition:transform 1.4s cubic-bezier(.22,1,.36,1)}
-#resources .lib-lead-text{position:absolute;top:0;right:0;width:45%;padding:48px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+#resources .lib-lead-text{position:absolute;top:0;right:48px;z-index:2;width:min(560px,50%);padding:48px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
 #resources .lib-cat{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#C6B8FF}
 #resources .lib-lead-title{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(30px,3.6vw,48px);line-height:1.1;color:#fff}
 #resources .lib-lead-copy{margin:0;font-size:16px;line-height:1.6;color:#B7C0D8;max-width:460px}
@@ -41,13 +44,17 @@
 #resources .lib-tile:focus-visible .lib-arrow{background:#6D5EF5;border-color:#6D5EF5;color:#fff;transform:translateX(4px)}
 @media (max-width:1024px){
 #resources .lib-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#resources .lib-lead .lib-media{width:80%}
+#resources .lib-lead-text{right:24px;width:min(520px,64%);padding:32px}
 }
 @media (max-width:760px){
 #resources .lib-head{flex-direction:column;align-items:flex-start;margin-bottom:40px}
 #resources .lib-title{font-size:clamp(32px,9vw,40px)}
 #resources .lib-lead{aspect-ratio:auto;display:flex;flex-direction:column;margin-bottom:56px}
-#resources .lib-lead-text{position:relative;width:100%;padding:28px 24px;z-index:1;background:#070a1c}
-#resources .lib-lead .lib-media{position:relative;inset:auto;order:2;aspect-ratio:4/3}
+#resources .lib-lead:after{display:none}
+#resources .lib-lead-text{position:relative;top:auto;right:auto;width:100%;padding:28px 24px;z-index:1;background:#070a1c}
+#resources .lib-lead .lib-media{position:relative;inset:auto;order:2;width:100%;aspect-ratio:4/3}
+#resources .lib-lead .lib-media img{object-fit:contain;object-position:center}
 #resources .lib-lead-title{font-size:clamp(28px,8vw,36px)}
 }
 @media (max-width:640px){
@@ -69,8 +76,7 @@
 <p class="lib-note">Plain-language articles, with linked sources.</p>
 </header>
 <a class="lib-lead" href="/articles/life-insurance-family-protection">
-<!-- Image slot: replace the div below with <img src="..." alt="..."> inside .lib-media -->
-<div class="lib-media" role="img" aria-label="Image placeholder: a family at home, representing life insurance and family protection"></div>
+<div class="lib-media"><img src="__LIFE_INSURANCE_ARTICLE_IMG__" alt="Life insurance policy beside a framed family portrait, representing family financial protection"></div>
 <div class="lib-lead-text">
 <span class="lib-cat">Start here · Life insurance</span>
 <h3 class="lib-lead-title">What happens to my family when I pass away?</h3>
@@ -80,22 +86,22 @@
 </a>
 <div class="lib-grid">
 <a class="lib-tile" href="/articles/medical-costs">
-<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a parent and child, representing protecting your family"></div></div>
+<div class="lib-thumb"><div class="lib-media"><img src="__HEALTH_CRISIS_ARTICLE_IMG__" alt="Heart monitor and stethoscope beside a medical chart, representing healthcare costs and financial planning"></div></div>
 <span class="lib-cat">Protecting your family</span>
 <div class="lib-tile-row"><h3 class="lib-tile-title">What if a health crisis became your family's financial crisis?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
 </a>
 <a class="lib-tile" href="/articles/emergency-fund">
-<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a calm, open landscape, representing retirement and the future"></div></div>
+<div class="lib-thumb"><div class="lib-media"><img src="__RETIREMENT_ARTICLE_IMG__" alt="Hourglass beside a calendar, illustrating retirement planning and saving for the future"></div></div>
 <span class="lib-cat">Retirement and the future</span>
 <div class="lib-tile-row"><h3 class="lib-tile-title">Could you cover six months of life if income stopped tomorrow?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
 </a>
 <a class="lib-tile" href="/articles/home-affordability">
-<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a house exterior, representing home affordability"></div></div>
+<div class="lib-thumb"><div class="lib-media"><img src="__HOME_AFFORDABILITY_ARTICLE_IMG__" alt="Model home and keys on property plans, illustrating home affordability and mortgage planning"></div></div>
 <span class="lib-cat">Your home</span>
 <div class="lib-tile-row"><h3 class="lib-tile-title">Can you really afford the home you're dreaming of?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
 </a>
 <a class="lib-tile" href="/articles/business-funding">
-<div class="lib-thumb"><div class="lib-media" role="img" aria-label="Image placeholder: a small business storefront, representing business funding"></div></div>
+<div class="lib-thumb"><div class="lib-media"><img src="__BUSINESS_FUNDING_ARTICLE_IMG__" alt="Laptop displaying a rising growth chart, illustrating small business funding and business growth"></div></div>
 <span class="lib-cat">Business funding</span>
 <div class="lib-tile-row"><h3 class="lib-tile-title">What could your business become with the right funding?</h3><span class="lib-arrow" aria-hidden="true">→</span></div>
 </a>
@@ -118,7 +124,7 @@
 <footer style="padding:72px 48px 32px;border-top:1px solid rgba(183,192,216,.12);background:#03050f;font-size:14px;color:#B7C0D8">
 <div style="max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:64px">
 <div style="flex:1 1 280px;max-width:320px">
-<div style="display:flex;align-items:center;gap:10px"><img src="__LOGO_IMG__" alt="CaloCapital Logo" style="height:84px;width:auto;flex:none;object-fit:contain;margin:-12px 0 0 -11px"></div>
+<div style="display:flex;align-items:center;gap:10px"><img src="__LOGO_IMG__" alt="Calo Capital insurance and financial planning logo" style="height:84px;width:auto;flex:none;object-fit:contain;margin:-12px 0 0 -11px"></div>
 <p style="margin:24px 0 32px;font-size:17px;color:#F4F7FB">Independent insurance agency<br>in Nashville, Tennessee.</p>
 <a href="#contact" style="display:inline-block;padding:16px 40px;border-radius:999px;background:#fff;color:#050816;font-weight:600">Get started</a>
 <div style="height:1px;background:rgba(183,192,216,.3);margin:12px 0 16px"></div>

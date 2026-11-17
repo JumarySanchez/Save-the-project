@@ -8,12 +8,22 @@ import article1 from "../assets/business-article1.jpg";
 import article2 from "../assets/business-article2.jpg";
 import logoImg from "../public/Calo_purple_logo.png";
 import article3 from "../assets/business-article3.jpg";
+import businessFundingArticle from "../assets/calo_redesign_business_funding.png";
+import homeAffordabilityArticle from "../assets/calo_redesign_home.png";
+import retirementArticle from "../assets/calo_redesign_retirement.png";
+import healthCrisisArticle from "../assets/calo_redesign_health_crisis.png";
+import lifeInsuranceArticle from "../assets/calo_redesign_life_insurance.png";
 
 const sectionsWithImages = sectionsHtml
   .replace("__FEATURE_IMG__", featureImg)
   .replace(/__ARTICLE1_IMG__/g, article1)
   .replace(/__ARTICLE2_IMG__/g, article2)
   .replace(/__ARTICLE3_IMG__/g, article3)
+  .replace("__LIFE_INSURANCE_ARTICLE_IMG__", lifeInsuranceArticle)
+  .replace("__HEALTH_CRISIS_ARTICLE_IMG__", healthCrisisArticle)
+  .replace("__RETIREMENT_ARTICLE_IMG__", retirementArticle)
+  .replace("__HOME_AFFORDABILITY_ARTICLE_IMG__", homeAffordabilityArticle)
+  .replace("__BUSINESS_FUNDING_ARTICLE_IMG__", businessFundingArticle)
   .replace(/__LOGO_IMG__/g, logoImg);
 
 const heroHtml = heroRaw;
